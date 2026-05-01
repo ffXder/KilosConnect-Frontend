@@ -1,7 +1,7 @@
 import { AssetInventorySummarySection } from "./sections/AssetInventoryDash";
 import { LostAndFoundTrackingSection } from "./sections/LostAndFoundTrackingSection";
 import { SafetyIncidentReportSection } from "./sections/SafetyIncidentReportSection";
-import { SidebarNavigationSection } from "./sections/SidebarNavigationSection";
+import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { TaskStatusPanelSection } from "./sections/TaskStatusPanelSection";
 
 export const DashboardPage : React.FC = () => {
@@ -67,3 +67,4 @@ export const DashboardPage : React.FC = () => {
     </div>
   );
 };
+export  default DashboardPage;
