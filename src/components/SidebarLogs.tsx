@@ -1,3 +1,5 @@
+import React from "react";
+
 const navItems = [
   {
     label: "Overview",
@@ -77,7 +79,7 @@ const navItems = [
   },
 ];
 
-export const SidebarNavigationSection : React.FC = () => {
+export const SidebarLogs : React.FC = () => {
   return (
     <aside
       className="fixed top-0 left-0 w-[240px] h-screen bg-[#072821] flex flex-col z-50"
@@ -135,3 +137,4 @@ export const SidebarNavigationSection : React.FC = () => {
     </aside>
   );
 };
+export default SidebarLogs;
