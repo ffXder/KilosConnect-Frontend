@@ -121,7 +121,7 @@ export const InventoryPage: React.FC = () => {
               <div className="flex flex-col md:flex-row gap-3 mb-6">
                 <div className="relative flex-1">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#813838" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
                   </span>
                   <input className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e8e8e8] focus:outline-none focus:border-[#0a2e27] transition-colors" placeholder="Search items..." />
                 </div>
