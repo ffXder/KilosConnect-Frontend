@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SidebarProfile from "../../components/SidebarProfile";
 import ProfileInfoSection from "./ProfileInfoSection";
 import ProfileStatsSection from "./ProfileStatsSection";
 import ProfileActivitySection from "./RecentActivitySection";
@@ -72,10 +73,11 @@ const ProfileMain: React.FC = () => {
   const handleSubmit = () => handleSave(form);
 
   return (
-    
-    <div className="min-h-screen bg-[#f4f5f6] p-8">
-      {/* Page Header */}
-      <div className="mb-6">
+    <div className="min-h-screen bg-[#f4f5f6]">
+      <SidebarProfile />
+      <div className="lg:pl-[280px] p-8">
+        {/* Page Header */}
+        <div className="mb-6">
         <h1 className="text-[28px] font-bold text-[#0d1f1a] leading-tight">
           Profile
         </h1>
@@ -175,7 +177,7 @@ const ProfileMain: React.FC = () => {
         </div>
       </div>
     </div>
-    
+  </div>
   );
 };
 
