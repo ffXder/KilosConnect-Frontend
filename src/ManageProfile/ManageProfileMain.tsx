@@ -65,7 +65,7 @@ const ManageProfileMain: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
-      <SidebarManageProfile />
+        <SidebarProfile />-
 
       <div className="flex flex-col flex-1 min-w-0 ml-60 overflow-y-auto">
         <header className="flex items-center justify-between px-8 pt-8 pb-4 bg-white border-b border-[#e8e8e8]">
