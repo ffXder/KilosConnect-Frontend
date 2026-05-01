@@ -1,15 +1,9 @@
-import { useState } from 'react'
 import './App.css'
-import Login from './pages/Login'
+import { LoginPage } from './pages/Login'
+import { DashboardPage } from './pages/Dashboard/Dashboard'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <Login />
-    </>
-  )
+  return <DashboardPage />
 }
 
 export default App
