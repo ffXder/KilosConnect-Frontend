@@ -1,3 +1,5 @@
+import React from "react";
+
 export type Incident = {
   id: string;
   title: string;
