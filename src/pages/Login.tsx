@@ -1,4 +1,4 @@
-import Logo from '../assets/KILOSLogo.png'
+import Logo from '../assets/react.svg'
 
 function Login () {
     return (
