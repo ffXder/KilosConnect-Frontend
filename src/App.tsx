@@ -1,11 +1,16 @@
 import './App.css'
-import { LoginPage } from './pages/Login'
-import { DashboardPage } from './pages/Dashboard/Dashboard'
-import { Logs } from './pages/Logs'
+import SidebarProfile from './components/SidebarProfile'
+import ProfileInfoCard from './Module/Profile/ProfileMain';
+import Logs from './pages/Logs/LogsMain';
 
 function App() {
-  return(
-    <Logs />
+  return (
+    <div className="min-h-screen bg-[#f0f2f5]">
+      <SidebarProfile />
+      <main className="pl-[240px]">
+        <ProfileInfoCard />
+      </main>
+    </div>
   )
 }
 
