@@ -70,7 +70,7 @@ export const LoginPage: React.FC = () => {
                     }
                     aria-label={field.label}
                     className="w-full h-full bg-white rounded-[var(--sizes-global-radius)] px-[12px] 
-                              text-white [font-family:'Poppins-Regular',Helvetica] font-normal text-base leading-[normal] 
+                              text-black [font-family:'Poppins-Regular',Helvetica] font-normal text-base leading-[normal] 
                               placeholder:text-white/60 shadow-[0_0_0_1px_#00000014]"
                   />
 

@@ -7,7 +7,7 @@ const navItems = [
         <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
       </svg>
     ),
-    active: true,
+    active: false,
   },
   {
     label: "Inventory",
@@ -54,7 +54,7 @@ const navItems = [
         <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
       </svg>
     ),
-    active: false,
+    active: true,
   },
   {
     label: "Profile",
