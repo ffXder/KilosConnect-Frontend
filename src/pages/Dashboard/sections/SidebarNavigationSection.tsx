@@ -80,7 +80,7 @@ const navItems = [
 export const SidebarNavigationSection : React.FC = () => {
   return (
     <aside
-      className="fixed top-0 left-0 w-[240px] h-screen bg-[#0a2e27] flex flex-col z-50"
+      className="fixed top-0 left-0 w-[240px] h-screen bg-[#072821] flex flex-col z-50"
       aria-label="Sidebar navigation"
       style={{ borderRight: "4px solid #1a5c4f" }}
     >
