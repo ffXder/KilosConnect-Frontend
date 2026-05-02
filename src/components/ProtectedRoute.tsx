@@ -9,10 +9,9 @@ interface Props {
 }
  
 export default function ProtectedRoute({ children, allowedRoles }: Props) {
-  const token = localStorage.getItem('token');
   const role = localStorage.getItem('role') as Role | null;
  
-  if (!token) return <Navigate to="/login" replace />;
+  if (!role) return <Navigate to="/login" replace />;
   if (allowedRoles && (!role || !allowedRoles.includes(role))) return <Navigate to="/unauthorized" replace />;
  
   return <>{children}</>;
