@@ -11,10 +11,8 @@ function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
-    // This represents your initial "Check" (Auth, API, or just a timer)
     const initApp = async () => {
       try {
-        // You could check for a user session here
         await new Promise(resolve => setTimeout(resolve, 2000)); 
       } finally {
         setIsPageLoading(false);
@@ -24,7 +22,6 @@ function App() {
     initApp();
   }, []);
 
-  // 1. GREETING: If we are still loading, show the splash screen
   if (isPageLoading) {
     return <LoadingPage />;
   }
@@ -42,6 +39,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+      {/* redirects to login if not found or authenticated */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   
