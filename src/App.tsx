@@ -6,7 +6,7 @@ import ManageProfile from './ManageProfile/ManageProfileMain';
 function App() {
   return (
     <div className="min-h-screen bg-[#f0f2f5]">
-      <ProfileInfoCard />
+      <ManageProfile />
     </div>
   )
 }
