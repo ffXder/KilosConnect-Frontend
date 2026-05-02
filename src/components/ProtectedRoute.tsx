@@ -1,9 +1,19 @@
 import type React from "react";
 import { Navigate } from "react-router-dom";
-
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-    const isLoggedIn = !!localStorage.getItem('JwTtoken');
-
-    return isLoggedIn ? <>{children}</> : <Navigate to="/login" replace />
+ 
+type Role = 'admin' | 'custodian';
+ 
+interface Props {
+  children: React.ReactNode;
+  allowedRoles?: Role[];
 }
-
+ 
+export default function ProtectedRoute({ children, allowedRoles }: Props) {
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role') as Role | null;
+ 
+  if (!token) return <Navigate to="/login" replace />;
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) return <Navigate to="/unauthorized" replace />;
+ 
+  return <>{children}</>;
+}
