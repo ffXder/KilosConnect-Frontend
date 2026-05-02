@@ -6,7 +6,7 @@ import { TaskStatusPanelSection } from "./sections/TaskStatusPanelSection";
 import { useAuth } from '../../hooks/useAuth'
 
 export const DashboardPage : React.FC = () => {
-  const { role } = useAuth()
+  const { role, user } = useAuth()
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
   return (
@@ -23,7 +23,7 @@ export const DashboardPage : React.FC = () => {
               Dashboard
             </h1>
             <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">
-              Welcome, BingBong!
+              Welcome, {user?.firstName || "User"}!
             </p>
           </div>
 
