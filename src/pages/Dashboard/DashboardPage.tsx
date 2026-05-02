@@ -3,12 +3,16 @@ import { LostAndFoundTrackingSection } from "./sections/LostAndFoundTrackingSect
 import { SafetyIncidentReportSection } from "./sections/SafetyIncidentReportSection";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { TaskStatusPanelSection } from "./sections/TaskStatusPanelSection";
+import { useAuth } from '../../hooks/useAuth'
 
 export const DashboardPage : React.FC = () => {
+  const { role, user } = useAuth()
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
+
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
       {/* Fixed Sidebar */}
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole} />
 
       {/* Main content - scrollable */}
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
@@ -19,7 +23,7 @@ export const DashboardPage : React.FC = () => {
               Dashboard
             </h1>
             <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">
-              Welcome, BingBong!
+              Welcome, {user?.firstName || "User"}!
             </p>
           </div>
 
@@ -67,4 +71,5 @@ export const DashboardPage : React.FC = () => {
     </div>
   );
 };
-export  default DashboardPage;
+
+export default DashboardPage
