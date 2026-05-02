@@ -19,6 +19,31 @@ interface NewUserForm {
   role: string;
 }
 
+export interface ProfileData {
+  firstName: string;
+  lastName: string;
+  role: string;
+  dateJoined: string;
+  avatarUrl?: string;
+}
+
+export interface PerformanceStats {
+  tasksCompleted: number;
+  incidentsReported: number;
+  itemsLogged: number;
+  activeDays: number;
+}
+
+export type ActivityType = "task" | "incident" | "inventory" | "log";
+
+export interface ActivityItem {
+  id: string;
+  type: ActivityType;
+  title: string;
+  description: string;
+  timeAgo: string;
+}
+
 const ManageProfileMain: React.FC = () => {
   const [search, setSearch] = useState("");
   const [accounts] = useState<UserAccount[]>([]);
@@ -65,7 +90,7 @@ const ManageProfileMain: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
-        <SidebarProfile />-
+      <SidebarManageProfile />
 
       <div className="flex flex-col flex-1 min-w-0 ml-60 overflow-y-auto">
         <header className="flex items-center justify-between px-8 pt-8 pb-4 bg-white border-b border-[#e8e8e8]">
@@ -210,7 +235,7 @@ const ManageProfileMain: React.FC = () => {
                             {account.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 [font-family:'Poppins',Helvetica] text-sm text-[#6b7280]">
+                        <td className="px-6 py-4 font-['Poppins',Helvetica] text-sm text-[#6b7280]">
                           {account.dateAdded}
                         </td>
                         <td className="px-6 py-4 flex items-center gap-3">
