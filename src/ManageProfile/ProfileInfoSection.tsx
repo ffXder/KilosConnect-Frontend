@@ -1,31 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import type { ProfileData } from "./ManageProfileMain";
 
 interface ProfileInfoSectionProps {
   profile: ProfileData;
   isEditing: boolean;
   onEditToggle: () => void;
-  onSave: (updated: ProfileData) => void;
 }
 
 const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
   profile,
   isEditing,
   onEditToggle,
-  onSave,
 }) => {
-  const [form, setForm] = useState<ProfileData>(profile);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = () => onSave(form);
-  const handleCancel = () => {
-    setForm(profile);
-    onEditToggle();
-  };
-
   const fullName = `${profile.firstName} ${profile.lastName}`;
 
   return (
