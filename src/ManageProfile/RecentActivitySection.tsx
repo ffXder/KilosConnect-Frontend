@@ -16,13 +16,13 @@ const ProfileActivitySection: React.FC<ProfileActivitySectionProps> = ({
   activities,
 }) => {
   return (
-    <div className="bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm px-6 py-5">
-      <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1a1a1a] text-xl mb-4 m-0 p-0">
+    <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm px-6 py-5">
+      <h2 className="font-['Poppins',Helvetica] font-semibold text-[#1a1a1a] text-xl mb-4 m-0 p-0">
         Recent Activity
       </h2>
 
       {activities.length === 0 ? (
-        <p className="[font-family:'Poppins',Helvetica] font-normal text-xs text-[#888] text-center py-6">
+        <p className="font-['Poppins',Helvetica] font-normal text-xs text-[#888] text-center py-6">
           No recent activity available.
         </p>
       ) : (
@@ -38,20 +38,20 @@ const ProfileActivitySection: React.FC<ProfileActivitySectionProps> = ({
             >
               <div className="flex items-start gap-3">
                 <span
-                  className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${
+                  className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${
                     activityDotColor[item.type]
                   }`}
                 />
                 <div>
-                  <p className="[font-family:'Poppins',Helvetica] font-medium text-sm text-[#1a1a1a]">
+                  <p className="font-['Poppins',Helvetica] font-medium text-sm text-[#1a1a1a]">
                     {item.title}
                   </p>
-                  <p className="[font-family:'Poppins',Helvetica] font-normal text-xs text-[#888] mt-0.5">
+                  <p className="font-['Poppins',Helvetica] font-normal text-xs text-[#888] mt-0.5">
                     {item.description}
                   </p>
                 </div>
               </div>
-              <span className="[font-family:'Poppins',Helvetica] font-normal text-xs text-[#888] whitespace-nowrap ml-4 mt-0.5">
+              <span className="font-['Poppins',Helvetica] font-normal text-xs text-[#888] whitespace-nowrap ml-4 mt-0.5">
                 {item.timeAgo}
               </span>
             </div>
