@@ -1,11 +1,34 @@
 import './App.css'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { LoadingPage } from './pages/Loading'
 import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardPage from './pages/Dashboard/Dashboard'
 
 
 function App() {
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    // This represents your initial "Check" (Auth, API, or just a timer)
+    const initApp = async () => {
+      try {
+        // You could check for a user session here
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+      } finally {
+        setIsPageLoading(false);
+      }
+    };
+
+    initApp();
+  }, []);
+
+  // 1. GREETING: If we are still loading, show the splash screen
+  if (isPageLoading) {
+    return <LoadingPage />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
@@ -14,7 +37,7 @@ function App() {
         <Route 
         path='/dashboard' 
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
               <DashboardPage />
             </ProtectedRoute>
           }
@@ -22,7 +45,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   
-  )
+  );
 }
 
 export default App
