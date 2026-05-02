@@ -1,8 +1,8 @@
 import React, { useId, useState } from "react";
 import type { FormEvent } from "react";
+import { Eye, EyeOff } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
-
 import KilosGymImg from "../assets/images/image-5.png";
 import KILOSWhiteLogo1 from "../assets/images/KILOS-white-logo-1.png";
 
@@ -17,6 +17,7 @@ export const LoginPage: React.FC = () => {
   const [formValues, setFormValues] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,7 +79,7 @@ export const LoginPage: React.FC = () => {
                   <input
                     id={`${formId}-${field.id}`}
                     name={field.id}
-                    type={field.type}
+                    type={field.id === "password" && showPassword ? "text" : field.type}
                     autoComplete={field.autoComplete}
                     value={formValues[field.id]}
                     onChange={(event) =>
@@ -92,6 +93,18 @@ export const LoginPage: React.FC = () => {
                               text-black [font-family:'Poppins-Regular',Helvetica] font-normal text-base leading-[normal] 
                               placeholder:text-white/60 shadow-[0_0_0_1px_#00000014]"
                   />
+
+                  {/* Eye Icon for Password field */}
+                  {field.id === "password" && (
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                )}
                 </div>
               </div>
             );
