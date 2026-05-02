@@ -1,14 +1,18 @@
 import { AssetInventorySummarySection } from "./sections/AssetInventoryDash";
 import { LostAndFoundTrackingSection } from "./sections/LostAndFoundTrackingSection";
 import { SafetyIncidentReportSection } from "./sections/SafetyIncidentReportSection";
-import { SidebarNavigationSection } from "./sections/SidebarNavigationSection";
+import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { TaskStatusPanelSection } from "./sections/TaskStatusPanelSection";
+import { useAuth } from '../../hooks/useAuth'
 
 export const DashboardPage : React.FC = () => {
+  const { role } = useAuth()
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
+
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
       {/* Fixed Sidebar */}
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole} />
 
       {/* Main content - scrollable */}
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
