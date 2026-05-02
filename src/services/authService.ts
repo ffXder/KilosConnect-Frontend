@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
  
 export async function login(username: string, password: string) {
   const res = await fetch(`${API_URL}/auth/login`, {
@@ -23,10 +23,6 @@ export async function login(username: string, password: string) {
 export function logOut() {
   localStorage.removeItem('role');
   localStorage.removeItem('user');
-}
- 
-export function getToken() {
-  return localStorage.getItem('role');
 }
  
 export function getRole() {
