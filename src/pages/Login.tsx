@@ -35,96 +35,72 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <main className="bg-white w-full min-w-[1920px] min-h-[1080px] flex">
-      {/* Left panel */}
+    <main className="min-h-screen w-full flex flex-col md:flex-row bg-white overflow-x-hidden">
+      
+      {/* Left panel: Full width on mobile, 35% on desktop */}
       <section
         aria-labelledby={`${formId}-title`}
-        className="w-[705px] h-[1080px] relative bg-[linear-gradient(180deg,rgba(7,40,33,1)_21%,rgba(17,27,48,1)_100%)]"
+        className="w-full md:w-[40%] lg:w-[35%] min-h-screen flex flex-col items-center justify-center p-6 md:p-12 
+                   bg-[linear-gradient(180deg,#072821_21%,#111B30_100%)]"
       >
+        {/* Logo */}
         <img
-          className="absolute top-[142px] left-[234px] w-[238px] h-[134px] object-contain"
+          className="w-[180px] md:w-[238px] mb-8 object-contain"
           alt="KILOS"
           src={KILOSWhiteLogo1}
         />
 
-        <h1
-          id={`${formId}-title`}
-          className="absolute top-[calc(50%-264px)] left-[calc(50%-110px)] w-[219px] h-[110px] flex items-center justify-center font-poppins font-semibold text-[#fdffe0] text-4xl text-center"
-        >
+        <h1 id={`${formId}-title`} className="font-poppins font-semibold text-[#fdffe0] text-3xl md:text-4xl mb-8">
           LOG IN
         </h1>
 
         {/* Error message */}
         {error && (
-          <div className="absolute top-[358px] left-[119px] w-[467px] bg-red-500/20 border border-red-400 rounded-md px-3 py-2">
+          <div className="w-full max-w-[400px] mb-4 bg-red-500/20 border border-red-400 rounded-md p-3">
             <p className="font-poppins text-red-300 text-sm text-center">{error}</p>
           </div>
         )}
 
-        <form className="contents" onSubmit={handleSubmit} aria-label="Login form">
-          {formFields.map((field, index) => {
-            const labelTop = index === 0 ? "top-[398px]" : "top-[518px]";
-            const inputTop = index === 0 ? "top-[438px]" : "top-[559px]";
-            const labelWidth = index === 0 ? "w-32" : "w-[116px]";
-
-            return (
-              <div key={field.id}>
-                <label
-                  htmlFor={`${formId}-${field.id}`}
-                  className={`absolute ${labelTop} left-[119px] ${labelWidth} h-7 flex items-center justify-center font-poppins text-[#fdffe0] text-2xl`}
-                >
-                  {field.label}
-                </label>
-                <div className={`absolute ${inputTop} left-[119px] w-[467px] h-[42px] flex rounded-md`}>
-                  <input
-                    id={`${formId}-${field.id}`}
-                    name={field.id}
-                    type={field.id === "password" && showPassword ? "text" : field.type}
-                    autoComplete={field.autoComplete}
-                    value={formValues[field.id]}
-                    onChange={(event) =>
-                      setFormValues((current) => ({
-                        ...current,
-                        [field.id]: event.target.value,
-                      }))
-                    }
-                    aria-label={field.label}
-                    className="w-full h-full bg-white rounded-[var(--sizes-global-radius)] px-[12px] 
-                              text-black [font-family:'Poppins-Regular',Helvetica] font-normal text-base leading-[normal] 
-                              placeholder:text-white/60 shadow-[0_0_0_1px_#00000014]"
-                  />
-
-                  {/* Eye Icon for Password field */}
-                  {field.id === "password" && (
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+        <form className="w-full max-w-[400px] flex flex-col gap-6" onSubmit={handleSubmit}>
+          {formFields.map((field) => (
+            <div key={field.id} className="flex flex-col gap-2">
+              <label htmlFor={`${formId}-${field.id}`} className="font-poppins text-[#fdffe0] text-lg md:text-xl">
+                {field.label}
+              </label>
+              <div className="relative w-full">
+                <input
+                  id={`${formId}-${field.id}`}
+                  name={field.id}
+                  type={field.id === "password" && showPassword ? "text" : field.type}
+                  value={formValues[field.id]}
+                  onChange={(e) => setFormValues(prev => ({ ...prev, [field.id]: e.target.value }))}
+                  className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#ba6300] outline-none"
+                />
+                {field.id === "password" && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 )}
-                </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
 
-          {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="absolute top-[680px] left-[119px] w-[467px] h-[42px] flex items-center justify-center bg-[#ba6300] rounded-md cursor-pointer disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fdffe0]"
+            className="w-full h-[50px] mt-4 bg-[#ba6300] hover:bg-[#a35600] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
           >
-            <span className="font-poppins font-medium text-[#fdffe0] text-xl">
-              {loading ? "Logging in..." : "Log in"}
-            </span>
+            {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
       </section>
 
-      {/* Right panel */}
-      <aside className="w-[1285px] h-[1080px]">
+      {/* Right panel*/}
+      <aside className="hidden md:block md:flex-1 h-screen">
         <img className="w-full h-full object-cover" alt="Gym interior" src={KilosGymImg} />
       </aside>
     </main>
