@@ -1,8 +1,9 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import DashboardPage from './pages/Dashboard/Dashboard'
 import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
+import DashboardPage from './pages/Dashboard/Dashboard'
+
 
 function App() {
   return (
@@ -11,9 +12,9 @@ function App() {
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<LoginPage />} />
         <Route 
-          path='/dashboard'
-          element={
-            <ProtectedRoute>
+        path='/dashboard' 
+        element={
+          <ProtectedRoute>
               <DashboardPage />
             </ProtectedRoute>
           }
