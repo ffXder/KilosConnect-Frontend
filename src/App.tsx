@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoadingPage } from './pages/Loading'
 import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
-import DashboardPage from './pages/Dashboard/Dashboard'
-
+import { DashboardPage } from './pages/Dashboard/DashboardPage'
+import { InventoryPage } from './pages/Inventory'
+import { TaskMonitorPage } from './pages/TaskMonitor'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -31,13 +32,26 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route 
-        path='/dashboard' 
+        <Route path='/dashboard' 
         element={
           <ProtectedRoute allowedRoles={['admin', 'custodian']}>
               <DashboardPage />
             </ProtectedRoute>
           }
+        />
+        <Route path='/inventory'
+        element={
+          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+              <InventoryPage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path='/task-monitor'
+        element={
+          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+              <TaskMonitorPage />
+          </ProtectedRoute>
+        }
         />
       {/* redirects to login if not found or authenticated */}
       <Route path="*" element={<Navigate to="/login" replace />} />
