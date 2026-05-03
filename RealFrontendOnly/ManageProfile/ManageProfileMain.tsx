@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import SidebarManageProfile from "../components/SidebarManageProfile";
+import SidebarProfile from "../../src/components/SidebarManageProfile";
 
 interface UserAccount {
   id: string;
@@ -46,7 +46,53 @@ export interface ActivityItem {
 
 const ManageProfileMain: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [accounts] = useState<UserAccount[]>([]);
+  const [accounts] = useState<UserAccount[]>([
+    {
+      id: "user-1",
+      initials: "JS",
+      name: "John Smith",
+      email: "john.smith@kilosph.com",
+      role: "Admin",
+      status: "Active",
+      dateAdded: "05/12/2024",
+    },
+    {
+      id: "user-2",
+      initials: "MD",
+      name: "Maria Dizon",
+      email: "maria.dizon@kilosph.com",
+      role: "Custodian",
+      status: "Active",
+      dateAdded: "09/18/2024",
+    },
+    {
+      id: "user-3",
+      initials: "DC",
+      name: "David Chen",
+      email: "david.chen@kilosph.com",
+      role: "Custodian",
+      status: "Active",
+      dateAdded: "12/06/2024",
+    },
+    {
+      id: "user-4",
+      initials: "SS",
+      name: "Sarah Santos",
+      email: "sarah.santos@kilosph.com",
+      role: "Admin",
+      status: "Inactive",
+      dateAdded: "02/02/2025",
+    },
+    {
+      id: "user-5",
+      initials: "MR",
+      name: "Michael Reyes",
+      email: "michael.reyes@kilosph.com",
+      role: "Custodian",
+      status: "Active",
+      dateAdded: "03/22/2025",
+    },
+  ]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newUserForm, setNewUserForm] = useState<NewUserForm>({
     username: "",
@@ -90,7 +136,7 @@ const ManageProfileMain: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
-      <SidebarManageProfile />
+      <SidebarProfile />
 
       <div className="flex flex-col flex-1 min-w-0 ml-60 overflow-y-auto">
         <header className="flex items-center justify-between px-8 pt-8 pb-4 bg-white border-b border-[#e8e8e8]">
