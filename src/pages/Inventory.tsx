@@ -5,7 +5,7 @@ import { X, Wrench, Layers, Search, Plus } from "lucide-react";
 import { useAuth } from '../hooks/useAuth'
 
 export const InventoryPage: React.FC = () => {
-  const { role, user } = useAuth()
+  const { role } = useAuth()
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
   const [isModalOpen, setIsModalOpen] = useState(false);
 
