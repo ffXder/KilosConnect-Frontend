@@ -1,10 +1,13 @@
-import { SidebarNavigationSection } from "../components/SidebarLogs";
+import { SidebarNavigationSection } from "../components/SidebarNavigationSection";
+import { useAuth } from "../hooks/useAuth";
 
-export const Logs : React.FC = () => {
+export const LogsPage : React.FC = () => {
+  const { role } = useAuth();
+    const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
       {/* Fixed Sidebar */}
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole}/>
 
       {/* Main content - scrollable */}
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
@@ -12,11 +15,8 @@ export const Logs : React.FC = () => {
         <header className="flex items-center justify-between px-8 pt-8 pb-4 bg-white border-b border-[#e8e8e8]">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-[36px] leading-tight m-0 p-0">
-              Dashboard
+              Logs
             </h1>
-            <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">
-              Welcome, BingBong!
-            </p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -59,5 +59,3 @@ export const Logs : React.FC = () => {
     </div>
   );
 };
-
-export default Logs;
