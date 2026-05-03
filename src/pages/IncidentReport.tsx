@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SidebarNavigationSection } from "../components/SidebarNavigationSection";
-
+import { useAuth } from "../hooks/useAuth";
 // Icons as SVG components to match your image exactly
 const PendingIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,6 +41,8 @@ interface Incident {
 }
 
 export const IncidentReportPage: React.FC = () => {
+  const { role } = useAuth()
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | "Pending" | "In Progress" | "Resolved">("All");
@@ -91,12 +93,12 @@ export const IncidentReportPage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden relative font-sans">
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole} />
 
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
         <header className="flex items-center justify-between px-8 pt-8 pb-4">
           <div>
-            <h1 className="font-semibold text-[#1f1f1f] text-[32px] leading-tight m-0">Incident Reporting</h1>
+            <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-2xl md:text-[36px]">Incident Reporting</h1>
             <p className="text-[#6b6b6b] text-base mt-0.5 m-0">Track and manage equipment issues and safety hazards</p>
           </div>
           <div className="flex items-center gap-2">
