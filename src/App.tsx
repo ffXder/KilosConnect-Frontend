@@ -1,6 +1,6 @@
 import './App.css'
 import ManageProfileMain from '../RealFrontendOnly/ManageProfile/ManageProfileMain';
-import Logs from '../RealFrontendOnly/Logs/LogsMain';
+import Logs from '../RealFrontendOnly/LogsModule/LogsMain';
 import ProfileMain from '../RealFrontendOnly/Profile/ProfileMain';
 
 function App() {
