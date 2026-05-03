@@ -144,7 +144,7 @@ const ProfileMain: React.FC = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSubmit}
-                      className="bg-[#22c55e] hover:bg-[#16a34a] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors"
+                      className="bg-[#183a30] hover:bg-[#336658] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors"
                     >
                       Save
                     </button>
