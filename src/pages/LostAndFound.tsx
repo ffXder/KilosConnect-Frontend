@@ -1,48 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { SidebarNavigationSection } from "../components/SidebarNavigationSection";
-
-// --- Types for MongoDB Mapping ---
-interface LostFoundItem {
-  _id: string; // MongoDB ID
-  name: string;
-  description: string;
-  location: string;
-  foundBy: string;
-  date: string;
-  status: "Unclaimed" | "Claimed";
-  claimedBy?: string;
-  claimedDate?: string;
-}
+import { useAuth } from "../hooks/useAuth";
 
 export const LostAndFoundPage: React.FC = () => {
-  // Initialized as empty for MongoDB connection
-  const [items, setItems] = useState<LostFoundItem[]>([]);
+  const { role } = useAuth();
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | "Unclaimed" | "Claimed">("All");
 
-  useEffect(() => {
-    const fetchLostFound = async () => {
-      try {
-        // Example: const res = await fetch('/api/lost-and-found');
-        // const data = await res.json();
-        // setItems(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-    fetchLostFound();
-  }, []);
+
 
   // Filter logic for the UI tabs
-  const filteredItems = items.filter(item => 
-    filter === "All" ? true : item.status === filter
-  );
+  // const filteredItems = items.filter(item => 
+  //   filter === "All" ? true : item.status === filter
+  // );
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole} />
 
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
         {/* Header matching dashboard theme */}
@@ -68,19 +43,19 @@ export const LostAndFoundPage: React.FC = () => {
           <div className="grid grid-cols-3 gap-6">
             <StatCard 
               label="Total Items" 
-              count={items.length} 
+              // count={items.length} 
               color="text-[#0a4a44]" 
               iconBg="bg-[#dcfce7]" 
             />
             <StatCard 
               label="Unclaimed" 
-              count={items.filter(i => i.status === "Unclaimed").length} 
+              // count={items.filter(i => i.status === "Unclaimed").length} 
               color="text-[#b45309]" 
               iconBg="bg-[#fef3c7]" 
             />
             <StatCard 
               label="Claimed" 
-              count={items.filter(i => i.status === "Claimed").length} 
+              // count={items.filter(i => i.status === "Claimed").length} 
               color="text-[#15803d]" 
               iconBg="bg-[#dcfce7]" 
             />
@@ -111,25 +86,6 @@ export const LostAndFoundPage: React.FC = () => {
               ))}
             </div>
           </div>
-
-          {/* Grid Area - Populated by MongoDB */}
-          <div className="bg-white p-8 rounded-[16px] border border-[#e8e8e8] shadow-sm min-h-[500px]">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center h-[400px] text-gray-400 animate-pulse">
-                <p>Connecting to database...</p>
-              </div>
-            ) : filteredItems.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredItems.map((item) => (
-                  <ItemCard key={item._id} item={item} />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-[400px] text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
-                <p>No items found in record.</p>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
@@ -155,39 +111,39 @@ const StatCard = ({ label, count, color, iconBg }: any) => (
   </div>
 );
 
-const ItemCard = ({ item }: { item: LostFoundItem }) => (
-  <div className="flex flex-col bg-white border border-[#e8e8e8] rounded-[12px] p-5 relative transition-all hover:shadow-md">
-    <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-      item.status === "Unclaimed" ? "bg-amber-100 text-amber-600" : "bg-green-100 text-green-600"
-    }`}>
-      {item.status}
-    </span>
+// const ItemCard = ({ item }: { item: LostFoundItem }) => (
+//   <div className="flex flex-col bg-white border border-[#e8e8e8] rounded-[12px] p-5 relative transition-all hover:shadow-md">
+//     <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+//       item.status === "Unclaimed" ? "bg-amber-100 text-amber-600" : "bg-green-100 text-green-600"
+//     }`}>
+//       {item.status}
+//     </span>
 
-    <div className="w-10 h-10 bg-teal-50 rounded-[8px] flex items-center justify-center mb-4">
-      <svg width="20" height="20" className="text-teal-600" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /></svg>
-    </div>
+//     <div className="w-10 h-10 bg-teal-50 rounded-[8px] flex items-center justify-center mb-4">
+//       <svg width="20" height="20" className="text-teal-600" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /></svg>
+//     </div>
 
-    <h3 className="font-bold text-[#1f1f1f] text-base mb-1">{item.name}</h3>
-    <p className="text-[#6b6b6b] text-xs leading-relaxed mb-4 line-clamp-2">{item.description}</p>
+//     <h3 className="font-bold text-[#1f1f1f] text-base mb-1">{item.name}</h3>
+//     <p className="text-[#6b6b6b] text-xs leading-relaxed mb-4 line-clamp-2">{item.description}</p>
 
-    <div className="space-y-2 mb-6">
-      <InfoRow icon="📍" label="Found in" value={item.location} />
-      <InfoRow icon="👤" label="Found by" value={item.foundBy} />
-      <InfoRow icon="📅" label="Date" value={item.date} />
-    </div>
+//     <div className="space-y-2 mb-6">
+//       <InfoRow icon="📍" label="Found in" value={item.location} />
+//       <InfoRow icon="👤" label="Found by" value={item.foundBy} />
+//       <InfoRow icon="📅" label="Date" value={item.date} />
+//     </div>
 
-    {item.status === "Claimed" ? (
-      <div className="mt-auto pt-4 border-t border-[#f4f5f6] space-y-1">
-        <div className="text-[11px] font-semibold text-green-600 flex items-center gap-2"><span>✔️</span> Claimed by: {item.claimedBy}</div>
-        <div className="text-[11px] font-semibold text-green-600 flex items-center gap-2"><span>📅</span> On: {item.claimedDate}</div>
-      </div>
-    ) : (
-      <button className="mt-auto w-full py-2 bg-[#0a2e27] text-white text-xs font-semibold rounded-[6px]">
-        Mark as Claimed
-      </button>
-    )}
-  </div>
-);
+//     {item.status === "Claimed" ? (
+//       <div className="mt-auto pt-4 border-t border-[#f4f5f6] space-y-1">
+//         <div className="text-[11px] font-semibold text-green-600 flex items-center gap-2"><span>✔️</span> Claimed by: {item.claimedBy}</div>
+//         <div className="text-[11px] font-semibold text-green-600 flex items-center gap-2"><span>📅</span> On: {item.claimedDate}</div>
+//       </div>
+//     ) : (
+//       <button className="mt-auto w-full py-2 bg-[#0a2e27] text-white text-xs font-semibold rounded-[6px]">
+//         Mark as Claimed
+//       </button>
+//     )}
+//   </div>
+// );
 
 const InfoRow = ({ icon, label, value }: any) => (
   <div className="flex items-center gap-2 text-[11px] text-[#4b4b4b]">
