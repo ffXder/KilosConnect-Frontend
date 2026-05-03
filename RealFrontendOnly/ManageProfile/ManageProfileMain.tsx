@@ -46,7 +46,8 @@ export interface ActivityItem {
 
 const ManageProfileMain: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [accounts] = useState<UserAccount[]>([
+  // Updated to allow state updates (setAccounts)
+  const [accounts, setAccounts] = useState<UserAccount[]>([
     {
       id: "user-1",
       initials: "JS",
@@ -93,7 +94,9 @@ const ManageProfileMain: React.FC = () => {
       dateAdded: "03/22/2025",
     },
   ]);
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [newUserForm, setNewUserForm] = useState<NewUserForm>({
     username: "",
     password: "",
@@ -112,9 +115,27 @@ const ManageProfileMain: React.FC = () => {
     [accounts, search]
   );
 
-  const openAddModal = () => setIsAddModalOpen(true);
+  const openAddModal = () => {
+    setEditingAccountId(null);
+    setIsAddModalOpen(true);
+  };
+
+  const openEditModal = (account: UserAccount) => {
+    const [firstName, ...lastNameParts] = account.name.split(" ");
+    setEditingAccountId(account.id);
+    setNewUserForm({
+      username: account.email.split("@")[0], // Mock username from email
+      password: "••••••••", // Mock password
+      firstName: firstName,
+      lastName: lastNameParts.join(" "),
+      role: account.role,
+    });
+    setIsAddModalOpen(true);
+  };
+
   const closeAddModal = () => {
     setIsAddModalOpen(false);
+    setEditingAccountId(null);
     setNewUserForm({
       username: "",
       password: "",
@@ -130,8 +151,47 @@ const ManageProfileMain: React.FC = () => {
 
   const handleAddUserSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (editingAccountId) {
+      // Logic for Editing
+      setAccounts((prev) =>
+        prev.map((acc) =>
+          acc.id === editingAccountId
+            ? {
+                ...acc,
+                name: `${newUserForm.firstName} ${newUserForm.lastName}`,
+                initials: `${newUserForm.firstName[0]}${newUserForm.lastName[0]}`.toUpperCase(),
+                role: newUserForm.role,
+                email: `${newUserForm.username.toLowerCase()}@kilosph.com`,
+              }
+            : acc
+        )
+      );
+    } else {
+      // Logic for Adding
+      const newUser: UserAccount = {
+        id: `user-${Date.now()}`,
+        initials: `${newUserForm.firstName[0]}${newUserForm.lastName[0]}`.toUpperCase(),
+        name: `${newUserForm.firstName} ${newUserForm.lastName}`,
+        email: `${newUserForm.username.toLowerCase()}@kilosph.com`,
+        role: newUserForm.role,
+        status: "Active",
+        dateAdded: new Date().toLocaleDateString("en-US", {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+        }),
+      };
+      setAccounts((prev) => [...prev, newUser]);
+    }
+
     closeAddModal();
-    // TODO: connect this to backend/database to add a user.
+  };
+
+  const handleDeleteUser = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      setAccounts((prev) => prev.filter((acc) => acc.id !== id));
+    }
   };
 
   return (
@@ -287,12 +347,14 @@ const ManageProfileMain: React.FC = () => {
                         <td className="px-6 py-4 flex items-center gap-3">
                           <button
                             type="button"
+                            onClick={() => openEditModal(account)}
                             className="text-[#2563eb] hover:text-[#1d4ed8] transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             type="button"
+                            onClick={() => handleDeleteUser(account.id)}
                             className="text-[#ef4444] hover:text-[#dc2626] transition-colors"
                           >
                             Delete
@@ -312,7 +374,7 @@ const ManageProfileMain: React.FC = () => {
             <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl">
               <div className="rounded-t-2xl bg-[#072821] px-6 py-4">
                 <h2 className="font-['Poppins',Helvetica] text-lg font-semibold text-white">
-                  Add User
+                  {editingAccountId ? "Edit User" : "Add User"}
                 </h2>
               </div>
               <form onSubmit={handleAddUserSubmit} className="space-y-4 px-6 py-6">
@@ -330,6 +392,7 @@ const ManageProfileMain: React.FC = () => {
                     <input
                       name={field.name}
                       type={field.type}
+                      required={!editingAccountId || field.name !== 'password'}
                       value={newUserForm[field.name as keyof NewUserForm]}
                       onChange={handleNewUserChange}
                       placeholder={field.placeholder}
@@ -343,6 +406,7 @@ const ManageProfileMain: React.FC = () => {
                   </label>
                   <select
                     name="role"
+                    required
                     value={newUserForm.role}
                     onChange={handleNewUserChange}
                     className="w-full rounded-[10px] border border-[#d1d5db] bg-[#f8fafb] px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1a4d3e]"
@@ -364,7 +428,7 @@ const ManageProfileMain: React.FC = () => {
                     type="submit"
                     className="rounded-[10px] bg-[#072821] px-4 py-2 text-sm font-medium text-white hover:bg-[#153d34] transition-colors"
                   >
-                    Add User
+                    {editingAccountId ? "Update User" : "Add User"}
                   </button>
                 </div>
               </form>
