@@ -21,5 +21,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "RealFrontendOnly/Logs", "RealFrontendOnly/ManageProfile", "RealFrontendOnly/LogsModule/LogsFilterSection.tsx", "RealFrontendOnly/LogsModule/LogsIcons.tsx", "RealFrontendOnly/LogsModule/LogsListSection.tsx", "RealFrontendOnly/LogsModule/LogsMain.tsx", "RealFrontendOnly/LogsModule/LogsStatsSection.tsx"]
+  "include": ["src", "RealFrontendOnly/Logs", "src/pages/ManageProfile", "src/pages/LogsModule/LogsFilterSection.tsx", "src/pages/LogsModule/LogsIcons.tsx", "src/pages/LogsModule/LogsListSection.tsx", "src/pages/LogsModule/LogsMain.tsx", "src/pages/LogsModule/LogsStatsSection.tsx"]
 }
