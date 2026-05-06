@@ -40,7 +40,7 @@ export const LostAndFoundTrackingSection : React.FC = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[#efefef]">
-              {["ID", "Item Description", "Location Found", "Date Found", "Status"].map((col) => (
+              {["ID", "Item Description", "Area Found", "Date Found", "Status"].map((col) => (
                 <th
                   key={col}
                   className="[font-family:'Poppins',Helvetica] font-semibold text-[#1a1a1a] text-sm text-left py-2 pr-6 last:pr-0 whitespace-nowrap"
