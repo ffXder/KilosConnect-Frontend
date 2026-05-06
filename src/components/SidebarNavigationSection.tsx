@@ -69,7 +69,7 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
     <aside
       className="fixed top-0 left-0 w-[240px] h-screen bg-[#072821] flex flex-col z-50"
       aria-label="Sidebar navigation"
-      style={{ borderRight: "4px solid #1a5c4f" }}
+      style={{ borderRight: "4px solid #072821" }}
     >
       {/* Logo */}
       <div className="flex items-center justify-center py-8 px-6">
