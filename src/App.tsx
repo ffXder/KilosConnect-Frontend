@@ -7,9 +7,11 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { DashboardPage } from './pages/Dashboard/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { TaskMonitorPage } from './pages/TaskMonitor'
-import { LostAndFoundPage } from './pages/LostAndFound'
+import { LostAndFoundPage } from './pages/LostandFound/LostAndFound'
 import { IncidentReportPage } from './pages/IncidentReport'
-import { LogsPage } from './pages/Logs'
+import { ProfilePage } from './pages/Profile/ProfileMain'
+import { LogsPage } from './pages/LogsModule/LogsMain'
+import { ManageAccountPage } from './pages/ManageAccounts/ManageAccountPage'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -77,7 +79,20 @@ function App() {
           </ProtectedRoute>
         }
         />
-
+        <Route path='/profile'
+        element={
+          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+              <ProfilePage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path='/manage-accounts'
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+              <ManageAccountPage />
+          </ProtectedRoute>
+        }
+        />
       {/* redirects to login if not found or authenticated */}
       <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
