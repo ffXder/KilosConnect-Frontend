@@ -100,6 +100,8 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Critical">Critical</option>
               </select>
               <ChevronDown className="absolute right-4 bottom-4 text-gray-400 pointer-events-none" size={18} />
             </div>
