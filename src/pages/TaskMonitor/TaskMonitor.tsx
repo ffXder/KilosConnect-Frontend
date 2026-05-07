@@ -4,6 +4,7 @@ import TaskStatsSection from './TaskStatsSection';
 import TaskFilterSection from './TaskFilterSection';
 import TaskListSection from './TaskListSection';
 import AddTaskModal from './AddITaskModals';
+import { useAuth } from '../../hooks/useAuth';
 
 interface Task {
   _id: string;
@@ -24,7 +25,7 @@ const MOCK_DATA: Task[] = [
   { _id: '4', title: 'Aircon Filter Maintenance', description: 'Wash filters in the CrossFit area.', area: 'CrossFit Area', frequency: 'Monthly', status: 'Pending', startTime: '15:00', endTime: '17:00', isArchived: false },
 ];
 
-const TaskMonitor: React.FC = () => {
+export const TaskMonitorPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>(MOCK_DATA);
   const [statusFilter, setStatusFilter] = useState('All Tasks');
@@ -46,10 +47,13 @@ const TaskMonitor: React.FC = () => {
   const handleAddTask = (newTask: any) => setTasks(prev => [...prev, newTask]);
   const handleToggleStatus = (id: string) => setTasks(prev => prev.map(t => t._id === id ? { ...t, status: 'Completed' } : t));
   const handleArchiveTask = (id: string) => setTasks(prev => prev.filter(t => t._id !== id));
+  
+  const { role } = useAuth();
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
-      <SidebarNavigationSection />
+      <SidebarNavigationSection userRole={userRole} />
       <main className="flex-1 ml-[240px] p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#0f172a]">Task Tracking</h1>
@@ -92,4 +96,3 @@ const TaskMonitor: React.FC = () => {
   );
 };
 
-export default TaskMonitor;
