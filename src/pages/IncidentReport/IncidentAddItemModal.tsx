@@ -22,8 +22,7 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
     title.trim() !== '' && 
     description.trim() !== '' && 
     location !== '' && 
-    dateTime !== '' && 
-    reportedBy.trim() !== '';
+    dateTime !== '';
 
   if (!isOpen) return null;
 
