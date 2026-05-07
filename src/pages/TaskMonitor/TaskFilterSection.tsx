@@ -83,10 +83,10 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <button 
                 key={opt.label} 
                 onClick={() => setFrequencyFilter(opt.label)}
-                className={`px-4 py-2 rounded-[9px] text-[11px] font-black transition-all ${
+                className={`px-4 py-2 rounded-[9px] [font-family:'Poppins',Helvetica] font-semibold text-[10px] font-black transition-all ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
-                    : "text-slate-400 hover:bg-white/50"
+                    : "text-slate-400 hover:bg-white/50"  
                 }`}
               >
                 {opt.label.toUpperCase()}
