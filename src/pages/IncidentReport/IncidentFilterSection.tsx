@@ -26,7 +26,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 }) => {
   // Added 'Archived' to statusOptions[cite: 2]
   const statusOptions = ['All', 'Pending', 'In Progress', 'Resolved'];
-  const priorityOptions = ['Any Priority', 'Low Severity', 'Medium Severity', 'High Severity'];
+  const priorityOptions = ['Any Priority', 'Low Severity', 'Medium Severity', 'High Severity', 'Urgent Severity', 'Critical Severity'];
   const locations = [
     'All Areas', 'Mezzanine', 'Powerlifting Area', 'Open WOD Area', 
     'CrossFit Area', 'Café', 'General Storage', 'Maintenance Storage'
