@@ -25,7 +25,7 @@ const ZONES = [
   "Powerlifting Area",
   "Open WOD Area",
   "CrossFit Area",
-  "Café",
+  "Weightlifting Area",
   "General Storage",
   "Maintenance Storage",
 ];
