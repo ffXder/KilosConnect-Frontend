@@ -56,8 +56,8 @@ export const TaskMonitorPage: React.FC = () => {
       <SidebarNavigationSection userRole={userRole} />
       <main className="flex-1 ml-[240px] p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#0f172a]">Task Tracking</h1>
-          <p className="text-gray-500 mt-1 text-sm font-medium">Monitor and manage facility maintenance schedules</p>
+          <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Task Tracking</h1>
+          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">Monitor and manage facility maintenance schedules</p>
         </div>
         
         <TaskStatsSection tasks={tasks} />
