@@ -17,7 +17,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   onAddTask, statusFilter, setStatusFilter, frequencyFilter, setFrequencyFilter, areaFilter, setAreaFilter, searchTerm, setSearchTerm
 }) => {
   const statusOptions = ['All Tasks', 'Pending', 'Completed'];
-  const zones = ["All Areas", "Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Café", "General Storage", "Maintenance Storage"];
+  const zones = ["All Areas", "Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Weightlifting Area", "General Storage", "Maintenance Storage"];
   
   const frequencyOptions = [
     { label: 'All', active: 'bg-[#a855f7] text-white', inactive: 'text-[#a855f7] bg-purple-50' },
