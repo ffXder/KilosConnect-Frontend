@@ -10,7 +10,7 @@ interface IncidentItemProps {
 const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onClick }) => {
   const getStatusConfig = () => {
     switch (incident.status) {
-      case 'Pending': return { icon: <AlertCircle className="text-red-500" size={20} />, color: 'bg-red-100 text-red-500' };
+      case 'Open': return { icon: <AlertCircle className="text-red-500" size={20} />, color: 'bg-red-100 text-red-500' };
       case 'In Progress': return { icon: <Clock className="text-blue-500" size={20} />, color: 'bg-blue-100 text-blue-500' };
       case 'Resolved': return { icon: <CheckCircle2 className="text-emerald-500" size={20} />, color: 'bg-emerald-100 text-emerald-500' };
       case 'Archived': return { icon: <Archive className="text-gray-400" size={20} />, color: 'bg-gray-100 text-gray-500' }; // Added Archived config[cite: 3]
