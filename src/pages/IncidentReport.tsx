@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { SidebarNavigationSection } from "../components/SidebarNavigationSection";
 import { useAuth } from "../hooks/useAuth";
-// Icons as SVG components to match your image exactly
+import { Bell } from "lucide-react";
+
 const PendingIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="9" stroke="#e53e3e" strokeWidth="2"/>
@@ -96,16 +97,14 @@ export const IncidentReportPage: React.FC = () => {
       <SidebarNavigationSection userRole={userRole} />
 
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
-        <header className="flex items-center justify-between px-8 pt-8 pb-4">
-          <div>
-            <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-2xl md:text-[36px]">Incident Reporting</h1>
-            <p className="text-[#6b6b6b] text-base mt-0.5 m-0">Track and manage equipment issues and safety hazards</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-[#e8e8e8]">
-               <img className="w-6 h-6" alt="Notifications" src="https://c.animaapp.com/C3N4JJvt/img/notification@2x.png" />
-            </button>
-            <img className="w-10 h-10 rounded-full border border-[#d8d8d8]" alt="Profile" src="https://c.animaapp.com/C3N4JJvt/img/profile@2x.png" />
+        <header className="flex items-center justify-between px-10 py-6">
+          <h1 className="font-bold text-[#1f1f1f] text-[40px]">Incident Report</h1>
+          <div className="flex items-center gap-4">
+            <button className="p-2 rounded-full border border-gray-200 bg-white shadow-sm"><Bell size={22} /></button>
+            {/* Centered Profile Fix Applied Below */}
+            <div className="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer">
+              <img src="https://c.animaapp.com/C3N4JJvt/img/profile@2x.png" alt="User" className="w-full h-full object-cover" />
+            </div>
           </div>
         </header>
 

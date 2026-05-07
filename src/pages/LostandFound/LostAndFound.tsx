@@ -114,7 +114,7 @@ export const LostAndFoundPage: React.FC = () => {
         <header className="flex items-center justify-between px-10 pt-10 pb-6">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-2xl md:text-[36px]">Lost & Found</h1>
-            <p className="text-[#64748b] text-sm mt-1 font-normal">Manage items stored in facility zones</p>
+            <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">Manage items stored in facility zones</p>
           </div>
           <div className="flex items-center gap-4">
             <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#e2e8f0] text-gray-500 hover:bg-gray-50 transition-colors">
