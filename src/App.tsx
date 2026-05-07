@@ -8,10 +8,10 @@ import { DashboardPage } from './pages/Dashboard/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { TaskMonitorPage } from './pages/TaskMonitor'
 import { LostAndFoundPage } from './pages/LostandFound/LostAndFound'
-import { IncidentReportPage } from './pages/IncidentReport'
+import { IncidentReportPage } from './pages/IncidentReport/IncidentReporting'
 import { ProfilePage } from './pages/Profile/ProfileMain'
 import { LogsPage } from './pages/LogsModule/LogsMain'
-import { ManageAccountPage } from './pages/ManageAccounts/ManageAccountPage'
+import { ManageAccountsPage } from './pages/ManageAccounts/ManageAccountPage'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -89,7 +89,7 @@ function App() {
         <Route path='/manage-accounts'
         element={
           <ProtectedRoute allowedRoles={['admin']}>
-              <ManageAccountPage />
+              <ManageAccountsPage />
           </ProtectedRoute>
         }
         />
