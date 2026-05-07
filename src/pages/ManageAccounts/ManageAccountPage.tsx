@@ -123,9 +123,7 @@ export const ManageAccountsPage: React.FC = () => {
     setDeleteConfirm({ isOpen: false, id: "", name: "" });
   };
 
-  const { role } = useAuth();
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
-
+  
   const filteredAccounts = accounts.filter(a => {
     const query = search.toLowerCase();
     return (
@@ -136,7 +134,10 @@ export const ManageAccountsPage: React.FC = () => {
       a.phoneNumber.includes(query)
     );
   });
-
+  
+  const { role } = useAuth();
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+  
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole}/>
