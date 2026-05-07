@@ -1,0 +1,124 @@
+import React from 'react';
+import { Plus, Search } from 'lucide-react';
+
+interface TaskFilterProps {
+  onAddTask: () => void;
+  statusFilter: string;
+  setStatusFilter: (val: string) => void;
+  frequencyFilter: string;
+  setFrequencyFilter: (val: string) => void;
+  areaFilter: string;
+  setAreaFilter: (val: string) => void;
+  searchTerm: string;
+  setSearchTerm: (val: string) => void;
+}
+
+const TaskFilterSection: React.FC<TaskFilterProps> = ({ 
+  onAddTask, statusFilter, setStatusFilter, frequencyFilter, setFrequencyFilter, areaFilter, setAreaFilter, searchTerm, setSearchTerm
+}) => {
+  const statusOptions = ['All Tasks', 'Pending', 'Completed'];
+  const zones = ["All Areas", "Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Café", "General Storage", "Maintenance Storage"];
+  
+  const frequencyOptions = [
+    { label: 'All', active: 'bg-[#a855f7] text-white', inactive: 'text-[#a855f7] bg-purple-50' },
+    { label: 'Daily', active: 'bg-[#f5d0fe] text-[#a21caf]', inactive: 'text-[#a21caf] bg-[#fdf4ff]' },
+    { label: 'Weekly', active: 'bg-[#dbeafe] text-[#1e40af]', inactive: 'text-[#1e40af] bg-[#eff6ff]' },
+    { label: 'Monthly', active: 'bg-[#dcfce7] text-[#15803d]', inactive: 'text-[#15803d] bg-[#f0fdf4]' }
+  ];
+
+  return (
+    <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans">
+      
+      {/* Primary Action Row: Search & Add (Copied from LostAndFound) */}
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1">
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] text-[15px] focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <button
+          onClick={onAddTask}
+          className="bg-[#113129] text-white px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-[0_4px_12px_rgba(17,49,41,0.15)] active:scale-95"
+        >
+          <Plus size={20} strokeWidth={2.5} />
+          <span>New Task</span>
+        </button>
+      </div>
+
+      {/* Secondary Filter Row: Status, Type, & Area */}
+      <div className="flex flex-wrap items-center gap-6">
+        
+        {/* Status Group */}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Status:</span>
+          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px]">
+            {statusOptions.map((status) => (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all ${
+                  statusFilter === status
+                    ? "bg-white text-[#113129] shadow-sm"
+                    : "text-[#64748b] hover:text-[#1a1a1a]"
+                }`}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="h-6 w-px bg-gray-200" /> {/* Divider */}
+
+        {/* Type (Frequency) Group */}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Type:</span>
+          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px] gap-1">
+            {frequencyOptions.map((opt) => (
+              <button 
+                key={opt.label} 
+                onClick={() => setFrequencyFilter(opt.label)}
+                className={`px-4 py-2 rounded-[9px] text-[11px] font-black transition-all ${
+                  frequencyFilter === opt.label 
+                    ? opt.active + " shadow-sm" 
+                    : "text-slate-400 hover:bg-white/50"
+                }`}
+              >
+                {opt.label.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="h-6 w-px bg-gray-200" /> {/* Divider */}
+
+        {/* Area Group */}
+        <div className="flex items-center gap-3 flex-1 overflow-hidden">
+          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">Area:</span>
+          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+            {zones.map((z) => (
+              <button
+                key={z}
+                onClick={() => setAreaFilter(z)}
+                className={`px-4 py-2 rounded-[10px] text-[13px] font-semibold whitespace-nowrap border transition-all ${
+                  areaFilter === z
+                    ? "bg-[#113129] border-[#113129] text-white shadow-sm"
+                    : "bg-white border-[#e2e8f0] text-[#64748b] hover:border-[#cbd5e1] hover:bg-gray-50"
+                }`}
+              >
+                {z}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TaskFilterSection;

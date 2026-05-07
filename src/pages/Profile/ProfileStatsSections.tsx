@@ -20,3 +20,4 @@ export const ProfileStatsSection: React.FC<{ stats: PerformanceStats }> = ({ sta
     <StatRow label="Active Days" sublabel="This Month" value={stats.activeDays} />
   </div>
 );
+
