@@ -17,12 +17,12 @@ export const DashboardPage : React.FC = () => {
       {/* Main content - scrollable */}
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
         {/* Header */}
-        <header className="flex items-center justify-between px-8 pt-8 pb-4 bg-white border-b border-[#e8e8e8]">
+        <header className="flex items-center justify-between px-8 pt-8 pb-4 ">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-[36px] leading-tight m-0 p-0">
+            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">
               Dashboard
             </h1>
-            <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">
               Welcome, {user?.firstName || "User"}!
             </p>
           </div>  
