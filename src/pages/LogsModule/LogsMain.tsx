@@ -116,8 +116,8 @@ export const LogsPage: React.FC = () => {
       <main className="flex-1 p-10 overflow-y-auto">
         <header className="flex justify-between items-start mb-8 w-full">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] font-semibold text-[#1f1f1f] text-2xl md:text-[36px]">Activity Logs</h1>
-            <p className="text-gray-500 text-sm mt-1">View all system activities and changes</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Activity Logs</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">View all system activities and changes</p>
           </div>
         </header>
         <LogsStatsSection stats={stats} />
