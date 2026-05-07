@@ -41,7 +41,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
       <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
-        <div className="bg-[#1e4d46] p-6 text-white flex justify-between items-center">
+        <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">Add New Inventory Item</h2>
             <p className="text-white/70 text-sm font-normal opacity-90">Fill in the details to record a found item</p>

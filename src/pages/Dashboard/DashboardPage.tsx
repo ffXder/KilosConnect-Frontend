@@ -25,32 +25,7 @@ export const DashboardPage : React.FC = () => {
             <p className="mt-0.5 [font-family:'Poppins',Helvetica] font-normal text-[#6b6b6b] text-base leading-normal m-0 p-0">
               Welcome, {user?.firstName || "User"}!
             </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#f0f0f0] transition-colors cursor-pointer"
-              aria-label="View notifications"
-            >
-              <img
-                className="w-6 h-6 object-contain"
-                alt="Notifications"
-                src="https://c.animaapp.com/C3N4JJvt/img/notification@2x.png"
-              />
-            </button>
-            <button
-              type="button"
-              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#f0f0f0] transition-colors cursor-pointer"
-              aria-label="Open profile menu"
-            >
-              <img
-                className="w-8 h-8 object-cover rounded-full"
-                alt="Profile"
-                src="https://c.animaapp.com/C3N4JJvt/img/profile@2x.png"
-              />
-            </button>
-          </div>
+          </div>  
         </header>
 
         {/* Body */}
