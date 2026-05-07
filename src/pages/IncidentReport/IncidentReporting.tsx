@@ -18,7 +18,7 @@ export interface Incident {
   id: string;
   title: string;
   description: string;
-  status: 'Pending' | 'In Progress' | 'Resolved' | 'Archived'; // Added 'Archived'[cite: 4]
+  status: 'Open' | 'In Progress' | 'Resolved' | 'Archived'; // Added 'Archived'[cite: 4]
   priority: 'High Severity' | 'Medium Severity' | 'Low Severity';
   location: string;
   reportedBy: string;
@@ -48,7 +48,7 @@ export const IncidentReportPage: React.FC = () => {
       id: '1', 
       title: 'Squat rack unstable', 
       description: 'The left side squat rack is wobbling and needs immediate attention', 
-      status: 'Pending', 
+      status: 'Open', 
       priority: 'High Severity', 
       location: 'Powerlifting Area', 
       reportedBy: 'Maria Santos', 
@@ -58,7 +58,7 @@ export const IncidentReportPage: React.FC = () => {
       id: '2', 
       title: 'Broken mirror', 
       description: 'Wall mirror has a crack', 
-      status: 'Pending', 
+      status: 'Open', 
       priority: 'Medium Severity', 
       location: 'Mezzanine', 
       reportedBy: 'Juan Cruz', 
@@ -70,7 +70,7 @@ export const IncidentReportPage: React.FC = () => {
     const incidentWithId: Incident = {
       ...newIncident,
       id: Date.now().toString(),
-      status: 'Pending'
+      status: 'Open'
     };
     setIncidents([incidentWithId, ...incidents]);
   };
@@ -117,8 +117,8 @@ export const IncidentReportPage: React.FC = () => {
 
         <div className="flex gap-5 mb-8">
           <StatCard 
-            label="Pending" 
-            count={incidents.filter(i => i.status === 'Pending').length} 
+            label="Open" 
+            count={incidents.filter(i => i.status === 'Open').length} 
             icon={<CircleX className="text-[#EF4444]" size={24} />} 
             colorClass="bg-[#FEE2E2]" 
           />
