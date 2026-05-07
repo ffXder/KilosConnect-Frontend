@@ -111,8 +111,8 @@ export const ProfilePage: React.FC = () => {
       <SidebarNavigationSection userRole={userRole}/>
       <div className="lg:pl-[280px] p-8">
         <div className="mb-6">
-          <h1 className="text-[28px] font-bold text-[#0d1f1a] leading-tight">Profile</h1>
-          <p className="text-sm text-[#6b7280] mt-0.5">Manage your account information and view your activity</p>
+          <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Profile</h1>
+          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">Manage your account information and view your activity</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
