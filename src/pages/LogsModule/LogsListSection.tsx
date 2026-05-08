@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface LogEntry {
-  id: string | number;
+  id: string; 
   title: string;
   description: string;
   user: string;
