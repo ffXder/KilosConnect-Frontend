@@ -1,35 +1,31 @@
 import React, { useState } from "react";
 import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
-
-// Modular Imports
 import type { UserAccount, NewUserForm } from "../../types/manageAccount";
 import { AccountsStatsSection }  from "./AccountStatsSection";
 import { AccountsFilterSection } from "./AccountFilterSection";
 import AccountsListSection from "./AccountListSection";
 import AccountsIcons from "./AccountIcons";
+import { createUser, updateUser } from "../../services/manageAccountService";
+import { useUsers } from "../../hooks/useUsers";
 
 export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [accounts, setAccounts] = useState<UserAccount[]>([
-    { id: "USER-1032CD8C", initials: "MG", name: "Maria Garcia", email: "maria.garcia@kilosph.com", role: "Custodian", status: "Active", dateAdded: "2/20/2024", phoneNumber: "+63 956 745 2678" },
-    { id: "USER-1029ZS8C", initials: "DC", name: "David Chen", email: "david.chen@kilosph.com", role: "Custodian", status: "Active", dateAdded: "3/10/2024", phoneNumber: "+63 998 574 9281" },
-    { id: "USER-1029ZS8D", initials: "C", name: "David Tan", email: "david.Tan@kilosph.com", role: "Admin", status: "Inactive", dateAdded: "4/6/2024", phoneNumber: "+63 998 574 2678" }
-  ]);
-
-  // --- MODAL & FORM STATES ---
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string }>({ 
-    isOpen: false, id: "", name: "" 
-  });
-  const [showPassword, setShowPassword] = useState(false); 
-  const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
+  const { users, loading, error, refresh, handleToggleArchive } = useUsers();
   
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string}>({
+    isOpen: false, id: "", name: ""
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
+
   const [newUserForm, setNewUserForm] = useState<NewUserForm>({
     firstName: "", lastName: "", password: "", email: "", role: "Custodian", phoneNumber: "",
   });
 
-  // --- HELPER FUNCTIONS ---
+   // --- HELPER FUNCTIONS ---
   const formatPHPhoneNumber = (value: string): string => {
     const digits = value.replace(/\D/g, "");
     const cleanNumbers = digits.startsWith("63") ? digits.slice(2) : digits;
@@ -45,99 +41,84 @@ export const ManageAccountsPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    if (name === "phoneNumber") {
+    if (name === "role") {
+      setNewUserForm((prev) => ({ ...prev, [name]: value.toLowerCase() }));
+    } else if (name === "phoneNumber") {
       setNewUserForm((prev) => ({ ...prev, [name]: formatPHPhoneNumber(value) }));
     } else {
       setNewUserForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!isAddModalOpen) return;
+    
+    const submissionData = {
+      ...newUserForm,
+      role: newUserForm.role.toLowerCase() 
+    };
 
-    // Email validation check before saving
-    if (newUserForm.email && !newUserForm.email.includes("@")) {
-      alert("Please enter a valid email address containing '@'");
-      return;
+    try {
+      if (editingAccountId) {
+        await updateUser(editingAccountId, submissionData);
+      } else {
+        await createUser(submissionData);
+      }
+
+      await refresh();
+      closeAddModal();
+    } catch (err: any) {
+      alert("Error: " + err.message);
     }
-
-    if (!newUserForm.firstName || !newUserForm.lastName) return;
-
-    const fullName = `${newUserForm.firstName} ${newUserForm.lastName}`;
-    const initials = (newUserForm.firstName[0] + (newUserForm.lastName[0] || "")).toUpperCase();
-
-    if (editingAccountId) {
-      setAccounts(accounts.map(acc => 
-        acc.id === editingAccountId 
-          ? { ...acc, name: fullName, initials, email: newUserForm.email, role: newUserForm.role as any, phoneNumber: newUserForm.phoneNumber }
-          : acc
-      ));
-    } else {
-      const newAccount: UserAccount = {
-        id: `USER-${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-        initials,
-        name: fullName,
-        email: newUserForm.email,
-        role: newUserForm.role as any,
-        status: "Active",
-        dateAdded: new Date().toLocaleDateString(),
-        phoneNumber: newUserForm.phoneNumber
-      };
-      setAccounts([newAccount, ...accounts]);
-    }
-    closeAddModal();
   };
+
+  const confirmDelete = async () => {
+    try {
+      await handleToggleArchive(deleteConfirm.id, false);
+      setDeleteConfirm({ isOpen: false, id: "", name: "" });
+    } catch (err: any) {
+      alert("Failed to delete user.");
+    }
+  }
+
+  const filteredAccounts = users.filter(a => {
+    const query = search.toLowerCase();
+    const fullName = `${a.firstName} ${a.lastName}`.toLowerCase();
+    return (
+      fullName.includes(query) || 
+      a.userId.toLowerCase().includes(query) ||
+      a.email.toLowerCase().includes(query) ||
+      a.role.toLowerCase().includes(query)
+    );
+  });
 
   const closeAddModal = () => {
     setIsAddModalOpen(false);
     setShowPassword(false);
     setEditingAccountId(null);
-    setNewUserForm({ firstName: "", lastName: "", password: "", email: "", role: "Custodian", phoneNumber: "" });
+    setNewUserForm({ firstName: "", lastName: "", password: "", email: "", role: "custodian", phoneNumber: "" });
   };
 
   const openEditModal = (account: UserAccount) => {
-    const nameParts = account.name.split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(" ");
-
-    setEditingAccountId(account.id); 
-    setNewUserForm({
-      firstName,
-      lastName,
-      password: "password123", 
-      email: account.email,
-      role: account.role,
-      phoneNumber: account.phoneNumber,
-    });
-    setIsAddModalOpen(true);
-  };
-
-  const openDeleteConfirm = (id: string, name: string) => {
-    setDeleteConfirm({ isOpen: true, id, name });
-  };
-
-  const confirmDelete = () => {
-    setAccounts(accounts.filter(acc => acc.id !== deleteConfirm.id));
-    setDeleteConfirm({ isOpen: false, id: "", name: "" });
-  };
-
-  
-  const filteredAccounts = accounts.filter(a => {
-    const query = search.toLowerCase();
-    return (
-      a.name.toLowerCase().includes(query) || 
-      a.id.toLowerCase().includes(query) ||
-      a.email.toLowerCase().includes(query) ||
-      a.role.toLowerCase().includes(query) ||
-      a.phoneNumber.includes(query)
-    );
+  setEditingAccountId(account.userId);
+  setNewUserForm({
+    firstName: account.firstName,
+    lastName: account.lastName,
+    password: "", 
+    email: account.email,
+    role: account.role.toLowerCase() as "admin" | "custodian",
+    phoneNumber: account.phoneNumber,
   });
-  
+  setIsAddModalOpen(true);
+};
+
   const { role } = useAuth();
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
   
+  if (loading) return <div>Synchronizing with Database...</div>;
+  if (error) return <div>Error loading users: {error}</div>;
+
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole}/>
@@ -154,10 +135,11 @@ export const ManageAccountsPage: React.FC = () => {
             />
 
             <AccountsListSection 
-              accounts={filteredAccounts}
-              onEditClick={openEditModal}
-              onDeleteClick={openDeleteConfirm}
+              accounts={filteredAccounts} 
+              onEditClick={openEditModal} // Change this from setEditingAccountId
+              onDeleteClick={(id: string, name: string) => setDeleteConfirm({ isOpen: true, id, name })} 
             />
+
           </div>
         </main>
 
@@ -183,6 +165,7 @@ export const ManageAccountsPage: React.FC = () => {
                     <input 
                       required
                       name="password"
+                      autoComplete="new-password"
                       type={showPassword ? "text" : "password"} 
                       value={newUserForm.password}
                       onChange={handleInputChange}
@@ -222,8 +205,8 @@ export const ManageAccountsPage: React.FC = () => {
                 <div className="space-y-1.5">
                   <label className="text-[14px] font-semibold text-gray-700">Role: <span className="text-red-500">*</span></label>
                   <select required name="role" value={newUserForm.role} onChange={handleInputChange} className="w-full border border-gray-300 rounded-lg p-2.5 text-sm bg-white">
-                    <option value="Custodian">Custodian</option>
-                    <option value="Admin">Admin</option>
+                    <option value="custodian">Custodian</option>
+                    <option value="admin">Admin</option>
                   </select>
                 </div>
                 <div className="flex justify-center gap-3 pt-4">
