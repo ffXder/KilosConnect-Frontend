@@ -4,7 +4,6 @@ import {
   Clock, 
   CircleCheckBig, 
   TriangleAlert,
-  Archive // Added[cite: 4]
 } from 'lucide-react';
 import IncidentItem from './IncidentItem';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
@@ -133,12 +132,6 @@ export const IncidentReportPage: React.FC = () => {
             count={incidents.filter(i => i.status === 'Resolved').length} 
             icon={<CircleCheckBig className="text-[#10B981]" size={24} />} 
             colorClass="bg-[#D1FAE5]" 
-          />
-          <StatCard 
-            label="Archived" 
-            count={incidents.filter(i => i.status === 'Archived').length} 
-            icon={<Archive className="text-[#64748b]" size={24} />} 
-            colorClass="bg-[#f1f5f9]" 
           />
         </div>
 
