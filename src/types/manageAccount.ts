@@ -1,12 +1,14 @@
 export interface UserAccount {
-  id: string;
+  userId: string;
   initials: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  role: "Admin" | "Custodian";
-  status: "Active" | "Inactive";
+  role: "admin" | "custodian";
+  isArchived: boolean;
   dateAdded: string;
   phoneNumber: string;
+  createdAt: string;
 }
 
 export interface NewUserForm {
