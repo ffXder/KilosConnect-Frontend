@@ -12,11 +12,14 @@ import {
 } from './LogsIcons';
 import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
+import { useAuditLogs } from '../../hooks/useLogs';
+import type { AuditLogs } from '../../types/auditLogs';
 
 const moduleToFilterType = (moduleName: string) => {
   switch (moduleName) {
     case 'Inventory':
-    case 'Asset':
+    case 'Asset':    
+    case 'Consumable': 
       return 'Inventory';
     case 'Task':
       return 'Tasks';
@@ -29,13 +32,33 @@ const moduleToFilterType = (moduleName: string) => {
   }
 };
 
+const actionToFriendlyLabel = (action: string) => {
+  // Convert Schema ENUMs (CREATE, UPDATE) to readable text
+  switch (action) {
+    case 'CREATE': return 'Created';
+    case 'UPDATE': return 'Updated';
+    case 'ARCHIVE': return 'Archived';
+    case 'DELETE': return 'Deleted';
+    case 'COMPLETE': return 'Completed';
+    case 'CLAIM': return 'Claimed';
+    default: return action; // Fallback to raw string
+  }
+};
+
 const moduleToEntryIcon = (moduleName: string) => {
   switch (moduleName) {
-    case 'Inventory': return <InventoryIcon />;
-    case 'Task': return <TaskIcon />;
-    case 'IncidentReport': return <IncidentIcon />;
-    case 'LostAndFound': return <LostFoundIcon />;
-    default: return <InventoryIcon />;
+    case 'Inventory':
+    case 'Asset':
+    case 'Consumable': 
+      return <InventoryIcon />;
+    case 'Task': 
+      return <TaskIcon />;
+    case 'IncidentReport': 
+      return <IncidentIcon />;
+    case 'LostAndFound': 
+      return <LostFoundIcon />;
+    default: 
+      return <InventoryIcon />; // Default fallback
   }
 };
 
@@ -49,18 +72,10 @@ const moduleToEntryBg = (moduleName: string) => {
   }
 };
 
-// Mock data array to replace the getAuditLogs service call[cite: 5]
-const mockRawLogs = [
-  { _id: '1', module: 'Task', action: 'Task Completed', details: 'Morning equipment sanitation completed', performedBy: 'John Doe', createdAt: '2026-05-03T08:00:00Z' },
-  { _id: '2', module: 'Inventory', action: 'Stock Updated', details: 'Added 50 units of Floor Cleaner', performedBy: 'Bingbong Marcos', createdAt: '2026-05-03T09:30:00Z' },
-  { _id: '3', module: 'IncidentReport', action: 'Incident Reported', details: 'Loose cable found on treadmill #4', performedBy: 'Daniel Tan', createdAt: '2026-05-03T10:15:00Z' },
-  { _id: '4', module: 'LostAndFound', action: 'Item Logged', details: 'Black Hydroflask bottle found in locker area', performedBy: 'John Doe', createdAt: '2026-05-03T11:00:00Z' },
-  { _id: '5', module: 'Task', action: 'Task Assigned', details: 'Weekly fire safety inspection', performedBy: 'Admin', createdAt: '2026-05-03T13:45:00Z' },
-  { _id: '6', module: 'LostAndFound', action: 'Item Claimed', details: 'Black Hydroflask claimed by Sarah Lee', performedBy: 'Cads', createdAt: '2026-05-03T14:30:00Z' }
-];
 
 export const LogsPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All Logs');
+  const { logs: rawLogs, isLoading, error } = useAuditLogs();
   const [stats, setStats] = useState<StatData[]>([
     { label: 'Inventory Logs', count: 0, icon: <InventoryIcon />, bg: 'bg-blue-50', color: ''},
     { label: 'Task Logs', count: 0, icon: <TaskIcon />, bg: 'bg-[#e6f9f0]', color: '' },
@@ -72,38 +87,47 @@ export const LogsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Simulated fetch using mock data[cite: 5]
-    const formattedLogs = mockRawLogs.map((log: any) => ({
-      ...log,
-      id: log._id,
-      type: moduleToFilterType(log.module),
-      title: log.action,
-      description: log.details || '',
-      user: log.performedBy,
-      timestamp: new Date(log.createdAt).toLocaleString(),
-      icon: moduleToEntryIcon(log.module),
-      bg: moduleToEntryBg(log.module),
-    })).reverse(); 
+    if (!isLoading && rawLogs) {
+      const formattedLogs: LogEntry[] = rawLogs.map((log: any) => ({
+    id: log._id, // Map MongoDB _id to your interface's id
+    type: moduleToFilterType(log.module),
+    title: `${actionToFriendlyLabel(log.action)} ${log.module}`,
+    description: log.details || 'No additional details',
+    user: log.performedBy || 'System',
+    timestamp: new Date(log.createdAt).toLocaleString('en-PH', { 
+      month: 'short', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }),
+    icon: moduleToEntryIcon(log.module),
+    bg: moduleToEntryBg(log.module),   
+  }))
 
     setLogs(formattedLogs);
-    updateStats(mockRawLogs); 
-    setLoading(false);
-  }, []);
 
-  const updateStats = (loadedLogs: any[]) => {
-    const counts = loadedLogs.reduce<Record<string, number>>((acc, log) => {
-      const moduleName = log.module; 
-      acc[moduleName] = (acc[moduleName] ?? 0) + 1;
+    // Calculate Stats
+    const counts = (rawLogs as AuditLogs[]).reduce<Record<string, number>>((acc, log) => {
+      acc[log.module] = (acc[log.module] ?? 0) + 1;
       return acc;
     }, {});
 
     setStats([
-      { label: 'Inventory Logs', count: counts.Inventory ?? 0, icon: <InventoryIcon />, bg: 'bg-blue-50', color: '' },
+      { 
+        label: 'Inventory Logs', 
+        count: (counts.Inventory ?? 0) + (counts.Asset ?? 0) + (counts.Consumable ?? 0), 
+        icon: <InventoryIcon />, 
+        bg: 'bg-blue-50', 
+        color: '' 
+      },
       { label: 'Task Logs', count: counts.Task ?? 0, icon: <TaskIcon />, bg: 'bg-[#e6f9f0]', color: '' },
       { label: 'Incident Logs', count: counts.IncidentReport ?? 0, icon: <IncidentIcon />, bg: 'bg-red-50', color: '' },
       { label: 'Lost & Found Logs', count: counts.LostAndFound ?? 0, icon: <LostFoundIcon />, bg: 'bg-purple-50', color: '' },
     ]);
-  };
+
+    setLoading(false); // Stop showing the loading spinner
+  }
+}, [rawLogs, isLoading]);
 
   const { role } = useAuth()
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
