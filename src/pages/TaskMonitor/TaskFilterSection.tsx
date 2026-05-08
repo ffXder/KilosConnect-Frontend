@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, ChevronDown } from 'lucide-react';
 
 interface TaskFilterProps {
   onAddTask: () => void;
@@ -29,7 +29,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   return (
     <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans">
       
-      {/* Primary Action Row: Search & Add (Copied from LostAndFound) */}
+      {/* Primary Action Row: Search & Add */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
@@ -97,23 +97,24 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
 
         <div className="h-6 w-px bg-gray-200" /> {/* Divider */}
 
-        {/* Area Group */}
-        <div className="flex items-center gap-3 flex-1 overflow-hidden">
+        {/* Area Group - Updated to Dropdown */}
+        <div className="flex items-center gap-3">
           <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">Area:</span>
-          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-            {zones.map((z) => (
-              <button
-                key={z}
-                onClick={() => setAreaFilter(z)}
-                className={`px-4 py-2 rounded-[10px] text-[13px] font-semibold whitespace-nowrap border transition-all ${
-                  areaFilter === z
-                    ? "bg-[#113129] border-[#113129] text-white shadow-sm"
-                    : "bg-white border-[#e2e8f0] text-[#64748b] hover:border-[#cbd5e1] hover:bg-gray-50"
-                }`}
-              >
-                {z}
-              </button>
-            ))}
+          <div className="relative">
+            <select
+              value={areaFilter}
+              onChange={(e) => setAreaFilter(e.target.value)}
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1]"
+            >
+              {zones.map((z) => (
+                <option key={z} value={z}>
+                  {z}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#94a3b8]">
+              <ChevronDown size={16} />
+            </div>
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
 import React from "react";
 import { AlertCircle } from "lucide-react";
- 
+
 interface Props {
   outOfStockCount: number;
   lowStockCount: number;
 }
- 
+
 export const InventoryAlertBanner: React.FC<Props> = ({ outOfStockCount, lowStockCount }) => {
   if (outOfStockCount === 0 && lowStockCount === 0) return null;
+
   return (
     <div className="mb-8 flex items-center gap-4 p-5 bg-[#fff5f5] border border-[#feb2b2] rounded-2xl">
       <div className="p-2 bg-white rounded-lg border border-[#feb2b2]">
@@ -21,4 +22,4 @@ export const InventoryAlertBanner: React.FC<Props> = ({ outOfStockCount, lowStoc
       </div>
     </div>
   );
-}
+};
