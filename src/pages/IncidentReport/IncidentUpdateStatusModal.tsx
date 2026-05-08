@@ -15,7 +15,7 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
   incident, 
   onUpdateStatus 
 }) => {
-  const [selectedStatus, setSelectedStatus] = useState<Incident['status']>('Pending');
+  const [selectedStatus, setSelectedStatus] = useState<Incident['status']>('Open');
 
   useEffect(() => {
     if (incident) setSelectedStatus(incident.status);
@@ -23,7 +23,7 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
 
   if (!isOpen || !incident) return null;
 
-  const statusOptions: Incident['status'][] = ['Pending', 'In Progress', 'Resolved'];
+  const statusOptions: Incident['status'][] = ['Open', 'In Progress', 'Resolved'];
 
   const handleSave = () => {
     onUpdateStatus(incident.id, selectedStatus);

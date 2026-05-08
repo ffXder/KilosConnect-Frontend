@@ -129,17 +129,21 @@ export const InventoryPage = () => {
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole}/>
       
-      <div className="flex-1 p-10 ml-[280px]">
-        <div className="flex justify-between items-center mb-10">
+      {/* Main content area that handles scrolling for the whole page */}
+      <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto h-full">
+        {/* Sticky Header */}
+        <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-8 pb-4">
           <div>
-            <h1 className="text-[32px] font-black text-[#0a2e27]">Inventory Management</h1>
-            <p className="text-gray-400 font-medium mt-1">Track and manage your gym equipment and supplies.</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">
+              Inventory Management
+            </h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">
+              Track and manage your gym equipment and supplies!
+            </p>
           </div>
-          <button className="p-4 bg-white rounded-2xl border border-[#e8e8e8] text-gray-400 hover:text-[#0a2e27] transition-all shadow-sm">
-            <Bell size={24} />
-          </button>
-        </div>
-
+        </header>
+        
+        <main className="p-8 pb-12 flex flex-col gap-6">
         <InventoryFilterSection
           activeCategory={activeCategory}
           searchQuery={searchQuery}
@@ -157,7 +161,7 @@ export const InventoryPage = () => {
                 lowStockCount={filterData.lowStockCount} 
               />
               
-              <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#e8e8e8]">
+              <div className="bg-white p-8 rounded-3xl shadow-sm border border-[#e8e8e8]">
                 <InventoryStats 
                   activeCategory={activeCategory}
             
@@ -208,6 +212,7 @@ export const InventoryPage = () => {
             </div>
           )}
         </InventoryFilterSection>
+        </main>
       </div>
       
       <AddItemModal 

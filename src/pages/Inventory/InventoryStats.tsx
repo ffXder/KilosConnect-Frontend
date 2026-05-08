@@ -23,7 +23,6 @@ export const InventoryStats: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex justify-between items-start mb-10">
-      <h2 className="text-[28px] font-bold text-[#1f1f1f]">Inventory Overview</h2>
       <div className="flex gap-8 text-center uppercase tracking-wider">
         {activeCategory === "Consumables" ? (
           <>
