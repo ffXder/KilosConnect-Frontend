@@ -1,5 +1,7 @@
 const API_URL = '/api';
  
+
+//login
 export async function login(username: string, password: string) {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -19,12 +21,23 @@ export async function login(username: string, password: string) {
   localStorage.setItem('token', data.token)
  
   return data;
-}
+};
  
 export function logOut() {
-  localStorage.removeItem('role');
-  localStorage.removeItem('user');
-}
+  localStorage.clear();
+  window.location.href = '/login';
+};
+
+export const refreshAccessToken = async () => {
+    const res = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        credentials: 'include',
+    });
+
+    if (!res.ok) throw new Error('Refresh failed');
+    return res.json(); 
+};
+
 
 export function getRole() {
   return localStorage.getItem('role') as 'admin' | 'custodian' | null;
@@ -35,12 +48,35 @@ export function getUser() {
   return user ? JSON.parse(user) : null;
 }
 
-export const refreshAccessToken = async () => {
-    const res = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include', // CRITICAL: This sends the refreshToken cookie to the server
-    });
+// api interceptir
+export async function apiRequest(endpoint: string, options: any = {}) {
+  let token = localStorage.getItem('token');
 
-    if (!res.ok) throw new Error('Refresh failed');
-    return res.json(); // Returns { accessToken: "..." }
+  const headers = {
+    'Content-Type' : 'application/json',
+    'Authorization' : `Bearer ${token}`,
+    ...options.headers,
+  }
+
+  let res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+      credentials: 'include'
+  });
+
+  if (res.status === 401) {
+    try {
+      const data = await refreshAccessToken();
+      localStorage.setItem('token', data.accessToken);
+
+      headers['Authorization'] = `Bearer ${data.accessToken}`;
+      res = await fetch(`${API_URL}${endpoint}`, { ...options, headers, credentials: 'include' });
+    } catch (err) {
+      console.error("Session dead, logging out...", err);
+      logOut(); // this logouts if the session is dead
+      window.location.replace('/login');
+    }
+  }
+
+  return res
 };
