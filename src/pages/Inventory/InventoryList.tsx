@@ -1,5 +1,5 @@
-import React from "react";
-import { Layers, Trash2, Wrench, CalendarDays } from "lucide-react";
+import React, { useMemo } from "react";
+import { Layers, Trash2, Wrench, Package} from "lucide-react";
 
 interface Props {
   activeCategory: string;
@@ -7,120 +7,155 @@ interface Props {
   filteredAssets: any[];
   isOutOfStock: (item: any) => boolean;
   isLowStock: (item: any) => boolean;
-  onAssetClick: (asset: any) => void; 
-  onConsumableClick: (item: any) => void; 
+  onAssetClick: (asset: any) => void;
+  onConsumableClick: (item: any) => void;
   onDeleteConsumable: (id: string) => void;
   onDeleteAsset: (id: string) => void;
 }
 
-export const InventoryList: React.FC<Props> = ({ 
-  activeCategory, 
-  filteredConsumables, 
-  filteredAssets, 
-  isOutOfStock, 
+const conditionStyles: Record<string, { border: string; badge: string; text: string }> = {
+  "Working":            { border: "border-emerald-200", badge: "bg-emerald-50 text-emerald-600", text: "Working" },
+  "Needs Repair":       { border: "border-amber-200",   badge: "bg-amber-50 text-amber-600",     text: "Needs Repair" },
+  "Needs Replacement":  { border: "border-red-200",     badge: "bg-red-50 text-red-500",         text: "Needs Replacement" },
+  "Under Repair":       { border: "border-blue-200",    badge: "bg-blue-50 text-blue-500",       text: "Under Repair" },
+  "Damaged":            { border: "border-red-400",     badge: "bg-red-100 text-red-600",        text: "Damaged" },
+};
+
+export const InventoryList: React.FC<Props> = ({
+  activeCategory,
+  filteredConsumables,
+  filteredAssets,
+  isOutOfStock,
   isLowStock,
   onAssetClick,
   onConsumableClick,
   onDeleteConsumable,
-  onDeleteAsset
+  onDeleteAsset,
 }) => {
-  return (
-    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-      {/* Consumables Rendering */}
-      {(activeCategory === "Consumables" || activeCategory === "All") && filteredConsumables.map(item => (
-        <div 
-          key={item._id || item.consumableId} 
-          onClick={() => onConsumableClick(item)} 
-          className={`flex items-center justify-between p-6 bg-white border-2 rounded-2xl group transition-all cursor-pointer hover:bg-gray-50 active:scale-[0.99] ${isOutOfStock(item) ? "border-[#ff1a1a]" : isLowStock(item) ? "border-[#ff9900]" : "border-[#e8e8e8]"}`}
-        >
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-[#f4f5f6] text-gray-400 group-hover:bg-[#0a2e27] group-hover:text-white transition-colors">
-              <Layers size={24} />
-            </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <h4 className="text-xl font-bold text-[#1f1f1f]">{item.name}</h4>
-                {isLowStock(item) && <span className="px-2 py-0.5 bg-[#fff7ed] text-[#ff9900] text-[10px] font-black rounded-md uppercase">Low Stock</span>}
-                {isOutOfStock(item) && <span className="px-2 py-0.5 bg-[#fef2f2] text-[#ff1a1a] text-[10px] font-black rounded-md uppercase">Out of Stock</span>}
-              </div>
-              <div className="flex flex-col gap-1 mt-0.5">
-                <p className="text-sm font-medium text-gray-400 uppercase tracking-tight">ID: {item.consumableId} • {item.location || item.zone}</p>
-                
-                {item.lastRestocked && item.lastRestocked !== "" && item.lastRestocked !== item.createdAt && (
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#0d9488] bg-[#f0fdfa] w-fit px-2 py-1 rounded-md mt-1 border border-[#ccfbf1]">
-                    <CalendarDays size={12} />
-                    <span>LAST RESTOCKED: {item.lastRestocked}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="text-right flex items-center gap-8">
-            <div>
-              <div className={`text-[32px] font-black leading-none ${isOutOfStock(item) ? "text-[#ff1a1a]" : isLowStock(item) ? "text-[#ff9900]" : "text-[#1f1f1f]"}`}>{item.quantity}</div>
-              <div className="text-[10px] font-black text-gray-400 uppercase">{item.unit}</div>
-            </div>
-            {activeCategory !== "All" && (
-              <button 
-                className="text-gray-300 hover:text-red-500 transition-colors relative z-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteConsumable(item.consumableId);
-                }}
-              >
-                <Trash2 size={22} />
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
 
-      {/* Assets Rendering */}
-      {(activeCategory === "Assets" || activeCategory === "All") && filteredAssets.map(asset => (
-        <div 
-          key={asset._id || asset.assetId} 
-          onClick={() => onAssetClick(asset)}
-          className={`flex items-center justify-between p-6 bg-white border-2 rounded-2xl group transition-all cursor-pointer hover:bg-gray-50 active:scale-[0.99] ${
-            asset.condition === "Needs Replacement" ? "border-[#ff1a1a]" : 
-            asset.condition === "Good Condition" ? "border-[#10b981]" : 
-            asset.condition === "Needs Repair" ? "border-[#ff9900]" : 
-            asset.condition === "Under Repair" ? "border-[#3b82f6]" :
-            "border-[#e8e8e8]"
-          }`}
-        >
-          <div className="flex items-center gap-5">
-            <div className={`w-14 h-14 flex items-center justify-center rounded-xl bg-[#f4f5f6] transition-colors group-hover:bg-[#0a2e27] group-hover:text-white ${
-              asset.condition === "Good Condition" ? "text-[#10b981]" : "text-gray-400"
-            }`}>
-              <Wrench size={24} />
-            </div>
-            <div>
-              <h4 className="text-xl font-bold text-[#1f1f1f] group-hover:text-[#0a2e27] transition-colors">{asset.name}</h4>
-              <p className="text-sm font-medium text-gray-400 uppercase tracking-tight">ID: {asset.assetId} • {asset.area || asset.zone}</p>
-            </div>
+  // Merge and sort by createdAt for "All" view
+  const allItems = useMemo(() => {
+    if (activeCategory !== "All") return [];
+    const consumablesTagged = filteredConsumables.map(i => ({ ...i, _type: "consumable" }));
+    const assetsTagged = filteredAssets.map(a => ({ ...a, _type: "asset" }));
+    return [...consumablesTagged, ...assetsTagged].sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }, [activeCategory, filteredConsumables, filteredAssets]);
+
+  const renderConsumable = (item: any, showDelete: boolean) => {
+    const outOfStock = isOutOfStock(item);
+    const lowStock = isLowStock(item);
+    return (
+      <div
+        key={item.consumableId}
+        onClick={() => onConsumableClick(item)}
+        className={`group flex items-center justify-between px-6 py-4 bg-white border rounded-2xl cursor-pointer transition-all hover:shadow-md hover:-translate-y-[1px] active:scale-[0.99] ${
+          outOfStock ? "border-red-300 bg-red-50/30" : lowStock ? "border-amber-300 bg-amber-50/30" : "border-[#e8e8e8]"
+        }`}
+      >
+        <div className="flex items-center gap-4">
+          <div className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
+            outOfStock ? "bg-red-100 text-red-400" : lowStock ? "bg-amber-100 text-amber-500" : "bg-[#f4f5f6] text-gray-400 group-hover:bg-[#0a2e27] group-hover:text-white"
+          }`}>
+            <Layers size={20} />
           </div>
-          <div className="flex items-center gap-8">
-            <span className={`px-4 py-1.5 text-[10px] font-black rounded-full uppercase ${
-              asset.condition === "Good Condition" ? "bg-[#ecfdf5] text-[#10b981]" : 
-              asset.condition === "Need Repair" ? "bg-[#fff7ed] text-[#ff9900]" : 
-              asset.condition === "Needs Replacement" ? "bg-[#fef2f2] text-[#ff1a1a]" : "bg-blue-50 text-blue-500"
-            }`}>
-              {asset.condition || "New"}
-            </span>
-            {activeCategory !== "All" && (
-              <button 
-                className="text-gray-300 hover:text-red-500 transition-colors relative z-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteAsset(asset.assetId);
-                }}
-              >
-                <Trash2 size={22} />
-              </button>
-            )}
+          <div>
+            <div className="flex items-center gap-2">
+              <h4 className="font-bold text-[#1f1f1f] text-base">{item.name}</h4>
+              {lowStock && !outOfStock && <span className="px-2 py-0.5 bg-amber-100 text-amber-600 text-[10px] font-black rounded-md uppercase tracking-wide">Low Stock</span>}
+              {outOfStock && <span className="px-2 py-0.5 bg-red-100 text-red-500 text-[10px] font-black rounded-md uppercase tracking-wide">Out of Stock</span>}
+              <span className="px-2 py-0.5 bg-[#f0f9ff] text-[#0369a1] text-[10px] font-bold rounded-md">Consumable</span>
+            </div>
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-tight mt-0.5">
+              {item.consumableId} • {item.location || item.zone}
+            </p>
           </div>
         </div>
-      ))}
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <div className={`text-2xl font-black leading-none ${outOfStock ? "text-red-500" : lowStock ? "text-amber-500" : "text-[#1f1f1f]"}`}>
+              {item.quantity}
+            </div>
+            <div className="text-[10px] font-bold text-gray-400 uppercase">{item.unit}</div>
+          </div>
+          {showDelete && (
+            <button
+              className="text-gray-300 hover:text-red-500 transition-colors"
+              onClick={(e) => { e.stopPropagation(); onDeleteConsumable(item.consumableId); }}
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderAsset = (asset: any, showDelete: boolean) => {
+    const style = conditionStyles[asset.condition] ?? { border: "border-[#e8e8e8]", badge: "bg-gray-100 text-gray-500", text: asset.condition };
+    return (
+      <div
+        key={asset.assetId}
+        onClick={() => onAssetClick(asset)}
+        className={`group flex items-center justify-between px-6 py-4 bg-white border rounded-2xl cursor-pointer transition-all hover:shadow-md hover:-translate-y-[1px] active:scale-[0.99] ${style.border}`}
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#f4f5f6] text-gray-400 group-hover:bg-[#0a2e27] group-hover:text-white transition-colors">
+            <Wrench size={20} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h4 className="font-bold text-[#1f1f1f] text-base">{asset.name}</h4>
+              <span className="px-2 py-0.5 bg-[#f5f0ff] text-[#7c3aed] text-[10px] font-bold rounded-md">Asset</span>
+            </div>
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-tight mt-0.5">
+              {asset.assetId} • {asset.area || asset.zone}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+          <span className={`px-3 py-1 text-[10px] font-black rounded-full uppercase ${style.badge}`}>
+            {style.text}
+          </span>
+          {showDelete && (
+            <button
+              className="text-gray-300 hover:text-red-500 transition-colors"
+              onClick={(e) => { e.stopPropagation(); onDeleteAsset(asset.assetId); }}
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
+      {/* ALL — merged and sorted by recent */}
+      {activeCategory === "All" && allItems.map(item =>
+        item._type === "consumable"
+          ? renderConsumable(item, false)
+          : renderAsset(item, false)
+      )}
+
+      {/* CONSUMABLES only */}
+      {activeCategory === "Consumables" && filteredConsumables.map(item => renderConsumable(item, true))}
+
+      {/* ASSETS only */}
+      {activeCategory === "Assets" && filteredAssets.map(asset => renderAsset(asset, true))}
+
+      {/* Empty state */}
+      {((activeCategory === "All" && allItems.length === 0) ||
+        (activeCategory === "Consumables" && filteredConsumables.length === 0) ||
+        (activeCategory === "Assets" && filteredAssets.length === 0)) && (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <Package className="text-gray-200 mb-3" size={40} />
+          <p className="text-gray-400 font-semibold">No items found</p>
+          <p className="text-gray-300 text-sm">Try adjusting your filters</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -11,33 +11,52 @@ interface Props {
   underRepairCount: number;
 }
 
-export const InventoryStats: React.FC<Props> = ({ 
-  activeCategory, 
-  outOfStockCount, 
-  lowStockCount, 
+const StatItem = ({ value, label, color }: { value: number; label: string; color: string }) => (
+  <div className="flex flex-col items-center gap-1 min-w-[80px]">
+    <span className={`[font-family:'Poppins',Helvetica] text-2xl font-bold leading-none ${color}`}>
+      {value}
+    </span>
+    <span className="[font-family:'Poppins',Helvetica] text-[11px] font-medium text-gray-400 uppercase tracking-widest whitespace-nowrap">
+      {label}
+    </span>
+  </div>
+);
+
+const Divider = () => <div className="w-px h-8 bg-gray-100 self-center" />;
+
+export const InventoryStats: React.FC<Props> = ({
+  activeCategory,
+  outOfStockCount,
+  lowStockCount,
   totalItems,
   goodConditionCount,
   needRepairCount,
   needsReplacementCount,
-  underRepairCount
+  underRepairCount,
 }) => {
   return (
-    <div className="flex justify-between items-start mb-10">
-      <div className="flex gap-8 text-center uppercase tracking-wider">
+    <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center gap-6">
         {activeCategory === "Consumables" ? (
           <>
-            <div><div className="text-[22px] font-black text-[#ff1a1a]">{outOfStockCount}</div><div className="text-[10px] font-bold text-gray-400">Out of Stock</div></div>
-            <div><div className="text-[22px] font-black text-[#ff9900]">{lowStockCount}</div><div className="text-[10px] font-bold text-gray-400">Low Stock</div></div>
+            <StatItem value={outOfStockCount} label="Out of Stock" color="text-red-500" />
+            <Divider />
+            <StatItem value={lowStockCount} label="Low Stock" color="text-amber-500" />
           </>
         ) : activeCategory === "Assets" ? (
           <>
-            <div><div className="text-[22px] font-black text-[#10b981]">{goodConditionCount}</div><div className="text-[10px] font-bold text-gray-400">Good Condition</div></div>
-            <div><div className="text-[22px] font-black text-[#ff9900]">{needRepairCount}</div><div className="text-[10px] font-bold text-gray-400">Need Repair</div></div>
-            <div><div className="text-[22px] font-black text-[#ff1a1a]">{needsReplacementCount}</div><div className="text-[10px] font-bold text-gray-400">Needs Replacement</div></div>
-            <div><div className="text-[22px] font-black text-[#3385ff]">{underRepairCount}</div><div className="text-[10px] font-bold text-gray-400">Under Repair</div></div>
+            <StatItem value={goodConditionCount} label="Working" color="text-emerald-500" />
+            <Divider />
+            <StatItem value={needRepairCount} label="Needs Repair" color="text-amber-500" />
+            <Divider />
+            <StatItem value={needsReplacementCount} label="Replacement" color="text-red-500" />
+            <Divider />
+            <StatItem value={underRepairCount} label="Under Repair" color="text-blue-500" />
           </>
         ) : (
-          <div><div className="text-[22px] font-black text-[#1f1f1f]">{totalItems}</div><div className="text-[10px] font-bold text-gray-400">Total Items</div></div>
+          <>
+            <StatItem value={totalItems} label="Total Items" color="text-[#0a2e27]" />
+          </>
         )}
       </div>
     </div>
