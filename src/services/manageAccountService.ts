@@ -11,7 +11,7 @@ export const getAllUsers = async (): Promise<UserAccount[]> => {
         throw new Error(err.message || 'Could not load users');
     }
     return await res.json();;
-}
+};
 
 //POST
 export const createUser = async (userData: NewUserForm): Promise<void> => {
@@ -24,7 +24,7 @@ export const createUser = async (userData: NewUserForm): Promise<void> => {
     const err = await res.json();
     throw new Error(err.message || 'Failed to create user');
   }
-}
+};
 
 //PUT
 export const updateUser = async (userId: string, userData: NewUserForm): Promise<void> => {
@@ -37,7 +37,7 @@ export const updateUser = async (userId: string, userData: NewUserForm): Promise
         const err = await res.json();
         throw new Error(err.message || 'Update failed');
     }
-}
+};
 
 //PATCH
 export const toggleArchiveUser = async (userId: string, isArchived: boolean): Promise<void> => {
