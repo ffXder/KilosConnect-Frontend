@@ -17,7 +17,7 @@ export const DashboardPage: React.FC = () => {
       {/* Main content area that handles scrolling for the whole page */}
       <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto h-full">
         {/* Sticky Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-8 pb-4">
+        <header className="top-0 z-20 flex items-center justify-between px-8 pt-8 pb-4">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">
               Dashboard
