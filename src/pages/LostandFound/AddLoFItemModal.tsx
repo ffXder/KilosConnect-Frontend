@@ -18,17 +18,15 @@ const ZONES = [
 
 export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({ 
-    name: "", 
+    item: "", 
     description: "", 
-    location: ZONES[0], 
-    foundBy: "", 
+    areaFound: ZONES[0],  
     date: new Date().toISOString().split('T')[0] 
   });
 
   const isFormValid = 
-    formData.name.trim() !== "" && 
+    formData.item.trim() !== "" && 
     formData.description.trim() !== "" && 
-    formData.foundBy.trim() !== "" && 
     formData.date !== "";
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,7 +41,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
       <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
         <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight">Add New Inventory Item</h2>
+            <h2 className="text-xl font-semibold tracking-tight">Add Lost and Found Item</h2>
             <p className="text-white/70 text-sm font-normal opacity-90">Fill in the details to record a found item</p>
           </div>
           <button type="button" onClick={onClose} className="hover:text-white/70 transition-colors">
@@ -58,8 +56,8 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               required 
               className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
               placeholder="e.g. Black Water Bottle" 
-              value={formData.name}
-              onChange={e => setFormData({...formData, name: e.target.value})} 
+              value={formData.item}
+              onChange={e => setFormData({...formData, item: e.target.value})} 
             />
           </div>
           <div>
@@ -78,23 +76,13 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               <select 
                 required 
                 className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal bg-white focus:ring-2 focus:ring-[#1e4d46]/10 outline-none"
-                value={formData.location}
-                onChange={e => setFormData({...formData, location: e.target.value})}
+                value={formData.areaFound}
+                onChange={e => setFormData({...formData, areaFound: e.target.value})}
               >
                 {ZONES.map(zone => (
                   <option key={zone} value={zone}>{zone}</option>
                 ))}
               </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Found By *</label>
-              <input 
-                required 
-                className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
-                placeholder="Staff name" 
-                value={formData.foundBy}
-                onChange={e => setFormData({...formData, foundBy: e.target.value})} 
-              />
             </div>
           </div>
           <div>
@@ -118,7 +106,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                   : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed"
               }`}
             >
-              Add to Inventory
+              Report to Lost and Found
             </button>
           </div>
         </form>

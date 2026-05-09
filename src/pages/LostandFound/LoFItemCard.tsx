@@ -1,9 +1,9 @@
 import React from 'react';
-import type { LostFoundItem } from './LostAndFound';
+import type { LostAndFound } from '../../types/lostAndFound';
 import { MapPin, User, Calendar, Package, CheckCircle2 } from 'lucide-react';
 
 interface LoFItemCardProps {
-  item: LostFoundItem;
+  item: LostAndFound;
   onClaim: (id: string) => void;
 }
 
@@ -19,17 +19,17 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim }) => (
       <Package size={18} className="text-[#1e4d46]" />
     </div>
 
-    <h3 className="font-bold text-[#1a1a1a] text-[18px] mb-2">{item.name}</h3>
+    <h3 className="font-bold text-[#1a1a1a] text-[18px] mb-2">{item.item}</h3>
     <p className="text-[#64748b] text-[13px] leading-relaxed mb-5 line-clamp-2">{item.description}</p>
 
     <div className="space-y-3 mb-6 text-[13px] text-[#475569]">
       <div className="flex items-center gap-2.5">
         <MapPin size={14} className="text-[#94a3b8]" /> 
-        <span className="text-gray-500">Found in:</span> <span className="font-semibold text-[#1a1a1a]">{item.location}</span>
+        <span className="text-gray-500">Found in:</span> <span className="font-semibold text-[#1a1a1a]">{item.areaFound}</span>
       </div>
       <div className="flex items-center gap-2.5">
         <User size={14} className="text-[#94a3b8]" /> 
-        <span className="text-gray-500">Found by:</span> <span className="font-semibold text-[#1a1a1a]">{item.foundBy}</span>
+        <span className="text-gray-500">Found by:</span> <span className="font-semibold text-[#1a1a1a]">{item.reportedBy}</span>
       </div>
       <div className="flex items-center gap-2.5">
         <Calendar size={14} className="text-[#94a3b8]" /> 
@@ -43,12 +43,12 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim }) => (
           <CheckCircle2 size={14}/> Claimed by: {item.claimedBy}
         </div>
         <div className="flex items-center gap-2 text-[#15803d] font-semibold">
-          <Calendar size={14} /> On: {item.claimedDate}
+          <Calendar size={14} /> On: {item.claimedAt}
         </div>
       </div>
     ) : (
       <button 
-        onClick={() => onClaim(item._id)}
+        onClick={() => onClaim(item.lostId)}
         className="mt-auto w-full py-3 bg-[#1e4d46] text-white text-[14px] font-bold rounded-[8px] transition-colors hover:bg-[#163a35]"
       >
         Mark as Claimed

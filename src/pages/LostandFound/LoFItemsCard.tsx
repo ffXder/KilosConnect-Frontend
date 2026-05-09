@@ -1,9 +1,9 @@
 import React from 'react';
-import type { LostFoundItem } from './LostAndFound';
+import type { LostAndFound } from '../../types/lostAndFound';
 import { MapPin, User, Calendar, Package, CheckCircle2 } from 'lucide-react';
 
 interface LoFItemCardProps {
-  item: LostFoundItem;
+  item: LostAndFound;
   onClaim: (id: string) => void;
 }
 
@@ -19,17 +19,17 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim }) => (
       <Package size={20} className="text-[#1e4d46]" />
     </div>
 
-    <h3 className="font-semibold text-[#1a1a1a] text-[17px] mb-1.5 tracking-tight">{item.name}</h3>
+    <h3 className="font-semibold text-[#1a1a1a] text-[17px] mb-1.5 tracking-tight">{item.item}</h3>
     <p className="text-[#64748b] text-[13px] leading-relaxed mb-4 line-clamp-2 font-normal">{item.description}</p>
 
     <div className="space-y-2.5 mb-6 text-[13px] text-[#475569]">
       <div className="flex items-center gap-2">
         <MapPin size={15} className="text-[#94a3b8]" /> 
-        <span className="font-normal text-gray-500">Found in:</span> <span className="font-medium">{item.location}</span>
+        <span className="font-normal text-gray-500">Found in:</span> <span className="font-medium">{item.areaFound}</span>
       </div>
       <div className="flex items-center gap-2">
         <User size={15} className="text-[#94a3b8]" /> 
-        <span className="font-normal text-gray-500">Found by:</span> <span className="font-medium">{item.foundBy}</span>
+        <span className="font-normal text-gray-500">Found by:</span> <span className="font-medium">{item.reportedBy}</span>
       </div>
       <div className="flex items-center gap-2">
         <Calendar size={15} className="text-[#94a3b8]" /> 
@@ -40,7 +40,7 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim }) => (
     {item.status === "Claimed" ? (
       <div className="mt-auto pt-4 border-t border-[#f1f5f9] text-[13px] font-medium text-green-600 space-y-1">
         <div className="flex items-center gap-1.5"><CheckCircle2 size={14}/> Claimed by: {item.claimedBy}</div>
-        <div className="flex items-center gap-1.5"><Calendar size={14} className="opacity-0" /> On: {item.claimedDate}</div>
+        <div className="flex items-center gap-1.5"><Calendar size={14} className="opacity-0" /> On: {item.claimedAt}</div>
       </div>
     ) : (
       <button 

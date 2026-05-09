@@ -6,18 +6,8 @@ import { LoFItemCard } from "./LoFItemCard";
 import { StatCard } from "./StatCard";
 import { Archive, AlertCircle, CheckCircle } from "lucide-react"; 
 import { useAuth } from "../../hooks/useAuth";
-
-export interface LostFoundItem {
-  _id: string;
-  name: string;
-  description: string;
-  location: string;
-  foundBy: string;
-  date: string;
-  status: "Unclaimed" | "Claimed";
-  claimedBy?: string;
-  claimedDate?: string;
-}
+import { useLostAndFound } from "../../hooks/useLostAndFound";
+import type { LostAndFound } from "../../types/lostAndFound";
 
 const ZONES = [
   "All Areas",
@@ -31,32 +21,28 @@ const ZONES = [
 ];
 
 export const LostAndFoundPage: React.FC = () => {
-  const [items, setItems] = useState<LostFoundItem[]>([
-    { _id: "1", name: "AquaFlask 32oz", description: "Black insulated water bottle.", location: "Powerlifting Area", foundBy: "John Doe", date: "2026-05-01", status: "Unclaimed" },
-    { _id: "2", name: "Leather Lifting Belt", description: "Brown leather belt.", location: "CrossFit Area", foundBy: "Jane Smith", date: "2026-04-28", status: "Claimed", claimedBy: "Robert Fox", claimedDate: "2026-04-30" }
-  ]);
-
+  const { items, loading, error, handleCreate, handleClaim, handleDelete } = useLostAndFound();
   const [filter, setFilter] = useState<"All" | "Unclaimed" | "Claimed">("All");
   const [zoneFilter, setZoneFilter] = useState("All Areas");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleAddItem = (newItemData: any) => {
-    const newItem: LostFoundItem = { ...newItemData, _id: Math.random().toString(36).substr(2, 9), status: "Unclaimed" };
-    setItems([newItem, ...items]);
+  const handleAddItem = async (newItemData: Omit<LostAndFound, '_id' | 'lostId' | 'status' | 'claimedBy' | 'claimedAt'>) => {
+    await handleCreate(newItemData);
     setIsModalOpen(false);
   };
 
-  const handleClaimItem = (id: string) => {
-    const claimantName = prompt("Enter the name of the person claiming this item:");
+  const handleClaimItem = async (lostId: string) => {
+    const claimantName = prompt('Enter the name of the person claiming this item:');
     if (!claimantName) return;
-    setItems(items.map(item => item._id === id ? { ...item, status: "Claimed", claimedBy: claimantName, claimedDate: new Date().toISOString().split('T')[0] } : item));
+    await handleClaim(lostId, claimantName);
   };
 
   const filteredItems = items.filter((item) => {
     const matchesStatus = filter === "All" ? true : item.status === filter;
-    const matchesZone = zoneFilter === "All Areas" ? true : item.location === zoneFilter;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesZone = zoneFilter === 'All Areas' ? true : item.areaFound === zoneFilter;
+    const matchesSearch = (item.item ?? '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (item.description ?? '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesZone && matchesSearch;
   });
 
