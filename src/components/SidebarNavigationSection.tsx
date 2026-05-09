@@ -98,13 +98,13 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
               `flex items-center gap-3 w-full px-4 py-3 rounded-[10px] transition-all cursor-pointer border-l-4 ${
                 isActive
                   ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
-                  : "text-[#c8d8d5] hover:bg-white/5 border-transparent"
+                  : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <span className={isActive ? "text-[#f5a623]" : "text-[#c8d8d5]"}>{item.icon}</span>
+                <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>{item.icon}</span>
                 <span className="[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap">
                   {item.label}
                 </span>
@@ -121,12 +121,12 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
           onClick={handleLogoutClick}
           className="flex items-center gap-3 w-full px-4 py-3 rounded-[10px] text-[#c8d8d5] hover:bg-white/5 transition-colors cursor-pointer border-l-4 border-transparent"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FDFFE0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          <span className="[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap">Log Out</span>
+          <span className="[font-family:'Poppins',Helvetica] font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap">Log Out</span>
         </button>
       </div>
     </aside>
