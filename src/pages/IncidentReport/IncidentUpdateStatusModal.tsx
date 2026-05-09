@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Archive } from 'lucide-react'; // Added Archive icon[cite: 5]
-import type { Incident } from './IncidentReporting';
+import { X, CheckCircle2, Trash2 } from 'lucide-react';
+import type { IncidentReport } from '../../types/incident';
 
 interface IncidentUpdateStatusModalProps {
   isOpen: boolean;
   onClose: () => void;
-  incident: Incident | null;
-  onUpdateStatus: (id: string, newStatus: Incident['status']) => void;
+  incident: IncidentReport | null;
+  onUpdateStatus: (id: string, newStatus: IncidentReport['status']) => void;
+  onDelete: (id: string) => void;
 }
 
 const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({ 
   isOpen, 
   onClose, 
   incident, 
-  onUpdateStatus 
+  onUpdateStatus,
+  onDelete
 }) => {
-  const [selectedStatus, setSelectedStatus] = useState<Incident['status']>('Open');
+  const [selectedStatus, setSelectedStatus] = useState<IncidentReport['status']>('Open');
 
   useEffect(() => {
     if (incident) setSelectedStatus(incident.status);
@@ -23,16 +25,10 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
 
   if (!isOpen || !incident) return null;
 
-  const statusOptions: Incident['status'][] = ['Open', 'In Progress', 'Resolved'];
+  const statusOptions: IncidentReport['status'][] = ['Open', 'In Progress', 'Resolved'];
 
   const handleSave = () => {
-    onUpdateStatus(incident.id, selectedStatus);
-    onClose();
-  };
-
-  // Dedicated handler for archiving[cite: 5]
-  const handleArchive = () => {
-    onUpdateStatus(incident.id, 'Archived');
+    onUpdateStatus(incident.incidentId, selectedStatus);
     onClose();
   };
 
@@ -50,7 +46,7 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
           <div>
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Incident</p>
             <h3 className="text-lg font-bold text-gray-800">{incident.title}</h3>
-            <p className="text-sm text-gray-500">{incident.location}</p>
+            <p className="text-sm text-gray-500">{incident.area}</p>
           </div>
 
           <div className="space-y-3">
@@ -76,11 +72,14 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
           <div className="pt-4 space-y-3 border-t border-gray-100">
             {/* Archive Button[cite: 5] */}
             <button 
-              onClick={handleArchive}
+              onClick={() => {
+                onDelete(incident.incidentId);
+                onClose()
+              }}
               className="w-full py-3 flex items-center justify-center gap-2 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition-colors border border-gray-200"
             >
-              <Archive size={18} />
-              Archive Incident
+              <Trash2 size={18} />
+              Delete
             </button>
             
             <div className="flex gap-3">

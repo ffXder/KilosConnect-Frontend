@@ -12,17 +12,8 @@ import IncidentFilterSection from './IncidentFilterSection';
 import IncidentAddItemModal from './IncidentAddItemModal';
 import IncidentUpdateStatusModal from './IncidentUpdateStatusModal';
 import { useAuth } from '../../hooks/useAuth';
-
-export interface Incident {
-  id: string;
-  title: string;
-  description: string;
-  status: 'Open' | 'In Progress' | 'Resolved' | 'Archived'; // Added 'Archived'[cite: 4]
-  priority: 'High Severity' | 'Medium Severity' | 'Low Severity';
-  location: string;
-  reportedBy: string;
-  date: string;
-}
+import { useIncidentReports } from '../../hooks/useIncident';
+import type { IncidentReport } from '../../types/incident';
 
 export interface StatCardProps {
   label: string;
@@ -34,69 +25,39 @@ export interface StatCardProps {
 
 export const IncidentReportPage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState('All');
-  const [activePriority, setActivePriority] = useState('Any Priority');
-  const [activeLocation, setActiveLocation] = useState('All Areas'); 
+  const [activeSeverity, setActiveSeverity] = useState('Any Severity');
+  const [activeArea, setActiveArea] = useState('All Areas'); 
   const [searchTerm, setSearchTerm] = useState(''); 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
-  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
+  const [selectedIncident, setSelectedIncident] = useState<IncidentReport | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   
-  const [incidents, setIncidents] = useState<Incident[]>([
-    { 
-      id: '1', 
-      title: 'Squat rack unstable', 
-      description: 'The left side squat rack is wobbling and needs immediate attention', 
-      status: 'Open', 
-      priority: 'High Severity', 
-      location: 'Powerlifting Area', 
-      reportedBy: 'Maria Santos', 
-      date: '2025-04-24 13:30' 
-    },
-    { 
-      id: '2', 
-      title: 'Broken mirror', 
-      description: 'Wall mirror has a crack', 
-      status: 'Open', 
-      priority: 'Medium Severity', 
-      location: 'Mezzanine', 
-      reportedBy: 'Juan Cruz', 
-      date: '2025-04-24 14:00' 
-    }
-  ]);
+  const { reports, loading, error, handleCreate, handleUpdate, handleDelete } = useIncidentReports();
+  const incidents = reports ?? [];
 
-  const handleAddIncident = (newIncident: Omit<Incident, 'id' | 'status'>) => {
-    const incidentWithId: Incident = {
-      ...newIncident,
-      id: Date.now().toString(),
-      status: 'Open'
-    };
-    setIncidents([incidentWithId, ...incidents]);
+  const handleAddIncident = async (newIncident: Omit<IncidentReport, '_id' | 'incidentId' | 'status' | 'reportedBy'>) => {
+    await handleCreate(newIncident);
+};
+
+  const handleUpdateStatus = async (id: string, newStatus: IncidentReport['status']) => {
+    await handleUpdate(id, { status: newStatus });
   };
 
-  const handleUpdateStatus = (id: string, newStatus: Incident['status']) => {
-    setIncidents(prev => prev.map(inc => 
-      inc.id === id ? { ...inc, status: newStatus } : inc
-    ));
-  };
-
-  const handleItemClick = (incident: Incident) => {
+  const handleItemClick = (incident: IncidentReport) => {
     setSelectedIncident(incident);
     setIsUpdateModalOpen(true);
   };
 
   const filteredIncidents = incidents.filter(incident => {
-    // If "All" is selected, we hide Archived items to keep the list clean[cite: 4]
-    const matchesStatus = activeStatus === 'All' 
-      ? incident.status !== 'Archived' 
-      : incident.status === activeStatus;
+    const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
       
-    const matchesPriority = activePriority === 'Any Priority' || incident.priority === activePriority;
-    const matchesLocation = activeLocation === 'All Areas' || incident.location === activeLocation; 
-    const matchesSearch = incident.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          incident.description.toLowerCase().includes(searchTerm.toLowerCase()); 
+    const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
+    const matchesArea = activeArea === 'All Areas' || incident.area === activeArea; 
+    const matchesSearch = (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesStatus && matchesPriority && matchesLocation && matchesSearch;
+    return matchesStatus && matchesSeverity && matchesArea && matchesSearch;
   });
 
   const { role } = useAuth()
@@ -138,10 +99,10 @@ export const IncidentReportPage: React.FC = () => {
         <IncidentFilterSection 
           activeStatus={activeStatus} 
           onStatusChange={setActiveStatus}
-          activePriority={activePriority}
-          onPriorityChange={setActivePriority}
-          activeLocation={activeLocation} 
-          onLocationChange={setActiveLocation} 
+          activeSeverity={activeSeverity}     
+          onSeverityChange={setActiveSeverity} 
+          activeArea={activeArea}                
+          onAreaChange={setActiveArea}           
           searchTerm={searchTerm} 
           onSearchChange={setSearchTerm} 
           onAddClick={() => setIsAddModalOpen(true)}
@@ -151,7 +112,7 @@ export const IncidentReportPage: React.FC = () => {
           {filteredIncidents.length > 0 ? (
             filteredIncidents.map((incident) => (
               <IncidentItem 
-                key={incident.id} 
+                key={incident.incidentId} 
                 incident={incident} 
                 onClick={handleItemClick} 
               />
@@ -175,6 +136,7 @@ export const IncidentReportPage: React.FC = () => {
           onClose={() => setIsUpdateModalOpen(false)}
           incident={selectedIncident}
           onUpdateStatus={handleUpdateStatus}
+          onDelete={handleDelete}
         />
       </main>
     </div>

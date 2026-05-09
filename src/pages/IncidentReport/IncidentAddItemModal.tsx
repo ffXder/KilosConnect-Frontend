@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import { X, Plus, ChevronDown } from 'lucide-react';
-import type { Incident } from './IncidentReporting';
+import type { IncidentReport } from '../../types/incident';
 
 interface IncidentAddItemModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (incident: Omit<Incident, 'id' | 'status'>) => void;
+  onSubmit: (incident: Omit<IncidentReport, '_id' | 'incidentId' | 'status' | 'reportedBy'>) => void;
 }
 
 const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  // Form State[cite: 26]
+  // form state
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<Incident['priority']>('Low Severity');
-  const [location, setLocation] = useState('');
-  const [dateTime, setDateTime] = useState('');
-  const [reportedBy, setReportedBy] = useState('');
-
-  // Validation check[cite: 26]
+  const [severity, setSeverity] = useState<IncidentReport['severity']>('Low');
+  const [area, setArea] = useState('');
+  const [dateAndTime, setDateAndTime] = useState('');
+  const [affectedAssets, setAffectedAssets] = useState<string[]>([]);
+ 
+  //validate
   const isFormValid = 
     title.trim() !== '' && 
-    description.trim() !== '' && 
-    location !== '' && 
-    dateTime !== '';
+    area !== '' && 
+    dateAndTime !== '';
 
   if (!isOpen) return null;
 
@@ -31,19 +30,19 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
       onSubmit({
         title,
         description,
-        priority,
-        location,
-        date: dateTime.replace('T', ' '), // Formatting for the list[cite: 26]
-        reportedBy
+        severity,
+        area,
+        dateAndTime,
+        affectedAssets
       });
 
-      // Reset and close[cite: 26]
+     
       setTitle('');
       setDescription('');
-      setPriority('Low Severity');
-      setLocation('');
-      setDateTime('');
-      setReportedBy('');
+      setSeverity('Low');
+      setArea('');
+      setDateAndTime('');
+      setAffectedAssets([]);
       onClose();
     }
   };
@@ -79,7 +78,7 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Description *</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Description </label>
             <textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -93,8 +92,8 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
             <div className="relative">
               <label className="block text-sm font-bold text-gray-700 mb-2">Severity *</label>
               <select 
-                value={priority.split(' ')[0]} 
-                onChange={(e) => setPriority(`${e.target.value} Severity` as Incident['priority'])}
+                onChange={(e) => setSeverity(e.target.value as IncidentReport['severity'])}
+                value={severity}
                 className="w-full appearance-none px-4 py-3 border border-gray-200 rounded-xl bg-white outline-none"
               >
                 <option value="Low">Low</option>
@@ -109,8 +108,8 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
             <div className="relative">
               <label className="block text-sm font-bold text-gray-700 mb-2">Location *</label>
               <select 
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
                 className="w-full appearance-none px-4 py-3 border border-gray-200 rounded-xl bg-white outline-none"
               >
                 <option value="" disabled>Select zone</option>
@@ -123,8 +122,8 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Date and Time Occurred *</label>
             <input 
-              value={dateTime}
-              onChange={(e) => setDateTime(e.target.value)}
+              value={dateAndTime}
+              onChange={(e) => setDateAndTime(e.target.value)}
               type="datetime-local" 
               className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white outline-none"
             />

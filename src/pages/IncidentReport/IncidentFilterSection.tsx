@@ -4,10 +4,10 @@ import { Plus, Search, ChevronDown } from 'lucide-react';
 interface IncidentFilterSectionProps {
   activeStatus: string;
   onStatusChange: (status: string) => void;
-  activePriority: string;
-  onPriorityChange: (priority: string) => void;
-  activeLocation: string;
-  onLocationChange: (location: string) => void;
+  activeSeverity: string;
+  onSeverityChange: (severity: string) => void;
+  activeArea: string;
+  onAreaChange: (location: string) => void;
   searchTerm: string; 
   onSearchChange: (val: string) => void; 
   onAddClick: () => void;
@@ -16,18 +16,18 @@ interface IncidentFilterSectionProps {
 const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({ 
   activeStatus, 
   onStatusChange,
-  activePriority,
-  onPriorityChange,
-  activeLocation,
-  onLocationChange,
+  activeSeverity,
+  onSeverityChange,
+  activeArea,
+  onAreaChange,
   searchTerm,
   onSearchChange,
   onAddClick 
 }) => {
   // Added 'Archived' to statusOptions
   const statusOptions = ['All', 'Open', 'In Progress', 'Resolved'];
-  const priorityOptions = ['Any Priority', 'Low Severity', 'Medium Severity', 'High Severity', 'Urgent Severity', 'Critical Severity'];
-  const locations = [
+  const severityOptions = ['Any Severity', 'Low', 'Medium', 'High', 'Urgent', 'Critical'];
+  const area = [
     'All Areas', 'Mezzanine', 'Powerlifting Area', 'Open WOD Area', 
     'CrossFit Area', 'Café', 'General Storage', 'Maintenance Storage'
   ];
@@ -85,17 +85,17 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Priority:</span>
           <div className="flex bg-[#f1f5f9] p-1 rounded-[12px] gap-1">
-            {priorityOptions.map((priority) => (
+            {severityOptions.map((severity) => (
               <button
-                key={priority}
-                onClick={() => onPriorityChange(priority)}
+                key={severity}
+                onClick={() => onSeverityChange(severity)}
                 className={`px-4 py-2 rounded-[9px] text-[11px] font-bold transition-all ${
-                  activePriority === priority
+                  activeSeverity === severity
                     ? "bg-white text-[#113129] shadow-sm"
                     : "text-[#64748b] hover:text-[#1a1a1a]"
                 }`}
               >
-                {priority.split(' ')[0].toUpperCase()}
+                {severity.split(' ')[0].toUpperCase()}
               </button>
             ))}
           </div>
@@ -108,13 +108,13 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">Area:</span>
           <div className="relative">
             <select
-              value={activeLocation}
-              onChange={(e) => onLocationChange(e.target.value)}
+              value={activeArea}
+              onChange={(e) => onAreaChange(e.target.value)}
               className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1]"
             >
-              {locations.map((loc) => (
-                <option key={loc} value={loc}>
-                  {loc}
+              {area.map((area) => (
+                <option key={area} value={area}>
+                  {area}
                 </option>
               ))}
             </select>
