@@ -23,9 +23,10 @@ export const UpdateConsumableModal: React.FC<Props> = ({ isOpen, onClose, item, 
   if (!isOpen || !item) return null;
 
   const handleSave = () => {
-    onUpdate(item._id, {
+    onUpdate(item.consumableId, {
       quantity: Number(quantity),
       lastRestocked: restockDate,
+      unit: item.unit
     });
     onClose();
   };

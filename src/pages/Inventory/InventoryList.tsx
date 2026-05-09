@@ -44,7 +44,7 @@ export const InventoryList: React.FC<Props> = ({
                 {isOutOfStock(item) && <span className="px-2 py-0.5 bg-[#fef2f2] text-[#ff1a1a] text-[10px] font-black rounded-md uppercase">Out of Stock</span>}
               </div>
               <div className="flex flex-col gap-1 mt-0.5">
-                <p className="text-sm font-medium text-gray-400 uppercase tracking-tight">ID: {item.consumableId} • {item.area || item.zone}</p>
+                <p className="text-sm font-medium text-gray-400 uppercase tracking-tight">ID: {item.consumableId} • {item.location || item.zone}</p>
                 
                 {item.lastRestocked && item.lastRestocked !== "" && item.lastRestocked !== item.createdAt && (
                   <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#0d9488] bg-[#f0fdfa] w-fit px-2 py-1 rounded-md mt-1 border border-[#ccfbf1]">
@@ -65,7 +65,7 @@ export const InventoryList: React.FC<Props> = ({
                 className="text-gray-300 hover:text-red-500 transition-colors relative z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDeleteConsumable(item._id);
+                  onDeleteConsumable(item.consumableId);
                 }}
               >
                 <Trash2 size={22} />
@@ -83,7 +83,7 @@ export const InventoryList: React.FC<Props> = ({
           className={`flex items-center justify-between p-6 bg-white border-2 rounded-2xl group transition-all cursor-pointer hover:bg-gray-50 active:scale-[0.99] ${
             asset.condition === "Needs Replacement" ? "border-[#ff1a1a]" : 
             asset.condition === "Good Condition" ? "border-[#10b981]" : 
-            asset.condition === "Need Repair" ? "border-[#ff9900]" : 
+            asset.condition === "Needs Repair" ? "border-[#ff9900]" : 
             asset.condition === "Under Repair" ? "border-[#3b82f6]" :
             "border-[#e8e8e8]"
           }`}
@@ -112,7 +112,7 @@ export const InventoryList: React.FC<Props> = ({
                 className="text-gray-300 hover:text-red-500 transition-colors relative z-10"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDeleteAsset(asset._id);
+                  onDeleteAsset(asset.assetId);
                 }}
               >
                 <Trash2 size={22} />

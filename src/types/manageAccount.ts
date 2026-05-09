@@ -1,6 +1,7 @@
 export interface UserAccount {
   userId: string;
   initials: string;
+  username: string;
   firstName: string;
   lastName: string;
   email: string;

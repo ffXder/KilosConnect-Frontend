@@ -24,13 +24,13 @@ export const UpdateAssetModal: React.FC<Props> = ({ isOpen, onClose, asset, onUp
 
   const conditions = [
     "Good Condition",
-    "Need Repair",
+    "Needs Repair",
     "Needs Replacement",
     "Under Repair"
   ];
 
   const handleSave = () => {
-    onUpdate(asset._id, {
+    onUpdate(asset.assetId, {
       condition: condition,
       description: updateNote,
       lastUpdated: new Date().toISOString()

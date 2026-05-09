@@ -17,8 +17,9 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
       <thead className="bg-[#fafbfc] text-[11px] font-bold text-gray-500 uppercase tracking-widest">
         <tr>
           <th className="px-6 py-3">Name</th>
-          <th className="px-6 py-3">Phone Number</th>
           <th className="px-6 py-3">User ID</th>
+          <th className="px-6 py-3">Username</th>
+          <th className="px-6 py-3">Phone Number</th>
           <th className="px-6 py-3">Role</th>
           <th className="px-6 py-3">Status</th>
           <th className="px-6 py-3">Date Added</th>
@@ -37,8 +38,9 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                 <span className="text-[#6b6b6b] text-[12px]">{acc.email}</span>
               </div>
             </td>
-            <td className="px-6 py-4">{acc.phoneNumber}</td>
             <td className="px-6 py-4 text-gray-400 font-mono text-[13px]">{acc.userId}</td>
+            <td className="px-6 py-4">{acc.username}</td>
+            <td className="px-6 py-4">{acc.phoneNumber}</td>
             <td className="px-6 py-4">
               {/* Conditional styling for Role */}
               <span className={`px-3 py-1 rounded-full text-[10px]  [font-family:'Poppins',Helvetica] font-bold ${

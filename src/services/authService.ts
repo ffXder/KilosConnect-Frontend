@@ -64,7 +64,7 @@ export async function apiRequest(endpoint: string, options: any = {}) {
       credentials: 'include'
   });
 
-  if (res.status === 401) {
+  if (res.status === 401 || res.status === 403) {
     try {
       const data = await refreshAccessToken();
       localStorage.setItem('token', data.accessToken);

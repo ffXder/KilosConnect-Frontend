@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Bell } from "lucide-react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { InventoryAlertBanner } from "./InventoryAlertBanner";
 import { InventoryStats } from "./InventoryStats";
@@ -11,17 +10,8 @@ import { UpdateConsumableModal } from "./UpdateConsumableModal";
 import { InventoryFilterSection } from "./InventoryFilterSection";
 import { useAuth } from '../../hooks/useAuth';
 import { ArchiveConfirmModal } from "./ArchiveConfirmModal";
-
-const INITIAL_CONSUMABLES = [
-  { _id: "1", name: "Magnesium Chalk", consumableId: "CON-001", quantity: 5, lowStockAlert: 10, unit: "kg", area: "General Storage", description: "Standard gym chalk", lastRestocked: "2024-05-10" },
-  { _id: "2", name: "Cleaning Spray", consumableId: "CON-002", quantity: 25, lowStockAlert: 5, unit: "bottles", area: "Maintenance Storage", description: "Disinfectant spray", lastRestocked: null },
-  { _id: "3", name: "Microfiber Cloths", consumableId: "CON-003", quantity: 0, lowStockAlert: 15, unit: "pcs", area: "Maintenance Storage", description: "Cleaning cloths", lastRestocked: null },
-];
-
-const INITIAL_ASSETS = [
-  { _id: "a1", name: "Treadmill X1", assetId: "AST-101", area: "Mezzanine", condition: "Good Condition", description: "Cardio zone treadmill" },
-  { _id: "a2", name: "Bench Press", assetId: "AST-102", area: "Powerlifting Area", condition: "Need Repair", description: "Flat bench" },
-];
+import { useAssets } from "../../hooks/useAssets";
+import { useConsumables } from "../../hooks/useConsumables";
 
 export const InventoryPage = () => {
   const [activeCategory, setActiveCategory] = useState<"All" | "Consumables" | "Assets" >("All");
@@ -41,8 +31,8 @@ export const InventoryPage = () => {
   const [selectedAssetForEdit, setSelectedAssetForEdit] = useState<any>(null);
   const [selectedConsumableForEdit, setSelectedConsumableForEdit] = useState<any>(null);
 
-  const [consumables, setConsumables] = useState(INITIAL_CONSUMABLES);
-  const [assets, setAssets] = useState(INITIAL_ASSETS);
+  const { assets, handleCreate: createAsset, handleUpdate: updateAsset, handleUpdateCondition, handleArchive: archiveAsset } = useAssets();
+  const { consumables, handleCreate: createConsumable, handleUpdate: updateConsumable, handleArchive: archiveConsumable } = useConsumables();
 
  const handleCategoryChange = (category: any) => {
     setActiveCategory(category);
@@ -52,70 +42,62 @@ export const InventoryPage = () => {
       setSelectedArea("General Storage");
     }
   };
-  const handleAddItem = (newItem: any) => {
-    const idSuffix = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-
+  const handleAddItem = async (newItem: any) => {
     if (newItem.category === "Consumables") {
-      const formattedConsumable = {
-        _id: Date.now().toString(),
-        name: newItem.name,
-        consumableId: `CON-${idSuffix}`,
-        quantity: newItem.quantity,
-        lowStockAlert: newItem.minQuantity,
-        unit: newItem.unit || "pcs",
-        area: newItem.zone,
-        description: newItem.description,
-        lastRestocked: new Date().toISOString().split('T')[0]
-      };
-      setConsumables(prev => [...prev, formattedConsumable]);
+        await createConsumable({
+            consumableId: newItem.consumableId,
+            name: newItem.name,
+            category: newItem.category,
+            unit: newItem.unit,
+            quantity: newItem.quantity,
+            lowStockAlert: newItem.minQuantity,
+            location: newItem.zone,
+            description: newItem.description
+        });
     } else {
-      const formattedAsset = {
-        _id: Date.now().toString(),
-        name: newItem.name,
-        assetId: `AST-${idSuffix}`,
-        area: newItem.zone,
-        condition: "Good Condition",
-        description: newItem.description
-      };
-      setAssets(prev => [...prev, formattedAsset]);
+        await createAsset({
+            assetId: newItem.assetId,
+            name: newItem.name,
+            condition: newItem.condition || 'Good Condition',
+            purchaseDate: newItem.purchaseDate,
+            quantity: newItem.quantity,
+            area: newItem.zone,
+            description: newItem.description
+        });
     }
   };
 
-  const handleUpdateAsset = (id: string, updates: any) => {
-    setAssets(prev => prev.map(asset => 
-      asset._id === id ? { ...asset, ...updates } : asset
-    ));
+  const handleUpdateAsset = async (id: string, updates: any) => {
+    await handleUpdateCondition(id, updates.condition, updates.description);
   };
 
-  const handleUpdateConsumable = (id: string, updates: any) => {
-    setConsumables(prev => prev.map(item => 
-      item._id === id ? { ...item, ...updates } : item
-    ));
+  const handleUpdateConsumable = async (id: string, updates: any) => {
+    await updateConsumable(id, updates);
   };
 
   const triggerArchiveConsumable = (id: string) => {
-    const item = consumables.find(i => i._id === id);
+    const item = consumables.find(i => i.consumableId === id);
     if (item) {
-      setItemToArchive({ id, name: item.name, type: 'consumable' });
+      setItemToArchive({ id: item.consumableId, name: item.name, type: 'consumable' });
       setIsArchiveModalOpen(true);
     }
   };
 
   const triggerArchiveAsset = (id: string) => {
-    const asset = assets.find(a => a._id === id);
+    const asset = assets.find(a => a.assetId === id);
     if (asset) {
-      setItemToArchive({ id, name: asset.name, type: 'asset' });
+      setItemToArchive({ id: asset.assetId, name: asset.name, type: 'asset' });
       setIsArchiveModalOpen(true);
     }
   };
 
-  const handleConfirmArchive = () => {
+  const handleConfirmArchive = async () => {
     if (!itemToArchive) return;
     
     if (itemToArchive.type === 'consumable') {
-      setConsumables(prev => prev.filter(item => item._id !== itemToArchive.id));
+      await archiveConsumable(itemToArchive.id)
     } else {
-      setAssets(prev => prev.filter(asset => asset._id !== itemToArchive.id));
+      await archiveAsset(itemToArchive.id)
     }
     
     setIsArchiveModalOpen(false);
@@ -151,8 +133,8 @@ export const InventoryPage = () => {
           selectedArea={selectedArea}
           selectedAssetArea={selectedAssetArea}
           selectedCondition={selectedCondition}
-          mockConsumables={consumables}
-          mockAssets={assets}
+          getConsumables={consumables}
+          getAssets={assets}
         >
           {(filterData) => (
             <div className="space-y-8">

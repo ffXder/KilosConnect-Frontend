@@ -19,10 +19,28 @@ interface Task {
 }
 
 const MOCK_DATA: Task[] = [
-  { _id: '1', title: 'Deep Clean Powerlifting Racks', description: 'Wipe down all metal surfaces and check for loose bolts.', area: 'Powerlifting Area', frequency: 'Daily', status: 'Completed', startTime: '08:00', endTime: '09:30', isArchived: false },
-  { _id: '2', title: 'Inventory Check: Protein Shakes', description: 'Count remaining stock in the café chiller.', area: 'Café', frequency: 'Daily', status: 'Pending', startTime: '10:00', endTime: '10:30', isArchived: false },
-  { _id: '3', title: 'Mop Mezzanine Yoga Mats', description: 'Use the lavender-scented disinfectant.', area: 'Mezzanine', frequency: 'Weekly', status: 'Pending', startTime: '13:00', endTime: '14:00', isArchived: false },
-  { _id: '4', title: 'Aircon Filter Maintenance', description: 'Wash filters in the CrossFit area.', area: 'CrossFit Area', frequency: 'Monthly', status: 'Pending', startTime: '15:00', endTime: '17:00', isArchived: false },
+  // --- MORNING SHIFT ---
+  { _id: 'm1', title: 'Preparation & Inventory Check', description: 'Check tissue, soap, alcohol, and magnesium chalk levels.', area: 'General Storage', frequency: 'Daily', status: 'Pending', startTime: '06:00', endTime: '06:30', isArchived: false },
+  { _id: 'm2', title: 'Morning Mopping (Zone A)', description: 'Mop Mezzanine and Powerlifting Area.', area: 'Mezzanine', frequency: 'Daily', status: 'Pending', startTime: '06:30', endTime: '07:00', isArchived: false },
+  { _id: 'm3', title: 'Morning Mopping (Zone B)', description: 'Mop Open WOD and CrossFit Area.', area: 'Open WOD Area', frequency: 'Daily', status: 'Pending', startTime: '07:00', endTime: '07:30', isArchived: false },
+  { _id: 'm4', title: 'Deep Clean: Mezzanine', description: 'Deep clean Hammer Strength and Lifefitness equipment.', area: 'Mezzanine', frequency: 'Daily', status: 'Pending', startTime: '07:30', endTime: '08:30', isArchived: false },
+  { _id: 'm5', title: 'Deep Clean: Powerlifting Area', description: 'Deep clean Eleiko plates and racks.', area: 'Powerlifting Area', frequency: 'Daily', status: 'Pending', startTime: '08:30', endTime: '09:30', isArchived: false },
+  { _id: 'm6', title: 'Deep Clean: CrossFit Area', description: 'Deep clean cardiovascular equipment (Bikes/Rowers).', area: 'CrossFit Area', frequency: 'Daily', status: 'Pending', startTime: '09:30', endTime: '10:30', isArchived: false },
+
+  // --- MID-DAY SHIFT ---
+  { _id: 'd1', title: 'Mid-Day Inventory & General Cleaning', description: 'Refill supplies and organize high-traffic areas.', area: 'General Storage', frequency: 'Daily', status: 'Pending', startTime: '12:00', endTime: '13:00', isArchived: false },
+  { _id: 'd2', title: 'Detailed Equipment Inspection', description: 'Check cables, pulleys, and structural integrity.', area: 'Open WOD Area', frequency: 'Daily', status: 'Pending', startTime: '13:00', endTime: '14:00', isArchived: false },
+  { _id: 'd3', title: 'Secondary Chalk Refill', description: 'Refill all magnesium chalk buckets.', area: 'Weightlifting Area', frequency: 'Daily', status: 'Pending', startTime: '15:00', endTime: '15:30', isArchived: false },
+
+  // --- EVENING SHIFT ---
+  { _id: 'e1', title: 'Post-Peak Mopping', description: 'Mopping high-traffic zones after peak hours.', area: 'Open WOD Area', frequency: 'Daily', status: 'Pending', startTime: '18:00', endTime: '19:00', isArchived: false },
+  { _id: 'e2', title: 'Nightly Deep Clean: Weightlifting Area', description: 'End-of-day cleaning for platforms and plates.', area: 'Weightlifting Area', frequency: 'Daily', status: 'Pending', startTime: '21:00', endTime: '22:00', isArchived: false },
+  { _id: 'e3', title: 'Final Facility Walkthrough', description: 'Secure facility and perform final check of all zones.', area: 'Maintenance Storage', frequency: 'Daily', status: 'Pending', startTime: '23:00', endTime: '00:00', isArchived: false },
+
+  // --- WEEKLY TASKS ---
+  { _id: 'w1', title: 'Deep Clean: Yoga Mats & Accessories', description: 'Sanitize all mats, foam rollers, and yoga blocks.', area: 'Mezzanine', frequency: 'Weekly', status: 'Pending', startTime: '10:00', endTime: '11:30', isArchived: false },
+  { _id: 'w2', title: 'Glass & Window Cleaning', description: 'Clean all glass partitions and windows across the facility.', area: 'Open WOD Area', frequency: 'Weekly', status: 'Pending', startTime: '14:00', endTime: '15:30', isArchived: false },
+  { _id: 'w3', title: 'Air Conditioning Filter Maintenance', description: 'Remove and clean dust filters from AC units.', area: 'General Storage', frequency: 'Weekly', status: 'Pending', startTime: '15:30', endTime: '17:00', isArchived: false }
 ];
 
 export const TaskMonitorPage: React.FC = () => {

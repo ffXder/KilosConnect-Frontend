@@ -10,10 +10,20 @@ export type Task = {
 
 // Updated mock data to only include Completed and Pending
 const tasks: Task[] = [
-  { id: "TSK-001", title: "Morning Sanitization Walk", due: "Today, 08:00 AM", status: "Completed", frequency: "Daily" },
-  { id: "TSK-002", title: "Inventory Stock Check", due: "Today, 05:00 PM", status: "Pending", frequency: "Weekly" },
-  { id: "TSK-003", title: "Fire Safety Inspection", due: "May 15", status: "Pending", frequency: "Monthly" },
-  { id: "TSK-004", title: "Pool Chemistry Test", due: "Today, 02:00 PM", status: "Pending", frequency: "Daily" },
+  // --- MORNING SHIFT ---
+  { id: 'm1', title: 'Preparation & Inventory Check', frequency: 'Daily', status: 'Pending', due: "Today, 06:30 AM"},
+  { id: 'm2', title: 'Morning Mopping (Zone A)', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 AM" },
+
+  // --- MID-DAY SHIFT ---
+  { id: 'd1', title: 'Mid-Day Inventory & General Cleaning', frequency: 'Daily', status: 'Pending', due: "Today, 12:00 PM" },
+  { id: 'd2', title: 'Detailed Equipment Inspection', frequency: 'Daily', status: 'Pending',due: "Today, 4:00 PM"},
+ 
+  // --- EVENING SHIFT ---
+  { id: 'e1', title: 'Post-Peak Mopping', frequency: 'Daily', status: 'Pending', due: "Today, 08:00 AM" },
+  { id: 'e2', title: 'Nightly Deep Clean: Weightlifting Area', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 PM" },
+  
+  // --- WEEKLY TASKS ---
+  { id: 'w1', title: 'Deep Clean: Yoga Mats & Accessories', frequency: 'Weekly', status: 'Pending', due: "Today, 08:00 AM" },
 ];
 
 const summaryCards = [

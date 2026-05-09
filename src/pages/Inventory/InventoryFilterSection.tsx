@@ -7,8 +7,8 @@ interface Props {
   selectedArea: string;
   selectedAssetArea: string;
   selectedCondition: string;
-  mockConsumables: any[];
-  mockAssets: any[];
+  getConsumables: any[];
+  getAssets: any[];
   children: (data: {
     filteredConsumables: any[];
     filteredAssets: any[];
@@ -30,17 +30,17 @@ export const InventoryFilterSection: React.FC<Props> = ({
   selectedArea,
   selectedAssetArea,
   selectedCondition,
-  mockConsumables,
-  mockAssets,
+  getConsumables,
+  getAssets,
   children,
 }) => {
   const isLowStock = (item: any) => item.quantity <= item.lowStockAlert && item.quantity > 0;
   const isOutOfStock = (item: any) => item.quantity === 0;
 
   const filteredConsumables = useMemo(() => {
-    return mockConsumables.filter((item) => {
+    return getConsumables.filter((item) => {
       const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesArea = activeCategory === "Consumables" ? item.area === selectedArea : true;
+      const matchesArea = activeCategory === "Consumables" ? item.location === selectedArea : true;
 
       let matchesStatus = true;
       if (filter === "LOW STOCK") matchesStatus = isLowStock(item);
@@ -48,26 +48,26 @@ export const InventoryFilterSection: React.FC<Props> = ({
 
       return matchesSearch && matchesArea && matchesStatus;
     });
-  }, [searchQuery, filter, selectedArea, activeCategory, mockConsumables]);
+  }, [searchQuery, filter, selectedArea, activeCategory, getConsumables]);
 
   const filteredAssets = useMemo(() => {
-    return mockAssets.filter((asset) => {
+    return getAssets.filter((asset) => {
       const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesArea = selectedAssetArea === "ALL AREAS" || asset.area === selectedAssetArea;
       const matchesCondition = selectedCondition === "ALL CONDITIONS" || asset.condition.toUpperCase() === selectedCondition;
 
       return matchesSearch && matchesArea && matchesCondition;
     });
-  }, [searchQuery, selectedAssetArea, selectedCondition, mockAssets]);
+  }, [searchQuery, selectedAssetArea, selectedCondition, getAssets]);
 
-  const outOfStockCount = mockConsumables.filter(isOutOfStock).length;
-  const lowStockCount = mockConsumables.filter(isLowStock).length;
+  const outOfStockCount = getConsumables.filter(isOutOfStock).length;
+  const lowStockCount = getConsumables.filter(isLowStock).length;
 
   // New Dynamic Calculations for Assets
-  const goodConditionCount = mockAssets.filter(a => a.condition === "Good Condition").length;
-  const needRepairCount = mockAssets.filter(a => a.condition === "Need Repair").length;
-  const needsReplacementCount = mockAssets.filter(a => a.condition === "Needs Replacement").length;
-  const underRepairCount = mockAssets.filter(a => a.condition === "Under Repair").length;
+  const goodConditionCount = getAssets.filter(a => a.condition === "Good Condition").length;
+  const needRepairCount = getAssets.filter(a => a.condition === "Needs Repair").length;
+  const needsReplacementCount = getAssets.filter(a => a.condition === "Needs Replacement").length;
+  const underRepairCount = getAssets.filter(a => a.condition === "Under Repair").length;
 
   return (
     <>

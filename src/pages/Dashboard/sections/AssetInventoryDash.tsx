@@ -2,19 +2,34 @@ import React, { useState, useEffect } from "react";
 
 // Updated Mock services with Out of Stock data
 const mockFetchAssets = async () => [
-  { assetId: "AST-001", name: "Pro-Form Treadmill", condition: "working", purchaseDate: "2024-01-12" },
-  { assetId: "AST-002", name: "Olympic Barbell", condition: "needs replacement", purchaseDate: "2023-11-05" },
-  { assetId: "AST-003", name: "Power Rack", condition: "need repair", purchaseDate: "2023-06-20" },
-  { assetId: "AST-004", name: "Spin Bike v2", condition: "under repair", purchaseDate: "2024-02-15" },
-  { assetId: "AST-005", name: "Dumbbell Set (5-50lbs)", condition: "working", purchaseDate: "2023-08-10" },
+   { _id: "a1", name: "Hammer Strength Seated Leg Curl", assetId: "AST-101", area: "Mezzanine", condition: "Good Condition", description: "Leg machine" },
+  { _id: "a2", name: "Lifefitness Strength Abdominal", assetId: "AST-102", area: "Mezzanine", condition: "Good Condition", description: "Ab machine" },
+  // Crossfit Area
+  { _id: "a5", name: "Eleiko Stick", assetId: "AST-105", area: "CrossFit Area", condition: "Good Condition", description: "12 pieces" },
+  { _id: "a6", name: "Non Magnet Lock-Jaw Pro", assetId: "AST-106", area: "CrossFit Area", condition: "Good Condition", description: "28 pieces" },
+  // Powerlifting Area
+  { _id: "a9", name: "Eleiko 25kg Red1 Sweden PL Plates", assetId: "AST-109", area: "Powerlifting Area", condition: "Good Condition", description: "14 pieces" },
+  { _id: "a10", name: "Eleiko 25kg Red2 Sweden PL Plates", assetId: "AST-110", area: "Powerlifting Area", condition: "Good Condition", description: "20 pieces" },
+  // Open WOD
+  { _id: "a13", name: "Concept 2 SkiERG", assetId: "AST-113", area: "Open WOD Area", condition: "Good Condition", description: "4 units" },
+  { _id: "a14", name: "Concept 2 Rower", assetId: "AST-114", area: "Open WOD Area", condition: "Good Condition", description: "4 units" },
+
+  // Weightlifting Area
+  { _id: "a18", name: "25kg Eleiko Plate", assetId: "AST-118", area: "Weightlifting Area", condition: "Good Condition", description: "6 pieces" },
+  { _id: "a19", name: "20kg Eleiko Plate", assetId: "AST-119", area: "Weightlifting Area", condition: "Good Condition", description: "2 pieces" },
 ];
 
 const mockFetchConsumables = async () => [
-  { consumableId: "CON-101", name: "Disinfectant Wipes", quantity: 8, lowStockAlert: 15, unit: "rolls", location: "Sanitation Station" },
-  { consumableId: "CON-102", name: "Paper Towels", quantity: 50, lowStockAlert: 20, unit: "packs", location: "Storage A" },
-  { consumableId: "CON-103", name: "Chalk Blocks", quantity: 3, lowStockAlert: 5, unit: "boxes", location: "Weight Area" },
-  { consumableId: "CON-104", name: "Hand Sanitizer Refill", quantity: 12, lowStockAlert: 10, unit: "liters", location: "Reception" },
-  { consumableId: "CON-105", name: "Microfiber Cloths", quantity: 0, lowStockAlert: 5, unit: "packs", location: "Storage B" },
+  // Maintenance Storage
+  { _id: "c1", name: "Joy Dishwashing 1050ml", consumableId: "CON-001", quantity: 2, lowStockAlert: 1, unit: "bottles", area: "Maintenance Storage", description: "Dishwashing liquid", lastRestocked: "2024-05-10" },
+  { _id: "c2", name: "Mortein 250ml", consumableId: "CON-002", quantity: 2, lowStockAlert: 1, unit: "bottles", area: "Maintenance Storage", description: "Insecticide", lastRestocked: "2024-05-10" },
+  { _id: "c3", name: "Mortein 500ml", consumableId: "CON-003", quantity: 2, lowStockAlert: 1, unit: "bottles", area: "Maintenance Storage", description: "Insecticide", lastRestocked: "2024-05-10" },
+  { _id: "c4", name: "Baygon 500m", consumableId: "CON-004", quantity: 3, lowStockAlert: 1, unit: "bottles", area: "Maintenance Storage", description: "Insecticide", lastRestocked: "2024-05-10" },
+  // General Storage
+  { _id: "c5", name: "Mops", consumableId: "CON-005", quantity: 2, lowStockAlert: 1, unit: "pcs", area: "General Storage", description: "Cleaning mops", lastRestocked: "2024-05-10" },
+  { _id: "c6", name: "4in1", consumableId: "CON-006", quantity: 2, lowStockAlert: 1, unit: "pcs", area: "General Storage", description: "Multi-purpose cleaner", lastRestocked: "2024-05-10" },
+  { _id: "c7", name: "Singer All Purpose Oil", consumableId: "CON-007", quantity: 14, lowStockAlert: 5, unit: "bottles", area: "General Storage", description: "Equipment lubricant", lastRestocked: "2024-05-10" },
+  { _id: "c8", name: "Lysol All In One Disinfectant", consumableId: "CON-008", quantity: 2, lowStockAlert: 1, unit: "bottles", area: "General Storage", description: "Concentrate disinfectant", lastRestocked: "2024-05-10" },
 ];
 
 const conditionStyles: Record<string, { color: string; bg: string }> = {
