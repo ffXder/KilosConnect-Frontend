@@ -12,11 +12,20 @@ export const getAllLostAndFound = async (): Promise<LostAndFound[]> => {
 };
 
 // CREATE
-export const createLostAndFound = async (data: NewLostAndFound): Promise<LostAndFound> => {
+export const createLostAndFound = async (data: NewLostAndFound, imageFile: File): Promise<LostAndFound> => {
+    const formData = new FormData();
+    formData.append('item', data.item);
+    formData.append('areaFound', data.areaFound);
+    formData.append('date', data.date);
+    formData.append('itemImage', imageFile);
+    if (data.description) formData.append('description', data.description);
+
     const res = await apiRequest('/lost-and-founds', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: formData,
+        
     });
+
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Could not create item');
@@ -25,11 +34,31 @@ export const createLostAndFound = async (data: NewLostAndFound): Promise<LostAnd
 };
 
 // UPDATE
-export const updateLostAndFound = async (id: string, data: UpdateLostAndFound): Promise<LostAndFound> => {
-    const res = await apiRequest(`/lost-and-founds/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-    });
+export const updateLostAndFound = async (id: string, data: UpdateLostAndFound, imageFile?: File): Promise<LostAndFound> => {
+    let res;
+
+    if (imageFile) {
+        // use FormData if there's a new image
+        const formData = new FormData();
+        if (data.item) formData.append('item', data.item);
+        if (data.description) formData.append('description', data.description);
+        if (data.areaFound) formData.append('areaFound', data.areaFound);
+        if (data.date) formData.append('date', data.date);
+        if (data.status) formData.append('status', data.status);
+        formData.append('itemImage', imageFile);
+
+        res = await apiRequest(`/lost-and-founds/${id}`, {
+            method: 'PUT',
+            body: formData,
+        });
+    } else {
+        // no image, use JSON
+        res = await apiRequest(`/lost-and-founds/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+        });
+    }
+
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Could not update item');
@@ -38,10 +67,14 @@ export const updateLostAndFound = async (id: string, data: UpdateLostAndFound): 
 };
 
 // CLAIM
-export const claimLostAndFound = async (id: string, claimedBy: string, claimedDate?: string, claimImage?: string): Promise<void> => {
+export const claimLostAndFound = async (id: string, claimedBy: string, imageFile: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('claimedBy', claimedBy);
+    formData.append('claimedImage', imageFile); // file object
+
     const res = await apiRequest(`/lost-and-founds/${id}/claim`, {
         method: 'PATCH',
-        body: JSON.stringify({ claimedBy, claimedAt: claimedDate, claimedImage: claimImage }),
+        body: formData,
     });
     if (!res.ok) {
         const err = await res.json();
