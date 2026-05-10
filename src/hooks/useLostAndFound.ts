@@ -31,27 +31,27 @@ export function useLostAndFound() {
         fetchItems();
     }, [fetchItems]);
 
-    const handleCreate = async (data: NewLostAndFound) => {
+    const handleCreate = async (data: NewLostAndFound, imageFile: File) => {
         try {
-            await createLostAndFound(data);
+            await createLostAndFound(data, imageFile);
             await fetchItems();
         } catch (err: any) {
             setError(err.message);
         }
     };
 
-    const handleUpdate = async (id: string, data: UpdateLostAndFound) => {
+    const handleUpdate = async (id: string, data: UpdateLostAndFound, imageFile?: File) => {
         try {
-            await updateLostAndFound(id, data);
+            await updateLostAndFound(id, data, imageFile);
             await fetchItems();
         } catch (err: any) {
             setError(err.message);
         }
     };
 
-    const handleClaim = async (id: string, claimedBy: string, claimedDate?: string, claimImage?: string) => {
+    const handleClaim = async (id: string, claimedBy: string, imageFile: File) => {
         try {
-            await claimLostAndFound(id, claimedBy, claimedDate, claimImage);
+            await claimLostAndFound(id, claimedBy, imageFile);
             await fetchItems();
         } catch (err: any) {
             setError(err.message);
