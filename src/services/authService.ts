@@ -54,9 +54,13 @@ export async function apiRequest(endpoint: string, options: any = {}) {
   let token = localStorage.getItem('token');
 
   const headers = {
-    'Content-Type' : 'application/json',
     'Authorization' : `Bearer ${token}`,
     ...options.headers,
+  };
+
+  // If body is FormData, we leave it empty so the browser sets it automatically
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
   }
 
   let res = await fetch(`${API_URL}${endpoint}`, {
