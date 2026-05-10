@@ -1,46 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
 export type Task = {
   id: string;
   title: string;
   due: string;
-  status: "Completed" | "Pending"; // Removed "In Progress"
+  status: "Completed" | "Pending";
   frequency: "Daily" | "Weekly" | "Monthly" | "Weekdays";
 };
 
-// Updated mock data to only include Completed and Pending
 const tasks: Task[] = [
-  // --- MORNING SHIFT ---
-  { id: 'm1', title: 'Preparation & Inventory Check', frequency: 'Daily', status: 'Pending', due: "Today, 06:30 AM"},
+  { id: 'm1', title: 'Preparation & Inventory Check', frequency: 'Daily', status: 'Pending', due: "Today, 06:30 AM" },
   { id: 'm2', title: 'Morning Mopping (Zone A)', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 AM" },
-
-  // --- MID-DAY SHIFT ---
   { id: 'd1', title: 'Mid-Day Inventory & General Cleaning', frequency: 'Daily', status: 'Pending', due: "Today, 12:00 PM" },
-  { id: 'd2', title: 'Detailed Equipment Inspection', frequency: 'Daily', status: 'Pending',due: "Today, 4:00 PM"},
- 
-  // --- EVENING SHIFT ---
+  { id: 'd2', title: 'Detailed Equipment Inspection', frequency: 'Daily', status: 'Pending', due: "Today, 4:00 PM" },
   { id: 'e1', title: 'Post-Peak Mopping', frequency: 'Daily', status: 'Pending', due: "Today, 08:00 AM" },
   { id: 'e2', title: 'Nightly Deep Clean: Weightlifting Area', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 PM" },
-  
-  // --- WEEKLY TASKS ---
   { id: 'w1', title: 'Deep Clean: Yoga Mats & Accessories', frequency: 'Weekly', status: 'Pending', due: "Today, 08:00 AM" },
 ];
 
 const summaryCards = [
-  { 
-    label: "Completed", 
-    count: tasks.filter(t => t.status === "Completed").length, 
-    bg: "bg-[#d4f5d4]", 
-    countColor: "text-[#1b9640]", 
-    labelColor: "text-[#1b9640]" 
-  },
-  { 
-    label: "Pending", 
-    count: tasks.filter(t => t.status === "Pending").length, 
-    bg: "bg-[#e8e8e8]", 
-    countColor: "text-[#555]", 
-    labelColor: "text-[#555]" 
-  },
+  { label: "Completed", count: tasks.filter(t => t.status === "Completed").length, bg: "bg-[#d4f5d4]", countColor: "text-[#1b9640]", labelColor: "text-[#1b9640]" },
+  { label: "Pending", count: tasks.filter(t => t.status === "Pending").length, bg: "bg-[#e8e8e8]", countColor: "text-[#555]", labelColor: "text-[#555]" },
 ];
 
 const statusStyle: Record<Task["status"], { color: string; bg: string }> = {
@@ -55,12 +35,13 @@ const freqStyle: Record<Task["frequency"], { color: string; bg: string }> = {
   Weekdays: { color: "text-[#1b5c2a]", bg: "bg-[#e0f5e9]" },
 };
 
-export const TaskStatusPanelSection : React.FC = () => {
+export const TaskStatusPanelSection: React.FC = () => {
+  const recentTasks = tasks.slice(0, 7);
+
   return (
     <aside aria-label="Task Overview" className="w-full h-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex flex-col overflow-hidden">
       <h2 className="font-semibold text-[#1a1a1a] text-xl px-5 pt-5 pb-0 m-0">Task Overview</h2>
-      
-      {/* Summary cards: Now showing 2 cards instead of 3 */}
+
       <div className="flex gap-3 px-5 pt-4 pb-3">
         {summaryCards.map((card) => (
           <div key={card.label} className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-3 rounded-[10px] ${card.bg}`}>
@@ -70,8 +51,8 @@ export const TaskStatusPanelSection : React.FC = () => {
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 pb-5 flex flex-col gap-2.5">
-        {tasks.map((task) => {
+      <div className="flex-1 overflow-y-auto px-5 flex flex-col gap-2.5">
+        {recentTasks.map((task) => {
           const ss = statusStyle[task.status];
           const fs = freqStyle[task.frequency];
           return (
@@ -89,6 +70,15 @@ export const TaskStatusPanelSection : React.FC = () => {
           );
         })}
       </div>
+
+      {tasks.length > 4 && (
+        <p className="text-center text-[11px] text-[#bbb] py-3 border-t border-[#f0f0f0] mt-1">
+          Showing 6 of {tasks.length} —{" "}
+          <a href="/tasks" className="text-[#1a4d3e] font-medium ml-1 hover:underline">
+            View all
+          </a>
+        </p>
+      )}
     </aside>
   );
 };
