@@ -3,7 +3,7 @@ import { X, ImagePlus } from 'lucide-react';
 
 interface ModalProps {
   onClose: () => void;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any, imageFile: File) => void; // ← added imageFile
 }
 
 const Areas = [
@@ -11,7 +11,7 @@ const Areas = [
   "Powerlifting Area", 
   "Open WOD Area", 
   "CrossFit Area", 
-  "Weighlifting Area", 
+  "Weightlifting Area", 
   "General Storage", 
   "Maintenance Storage"
 ];
@@ -23,29 +23,27 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
     description: "", 
     areaFound: Areas[0], 
     date: new Date().toISOString().split('T')[0],
-    itemImage: "" 
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);       // ← actual File
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // ← just for preview
 
-  // Updated validation: Description is no longer strictly required for form submission
   const isFormValid = 
     formData.item.trim() !== "" && 
-    formData.date !== "";
+    formData.date !== "" &&
+    imageFile !== null; // ← image is now required
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, itemImage: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+      setImageFile(file); // ← store the actual File
+      setImagePreview(URL.createObjectURL(file)); // ← just for preview
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      onSubmit(formData);
+    if (isFormValid && imageFile) {
+      onSubmit(formData, imageFile); // ← pass File separately
     }
   };
 
@@ -75,6 +73,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               onChange={e => setFormData({...formData, item: e.target.value})} 
             />
           </div>
+
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
               Description
@@ -86,6 +85,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               onChange={e => setFormData({...formData, description: e.target.value})} 
             />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
@@ -105,7 +105,9 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Found Item Photo (Optional)</label>
+            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+              Found Item Photo <span className="text-red-500">*</span> {/* ← now required */}
+            </label>
             <input 
               type="file" 
               ref={fileInputRef}
@@ -117,16 +119,16 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               onClick={() => fileInputRef.current?.click()}
               className="w-full border-2 border-dashed border-[#e8e8e8] rounded-[12px] p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors bg-[#fcfcfc]"
             >
-              {formData.itemImage ? (
+              {imagePreview ? (
                 <div className="flex items-center gap-3">
-                  <img src={formData.itemImage} alt="Preview" className="w-12 h-12 rounded-[6px] object-cover" />
-                  <span className="text-xs text-gray-500 font-medium">Image uploaded successfully</span>
+                  <img src={imagePreview} alt="Preview" className="w-12 h-12 rounded-[6px] object-cover" />
+                  <span className="text-xs text-gray-500 font-medium">{imageFile?.name}</span>
                 </div>
               ) : (
                 <>
                   <ImagePlus size={24} className="text-[#94a3b8] mb-2" />
                   <p className="text-[13px] font-medium text-gray-700">Drag & drop or click to upload</p>
-                  <p className="text-[11px] text-gray-400">Maximum file size: 5MB (Optional)</p>
+                  <p className="text-[11px] text-gray-400">Maximum file size: 5MB</p>
                 </>
               )}
             </div>
@@ -144,8 +146,11 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
               onChange={e => setFormData({...formData, date: e.target.value})} 
             />
           </div>
+
           <div className="flex gap-4 pt-4 border-t border-[#f4f5f6]">
-            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e8e8e8] rounded-[8px] text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e8e8e8] rounded-[8px] text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+              Cancel
+            </button>
             <button 
               type="submit" 
               disabled={!isFormValid}
