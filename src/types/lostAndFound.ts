@@ -1,3 +1,9 @@
+// for cloundinary
+export interface CloudinaryImage {
+    url: string;
+    public_id: string;
+}
+
 export interface LostAndFound {
     _id: string;
     lostId: string;
@@ -5,11 +11,11 @@ export interface LostAndFound {
     description: string | null;
     areaFound: 'WOD' | 'Cafe' | 'Powerlifting' | 'CrossFit' | 'Mezzanine' | 'Other';
     date: string;
-    itemImage: string
+    itemImage: CloudinaryImage
     status: 'Unclaimed' | 'Claimed';
     claimedBy: string | null;
     claimedAt: string | null;
-    claimedImage: string;
+    claimedImage: CloudinaryImage;
     reportedBy: string;
 }
 
