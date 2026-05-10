@@ -2,7 +2,7 @@ export interface Asset {
     _id: string;
     assetId: string;
     name: string;
-    condition: string;
+    condition: "Good Condition" | "Needs Repair" | "Needs Replacement" | "Under Repair";
     purchaseDate: string;
     quantity: number;
     area: string;
