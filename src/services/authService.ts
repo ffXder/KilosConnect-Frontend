@@ -33,7 +33,8 @@ export const refreshAccessToken = async () => {
         method: 'POST',
         credentials: 'include',
     });
-
+    console.log('Refresh status:', res.status);
+    console.log('Refresh body:', await res.json());
     if (!res.ok) throw new Error('Refresh failed');
     return res.json(); 
 };
@@ -70,7 +71,11 @@ export async function apiRequest(endpoint: string, options: any = {}) {
       localStorage.setItem('token', data.accessToken);
 
       headers['Authorization'] = `Bearer ${data.accessToken}`;
-      res = await fetch(`${API_URL}${endpoint}`, { ...options, headers, credentials: 'include' });
+      res = await fetch(`${API_URL}${endpoint}`, { 
+        ...options, 
+        headers, 
+        credentials: 'include' 
+      });
     } catch (err) {
       console.error("Session dead, logging out...", err);
       logOut(); // this logouts if the session is dead
