@@ -4,12 +4,14 @@ import { LostAndFoundFilters } from "./LostAndFoundFillters";
 import { AddLoFItemModal } from "./AddLoFItemModal";
 import { LoFItemCard } from "./LoFItemCard";
 import { StatCard } from "./StatCard";
+import { ClaimModal } from "./ClaimModal";
+import { LoFDetailedModal } from "./LoFDetailedModal";
 import { Archive, AlertCircle, CheckCircle } from "lucide-react"; 
 import { useAuth } from "../../hooks/useAuth";
 import { useLostAndFound } from "../../hooks/useLostAndFound";
 import type { LostAndFound } from "../../types/lostAndFound";
 
-const ZONES = [
+const areas = [
   "All Areas",
   "Mezzanine",
   "Powerlifting Area",
@@ -22,20 +24,31 @@ const ZONES = [
 
 export const LostAndFoundPage: React.FC = () => {
   const { items, loading, error, handleCreate, handleClaim, handleDelete } = useLostAndFound();
+  const [viewingItem, setViewingItem] = useState<LostAndFound | null>(null);
+  const [claimingItem, setClaimingItem] = useState<LostAndFound | null>(null);
   const [filter, setFilter] = useState<"All" | "Unclaimed" | "Claimed">("All");
   const [zoneFilter, setZoneFilter] = useState("All Areas");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleViewItem = (item: LostAndFound) => {
+    setViewingItem(item);
+  };
 
   const handleAddItem = async (newItemData: Omit<LostAndFound, '_id' | 'lostId' | 'status' | 'claimedBy' | 'claimedAt'>) => {
     await handleCreate(newItemData);
     setIsModalOpen(false);
   };
 
-  const handleClaimItem = async (lostId: string) => {
-    const claimantName = prompt('Enter the name of the person claiming this item:');
-    if (!claimantName) return;
-    await handleClaim(lostId, claimantName);
+  const handleClaimItem = (id: string) => {
+    const item = items.find(i => i.lostId === id);
+    if (item) setClaimingItem(item);
+  };
+
+  const handleConfirmClaim = async (claimedBy: string, claimedDate: string, claimImage?: string) => {
+    if (!claimingItem) return;
+    await handleClaim(claimingItem.lostId, claimedBy, claimedDate, claimImage);
+    setClaimingItem(null);
   };
 
   const filteredItems = items.filter((item) => {
@@ -77,20 +90,37 @@ export const LostAndFoundPage: React.FC = () => {
             setStatusFilter={setFilter}
             zoneFilter={zoneFilter}
             setZoneFilter={setZoneFilter}
-            zones={ZONES}
+            zones={areas}
             onAddItem={() => setIsModalOpen(true)}
           />
 
           <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-[24px] p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredItems.map((item) => (
-                <LoFItemCard key={item._id} item={item} onClaim={handleClaimItem} />
+                <LoFItemCard key={item.lostId} item={item} onClaim={handleClaimItem} onView={handleViewItem} />
               ))}
             </div>
           </div>
         </div>
       </div>
       {isModalOpen && <AddLoFItemModal onClose={() => setIsModalOpen(false)} onSubmit={handleAddItem} />}
+      
+      {/* CLAIM  */}
+      {claimingItem && (
+      <ClaimModal
+          itemName={claimingItem.item}
+          onClose={() => setClaimingItem(null)}
+          onConfirm={handleConfirmClaim}
+        />
+      )}
+
+      {/* Detailed Modal Trigger */}
+      {viewingItem && (
+        <LoFDetailedModal 
+          item={viewingItem} 
+          onClose={() => setViewingItem(null)} 
+        />
+      )}
     </div>
   );
 };

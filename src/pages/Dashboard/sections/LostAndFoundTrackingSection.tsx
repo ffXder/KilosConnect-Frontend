@@ -1,6 +1,6 @@
 import React from "react";
 import { useLostAndFound } from "../../../hooks/useLostAndFound";
-
+import { formatDate } from "../../../utils/formatter";
 export const LostAndFoundTrackingSection: React.FC = () => {
   const { items } = useLostAndFound();
   const allItems = items ?? [];
@@ -51,7 +51,7 @@ export const LostAndFoundTrackingSection: React.FC = () => {
                   <td className="py-3 pr-4 text-[#555] text-xs font-mono">{item.lostId}</td>
                   <td className="py-2.5 pr-6 text-[#1a1a1a] text-sm font-medium truncate max-w-[140px]">{item.item}</td>
                   <td className="py-2.5 pr-6 text-[#999] text-xs">{item.areaFound}</td>
-                  <td className="py-2.5 pr-6 text-[#999] text-xs">{item.date}</td>
+                  <td className="py-2.5 pr-6 text-[#999] text-xs">{formatDate(item.date)}</td>
                   <td className="py-2.5">
                     <span className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-[11px] font-medium ${
                       item.status === "Unclaimed" ? "bg-[#fff0e0] text-[#e07000]" : "bg-[#e0f5e9] text-[#1b9640]"
