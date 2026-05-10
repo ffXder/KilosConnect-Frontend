@@ -17,20 +17,21 @@ function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
-    const initApp = async () => {
-      try {
-        await new Promise(resolve => setTimeout(resolve, 2000)); 
-      } finally {
-        setIsPageLoading(false);
+  const initApp = async () => {
+    try {
+      // only show loading on first load
+      const hasVisited = sessionStorage.getItem('appLoaded');
+      if (!hasVisited) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        sessionStorage.setItem('appLoaded', 'true');
       }
-    };
+    } finally {
+      setIsPageLoading(false);
+    }
+  };
 
     initApp();
   }, []);
-
-  if (isPageLoading) {
-    return <LoadingPage />;
-  }
 
   return (
     <BrowserRouter>
