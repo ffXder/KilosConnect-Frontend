@@ -54,8 +54,8 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
 
   const handleSubmit = () => {
     // Basic validation
-    if (!formData.name || !formData.zone || !formData.id) {
-      alert("Please fill in the required fields (ID, Name, and Zone)");
+    if (!formData.name || !formData.zone) {
+      alert("Please fill in the required fields (Name and Zone)");
       return;
     }
 
@@ -79,7 +79,7 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
     "Powerlifting Area", 
     "Open WOD Area", 
     "CrossFit Area", 
-    "Café", 
+    "Weightlifting Area", 
     "General Storage", 
     "Maintenance Storage"
   ];
@@ -100,19 +100,6 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
         </div>
         
         <div className="p-8 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
-          {/* ID Input */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-bold text-[#4a5568]">
-              Item ID <span className="text-red-500">*</span>
-            </label>
-            <input 
-              name="id"
-              value={formData.id}
-              onChange={handleChange}
-              className="w-full px-5 py-3.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-2xl text-[#1f1f1f] focus:outline-none focus:border-[#0a2e27]" 
-              placeholder="e.g. ITEM-001" 
-            />
-          </div>
 
           {/* Item Name */}
           <div className="space-y-1.5">
@@ -229,7 +216,7 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
 
           {/* Category Switcher */}
           <div className="space-y-1.5">
-            <label className="text-sm font-bold text-[#4a5568]">Category <span className="text-red-500">*</span></label>
+            <label className="text-sm font-bold text-[#4a5568]">Inventory Type <span className="text-red-500">*</span></label>
             <div className="grid grid-cols-2 gap-3">
               <button 
                 type="button"
