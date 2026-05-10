@@ -71,7 +71,7 @@ export const TaskStatusPanelSection: React.FC = () => {
         })}
       </div>
 
-      {tasks.length > 4 && (
+      {tasks.length > 6 && (
         <p className="text-center text-[11px] text-[#bbb] py-3 border-t border-[#f0f0f0] mt-1">
           Showing 6 of {tasks.length} —{" "}
           <a href="/tasks" className="text-[#1a4d3e] font-medium ml-1 hover:underline">
