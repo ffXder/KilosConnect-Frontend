@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 interface Props {
-  activeCategory: "All" | "Consumables" | "Assets";
+  activeInventory: "All" | "Consumables" | "Assets";
   searchQuery: string;
   filter: string;
   selectedArea: string;
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const InventoryFilterSection: React.FC<Props> = ({
-  activeCategory,
+  activeInventory,
   searchQuery,
   filter,
   selectedArea,
@@ -40,7 +40,7 @@ export const InventoryFilterSection: React.FC<Props> = ({
   const filteredConsumables = useMemo(() => {
     return getConsumables.filter((item) => {
       const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesArea = activeCategory === "Consumables" ? item.location === selectedArea : true;
+      const matchesArea = activeInventory === "Consumables" ? (selectedArea === "All Areas" || item.location === selectedArea) : true;
 
       let matchesStatus = true;
       if (filter === "LOW STOCK") matchesStatus = isLowStock(item);
@@ -48,13 +48,13 @@ export const InventoryFilterSection: React.FC<Props> = ({
 
       return matchesSearch && matchesArea && matchesStatus;
     });
-  }, [searchQuery, filter, selectedArea, activeCategory, getConsumables]);
+  }, [searchQuery, filter, selectedArea, activeInventory, getConsumables]);
 
   const filteredAssets = useMemo(() => {
     return getAssets.filter((asset) => {
       const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesArea = selectedAssetArea === "ALL AREAS" || asset.area === selectedAssetArea;
-      const matchesCondition = selectedCondition === "ALL CONDITIONS" || asset.condition.toUpperCase() === selectedCondition;
+      const matchesArea = selectedAssetArea === "All Areas" || asset.area === selectedAssetArea;
+      const matchesCondition = selectedCondition === "All Conditions" || asset.condition === selectedCondition;
 
       return matchesSearch && matchesArea && matchesCondition;
     });

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import { Layers, Trash2, Wrench, Package} from "lucide-react";
+import { Layers, Trash2, Wrench, Package } from "lucide-react";
 
 interface Props {
-  activeCategory: string;
+  activeInventory: string;
   filteredConsumables: any[];
   filteredAssets: any[];
   isOutOfStock: (item: any) => boolean;
@@ -14,15 +14,14 @@ interface Props {
 }
 
 const conditionStyles: Record<string, { border: string; badge: string; text: string }> = {
-  "Working":            { border: "border-emerald-200", badge: "bg-emerald-50 text-emerald-600", text: "Working" },
+  "Good Condition":     { border: "border-emerald-200", badge: "bg-emerald-50 text-emerald-600", text: "Good Condition" },
   "Needs Repair":       { border: "border-amber-200",   badge: "bg-amber-50 text-amber-600",     text: "Needs Repair" },
   "Needs Replacement":  { border: "border-red-200",     badge: "bg-red-50 text-red-500",         text: "Needs Replacement" },
-  "Under Repair":       { border: "border-blue-200",    badge: "bg-blue-50 text-blue-500",       text: "Under Repair" },
-  "Damaged":            { border: "border-red-400",     badge: "bg-red-100 text-red-600",        text: "Damaged" },
+  "Under Repair":       { border: "border-blue-200",    badge: "bg-blue-50 text-blue-500",       text: "Under Repair" }
 };
 
 export const InventoryList: React.FC<Props> = ({
-  activeCategory,
+  activeInventory,
   filteredConsumables,
   filteredAssets,
   isOutOfStock,
@@ -35,13 +34,13 @@ export const InventoryList: React.FC<Props> = ({
 
   // Merge and sort by createdAt for "All" view
   const allItems = useMemo(() => {
-    if (activeCategory !== "All") return [];
+    if (activeInventory !== "All") return [];
     const consumablesTagged = filteredConsumables.map(i => ({ ...i, _type: "consumable" }));
     const assetsTagged = filteredAssets.map(a => ({ ...a, _type: "asset" }));
     return [...consumablesTagged, ...assetsTagged].sort((a, b) =>
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  }, [activeCategory, filteredConsumables, filteredAssets]);
+  }, [activeInventory, filteredConsumables, filteredAssets]);
 
   const renderConsumable = (item: any, showDelete: boolean) => {
     const outOfStock = isOutOfStock(item);
@@ -134,22 +133,22 @@ export const InventoryList: React.FC<Props> = ({
   return (
     <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
       {/* ALL — merged and sorted by recent */}
-      {activeCategory === "All" && allItems.map(item =>
+      {activeInventory === "All" && allItems.map(item =>
         item._type === "consumable"
           ? renderConsumable(item, false)
           : renderAsset(item, false)
       )}
 
       {/* CONSUMABLES only */}
-      {activeCategory === "Consumables" && filteredConsumables.map(item => renderConsumable(item, true))}
+      {activeInventory === "Consumables" && filteredConsumables.map(item => renderConsumable(item, true))}
 
       {/* ASSETS only */}
-      {activeCategory === "Assets" && filteredAssets.map(asset => renderAsset(asset, true))}
+      {activeInventory === "Assets" && filteredAssets.map(asset => renderAsset(asset, true))}
 
       {/* Empty state */}
-      {((activeCategory === "All" && allItems.length === 0) ||
-        (activeCategory === "Consumables" && filteredConsumables.length === 0) ||
-        (activeCategory === "Assets" && filteredAssets.length === 0)) && (
+      {((activeInventory === "All" && allItems.length === 0) ||
+        (activeInventory === "Consumables" && filteredConsumables.length === 0) ||
+        (activeInventory === "Assets" && filteredAssets.length === 0)) && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Package className="text-gray-200 mb-3" size={40} />
           <p className="text-gray-400 font-semibold">No items found</p>

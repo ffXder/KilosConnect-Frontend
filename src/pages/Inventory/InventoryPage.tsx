@@ -14,12 +14,12 @@ import { useAssets } from "../../hooks/useAssets";
 import { useConsumables } from "../../hooks/useConsumables";
 
 export const InventoryPage = () => {
-  const [activeCategory, setActiveCategory] = useState<"All" | "Consumables" | "Assets" >("All");
+  const [activeInventory, setActiveInventory] = useState<"All" | "Consumables" | "Assets" >("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("All");
-  const [selectedArea, setSelectedArea] = useState("ALL AREAS");
-  const [selectedAssetArea, setSelectedAssetArea] = useState("ALL AREAS");
-  const [selectedCondition, setSelectedCondition] = useState("ALL CONDITIONS");
+  const [selectedArea, setSelectedArea] = useState("All Areas");
+  const [selectedAssetArea, setSelectedAssetArea] = useState("All Areas");
+  const [selectedCondition, setSelectedCondition] = useState("All Conditions");
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -34,18 +34,13 @@ export const InventoryPage = () => {
   const { assets, handleCreate: createAsset, handleUpdate: updateAsset, handleUpdateCondition, handleArchive: archiveAsset } = useAssets();
   const { consumables, handleCreate: createConsumable, handleUpdate: updateConsumable, handleArchive: archiveConsumable } = useConsumables();
 
- const handleCategoryChange = (category: any) => {
-    setActiveCategory(category);
-    
-    // Set default area filter when switching to Consumables
-    if (category === "Consumables") {
-      setSelectedArea("General Storage");
-    }
+ const handleInventoryChange = (type: any) => {
+    setActiveInventory(type);
   };
+  
   const handleAddItem = async (newItem: any) => {
     if (newItem.category === "Consumables") {
         await createConsumable({
-            consumableId: newItem.consumableId,
             name: newItem.name,
             category: newItem.category,
             unit: newItem.unit,
@@ -56,7 +51,6 @@ export const InventoryPage = () => {
         });
     } else {
         await createAsset({
-            assetId: newItem.assetId,
             name: newItem.name,
             condition: newItem.condition || 'Good Condition',
             purchaseDate: newItem.purchaseDate,
@@ -127,7 +121,7 @@ export const InventoryPage = () => {
         
         <main className="p-8 pb-12 flex flex-col gap-6">
         <InventoryFilterSection
-          activeCategory={activeCategory}
+          activeInventory={activeInventory}
           searchQuery={searchQuery}
           filter={filter}
           selectedArea={selectedArea}
@@ -145,12 +139,12 @@ export const InventoryPage = () => {
               
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-[#e8e8e8]">
                 <InventoryStats 
-                  activeCategory={activeCategory}
+                  activeCategory={activeInventory}
             
                   totalItems={
-                    activeCategory === "Consumables" 
+                    activeInventory === "Consumables" 
                       ? consumables.length 
-                      : activeCategory === "Assets" 
+                      : activeInventory === "Assets" 
                         ? assets.length 
                         : consumables.length + assets.length
                   }
@@ -158,8 +152,8 @@ export const InventoryPage = () => {
                 />
 
                 <InventoryToolbar 
-                  activeCategory={activeCategory} 
-                  setActiveCategory={handleCategoryChange}
+                  activeInventory={activeInventory} 
+                  setActiveInventory={handleInventoryChange}
                   filter={filter} 
                   setFilter={setFilter}
                   searchQuery={searchQuery} 
@@ -174,7 +168,7 @@ export const InventoryPage = () => {
                 />
 
                 <InventoryList 
-                  activeCategory={activeCategory} 
+                  activeInventory={activeInventory} 
                   filteredConsumables={filterData.filteredConsumables} 
                   filteredAssets={filterData.filteredAssets} 
                   isOutOfStock={filterData.isOutOfStock} 

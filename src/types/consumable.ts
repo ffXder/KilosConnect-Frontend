@@ -12,7 +12,7 @@ export interface Consumable {
 }
 
 //for create
-export type NewConsumable = Omit<Consumable, '_id' | 'isArchived'>;
+export type NewConsumable = Omit<Consumable, '_id' | 'consumableId' | 'isArchived'>;
 
 //for update
 export type UpdateConsumable = Partial<Omit<Consumable, '_id' | 'consumableId'>>;
