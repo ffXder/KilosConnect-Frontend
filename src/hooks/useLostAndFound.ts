@@ -49,9 +49,9 @@ export function useLostAndFound() {
         }
     };
 
-    const handleClaim = async (id: string, claimedBy: string) => {
+    const handleClaim = async (id: string, claimedBy: string, claimedDate?: string, claimImage?: string) => {
         try {
-            await claimLostAndFound(id, claimedBy);
+            await claimLostAndFound(id, claimedBy, claimedDate, claimImage);
             await fetchItems();
         } catch (err: any) {
             setError(err.message);
