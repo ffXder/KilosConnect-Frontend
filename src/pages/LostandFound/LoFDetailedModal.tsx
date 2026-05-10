@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, MapPin, User, Calendar, Image as ImageIcon, Camera } from 'lucide-react';
 import type { LostAndFound } from '../../types/lostAndFound';
+import { formatDate, formatDateTime } from '../../utils/formatter';
 
 interface DetailedModalProps {
   item: LostAndFound;
@@ -28,9 +29,9 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
               {/* Item Photo */}
               <div>
                 <label className="block text-xs font-bold text-gray-400 mb-3 uppercase tracking-widest">Item Photo (Found)</label>
-                {item.itemImage ? (
-                  <div className="w-full h-48 rounded-[16px] overflow-hidden border border-[#e8e8e8]">
-                    <img src={item.itemImage} alt={item.item} className="w-full h-full object-cover" />
+                {item.itemImage?.url ? (
+                  <div className="w-full h-64 rounded-[16px] overflow-hidden border border-[#e8e8e8]">
+                    <img src={item.itemImage?.url} alt={item.item} className="w-full h-full object-cover" />
                   </div>
                 ) : (
                   <div className="w-full h-48 rounded-[16px] bg-[#f8fafc] border-2 border-dashed border-[#e2e8f0] flex flex-col items-center justify-center text-gray-400">
@@ -45,8 +46,8 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                 <div>
                   <label className="block text-xs font-bold text-[#15803d] mb-3 uppercase tracking-widest">Claimant / Proof Photo</label>
                   {item.claimedImage ? (
-                    <div className="w-full h-48 rounded-[16px] overflow-hidden border-2 border-[#dcfce7]">
-                      <img src={item.claimedImage} alt="Claimant proof" className="w-full h-full object-cover" />
+                    <div className="w-full h-64 rounded-[16px] overflow-hidden border-2 border-[#dcfce7]">
+                      <img src={item.claimedImage?.url} alt="Claimant proof" className="w-full h-full object-cover" />
                     </div>
                   ) : (
                     <div className="w-full h-48 rounded-[16px] bg-[#f0fdf4] border-2 border-dashed border-[#dcfce7] flex flex-col items-center justify-center text-[#15803d]/50">
@@ -84,7 +85,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                 <div className="flex items-center gap-3 text-[14px]">
                   <Calendar size={16} className="text-[#94a3b8]" />
                   <span className="text-gray-500">Date Found:</span>
-                  <span className="font-semibold text-[#1a1a1a]">{item.date}</span>
+                  <span className="font-semibold text-[#1a1a1a]">{formatDate(item.date)}</span>
                 </div>
               </div>
 
@@ -94,7 +95,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                     <span className="font-bold">Claimed By:</span> {item.claimedBy}
                   </div>
                   <div className="flex items-center gap-2 text-[#15803d] text-sm">
-                    <span className="font-bold">Claim Date:</span> {item.claimedAt}
+                    <span className="font-bold">Claim Date:</span> {item. claimedAt ? formatDateTime(item.claimedAt): '-'}
                   </div>
                 </div>
               )}
