@@ -11,6 +11,7 @@ import StatCard from './StatCard';
 import IncidentFilterSection from './IncidentFilterSection'; 
 import IncidentAddItemModal from './IncidentAddItemModal';
 import IncidentUpdateStatusModal from './IncidentUpdateStatusModal';
+import IncidentDetailedModal from './IncidentDetailModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useIncidentReports } from '../../hooks/useIncident';
 import type { IncidentReport } from '../../types/incident';
@@ -32,7 +33,8 @@ export const IncidentReportPage: React.FC = () => {
   
   const [selectedIncident, setSelectedIncident] = useState<IncidentReport | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  
+  const [isDetailedModalOpen, setIsDetailedModalOpen] = useState(false);
+
   const { reports, loading, error, handleCreate, handleUpdate, handleDelete } = useIncidentReports();
   const incidents = reports ?? [];
 
@@ -47,6 +49,11 @@ export const IncidentReportPage: React.FC = () => {
   const handleItemClick = (incident: IncidentReport) => {
     setSelectedIncident(incident);
     setIsUpdateModalOpen(true);
+  };
+
+  const handleViewDetails = (incident: IncidentReport) => {
+    setSelectedIncident(incident);
+    setIsDetailedModalOpen(true);
   };
 
   const filteredIncidents = incidents.filter(incident => {
@@ -108,13 +115,14 @@ export const IncidentReportPage: React.FC = () => {
           onAddClick={() => setIsAddModalOpen(true)}
         />
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden px-2 mb-10">
+        <div className="bg-white rounded-[24px] border border-[#e2e8f0] overflow-hidden mt-6 mb-10">
           {filteredIncidents.length > 0 ? (
             filteredIncidents.map((incident) => (
               <IncidentItem 
                 key={incident.incidentId} 
                 incident={incident} 
-                onClick={handleItemClick} 
+                onClick={handleItemClick}
+                onViewClick={handleViewDetails} // Pass the new handler here
               />
             ))
           ) : (
@@ -137,6 +145,13 @@ export const IncidentReportPage: React.FC = () => {
           incident={selectedIncident}
           onUpdateStatus={handleUpdateStatus}
           onDelete={handleDelete}
+        />
+
+        {/* Add the Detailed Modal component here */}
+        <IncidentDetailedModal 
+          isOpen={isDetailedModalOpen}
+          onClose={() => setIsDetailedModalOpen(false)}
+          incident={selectedIncident}
         />
       </main>
     </div>

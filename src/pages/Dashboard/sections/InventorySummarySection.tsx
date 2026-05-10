@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAssets } from "../../../hooks/useAssets";
 import { useConsumables } from "../../../hooks/useConsumables";
+import { formatDate } from "../../../utils/formatter";
 
 const conditionStyles: Record<string, { color: string; bg: string }> = {
   "good condition": { color: "#1a7a4a", bg: "#e6f4ed" },
@@ -42,7 +43,7 @@ export const InventorySummarySection: React.FC = () => {
 
   const headers =
     activeTab === "assets"
-      ? ["ID", "Equipment", "Condition", "Date"]
+      ? ["ID", "Equipment", "Condition", "Purchase Date"]
       : ["ID", "Name", "Quantity", "Location"];
 
   return (
@@ -129,7 +130,7 @@ export const InventorySummarySection: React.FC = () => {
                             </span>
                           </td>
                           <td className="py-2.5 text-[#999] text-xs">
-                            {row.purchaseDate ? new Date(row.purchaseDate).toLocaleDateString() : "—"}
+                            {row.purchaseDate ? formatDate(row.purchaseDate) : "—"}
                           </td>
                         </>
                       ) : (
