@@ -1,5 +1,6 @@
 import React from "react";
 import { useIncidentReports } from "../../../hooks/useIncident";
+import { formatDateTime } from "../../../utils/formatter";
 
 const Pill = ({ label, color, bg }: { label: string; color: string; bg: string }) => (
   <span className="inline-flex items-center justify-center px-3 py-0.5 rounded-full text-[11px] font-medium whitespace-nowrap" style={{ color, backgroundColor: bg }}>
@@ -71,7 +72,7 @@ export const SafetyIncidentReportSection: React.FC = () => {
                   <td className="py-2.5 pr-6 text-[#1a1a1a] text-sm font-medium truncate max-w-[160px]">{inc.title}</td>
                   <td className="py-2.5 pr-6"><Pill label={inc.severity} {...(severityColors[inc.severity] ?? { color: "#555", bg: "#f5f5f5" })} /></td>
                   <td className="py-2.5 pr-6"><Pill label={inc.status} {...(statusColors[inc.status] ?? { color: "#555", bg: "#f5f5f5" })} /></td>
-                  <td className="py-2.5 text-[#999] text-xs whitespace-nowrap">{new Date(inc.dateAndTime).toLocaleString()}</td>
+                  <td className="py-2.5 text-[#999] text-xs whitespace-nowrap">{inc.dateAndTime ? formatDateTime(inc.dateAndTime) : '—'}</td>
                 </tr>
               ))
             )}
