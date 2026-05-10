@@ -5,9 +5,11 @@ export interface LostAndFound {
     description: string | null;
     areaFound: 'WOD' | 'Cafe' | 'Powerlifting' | 'CrossFit' | 'Mezzanine' | 'Other';
     date: string;
+    itemImage: string
     status: 'Unclaimed' | 'Claimed';
     claimedBy: string | null;
     claimedAt: string | null;
+    claimedImage: string;
     reportedBy: string;
 }
 

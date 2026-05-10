@@ -38,10 +38,10 @@ export const updateLostAndFound = async (id: string, data: UpdateLostAndFound): 
 };
 
 // CLAIM
-export const claimLostAndFound = async (id: string, claimedBy: string): Promise<void> => {
+export const claimLostAndFound = async (id: string, claimedBy: string, claimedDate?: string, claimImage?: string): Promise<void> => {
     const res = await apiRequest(`/lost-and-founds/${id}/claim`, {
         method: 'PATCH',
-        body: JSON.stringify({ claimedBy }),
+        body: JSON.stringify({ claimedBy, claimedAt: claimedDate, claimedImage: claimImage }),
     });
     if (!res.ok) {
         const err = await res.json();
