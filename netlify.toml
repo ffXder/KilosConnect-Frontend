@@ -1,0 +1,5 @@
+[[redirects]]
+from = "/api/*"
+to = "kilosconnect-backend-production.up.railway.app"
+status = 200
+force = true
