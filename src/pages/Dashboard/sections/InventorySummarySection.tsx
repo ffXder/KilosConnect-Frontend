@@ -3,9 +3,9 @@ import { useAssets } from "../../../hooks/useAssets";
 import { useConsumables } from "../../../hooks/useConsumables";
 
 const conditionStyles: Record<string, { color: string; bg: string }> = {
-  working: { color: "#1a7a4a", bg: "#e6f4ed" },
+  "good condition": { color: "#1a7a4a", bg: "#e6f4ed" },
   "needs replacement": { color: "#d72c2c", bg: "#fdecea" },
-  "need repair": { color: "#e09000", bg: "#fff3e0" },
+  "needs repair": { color: "#e09000", bg: "#fff3e0" },
   "under repair": { color: "#0056d2", bg: "#e8f0fe" },
 };
 
@@ -21,14 +21,14 @@ export const InventorySummarySection: React.FC = () => {
   const rows = (activeTab === "assets" ? assets : consumables) as any[];
   const loading = activeTab === "assets" ? assetsLoading : consumablesLoading;
 
-  // Only show 5 most recent
+  // Only show 4 most recent
   const recentRows = rows.slice(0, 4);
 
   const summaryStats =
     activeTab === "assets"
       ? [
           { value: rows.length, label: "Total", valueColor: "text-[#1a1a1a]" },
-          { value: rows.filter((r) => normalizeCondition(r.condition) === "working").length, label: "Good", valueColor: "text-[#1a7a4a]" },
+          { value: rows.filter((r) => normalizeCondition(r.condition) === "good condition").length, label: "Good", valueColor: "text-[#1a7a4a]" },
           { value: rows.filter((r) => normalizeCondition(r.condition) === "needs replacement").length, label: "Replace", valueColor: "text-[#d72c2c]" },
           { value: rows.filter((r) => normalizeCondition(r.condition) === "needs repair").length, label: "Repair", valueColor: "text-[#e09000]" },
           { value: rows.filter((r) => normalizeCondition(r.condition) === "under repair").length, label: "In Repair", valueColor: "text-[#0056d2]" },
@@ -158,7 +158,7 @@ export const InventorySummarySection: React.FC = () => {
         )}
 
         {/* Footer link */}
-        {!loading && rows.length > 5 && (
+        {!loading && rows.length > 4 && (
           <p className="text-center text-[11px] text-[#bbb] mt-3">
             Showing 4 of {rows.length} — 
             <a href="/inventory" className="text-[#1a4d3e] font-medium ml-1 hover:underline">
