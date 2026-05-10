@@ -35,9 +35,9 @@ export const LostAndFoundPage: React.FC = () => {
     setViewingItem(item);
   };
 
-  const handleAddItem = async (newItemData: Omit<LostAndFound, '_id' | 'lostId' | 'status' | 'claimedBy' | 'claimedAt'>) => {
-    await handleCreate(newItemData);
-    setIsModalOpen(false);
+  const handleAddItem = async (data: any, imageFile: File) => {
+      await handleCreate(data, imageFile); // pass imageFile
+      setIsModalOpen(false);
   };
 
   const handleClaimItem = (id: string) => {
@@ -45,9 +45,9 @@ export const LostAndFoundPage: React.FC = () => {
     if (item) setClaimingItem(item);
   };
 
-  const handleConfirmClaim = async (claimedBy: string, claimedDate: string, claimImage?: string) => {
+  const handleConfirmClaim = async (claimedBy: string, imageFile: File) => {
     if (!claimingItem) return;
-    await handleClaim(claimingItem.lostId, claimedBy, claimedDate, claimImage);
+    await handleClaim(claimingItem.lostId, claimedBy, imageFile);
     setClaimingItem(null);
   };
 
