@@ -12,6 +12,8 @@ import { IncidentReportPage } from './pages/IncidentReport/IncidentReporting'
 import { ProfilePage } from './pages/Profile/ProfileMain'
 import { LogsPage } from './pages/LogsModule/LogsMain'
 import { ManageAccountsPage } from './pages/ManageAccounts/ManageAccountPage'
+import UnauthorizedPage from './pages/UnauthorizedPage'
+import ArchivePage from './pages/Archives'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -33,11 +35,17 @@ function App() {
     initApp();
   }, []);
 
+  if (isPageLoading) return <LoadingPage />;
+
   return (
     <BrowserRouter>
       <Routes>
+        {/* public routes */}
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/unauthorized' element={<UnauthorizedPage />} />
+        
+        {/* protected routes */}
         <Route path='/dashboard' 
         element={
           <ProtectedRoute allowedRoles={['admin', 'custodian']}>
@@ -91,6 +99,13 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['admin']}>
               <ManageAccountsPage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path='/archives'
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+              <ArchivePage />
           </ProtectedRoute>
         }
         />
