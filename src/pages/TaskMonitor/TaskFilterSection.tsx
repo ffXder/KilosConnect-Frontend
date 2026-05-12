@@ -1,8 +1,11 @@
 import React from 'react';
-import { Plus, Search, ChevronDown } from 'lucide-react';
+import { Plus, Search, ChevronDown, Layers} from 'lucide-react';
 
 interface TaskFilterProps {
   onAddTask: () => void;
+  onGenerate?: () => void;
+  showAddButton?: boolean;
+  showGenerateButton?: boolean;
   statusFilter: string;
   setStatusFilter: (val: string) => void;
   frequencyFilter: string;
@@ -11,10 +14,23 @@ interface TaskFilterProps {
   setAreaFilter: (val: string) => void;
   searchTerm: string;
   setSearchTerm: (val: string) => void;
+  hideStatus?: boolean; // Added this optional prop to fix the error
 }
 
 const TaskFilterSection: React.FC<TaskFilterProps> = ({ 
-  onAddTask, statusFilter, setStatusFilter, frequencyFilter, setFrequencyFilter, areaFilter, setAreaFilter, searchTerm, setSearchTerm
+  onAddTask, 
+  onGenerate,
+  statusFilter, 
+  setStatusFilter, 
+  frequencyFilter, 
+  setFrequencyFilter, 
+  areaFilter, 
+  setAreaFilter, 
+  searchTerm, 
+  setSearchTerm,
+  hideStatus = false, // Default to false
+  showAddButton = false,
+  showGenerateButton = false
 }) => {
   const statusOptions = ['All Tasks', 'Pending', 'Completed'];
   const zones = ["All Areas", "Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Weightlifting Area", "General Storage", "Maintenance Storage"];
@@ -41,39 +57,56 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button
-          onClick={onAddTask}
-          className="bg-[#113129] text-white px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-[0_4px_12px_rgba(17,49,41,0.15)] active:scale-95"
-        >
-          <Plus size={20} strokeWidth={2.5} />
-          <span>New Task</span>
-        </button>
+        
+        {showAddButton && (
+          <button
+            onClick={onAddTask}
+            className="bg-[#113129] text-white px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-sm active:scale-95 whitespace-nowrap"
+          >
+            <Plus size={20} strokeWidth={2.5} />
+            <span>New Task</span>
+          </button>
+        )}
+
+        {/* Only shows in "Live Monitor" tab */}
+        {showGenerateButton && (
+          <button
+            onClick={onGenerate}
+            className="bg-[#072821] text-white px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap"
+          >
+            <Layers size={20} strokeWidth={2.5} />
+            <span>Initialize Today</span>
+          </button>
+        )}
       </div>
 
       {/* Secondary Filter Row: Status, Type, & Area */}
       <div className="flex flex-wrap items-center gap-6">
         
-        {/* Status Group */}
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Status:</span>
-          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px]">
-            {statusOptions.map((status) => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all ${
-                  statusFilter === status
-                    ? "bg-white text-[#113129] shadow-sm"
-                    : "text-[#64748b] hover:text-[#1a1a1a]"
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="h-6 w-px bg-gray-200" /> {/* Divider */}
+        {/* Status Group - Conditionally hidden for Admin "Manage" view */}
+        {!hideStatus && (
+          <>
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Status:</span>
+              <div className="flex bg-[#f1f5f9] p-1 rounded-[12px]">
+                {statusOptions.map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => setStatusFilter(status)}
+                    className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all ${
+                      statusFilter === status
+                        ? "bg-white text-[#113129] shadow-sm"
+                        : "text-[#64748b] hover:text-[#1a1a1a]"
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="h-6 w-px bg-gray-200" />
+          </>
+        )}
 
         {/* Type (Frequency) Group */}
         <div className="flex items-center gap-3">
@@ -83,7 +116,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <button 
                 key={opt.label} 
                 onClick={() => setFrequencyFilter(opt.label)}
-                className={`px-4 py-2 rounded-[9px] [font-family:'Poppins',Helvetica] font-semibold text-[10px] font-black transition-all ${
+                className={`px-4 py-2 rounded-[9px] font-semibold text-[10px] transition-all ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
                     : "text-slate-400 hover:bg-white/50"  
@@ -95,9 +128,9 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
           </div>
         </div>
 
-        <div className="h-6 w-px bg-gray-200" /> {/* Divider */}
+        <div className="h-6 w-px bg-gray-200" />
 
-        {/* Area Group - Updated to Dropdown */}
+        {/* Area Group */}
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">Area:</span>
           <div className="relative">
