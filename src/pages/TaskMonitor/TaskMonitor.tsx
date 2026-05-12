@@ -19,7 +19,15 @@ export const TaskMonitorPage: React.FC = () => {
   const [frequencyFilter, setFrequencyFilter] = useState('All');
   const [areaFilter, setAreaFilter] = useState('All Areas');
   const [searchTerm, setSearchTerm] = useState('');
+  const [generateMessage, setGenerateMessage] = useState<string | null>(null);
 
+  const handleGenerateClick = async () => {
+      const result = await handleGenerate();
+      if (result?.message) {
+          setGenerateMessage(result.message);
+          setTimeout(() => setGenerateMessage(null), 3000); // auto dismiss after 3s
+      }
+  };
   const { logs, loading: logsLoading, handleComplete, handleGenerate } = useTaskLogs();
   const { tasks, loading: tasksLoading, handleCreate, handleArchive } = useTasks();
   const { role } = useAuth();
@@ -61,13 +69,13 @@ export const TaskMonitorPage: React.FC = () => {
             <div className="flex bg-gray-200/50 p-1 rounded-xl">
               <button 
                 onClick={() => setActiveTab('monitor')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'monitor' ? 'bg-white shadow-sm text-[#113129]' : 'text-gray-500'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition cursor-pointer ${activeTab === 'monitor' ? 'bg-white shadow-sm text-[#113129]' : 'text-gray-500'}`}
               >
                 Live Monitor
               </button>
               <button 
                 onClick={() => setActiveTab('manage')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'manage' ? 'bg-white shadow-sm text-[#113129]' : 'text-gray-500'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition cursor-pointer ${activeTab === 'manage' ? 'bg-white shadow-sm text-[#113129]' : 'text-gray-500'}`}
               >
                 Manage Tasks
               </button>
@@ -78,10 +86,24 @@ export const TaskMonitorPage: React.FC = () => {
         {/* Stats only relevant for Live Monitoring */}
         {activeTab === 'monitor' && <TaskStatsSection tasks={filteredLogs} />}
         
+        {/* generates an error message */}
+        {generateMessage && (
+            <div className={`mt-4 px-4 py-3.5 rounded-xl border text-sm font-semibold flex items-center gap-2 ${
+                generateMessage.includes('generated')
+                    ? 'border-green-200 bg-green-50 text-green-700'  // success
+                    : 'border-yellow-200 bg-yellow-50 text-yellow-700' // warning
+            }`}>
+                <div className={`w-2 h-2 rounded-full shrink-0 ${
+                    generateMessage.includes('generated') ? 'bg-green-400' : 'bg-yellow-400'
+                }`} />
+                {generateMessage}
+            </div>
+        )}
+
         <div className="mt-8">
           <TaskFilterSection 
             onAddTask={() => setIsModalOpen(true)}
-            onGenerate={handleGenerate}
+            onGenerate={handleGenerateClick}
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
             frequencyFilter={frequencyFilter}
