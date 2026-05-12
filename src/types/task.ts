@@ -1,6 +1,9 @@
 export type Frequency = 'Daily' | 'Weekly' | 'Monthly';
 
-export type DayType = 'Weekday' | 'Saturday' | 'Sunday' | 'All';
+export type DayType = 
+    | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'  // weekly
+    | number   // monthly (1-31)
+    | null;    // daily
 
 export type Priority = 'Low' | 'Medium' | 'High';
 
