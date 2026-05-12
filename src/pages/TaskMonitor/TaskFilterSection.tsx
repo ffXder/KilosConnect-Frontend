@@ -72,7 +72,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
         {showGenerateButton && (
           <button
             onClick={onGenerate}
-            className="bg-[#072821] text-white px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap"
+            className="bg-[#d86125] text-[#FDFFE0] px-7 py-4 rounded-[16px] text-[15px] font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer"
           >
             <Layers size={20} strokeWidth={2.5} />
             <span>Initialize Today</span>
@@ -93,7 +93,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
                   <button
                     key={status}
                     onClick={() => setStatusFilter(status)}
-                    className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all ${
+                    className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all cursor-pointer ${
                       statusFilter === status
                         ? "bg-white text-[#113129] shadow-sm"
                         : "text-[#64748b] hover:text-[#1a1a1a]"
@@ -116,7 +116,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <button 
                 key={opt.label} 
                 onClick={() => setFrequencyFilter(opt.label)}
-                className={`px-4 py-2 rounded-[9px] font-semibold text-[10px] transition-all ${
+                className={`px-4 py-2 rounded-[9px] font-semibold text-[10px] transition-all cursor-pointer ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
                     : "text-slate-400 hover:bg-white/50"  
