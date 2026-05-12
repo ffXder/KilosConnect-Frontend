@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { SidebarNavigationSection } from '../components/SidebarNavigationSection';
 import { Search, MapPin, RotateCcw, ChevronRight, Package, Users, ClipboardList, AlertTriangle, Archive, Filter } from 'lucide-react';
 
-type ArchiveCategory = 'tasks' | 'users' | 'inventory' | 'incidents' | 'lostfound';
+type ArchiveCategory = 'users' | 'tasks' | 'inventory' | 'incidents' | 'lostfound';
 
 const ArchivePage: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<ArchiveCategory>('tasks');
+  const [activeCategory, setActiveCategory] = useState<ArchiveCategory>('users');
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -38,8 +38,8 @@ const ArchivePage: React.FC = () => {
         {/* --- CATEGORY TABS --- */}
         <div className="flex gap-2 mb-6 bg-slate-100 p-1 rounded-2xl w-fit">
           {[
-            { id: 'tasks', label: 'Tasks', icon: ClipboardList },
             { id: 'users', label: 'Users', icon: Users },
+            { id: 'tasks', label: 'Tasks', icon: ClipboardList },
             { id: 'inventory', label: 'Inventory', icon: Package },
             { id: 'incidents', label: 'Incidents', icon: AlertTriangle },
             { id: 'lostfound', label: 'Lost & Found', icon: Archive },
@@ -89,7 +89,7 @@ const ArchivePage: React.FC = () => {
           </button>
         </div>
 
-        {/* --- LIST CARDS (UI MATCHED TO SCREENSHOT) --- */}
+        {/* --- LIST CARDS --- */}
         <div className="space-y-3">
           {mockData[activeCategory].map((item) => (
             <div 
@@ -108,12 +108,12 @@ const ArchivePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* ACTION AREA (UI FROM SCREENSHOT) */}
+              {/* ACTION AREA */}
               <div className="flex items-center gap-4 pr-2">
                 {/* Vertical Divider */}
                 <div className="h-12 w-px bg-slate-100" />
 
-                {/* Restore Button (Square Rounded) */}
+                {/* Restore Button */}
                 <button 
                   className="w-12 h-12 flex items-center justify-center bg-slate-50 text-slate-400 hover:text-[#113129] hover:bg-[#113129]/5 rounded-2xl transition-all active:scale-95"
                   title="Restore Item"
