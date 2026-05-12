@@ -116,8 +116,6 @@ export const ManageAccountsPage: React.FC = () => {
   const { role } = useAuth();
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
   
-  if (loading) return <div>Synchronizing with Database...</div>;
-  if (error) return <div>Error loading users: {error}</div>;
 
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden font-sans text-[#1a1a1a]">
