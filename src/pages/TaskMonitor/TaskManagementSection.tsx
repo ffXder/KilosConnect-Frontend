@@ -32,6 +32,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
             <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest">Task Detail</th>
             <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest">Area</th>
             <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest">Frequency</th>
+            <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest">Day</th>
             <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest text-right">Actions</th>
           </tr>
         </thead>
@@ -61,6 +62,11 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
                     task.frequency === 'Daily' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'
                   }`}>
                     {task.frequency}
+                  </span>
+                </td>
+                <td className="px-6 py-5">
+                  <span className="flex items-center gap-2 text-sm text-gray-600">
+                    {task.dayType === null ? "Everyday" : task.dayType}
                   </span>
                 </td>
                 <td className="px-6 py-5 text-right">
