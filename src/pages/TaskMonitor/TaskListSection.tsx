@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TaskLog } from '../../types/task';
-import { Clock, MapPin, Trash2, CheckCircle2, Box, Loader2, ClipboardX } from 'lucide-react';
+import { Clock, MapPin, Trash2, CheckCircle2, Box, Loader2, ClipboardX, Calendar1 } from 'lucide-react';
 
 interface TaskListProps {
   tasks: TaskLog[]; 
@@ -18,6 +18,7 @@ const TaskListSection: React.FC<TaskListProps> = ({ tasks, onToggleStatus, onArc
     hour = hour % 12 || 12;
     return `${hour}:${minutes} ${ampm}`;
   };
+  
 
   return (
     <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-[32px] p-8 shadow-sm min-h-[300px] flex flex-col">
@@ -78,6 +79,11 @@ const TaskListSection: React.FC<TaskListProps> = ({ tasks, onToggleStatus, onArc
                     <span className="text-[#1e293b]">
                       {formatTime(log.task.startTime)} - {formatTime(log.task.endTime)}
                     </span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[13px] font-semibold">
+                    <Calendar1 size={16} className="text-[#94a3b8]" />
+                    <span className="text-[#64748b]">Type:</span>
+                    <span className="text-[#1e293b]">{log.task.frequency}</span>
                   </div>
                 </div>
               </div>
