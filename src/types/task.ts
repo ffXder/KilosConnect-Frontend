@@ -1,4 +1,4 @@
-export type Frequency = 'Daily' | 'Weekly' | 'Monthly'; // adjust to your actual values
+export type Frequency = 'Daily' | 'Weekly' | 'Monthly';
 
 export type DayType = 'Weekday' | 'Saturday' | 'Sunday' | 'All';
 
@@ -31,10 +31,9 @@ export type TaskLogStatus = 'Pending' | 'In Progress' | 'Completed' | 'Missed';
 //for task log
 export interface TaskLog {
   _id: string;
-  task: Pick<Task, '_id' | 'title' | 'area' | 'startTime' | 'endTime' | 'isBreak'>;
-  date: string;
+  task: Pick<Task, '_id' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority'>;
   status: TaskLogStatus;
-  completedBy?: { firstName: string };
+  completedBy?: { _id: string; firstName: string };
   completedAt?: string;
   createdAt: string;
   updatedAt: string;
