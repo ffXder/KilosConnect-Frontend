@@ -11,6 +11,7 @@ export function useTaskLogs(date?: string, status?: string) {
         setLoading(true);
         try {
             const data = await LogService.getTaskLogs(date, status);
+            console.log('logs:', data); //test
             setLogs(data);
             setError(null);
         } catch (err: any) {
@@ -24,10 +25,11 @@ export function useTaskLogs(date?: string, status?: string) {
         fetchLogs();
     }, [fetchLogs]);
 
-    const handleGenerate = async () => {
+    const handleGenerate = async (): Promise<{ message: string; skipped?: number} | undefined> => {
         try {
-            await LogService.generateDailyLogs();
+            const result = await LogService.generateDailyLogs();
             await fetchLogs();
+            return result
         } catch (err: any) {
             setError(err.message);
             throw err;
