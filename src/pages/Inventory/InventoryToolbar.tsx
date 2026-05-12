@@ -36,7 +36,7 @@ export const InventoryToolbar: React.FC<Props> = ({
       {/* Row 1: Tabs + Filters + Add Button */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         
-        {/* Category Tabs */}
+        {/* Inventory Types Tabs */}
         <div className="flex gap-1 bg-[#f4f5f6] p-1 rounded-xl">
           {tabs.map((tab) => (
             <button
@@ -59,7 +59,7 @@ export const InventoryToolbar: React.FC<Props> = ({
           {activeInventory === "Consumables" && (
             <>
               {/* Category Dropdown */}
-              <div className="relative">
+              {/* <div className="relative">
                   <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   <select
                       value={selectedArea}
@@ -73,7 +73,7 @@ export const InventoryToolbar: React.FC<Props> = ({
                       ))}
                   </select>
                   <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              </div> */}
 
               {/* Area Dropdown */}
               <div className="relative">
