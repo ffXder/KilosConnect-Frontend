@@ -145,8 +145,8 @@ export const ManageAccountsPage: React.FC = () => {
         {isAddModalOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-[20px] w-full max-w-[420px] overflow-hidden shadow-2xl">
-              <div className="bg-[#0b3026] px-7 py-5">
-                <h3 className="text-white text-xl font-bold">{editingAccountId ? "Edit User" : "Add User"}</h3>
+              <div className="bg-[#1C2D24] px-7 py-5">
+                <h3 className="text-[#FDFFE0] text-xl font-bold">{editingAccountId ? "Edit User" : "Add User"}</h3>
               </div>
               <form className="p-7 space-y-5" onSubmit={handleSubmit}>
                 <div className="space-y-1.5">
@@ -209,7 +209,7 @@ export const ManageAccountsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-center gap-3 pt-4">
                   <button type="button" onClick={closeAddModal} className="w-full py-2.5 border border-gray-300 rounded-lg text-sm font-bold">Cancel</button>
-                  <button type="submit" className="w-full py-2.5 bg-[#0b3026] text-white rounded-lg text-sm font-bold">
+                  <button type="submit" className="w-full py-2.5 bg-[#d86125] text-[#FDFFE0] rounded-lg text-sm font-bold">
                     {editingAccountId ? "Save Changes" : "Add User"}
                   </button>
                 </div>
