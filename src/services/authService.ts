@@ -33,10 +33,9 @@ export const refreshAccessToken = async () => {
         method: 'POST',
         credentials: 'include',
     });
-    console.log('Refresh status:', res.status);
-    console.log('Refresh body:', await res.json());
+    const data = await res.json();
     if (!res.ok) throw new Error('Refresh failed');
-    return res.json(); 
+    return data; 
 };
 
 
