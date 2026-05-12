@@ -223,7 +223,7 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
                 onClick={() => setCategory("Consumables")}
                 className={`py-3.5 rounded-2xl border-2 font-bold transition-all ${
                   category === "Consumables" 
-                    ? "bg-[#0a2e27] text-white border-[#0a2e27] shadow-lg" 
+                    ? "bg-[#d86125] text-[#FDFFE0] border-[#ba6300] shadow-lg" 
                     : "border-[#e2e8f0] text-[#4a5568] hover:bg-gray-50"
                 }`}
               >
@@ -234,7 +234,7 @@ export const AddItemModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
                 onClick={() => setCategory("Assets")}
                 className={`py-3.5 rounded-2xl border-2 font-bold transition-all ${
                   category === "Assets" 
-                    ? "bg-[#0a2e27] text-white border-[#0a2e27] shadow-lg" 
+                    ? "bg-[#d86125] text-[#FDFFE0] border-[#ba6300] shadow-lg" 
                     : "border-[#e2e8f0] text-[#4a5568] hover:bg-gray-50"
                 }`}
               >
