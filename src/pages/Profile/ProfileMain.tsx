@@ -31,9 +31,9 @@ export interface ActivityItem {
 }
 
 const mockProfile: ProfileData = {
-  firstName: "Bingbong",
-  lastName: "Marcos",
-  username: "bingg@kilosph.com",
+  firstName: "Kilos",
+  lastName: "PH",
+  username: "kilosconnect@kilosph.com",
   phone: "+63 912 345 6789",
   role: "Admin",
   dateJoined: "2023-01-15",
