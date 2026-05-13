@@ -58,8 +58,8 @@ export const TaskMonitorPage: React.FC = () => {
         
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Task Tracking</h1>
-            <p className="text-gray-500 text-sm mt-1">
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Task Tracking</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
               {activeTab === 'monitor' ? "Live maintenance monitor" : "Manage master task templates"}
             </p>
           </div>
