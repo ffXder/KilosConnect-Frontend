@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TaskLog } from '../../types/task';
-import { Clock, MapPin, Trash2, CheckCircle2, Box, Loader2, ClipboardX, Calendar1 } from 'lucide-react';
+import { Clock, MapPin, CheckCircle2, Box, Loader2, ClipboardX, Calendar1 } from 'lucide-react';
 
 interface TaskListProps {
   tasks: TaskLog[]; 
@@ -103,17 +103,10 @@ const TaskListSection: React.FC<TaskListProps> = ({ tasks, onToggleStatus, onArc
                       <span>Completed</span>
                     </div>
                     {log.completedBy && (
-                       <span className="text-[11px] text-gray-400">by {log.completedBy.firstName}</span>
+                       <span className="text-[12px] text-gray-400">by {log.completedBy.firstName}</span>
                     )}
                   </div>
                 )}
-                
-                <button 
-                  onClick={() => { if(window.confirm("Archive task?")) onArchive(log.task._id) }} 
-                  className="p-3 text-gray-300 hover:text-red-500 transition-colors"
-                >
-                  <Trash2 size={18} />
-                </button>
               </div>
             </div>
           ))}
