@@ -8,7 +8,6 @@ import AddTaskModal from './AddITaskModals';
 import { useAuth } from '../../hooks/useAuth';
 import { useTasks } from '../../hooks/useTask';
 import { useTaskLogs } from '../../hooks/useTaskLog';
-import { AddItemModal } from '../Inventory/AddItemModal';
 
 export const TaskMonitorPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
