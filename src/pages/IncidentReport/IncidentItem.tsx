@@ -54,7 +54,7 @@ const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onClick, onViewCl
 
         {/* Footer */}
         <div className="flex items-center gap-3 text-[12px] text-gray-400">
-          <span>Reported By: {incident.reportedBy.firstName} {incident.reportedBy.lastName}</span>
+          <span>Reported By: {incident.reportedBy?.firstName ?? 'Unknown'} {incident.reportedBy?.lastName ?? ''}</span>
           <span>{formatDateTime(incident.dateAndTime)}</span>
           <span className="text-gray-300">·</span>
           <span>Click to update status</span>
