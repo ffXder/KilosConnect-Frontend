@@ -141,7 +141,7 @@ export const LogsPage: React.FC = () => {
       <main className="flex-1 p-10 overflow-y-auto">
         <header className="flex justify-between items-start mb-8 w-full">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Audit Logs</h1>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Activity Logs</h1>
             <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">View all system activities and changes</p>
           </div>
         </header>
