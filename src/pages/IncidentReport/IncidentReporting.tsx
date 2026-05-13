@@ -77,8 +77,8 @@ export const IncidentReportPage: React.FC = () => {
       <main className="flex-1 ml-[240px] p-10 overflow-y-auto">
         <header className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Incident Reporting</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">Track and manage equipment issues and safety hazards</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Incident Reporting</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Track and manage equipment issues and safety hazards</p>
           </div>
         </header>
 
