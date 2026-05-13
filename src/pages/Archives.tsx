@@ -3,7 +3,7 @@ import { SidebarNavigationSection } from '../components/SidebarNavigationSection
 import { Search, RotateCcw, Package, Users, ClipboardList, AlertTriangle, Archive, Calendar } from 'lucide-react';
 import { useArchivedUsers } from '../hooks/useArchivedUsers';
 import { formatDate } from '../utils/formatter';
-import type { UserAccount } from '../types/manageAccount';
+
 type ArchiveCategory = 'users' | 'tasks' | 'inventory' | 'incidents' | 'lostfound';
 
 const ArchivePage: React.FC = () => {
