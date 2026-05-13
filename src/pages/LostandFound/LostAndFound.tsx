@@ -70,8 +70,8 @@ export const LostAndFoundPage: React.FC = () => {
         {/* Header structure from IncidentReporting_2.tsx with icons removed[cite: 22] */}
         <header className="flex justify-between items-start px-10 py-8">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Lost & Found</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">Manage items stored in facility zones</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Lost & Found</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage items stored in facility zones</p>
           </div>
           {/* Action buttons container removed[cite: 22] */}
         </header>

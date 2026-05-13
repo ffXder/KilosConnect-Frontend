@@ -75,6 +75,7 @@ const moduleToEntryBg = (moduleName: string) => {
 
 export const LogsPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All Logs');
+  const [dateRange, setDateRange] = useState('Last 7 Days'); // for dates
   const { logs: rawLogs, isLoading, error } = useAuditLogs();
   const [stats, setStats] = useState<StatData[]>([
     { label: 'Inventory Logs', count: 0, icon: <InventoryIcon />, bg: 'bg-blue-50', color: ''},
@@ -102,7 +103,7 @@ export const LogsPage: React.FC = () => {
     }),
     icon: moduleToEntryIcon(log.module),
     bg: moduleToEntryBg(log.module),   
-  }))
+    }))
 
     setLogs(formattedLogs);
 
@@ -110,7 +111,7 @@ export const LogsPage: React.FC = () => {
     const counts = (rawLogs as AuditLogs[]).reduce<Record<string, number>>((acc, log) => {
       acc[log.module] = (acc[log.module] ?? 0) + 1;
       return acc;
-    }, {});
+  }, {});
 
     setStats([
       { 
@@ -140,13 +141,18 @@ export const LogsPage: React.FC = () => {
       <main className="flex-1 p-10 overflow-y-auto">
         <header className="flex justify-between items-start mb-8 w-full">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">Activity Logs</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">View all system activities and changes</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Audit Logs</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">View all system activities and changes</p>
           </div>
         </header>
         <LogsStatsSection stats={stats} />
         <div className="mt-8 mb-6">
-          <LogsFilterSection activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+          <LogsFilterSection 
+            activeFilter={activeFilter} 
+            setActiveFilter={setActiveFilter}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+          />
         </div>
         {loading ? (
           <div className="text-center py-10 text-gray-500">Loading activities...</div>
