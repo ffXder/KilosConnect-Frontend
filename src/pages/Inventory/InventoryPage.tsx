@@ -110,10 +110,10 @@ export const InventoryPage = () => {
         {/* Sticky Header */}
         <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-8 pb-4">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-3xl font-bold text-gray-900 tracking-tigh">
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
               Inventory Management
             </h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-1">
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
               Track and manage your gym equipment and supplies!
             </p>
           </div>
