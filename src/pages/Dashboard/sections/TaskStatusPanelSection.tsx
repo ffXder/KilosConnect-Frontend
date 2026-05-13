@@ -1,34 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import { useTaskLogs } from "../../../hooks/useTaskLog";
+import { formatTime } from "../../../utils/formatter";
 
-export type Task = {
-  id: string;
-  title: string;
-  due: string;
-  status: "Completed" | "Pending";
-  frequency: "Daily" | "Weekly" | "Monthly" | "Weekdays";
-};
-
-const tasks: Task[] = [
-  { id: 'm1', title: 'Preparation & Inventory Check', frequency: 'Daily', status: 'Pending', due: "Today, 06:30 AM" },
-  { id: 'm2', title: 'Morning Mopping (Zone A)', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 AM" },
-  { id: 'd1', title: 'Mid-Day Inventory & General Cleaning', frequency: 'Daily', status: 'Pending', due: "Today, 12:00 PM" },
-  { id: 'd2', title: 'Detailed Equipment Inspection', frequency: 'Daily', status: 'Pending', due: "Today, 4:00 PM" },
-  { id: 'e1', title: 'Post-Peak Mopping', frequency: 'Daily', status: 'Pending', due: "Today, 08:00 AM" },
-  { id: 'e2', title: 'Nightly Deep Clean: Weightlifting Area', frequency: 'Daily', status: 'Pending', due: "Today, 07:00 PM" },
-  { id: 'w1', title: 'Deep Clean: Yoga Mats & Accessories', frequency: 'Weekly', status: 'Pending', due: "Today, 08:00 AM" },
-];
-
-const summaryCards = [
-  { label: "Completed", count: tasks.filter(t => t.status === "Completed").length, bg: "bg-[#d4f5d4]", countColor: "text-[#1b9640]", labelColor: "text-[#1b9640]" },
-  { label: "Pending", count: tasks.filter(t => t.status === "Pending").length, bg: "bg-[#e8e8e8]", countColor: "text-[#555]", labelColor: "text-[#555]" },
-];
-
-const statusStyle: Record<Task["status"], { color: string; bg: string }> = {
+const statusStyle: Record<string, { color: string; bg: string }> = {
   Completed: { color: "text-[#1b9640]", bg: "bg-[#e0f5e9]" },
   Pending: { color: "text-[#888]", bg: "bg-[#e8e8e8]" },
 };
 
-const freqStyle: Record<Task["frequency"], { color: string; bg: string }> = {
+const freqStyle: Record<string, { color: string; bg: string }> = {
   Daily: { color: "text-[#c96a00]", bg: "bg-[#fff0e0]" },
   Weekly: { color: "text-[#7a00c9]", bg: "bg-[#f0e0ff]" },
   Monthly: { color: "text-[#007a8a]", bg: "bg-[#e0f7fa]" },
@@ -36,7 +15,29 @@ const freqStyle: Record<Task["frequency"], { color: string; bg: string }> = {
 };
 
 export const TaskStatusPanelSection: React.FC = () => {
-  const recentTasks = tasks.slice(0, 7);
+  const { logs, loading, error } = useTaskLogs();
+
+  const completedCount = logs.filter(t => t.status === "Completed").length;
+  const pendingCount = logs.filter(t => t.status === "Pending").length;
+
+  const summaryCards = [
+    { label: "Completed", count: completedCount, bg: "bg-[#d4f5d4]", countColor: "text-[#1b9640]", labelColor: "text-[#1b9640]" },
+    { label: "Pending", count: pendingCount, bg: "bg-[#e8e8e8]", countColor: "text-[#555]", labelColor: "text-[#555]" },
+  ];
+
+  const recentTasks = logs.slice(0, 10);
+
+  if (loading) return (
+    <aside className="w-full h-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex items-center justify-center">
+      <p className="text-sm text-[#aaa]">Loading tasks...</p>
+    </aside>
+  );
+
+  if (error) return (
+    <aside className="w-full h-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex items-center justify-center">
+      <p className="text-sm text-red-400">Failed to load tasks.</p>
+    </aside>
+  );
 
   return (
     <aside aria-label="Task Overview" className="w-full h-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex flex-col overflow-hidden">
@@ -53,28 +54,28 @@ export const TaskStatusPanelSection: React.FC = () => {
 
       <div className="flex-1 overflow-y-auto px-5 flex flex-col gap-2.5">
         {recentTasks.map((task) => {
-          const ss = statusStyle[task.status];
-          const fs = freqStyle[task.frequency];
+          const ss = statusStyle[task.status] ?? statusStyle["Pending"];
+          const fs = freqStyle[task.task.frequency] ?? freqStyle["Daily"];
           return (
-            <div key={task.id} className="bg-[#fafafa] rounded-[10px] p-3.5 border border-[#efefef]">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[#aaa] text-[11px]">{task.id}</span>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium ${fs.bg} ${fs.color}`}>{task.frequency}</span>
-              </div>
-              <p className="font-semibold text-[#1a1a1a] text-sm m-0 mb-2">{task.title}</p>
+            <div key={task._id} className="bg-[#fafafa] rounded-[10px] p-3.5 border border-[#efefef]">
+              <p className="font-semibold text-[#1a1a1a] text-sm m-0 mb-2">{task.task.title}</p>
               <div className="flex items-center justify-between">
-                <span className="text-[#aaa] text-[11px]">{task.due}</span>
+                <span className="text-[#aaa] text-[11px]">Task Due: {task.task.endTime}</span>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium ${ss.bg} ${ss.color}`}>{task.status}</span>
               </div>
             </div>
           );
         })}
+
+        {recentTasks.length === 0 && (
+          <p className="text-center text-sm text-[#bbb] py-6">No tasks for today.</p>
+        )}
       </div>
 
-      {tasks.length > 6 && (
+      {logs.length > 10 && (
         <p className="text-center text-[11px] text-[#bbb] py-3 border-t border-[#f0f0f0] mt-1">
-          Showing 6 of {tasks.length} —{" "}
-          <a href="/tasks" className="text-[#1a4d3e] font-medium ml-1 hover:underline">
+          Showing 10 of {logs.length} —{" "}
+          <a href="/task-monitor" className="text-[#1a4d3e] font-medium ml-1 hover:underline">
             View all
           </a>
         </p>
