@@ -51,3 +51,23 @@ export const toggleArchiveUser = async (userId: string, isArchived: boolean): Pr
     throw new Error(err.message || 'Update failed');
   }
 };
+
+export const unarchiveUser = async (userId: string): Promise<void> => {
+    const res = await apiRequest(`/users/${userId}/unarchive`, { method: 'PATCH'});
+    
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to unarchive user');
+    }
+}
+
+//GET Archive
+export const getArchivedUsers = async (): Promise<UserAccount[]> => {
+    const res = await apiRequest('/users/archived', { method: 'GET' });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Could not load archived users');
+    }
+    return await res.json();
+};
