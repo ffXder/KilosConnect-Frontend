@@ -84,7 +84,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
     }
   };
 
-  const zones = ["Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Café", "General Storage", "Maintenance Storage"];
+  const zones = ["Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Weightlifting Area", "General Storage", "Maintenance Storage"];
   const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const monthDays = Array.from({ length: 31 }, (_, i) => i + 1); // [1, 2, ... 31]
 
