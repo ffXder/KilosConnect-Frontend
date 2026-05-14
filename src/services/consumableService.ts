@@ -46,3 +46,21 @@ export const archiveConsumable = async(id: string): Promise<void> => {
     return res.json();
 }
 
+export const unarchiveConsumable = async(id: string): Promise<void> => {
+    const res = await apiRequest(`/consumables/${id}/unarchive`, { method: 'PATCH' });
+    if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.message || 'Could not unarchive consumable')
+    }
+    return res.json();
+}
+
+export const getArchivedConsumables = async (): Promise<Consumable[]> => {
+    const res = await apiRequest('/consumables/archived', { method: 'GET' });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Could not load archived users');
+    }
+    return await res.json();
+};
