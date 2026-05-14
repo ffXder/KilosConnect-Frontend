@@ -89,6 +89,18 @@ export const LoginPage: React.FC = () => {
             </div>
           ))}
 
+          <div className="text-center">
+  
+           <a href="/forgot-password"
+            className="font-poppins text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline transition-all"
+            >
+            Forgot Password?
+          </a>
+          <p className="font-poppins text-[#fdffe0]/50 text-xs mt-1">
+            For admin accounts only
+          </p>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
