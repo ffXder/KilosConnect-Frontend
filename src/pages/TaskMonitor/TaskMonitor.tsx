@@ -8,9 +8,16 @@ import AddTaskModal from './AddITaskModals';
 import { useAuth } from '../../hooks/useAuth';
 import { useTasks } from '../../hooks/useTask';
 import { useTaskLogs } from '../../hooks/useTaskLog';
+import type { Task } from '../../types/task';
 
 export const TaskMonitorPage: React.FC = () => {
+  const { logs, loading: logsLoading, handleComplete, handleGenerate } = useTaskLogs();
+  const { tasks, loading: tasksLoading, handleCreate, handleUpdate, handleArchive } = useTasks();
+  const { role } = useAuth();
+
+  const userRole = (role ?? 'custodian') as 'admin' | 'custodian';
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [activeTab, setActiveTab] = useState<'monitor' | 'manage'>('monitor');
   
   // Filter States
@@ -27,11 +34,19 @@ export const TaskMonitorPage: React.FC = () => {
           setTimeout(() => setGenerateMessage(null), 3000); // auto dismiss after 3s
       }
   };
-  const { logs, loading: logsLoading, handleComplete, handleGenerate } = useTaskLogs();
-  const { tasks, loading: tasksLoading, handleCreate, handleArchive } = useTasks();
-  const { role } = useAuth();
 
-  const userRole = (role ?? 'custodian') as 'admin' | 'custodian';
+  const handleSubmit = async (formData: any) => {
+    if (editingTask) {
+      await handleUpdate(editingTask._id, formData);
+    } else {
+      await handleCreate(formData);
+    }
+  };
+
+  const closeModal = () => {
+    setEditingTask(null);
+    setIsModalOpen(false);
+  };
 
   // filter task logs
   const filteredLogs = logs.filter(log => {
@@ -129,20 +144,21 @@ export const TaskMonitorPage: React.FC = () => {
               tasks={filteredMasterTasks} 
               onArchive={handleArchive} 
               loading={tasksLoading}
-              onEdit={(tasks) =>{
-                // WIP just a placeholder
-                console.log("Edit this task:", tasks);
+              onEdit={(task) => {
+                setEditingTask(task);
+                setIsModalOpen(true);
               }}
             />
           )}
         </div>
       
-          <AddTaskModal 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            onCreate={handleCreate}
-            onSuccess={() => setIsModalOpen(false)}
-          />
+        <AddTaskModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          onCreate={handleSubmit}
+          onSuccess={() => {}}
+          initialData={editingTask}
+        />
 
       </main>
     </div>
