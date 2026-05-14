@@ -8,6 +8,8 @@ export interface Asset {
     area: string;
     description?: string;
     isArchived: boolean;
+    archivedAt: string | null;
+    archivedBy: string | null;
 }
 
 //create
