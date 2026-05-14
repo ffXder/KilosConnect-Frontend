@@ -6,7 +6,7 @@ import {
     updateLostAndFound,
     claimLostAndFound,
     unclaimLostAndFound,
-    deleteLostAndFound
+    archiveLostAndFound
 } from '../services/lostAndFoundService';
 
 export function useLostAndFound() {
@@ -69,7 +69,7 @@ export function useLostAndFound() {
 
     const handleDelete = async (id: string) => {
         try {
-            await deleteLostAndFound(id);
+            await archiveLostAndFound(id);
             await fetchItems();
         } catch (err: any) {
             setError(err.message);
