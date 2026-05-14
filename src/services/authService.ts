@@ -71,7 +71,8 @@ export async function apiRequest(endpoint: string, options: any = {}) {
   if (res.status === 401 || res.status === 403) {
     try {
       const data = await refreshAccessToken();
-      localStorage.setItem('token', data.accessToken);
+      const newToken = data.accessToken || data.token; 
+      localStorage.setItem('token', newToken);
 
       headers['Authorization'] = `Bearer ${data.accessToken}`;
       res = await fetch(`${API_URL}${endpoint}`, { 
@@ -83,6 +84,7 @@ export async function apiRequest(endpoint: string, options: any = {}) {
       console.error("Session dead, logging out...", err);
       logOut(); // this logouts if the session is dead
       window.location.replace('/login');
+      return Promise.reject(err);
     }
   }
 
