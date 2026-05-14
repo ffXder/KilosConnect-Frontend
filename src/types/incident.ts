@@ -14,6 +14,9 @@ export interface IncidentReport {
         lastName: string;
     };
     dateAndTime: string;
+    isArchived: boolean;
+    archivedAt: string | null;
+    archivedBy: string | null;
 }
 
 // for create
