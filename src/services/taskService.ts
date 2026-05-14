@@ -49,3 +49,23 @@ export const archiveTask = async (taskId: string): Promise<void> => {
         throw new Error(err.message || 'Failed to archive task');
     }
 };
+
+export const unarchiveTask = async (taskId: string): Promise<void> => {
+    const res = await apiRequest(`/tasks/${taskId}/unarchive`, {
+        method: 'PATCH',
+        body: JSON.stringify({ isArchived: false })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to unarchive task');
+    }
+};
+
+export const getArchivedTasks = async (): Promise<Task[]> => {
+    const res = await apiRequest('/tasks/archived', { method: 'GET' });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to fetch archived tasks');
+    }
+    return res.json();
+}
