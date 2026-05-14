@@ -1,3 +1,5 @@
+import type { IncidentReport } from "./incident";
+
 export interface Consumable {
     _id: string;
     consumableId: string;
@@ -14,7 +16,6 @@ export interface Consumable {
 }
 
 //for create
-export type NewConsumable = Omit<Consumable, '_id' | 'consumableId' | 'isArchived'>;
+export type NewIncidentReport = Omit<IncidentReport, "_id" | "incidentId" | "status" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">;
 
-//for update
-export type UpdateConsumable = Partial<Omit<Consumable, '_id' | 'consumableId'>>;
+export type UpdateIncidentReport = Partial<Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">>;

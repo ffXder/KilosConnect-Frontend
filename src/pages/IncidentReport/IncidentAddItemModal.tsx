@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { X, Plus, ChevronDown } from 'lucide-react';
-import type { IncidentReport } from '../../types/incident';
+import type { NewIncidentReport } from '../../types/incident';
 
 interface IncidentAddItemModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (incident: Omit<IncidentReport, '_id' | 'incidentId' | 'status' | 'reportedBy'>) => void;
+  onSubmit: (incident: NewIncidentReport) => void;
 }
 
 const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onClose, onSubmit }) => {
   // form state
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [severity, setSeverity] = useState<IncidentReport['severity']>('Low');
+  const [severity, setSeverity] = useState<NewIncidentReport['severity']>('Low');
   const [area, setArea] = useState('');
   const [dateAndTime, setDateAndTime] = useState('');
   const [affectedAssets, setAffectedAssets] = useState<string[]>([]);
@@ -92,7 +92,7 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
             <div className="relative">
               <label className="block text-sm font-bold text-gray-700 mb-2">Severity *</label>
               <select 
-                onChange={(e) => setSeverity(e.target.value as IncidentReport['severity'])}
+                onChange={(e) => setSeverity(e.target.value as NewIncidentReport['severity'])}
                 value={severity}
                 className="w-full appearance-none px-4 py-3 border border-gray-200 rounded-xl bg-white outline-none"
               >

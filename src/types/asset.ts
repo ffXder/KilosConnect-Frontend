@@ -13,7 +13,7 @@ export interface Asset {
 }
 
 //create
-export type NewAsset = Omit<Asset, '_id' | 'assetId' | 'isArchived'>;
+export type NewAsset = Omit<Asset, '_id' | 'assetId' | 'isArchived' | 'archivedAt' | 'archivedBy'>;
 
 //update
-export type UpdateAsset = Partial<Omit<Asset, '_id' | 'assetId'>>;
+export type UpdateAsset = Partial<Omit<Asset, '_id' | 'assetId' | 'isArchived' | 'archivedAt' | 'archivedBy'>>;

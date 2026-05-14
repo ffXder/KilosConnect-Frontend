@@ -14,7 +14,7 @@ import IncidentUpdateStatusModal from './IncidentUpdateStatusModal';
 import IncidentDetailedModal from './IncidentDetailModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useIncidentReports } from '../../hooks/useIncident';
-import type { IncidentReport } from '../../types/incident';
+import type { IncidentReport, NewIncidentReport } from '../../types/incident';
 import { getDateThreshold } from '../../utils/dateHelper';
 
 export interface StatCardProps {
@@ -42,7 +42,7 @@ export const IncidentReportPage: React.FC = () => {
   const { reports, loading, error, handleCreate, handleUpdate, handleDelete } = useIncidentReports();
   const incidents = reports ?? [];
 
-  const handleAddIncident = async (newIncident: Omit<IncidentReport, '_id' | 'incidentId' | 'status' | 'reportedBy'>) => {
+  const handleAddIncident = async (newIncident: NewIncidentReport) => {
     await handleCreate(newIncident);
 };
 

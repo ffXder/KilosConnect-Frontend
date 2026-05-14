@@ -20,7 +20,7 @@ export interface IncidentReport {
 }
 
 // for create
-export type NewIncidentReport = Omit<IncidentReport, "_id" | "incidentId" | "status" | "reportedBy">;
+export type NewIncidentReport = Omit<IncidentReport, "_id" | "incidentId" | "status" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">;
 
-// for update
-export type UpdateIncidentReport = Partial<Omit<IncidentReport, "_id" | "incidentId">>;
+//for update
+export type UpdateIncidentReport = Partial<Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">>;
