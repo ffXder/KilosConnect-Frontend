@@ -91,7 +91,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
       <div className="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl">
-        <div className={`${initialData ? 'bg-blue-900' : 'bg-[#072821]'} p-6 text-white relative`}>
+        <div className={`${initialData ? 'bg-[#072821]' : 'bg-[#072821]'} p-6 text-white relative`}>
           <h2 className="text-xl font-bold">
             {initialData ? 'Edit Master Task' : 'Add New Task'}
           </h2>
@@ -243,7 +243,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 isFormInvalid || submitting 
                   ? "bg-gray-100 text-gray-300 cursor-not-allowed" 
                   : initialData 
-                    ? "bg-blue-600 hover:bg-blue-700 text-white" 
+                    ? "bg-[#072821] hover:bg-[#042421] text-white" 
                     : "bg-[#072821] hover:bg-[#042421] text-white"
               }`}
             >
