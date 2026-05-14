@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { SidebarNavigationSection } from '../components/SidebarNavigationSection';
 import { Search, RotateCcw, Package, Users, ClipboardList, AlertTriangle, Archive, Calendar } from 'lucide-react';
-import { useArchivedUsers } from '../hooks/useArchivedUsers';
+import { useArchivedUsers } from '../hooks/archives/useArchivedUsers';
+import { useArchivedTasks } from '../hooks/archives/useArchivedTask';
+import { useArchivedInventory } from '../hooks/archives/useArchivedInventory';
+import { useArchivedIncidents } from '../hooks/archives/useArchivedIncidents';
+import { useArchivedLostFound } from '../hooks/archives/useArchivedLostFound';
 import { formatDate } from '../utils/formatter';
 
 type ArchiveCategory = 'users' | 'tasks' | 'inventory' | 'incidents' | 'lostfound';
@@ -11,14 +15,19 @@ const ArchivePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const { archivedUsers, loading, error, handleUnarchive } = useArchivedUsers();
 
-  const mockData = {
-    tasks: [{ _id: 'T-9021', title: 'Deep Clean Racks', subtitle: 'Powerlifting Area', info: 'Archived Mar 15, 2026', date: '2026-03-15' }],
-    inventory: [{ _id: 'I-4421', title: 'Cleaning Solution X', subtitle: 'Storage B', info: 'Out of Stock', date: '2026-04-10' }],
-    incidents: [{ _id: 'INC-002', title: 'Floor Leak', subtitle: 'Main Hallway', info: 'Resolved Jan 20, 2026', date: '2026-01-20' }],
-    lostfound: [{ _id: 'LF-882', title: 'Blue Water Bottle', subtitle: 'Front Desk', info: 'Unclaimed', date: '2026-02-05' }]
-  };
+  const { archivedUsers, loading: loadingUsers, handleUnarchive: unarchiveUser } = useArchivedUsers();
+  const { archivedTasks, loading: loadingTasks, handleUnarchive: unarchiveTask } = useArchivedTasks();
+  const { archivedAssets, archivedConsumables, loading: loadingInventory, handleUnarchiveAsset, handleUnarchiveConsumable } = useArchivedInventory();
+  const { archivedIncidents, loading: loadingIncidents, handleUnarchive: unarchiveIncident } = useArchivedIncidents();
+  const { archivedItems, loading: loadingLostFound, handleUnarchive: unarchiveLostFound } = useArchivedLostFound();
+
+  const loading =
+    activeCategory === 'users' ? loadingUsers :
+    activeCategory === 'tasks' ? loadingTasks :
+    activeCategory === 'inventory' ? loadingInventory :
+    activeCategory === 'incidents' ? loadingIncidents :
+    loadingLostFound;
 
   const handleClearFilters = () => {
     setSearchTerm('');
@@ -26,36 +35,236 @@ const ArchivePage: React.FC = () => {
     setEndDate('');
   };
 
-  // Helper to check if a record falls within the selected date range
   const isWithinDateRange = (itemDate?: string | null) => {
     if (!itemDate) return true;
     const date = new Date(itemDate);
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
-
     if (start && date < start) return false;
     if (end && date > end) return false;
     return true;
   };
 
-  const filteredUsers = archivedUsers.filter(user => {
-    const matchesSearch = `${user.firstName} ${user.lastName} ${user.username}`
-      .toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDate = isWithinDateRange(user.archivedAt);
-    return matchesSearch && matchesDate;
-  });
+  const matchesSearch = (text: string) =>
+    text.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const filteredMockData = (mockData[activeCategory as keyof typeof mockData] || []).filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDate = isWithinDateRange(item.date);
-    return matchesSearch && matchesDate;
-  });
+  // --- Filtered Data ---
 
-  const getHeaders = () => {
-    if (activeCategory === 'users') {
-      return ['Name', 'User ID', 'Username', 'Role', 'Archived On', 'Actions'];
+  const filteredUsers = archivedUsers.filter(u =>
+    matchesSearch(`${u.firstName} ${u.lastName} ${u.username}`) &&
+    isWithinDateRange(u.archivedAt)
+  );
+
+  const filteredTasks = archivedTasks.filter(t =>
+    matchesSearch(`${t.title} ${t.area}`) &&
+    isWithinDateRange(t.updatedAt)
+  );
+
+  const filteredAssets = archivedAssets.filter(a =>
+    matchesSearch(`${a.name} ${a.area}`) &&
+    isWithinDateRange(a.archivedAt)
+  );
+
+  const filteredConsumables = archivedConsumables.filter(c =>
+    matchesSearch(`${c.name} ${c.category} ${c.location}`) &&
+    isWithinDateRange(c.archivedAt)
+  );
+
+  const filteredIncidents = archivedIncidents.filter(i =>
+    matchesSearch(`${i.title} ${i.area}`) &&
+    isWithinDateRange(i.archivedAt)
+  );
+
+  const filteredLostFound = archivedItems.filter(l =>
+    matchesSearch(`${l.item} ${l.areaFound}`) &&
+    isWithinDateRange(l.archivedAt)
+  );
+
+  const getEmptyCount = () => {
+    switch (activeCategory) {
+      case 'users': return filteredUsers.length;
+      case 'tasks': return filteredTasks.length;
+      case 'inventory': return filteredAssets.length + filteredConsumables.length;
+      case 'incidents': return filteredIncidents.length;
+      case 'lostfound': return filteredLostFound.length;
     }
-    return ['Item / Title', 'ID', 'Location / Category', 'Status / Info', 'Actions'];
+  };
+
+  const severityColor: Record<string, string> = {
+    Low: 'bg-green-100 text-green-600',
+    Medium: 'bg-yellow-100 text-yellow-600',
+    High: 'bg-orange-100 text-orange-600',
+    Urgent: 'bg-red-100 text-red-600',
+    Critical: 'bg-red-200 text-red-800',
+  };
+
+  const conditionColor: Record<string, string> = {
+    'Good Condition': 'bg-green-100 text-green-600',
+    'Needs Repair': 'bg-yellow-100 text-yellow-600',
+    'Needs Replacement': 'bg-red-100 text-red-600',
+    'Under Repair': 'bg-blue-100 text-blue-600',
+  };
+
+  const RestoreButton = ({ onClick }: { onClick: () => void }) => (
+    <button
+      onClick={onClick}
+      className="inline-flex items-center gap-2 text-[13px] font-bold text-[#113129] hover:text-green-700 transition-colors group"
+    >
+      <RotateCcw size={14} className="group-hover:rotate-[-90deg] transition-transform duration-300" />
+      Restore
+    </button>
+  );
+
+  const renderHeaders = () => {
+    const headers: Record<ArchiveCategory, string[]> = {
+      users: ['Name', 'User ID', 'Username', 'Role', 'Archived On', 'Actions'],
+      tasks: ['Title', 'Area', 'Frequency', 'Priority', 'Archived On', 'Actions'],
+      inventory: ['Name', 'ID', 'Type', 'Condition / Category', 'Archived On', 'Actions'],
+      incidents: ['Title', 'Incident ID', 'Area', 'Severity', 'Archived On', 'Actions'],
+      lostfound: ['Item', 'Lost ID', 'Area Found', 'Status', 'Archived On', 'Actions'],
+    };
+    return headers[activeCategory];
+  };
+  
+  const renderRows = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={6} className="px-6 py-20 text-center text-slate-400 text-sm">Loading...</td>
+        </tr>
+      );
+    }
+
+    switch (activeCategory) {
+      case 'users':
+        return filteredUsers.map(user => (
+          <tr key={user.userId} className="hover:bg-slate-50/50 transition-colors">
+            <td className="px-6 py-4">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-[#113129] text-white flex items-center justify-center text-xs font-bold uppercase">
+                  {user.firstName[0]}{user.lastName[0]}
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold text-slate-900 leading-tight">{user.firstName} {user.lastName}</p>
+                  <p className="text-[12px] text-slate-400 mt-0.5">{user.email}</p>
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-500 font-medium">USER-{user.userId.slice(-7).toUpperCase()}</td>
+            <td className="px-6 py-4 text-[13px] font-bold text-slate-700">{user.username}</td>
+            <td className="px-6 py-4">
+              <span className={`px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                {user.role}
+              </span>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-400">{user.archivedAt ? formatDate(user.archivedAt) : '—'}</td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveUser(user.userId)} /></td>
+          </tr>
+        ));
+
+      case 'tasks':
+        return filteredTasks.map(task => (
+          <tr key={task._id} className="hover:bg-slate-50/50 transition-colors">
+            <td className="px-6 py-4">
+              <p className="text-[14px] font-bold text-slate-900">{task.title}</p>
+              {task.description && <p className="text-[12px] text-slate-400 mt-0.5 truncate max-w-[200px]">{task.description}</p>}
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-600">{task.area}</td>
+            <td className="px-6 py-4 text-[13px] text-slate-500">{task.frequency}</td>
+            <td className="px-6 py-4">
+              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                task.priority === 'High' ? 'bg-red-100 text-red-600' :
+                task.priority === 'Medium' ? 'bg-yellow-100 text-yellow-600' :
+                'bg-green-100 text-green-600'
+              }`}>
+                {task.priority}
+              </span>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-400">{formatDate(task.updatedAt)}</td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveTask(task._id)} /></td>
+          </tr>
+        ));
+
+      case 'inventory':
+        return (
+          <>
+            {filteredAssets.map(asset => (
+              <tr key={asset._id} className="hover:bg-slate-50/50 transition-colors">
+                <td className="px-6 py-4">
+                  <p className="text-[14px] font-bold text-slate-900">{asset.name}</p>
+                  <p className="text-[12px] text-slate-400 mt-0.5">Qty: {asset.quantity}</p>
+                </td>
+                <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{asset.assetId}</td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">Asset</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${conditionColor[asset.condition] ?? ''}`}>
+                    {asset.condition}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-[13px] text-slate-400">{asset.archivedAt ? formatDate(asset.archivedAt) : '—'}</td>
+                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveAsset(asset._id)} /></td>
+              </tr>
+            ))}
+            {filteredConsumables.map(consumable => (
+              <tr key={consumable._id} className="hover:bg-slate-50/50 transition-colors">
+                <td className="px-6 py-4">
+                  <p className="text-[14px] font-bold text-slate-900">{consumable.name}</p>
+                  <p className="text-[12px] text-slate-400 mt-0.5">{consumable.unit} · Qty: {consumable.quantity}</p>
+                </td>
+                <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{consumable.consumableId}</td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-600">Consumable</span>
+                </td>
+                <td className="px-6 py-4 text-[13px] text-slate-600">{consumable.category}</td>
+                <td className="px-6 py-4 text-[13px] text-slate-400">{consumable.archivedAt ? formatDate(consumable.archivedAt) : '—'}</td>
+                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveConsumable(consumable._id)} /></td>
+              </tr>
+            ))}
+          </>
+        );
+
+      case 'incidents':
+        return filteredIncidents.map(incident => (
+          <tr key={incident._id} className="hover:bg-slate-50/50 transition-colors">
+            <td className="px-6 py-4">
+              <p className="text-[14px] font-bold text-slate-900">{incident.title}</p>
+              <p className="text-[12px] text-slate-400 mt-0.5 truncate max-w-[200px]">{incident.description}</p>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{incident.incidentId}</td>
+            <td className="px-6 py-4 text-[13px] text-slate-600">{incident.area}</td>
+            <td className="px-6 py-4">
+              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${severityColor[incident.severity] ?? ''}`}>
+                {incident.severity}
+              </span>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-400">{incident.archivedAt ? formatDate(incident.archivedAt) : '—'}</td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveIncident(incident._id)} /></td>
+          </tr>
+        ));
+
+      case 'lostfound':
+        return filteredLostFound.map(item => (
+          <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
+            <td className="px-6 py-4">
+              <p className="text-[14px] font-bold text-slate-900">{item.item}</p>
+              {item.description && <p className="text-[12px] text-slate-400 mt-0.5 truncate max-w-[200px]">{item.description}</p>}
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{item.lostId}</td>
+            <td className="px-6 py-4 text-[13px] text-slate-600">{item.areaFound}</td>
+            <td className="px-6 py-4">
+              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                item.status === 'Claimed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
+              }`}>
+                {item.status}
+              </span>
+            </td>
+            <td className="px-6 py-4 text-[13px] text-slate-400">{item.archivedAt ? formatDate(item.archivedAt) : '—'}</td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveLostFound(item._id)} /></td>
+          </tr>
+        ));
+    }
   };
 
   return (
@@ -106,24 +315,24 @@ const ArchivePage: React.FC = () => {
           <div className="flex items-center bg-white border border-slate-200 rounded-xl px-4 py-2 gap-3 shadow-sm">
             <Calendar size={16} className="text-slate-400" />
             <div className="flex items-center gap-2">
-              <input 
-                type="date" 
-                value={startDate} 
-                onChange={e => setStartDate(e.target.value)} 
+              <input
+                type="date"
+                value={startDate}
+                onChange={e => setStartDate(e.target.value)}
                 className="bg-transparent border-none text-[12px] font-bold text-slate-600 outline-none cursor-pointer"
               />
               <span className="text-slate-300 text-xs">—</span>
-              <input 
-                type="date" 
-                value={endDate} 
-                onChange={e => setEndDate(e.target.value)} 
+              <input
+                type="date"
+                value={endDate}
+                onChange={e => setEndDate(e.target.value)}
                 className="bg-transparent border-none text-[12px] font-bold text-slate-600 outline-none cursor-pointer"
               />
             </div>
           </div>
 
-          <button 
-            onClick={handleClearFilters} 
+          <button
+            onClick={handleClearFilters}
             className="flex items-center gap-2 px-4 py-3 text-slate-400 hover:text-red-500 bg-white border border-slate-200 rounded-xl transition-all active:scale-95"
             title="Reset Filters"
           >
@@ -137,65 +346,20 @@ const ArchivePage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/30">
-                {getHeaders().map((header, idx) => (
-                  <th key={header} className={`px-6 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest ${idx === getHeaders().length - 1 ? 'text-right' : ''}`}>
+                {renderHeaders().map((header, idx, arr) => (
+                  <th key={header} className={`px-6 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest ${idx === arr.length - 1 ? 'text-right' : ''}`}>
                     {header}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {activeCategory === 'users' ? (
-                filteredUsers.map((user) => (
-                  <tr key={user.userId} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#113129] text-white flex items-center justify-center text-xs font-bold uppercase">{user.firstName[0]}{user.lastName[0]}</div>
-                        <div>
-                          <p className="text-[14px] font-bold text-slate-900 leading-tight">{user.firstName} {user.lastName}</p>
-                          <p className="text-[12px] text-slate-400 mt-0.5">{user.email}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-[13px] text-slate-500 font-medium">USER-{user.userId.slice(-7).toUpperCase()}</td>
-                    <td className="px-6 py-4 text-[13px] font-bold text-slate-700">{user.username}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-[13px] text-slate-400">{user.archivedAt ? formatDate(user.archivedAt) : '—'}</td>
-                    <td className="px-6 py-4 text-right">
-                      <button onClick={() => handleUnarchive(user.userId)} className="inline-flex items-center gap-2 text-[13px] font-bold text-[#113129] hover:text-green-700 transition-colors group">
-                        <RotateCcw size={14} className="group-hover:rotate-[-90deg] transition-transform duration-300" />
-                        Restore
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                filteredMockData.map((item) => (
-                  <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-5">
-                       <p className="text-[14px] font-bold text-slate-900">{item.title}</p>
-                    </td>
-                    <td className="px-6 py-5 text-[13px] text-slate-500 font-mono">{item._id}</td>
-                    <td className="px-6 py-5 text-[13px] text-slate-600">{item.subtitle}</td>
-                    <td className="px-6 py-5 text-[12px] font-bold text-slate-400 uppercase">{item.info}</td>
-                    <td className="px-6 py-5 text-right">
-                      <button className="inline-flex items-center gap-2 text-[13px] font-bold text-[#113129] hover:text-green-700 group transition-colors">
-                        <RotateCcw size={14} className="group-hover:rotate-[-90deg] transition-transform duration-300" />
-                        Restore
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
+              {renderRows()}
             </tbody>
           </table>
-          
+
           {/* Empty State */}
-          {((activeCategory === 'users' ? filteredUsers.length : filteredMockData.length) === 0) && (
+          {!loading && getEmptyCount() === 0 && (
             <div className="py-20 text-center flex flex-col items-center gap-3">
               <Archive size={40} className="text-slate-200" />
               <p className="text-slate-400 font-medium">No records found for the selected criteria.</p>
