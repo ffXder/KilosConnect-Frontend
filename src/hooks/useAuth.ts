@@ -7,7 +7,6 @@ export function useAuth() {
     user: getUser()
   });
 
-  // the user info changes the UI follows
   useEffect(() => {
     setAuth({
       role: getRole(),
@@ -15,9 +14,12 @@ export function useAuth() {
     });
   }, []);
 
+  const user = auth.user;
+
   return {
     isLoggedIn: !!auth.role && !!auth.user,
     role: auth.role,
-    user: auth.user,
+    user,
+    userId: user?.id ?? user?.sub ?? null, // cover both shapes
   };
 }
