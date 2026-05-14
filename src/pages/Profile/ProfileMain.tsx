@@ -5,6 +5,7 @@ import ProfileActivitySection from "./RecentActivitySection";
 import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
 import { useProfile } from '../../hooks/useProfile';
+import { formatDate } from "../../utils/formatter";
 
 export interface ProfileData {
   firstName: string;
@@ -214,7 +215,7 @@ export const ProfilePage: React.FC = () => {
                   <InfoField label="Email Address" value={profile.username} icon="user" />
                   <InfoField label="Phone Number" value={profile.phone} icon="phone" />
                   <InfoField label="Role" value={profile.role} icon="shield" />
-                  <InfoField label="Date Joined" value={profile.dateJoined} icon="calendar" />
+                  <InfoField label="Date Joined" value={formatDate(profile.dateJoined)} icon="calendar" />
                 </div>
               )}
             </div>
