@@ -93,11 +93,31 @@ export const unclaimLostAndFound = async (id: string): Promise<void> => {
     }
 };
 
-// DELETE
-export const deleteLostAndFound = async (id: string): Promise<void> => {
-    const res = await apiRequest(`/lost-and-founds/${id}`, { method: 'DELETE' });
+// PATCH
+export const archiveLostAndFound = async (id: string): Promise<void> => {
+    const res = await apiRequest(`/lost-and-founds/${id}/archive`, { method: 'PATCH' });
     if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.message || 'Could not delete item');
+        throw new Error(err.message || 'Could not archive item');
     }
+};
+
+export const unarchiveLostAndFound = async (id: string): Promise<void> => {
+    const res = await apiRequest(`/lost-and-founds/${id}/unarchive`, { method: 'PATCH'});
+    
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to unarchive item');
+    }
+}
+
+//GET ARCHIVED
+export const getArchivedItems = async (): Promise<LostAndFound[]> => {
+    const res = await apiRequest('/lost-and-founds/archived', { method: 'GET' });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Could not load archived items');
+    }
+    return await res.json();
 };
