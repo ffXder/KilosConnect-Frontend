@@ -59,6 +59,6 @@ export function useAssets() {
             setError(err.message); 
         }
     };
-
+    
     return { assets, loading, error, refresh: fetchAssets, handleCreate, handleUpdate, handleUpdateCondition, handleArchive };
 }
