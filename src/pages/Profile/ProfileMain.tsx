@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProfileInfoSection } from "./ProfileInfoSection";
 import { ProfileStatsSection } from "./ProfileStatsSections";
 import ProfileActivitySection from "./RecentActivitySection";
 import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
+import { useProfile } from '../../hooks/useProfile';
 
 export interface ProfileData {
   firstName: string;
@@ -30,16 +31,6 @@ export interface ActivityItem {
   timeAgo: string;
 }
 
-const mockProfile: ProfileData = {
-  firstName: "Kilos",
-  lastName: "PH",
-  username: "kilosconnect@kilosph.com",
-  phone: "+63 912 345 6789",
-  role: "Admin",
-  dateJoined: "2023-01-15",
-  avatarUrl: "",
-};
-
 const mockStats: PerformanceStats = {
   tasksCompleted: 156,
   incidentsReported: 8,
@@ -56,39 +47,76 @@ const mockActivity: ActivityItem[] = [
 ];
 
 export const ProfilePage: React.FC = () => {
-  const [profile, setProfile] = useState<ProfileData>(mockProfile);
+  const { role } = useAuth();
+  const { profile: rawProfile, loading, error, handleSaveProfile, handleUpdateAvatar } = useProfile();
+
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+
   const [isEditing, setIsEditing] = useState(false);
-  const [form, setForm] = useState<ProfileData>(profile);
+  const [form, setForm] = useState<ProfileData>({
+    firstName: "",
+    lastName: "",
+    username: "",
+    phone: "",
+    role: "",
+    dateJoined: "",
+    avatarUrl: "",
+  });
+
+  const profile: ProfileData = rawProfile ? {
+    firstName: rawProfile.firstName,
+    lastName: rawProfile.lastName,
+    username: rawProfile.email,
+    phone: rawProfile.phoneNumber,
+    role: rawProfile.role,
+    dateJoined: rawProfile.createdAt.split("T")[0], 
+    avatarUrl: "",
+  } : form;
+
+  // Sync form when real profile loads
+  useEffect(() => {
+    if (rawProfile) {
+      setForm({
+        firstName: rawProfile.firstName,
+        lastName: rawProfile.lastName,
+        username: rawProfile.email,
+        phone: rawProfile.phoneNumber,
+        role: rawProfile.role,
+        dateJoined: rawProfile.createdAt.split("T")[0],
+        avatarUrl: "",
+      });
+    }
+  }, [rawProfile]);
 
   const handleEditToggle = () => setIsEditing((prev) => !prev);
-  const handleSave = (updated: ProfileData) => {
-    // Only save if email is valid
+
+  const handleSave = async (updated: ProfileData) => {
     if (!form.username.includes("@")) {
       alert("Please enter a valid email address containing '@'");
       return;
     }
-    setProfile(updated);
+    await handleSaveProfile({
+      firstName: updated.firstName,
+      lastName: updated.lastName,
+      email: updated.username,
+      phoneNumber: updated.phone,
+    });
     setForm(updated);
     setIsEditing(false);
   };
 
-  // Helper to format phone numbers (specifically +63 structure)
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, "");
-    // Remove leading 63 if present to avoid doubling up
     const cleanNumbers = numbers.startsWith("63") ? numbers.slice(2) : numbers;
-    
     let formatted = "+63";
     if (cleanNumbers.length > 0) formatted += " " + cleanNumbers.substring(0, 3);
     if (cleanNumbers.length > 3) formatted += " " + cleanNumbers.substring(3, 6);
     if (cleanNumbers.length > 6) formatted += " " + cleanNumbers.substring(6, 10);
-    
     return formatted.trim();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
     if (name === "phone") {
       setForm((prev) => ({ ...prev, [name]: formatPhoneNumber(value) }));
     } else {
@@ -103,12 +131,20 @@ export const ProfilePage: React.FC = () => {
 
   const handleSubmit = () => handleSave(form);
 
-  const { role } = useAuth();
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+  const handleUploadAvatar = async (file: File) => {
+    await handleUpdateAvatar(file);
+  };
+
+  const handleRemoveAvatar = () => {
+    setForm((prev) => ({ ...prev, avatarUrl: "" }));
+  };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-[#f4f5f6]">
-      <SidebarNavigationSection userRole={userRole}/>
+      <SidebarNavigationSection userRole={userRole} />
       <div className="lg:pl-[280px] p-8">
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
@@ -122,6 +158,8 @@ export const ProfilePage: React.FC = () => {
               isEditing={isEditing}
               onEditToggle={handleEditToggle}
               onSave={handleSave}
+              onUploadAvatar={handleUploadAvatar}
+              onRemoveAvatar={handleRemoveAvatar}
             />
             <ProfileStatsSection stats={mockStats} />
           </div>
@@ -137,7 +175,7 @@ export const ProfilePage: React.FC = () => {
                   </div>
                 )}
               </div>
-              
+
               {isEditing ? (
                 <div className="grid grid-cols-2 gap-x-8 gap-y-5">
                   {[
@@ -155,16 +193,14 @@ export const ProfilePage: React.FC = () => {
                         onChange={handleChange}
                         placeholder={name === "phone" ? "+63 000 000 0000" : ""}
                         className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] ${
-                          name === "username" && !form.username.includes("@") && form.username.length > 0 
-                          ? "border-red-400 ring-red-100" 
-                          : "border-[#d1d5db]"
+                          name === "username" && !form.username.includes("@") && form.username.length > 0
+                            ? "border-red-400 ring-red-100"
+                            : "border-[#d1d5db]"
                         }`}
                       />
-                      {/* Reminder for Email */}
                       {name === "username" && !form.username.includes("@") && form.username.length > 0 && (
                         <p className="text-[10px] text-red-500 mt-1 animate-pulse">Email must contain an "@" symbol</p>
                       )}
-                      {/* Reminder for Phone Structure */}
                       {name === "phone" && (
                         <p className="text-[10px] text-[#9ca3af] mt-1 italic">Format: +63 XXX XXX XXXX</p>
                       )}
@@ -206,4 +242,3 @@ const InfoField: React.FC<{ label: string; value: string; icon?: string }> = ({ 
     <p className="text-sm font-medium text-[#111827]">{value}</p>
   </div>
 );
-
