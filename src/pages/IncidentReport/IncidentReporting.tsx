@@ -15,6 +15,7 @@ import IncidentDetailedModal from './IncidentDetailModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useIncidentReports } from '../../hooks/useIncident';
 import type { IncidentReport } from '../../types/incident';
+import { getDateThreshold } from '../../utils/dateHelper';
 
 export interface StatCardProps {
   label: string;
@@ -34,6 +35,9 @@ export const IncidentReportPage: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<IncidentReport | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDetailedModalOpen, setIsDetailedModalOpen] = useState(false);
+  const [dateRange, setDateRange] = useState('Last 7 Days');
+  const [customStart, setCustomStart] = useState('');
+  const [customEnd, setCustomEnd] = useState('');
 
   const { reports, loading, error, handleCreate, handleUpdate, handleDelete } = useIncidentReports();
   const incidents = reports ?? [];
@@ -56,16 +60,31 @@ export const IncidentReportPage: React.FC = () => {
     setIsDetailedModalOpen(true);
   };
 
+  const isYesterday = dateRange === 'Yesterday';
+
+  const threshold = getDateThreshold(
+    dateRange,
+    customStart ? new Date(customStart) : null
+  );
+  const endDate = customEnd ? new Date(customEnd) : null;
+
   const filteredIncidents = incidents.filter(incident => {
-    const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
-      
-    const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
-    const matchesArea = activeArea === 'All Areas' || incident.area === activeArea; 
-    const matchesSearch = (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesStatus && matchesSeverity && matchesArea && matchesSearch;
-  });
+  const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
+  const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
+  const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
+  const matchesSearch = (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
+
+  const incidentDate = new Date(incident.dateAndTime); // adjust field name if different
+  const matchesStart = threshold ? incidentDate >= threshold : true;
+  const matchesEnd = isYesterday
+    ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
+    : endDate
+      ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
+      : true;
+
+  return matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd;
+});
 
   const { role } = useAuth()
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
@@ -113,6 +132,12 @@ export const IncidentReportPage: React.FC = () => {
           searchTerm={searchTerm} 
           onSearchChange={setSearchTerm} 
           onAddClick={() => setIsAddModalOpen(true)}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          customStart={customStart}
+          setCustomStart={setCustomStart}
+          customEnd={customEnd}
+          setCustomEnd={setCustomEnd}
         />
 
         <div className="bg-white rounded-[24px] border border-[#e2e8f0] overflow-hidden mt-6 mb-10">
