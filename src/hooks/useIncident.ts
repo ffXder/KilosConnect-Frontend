@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAllReports, createReport, updateReport, deleteReport } from '../services/incidentServices';
+import { getAllReports, createReport, updateReport, archiveReport } from '../services/incidentService';
 import type { IncidentReport, NewIncidentReport, UpdateIncidentReport } from '../types/incident';
 
 export function useIncidentReports() {
@@ -44,7 +44,7 @@ export function useIncidentReports() {
 
     const handleDelete = async (id: string) => {
         try {
-            await deleteReport(id);
+            await archiveReport(id);
             await fetchReports(); // auto refresh
         } catch (err: any) {
             setError(err.message);
