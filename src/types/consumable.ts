@@ -9,6 +9,8 @@ export interface Consumable {
     location: string;
     description?: string;
     isArchived: boolean;
+    archivedAt: string | null;
+    archivedBy: string | null;
 }
 
 //for create
