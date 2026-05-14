@@ -14,6 +14,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
 import { useAuditLogs } from '../../hooks/useLogs';
 import type { AuditLogs } from '../../types/auditLogs';
+import { getDateThreshold } from '../../utils/dateHelper';
 
 const moduleToFilterType = (moduleName: string) => {
   switch (moduleName) {
@@ -76,6 +77,8 @@ const moduleToEntryBg = (moduleName: string) => {
 export const LogsPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All Logs');
   const [dateRange, setDateRange] = useState('Last 7 Days'); // for dates
+  const [customStart, setCustomStart] = useState('');
+  const [customEnd, setCustomEnd] = useState('');
   const { logs: rawLogs, isLoading, error } = useAuditLogs();
   const [stats, setStats] = useState<StatData[]>([
     { label: 'Inventory Logs', count: 0, icon: <InventoryIcon />, bg: 'bg-blue-50', color: ''},
@@ -89,21 +92,22 @@ export const LogsPage: React.FC = () => {
 
   useEffect(() => {
     if (!isLoading && rawLogs) {
-      const formattedLogs: LogEntry[] = rawLogs.map((log: any) => ({
-    id: log._id, // Map MongoDB _id to your interface's id
-    type: moduleToFilterType(log.module),
-    title: `${actionToFriendlyLabel(log.action)} ${log.module}`,
-    description: log.details || 'No additional details',
-    user: log.performedBy || 'System',
-    timestamp: new Date(log.createdAt).toLocaleString('en-PH', { 
-      month: 'short', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }),
-    icon: moduleToEntryIcon(log.module),
-    bg: moduleToEntryBg(log.module),   
-    }))
+    const formattedLogs: LogEntry[] = rawLogs.map((log: any) => ({
+        id: log._id,
+        type: moduleToFilterType(log.module),
+        title: `${actionToFriendlyLabel(log.action)} ${log.module}`,
+        description: log.details || 'No additional details',
+        user: log.performedBy || 'System',
+        rawDate: log.createdAt, 
+        timestamp: new Date(log.createdAt).toLocaleString('en-PH', { 
+          month: 'short', 
+          day: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }),
+        icon: moduleToEntryIcon(log.module),
+        bg: moduleToEntryBg(log.module),   
+  }));
 
     setLogs(formattedLogs);
 
@@ -133,6 +137,29 @@ export const LogsPage: React.FC = () => {
   const { role } = useAuth()
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
+// filter logs by date range
+const isYesterday = dateRange === 'Yesterday';
+
+const threshold = getDateThreshold(
+  dateRange,
+  customStart ? new Date(customStart) : null
+);
+const endDate = customEnd ? new Date(customEnd) : null;
+
+const dateFilteredLogs = logs.filter(log => {
+  const logDate = new Date(log.rawDate);
+
+  const matchesStart = threshold ? logDate >= threshold : true;
+
+  const matchesEnd = isYesterday
+    ? logDate < new Date(new Date().setHours(0, 0, 0, 0))
+    : endDate
+      ? logDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
+      : true;
+
+  return matchesStart && matchesEnd;
+});
+
   return (
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden">
       <div className="w-64 shrink-0">
@@ -152,13 +179,23 @@ export const LogsPage: React.FC = () => {
             setActiveFilter={setActiveFilter}
             dateRange={dateRange}
             setDateRange={setDateRange}
+            customStart={customStart}
+            setCustomStart={setCustomStart}
+            customEnd={customEnd}
+            setCustomEnd={setCustomEnd}
           />
         </div>
         {loading ? (
           <div className="text-center py-10 text-gray-500">Loading activities...</div>
         ) : (
           <div className="space-y-4"> 
-            <LogsListSection logs={logs} activeFilter={activeFilter} />
+            <LogsListSection 
+              logs={dateFilteredLogs} 
+              activeFilter={activeFilter}
+              dateRange={dateRange}
+              customStart={customStart}
+              customEnd={customEnd}
+            />
           </div>
         )}
       </main>

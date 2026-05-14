@@ -6,6 +6,7 @@ export interface LogEntry {
   description: string;
   user: string;
   timestamp: string;
+  rawDate: string;
   type: string;
   icon: React.ReactNode;
   bg: string;
@@ -14,6 +15,9 @@ export interface LogEntry {
 interface Props {
   logs: LogEntry[];
   activeFilter: string;
+  dateRange: string;
+  customStart?: string;
+  customEnd?: string;
 }
 
 export const LogsListSection: React.FC<Props> = ({ logs, activeFilter }) => {
