@@ -204,7 +204,7 @@ const ArchivePage: React.FC = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-[13px] text-slate-400">{asset.archivedAt ? formatDate(asset.archivedAt) : '—'}</td>
-                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveAsset(asset._id)} /></td>
+                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveAsset(asset.assetId)} /></td>
               </tr>
             ))}
             {filteredConsumables.map(consumable => (
@@ -219,7 +219,7 @@ const ArchivePage: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 text-[13px] text-slate-600">{consumable.category}</td>
                 <td className="px-6 py-4 text-[13px] text-slate-400">{consumable.archivedAt ? formatDate(consumable.archivedAt) : '—'}</td>
-                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveConsumable(consumable._id)} /></td>
+                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveConsumable(consumable.consumableId)} /></td>
               </tr>
             ))}
           </>
@@ -240,7 +240,7 @@ const ArchivePage: React.FC = () => {
               </span>
             </td>
             <td className="px-6 py-4 text-[13px] text-slate-400">{incident.archivedAt ? formatDate(incident.archivedAt) : '—'}</td>
-            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveIncident(incident._id)} /></td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveIncident(incident.incidentId)} /></td>
           </tr>
         ));
 
@@ -261,7 +261,7 @@ const ArchivePage: React.FC = () => {
               </span>
             </td>
             <td className="px-6 py-4 text-[13px] text-slate-400">{item.archivedAt ? formatDate(item.archivedAt) : '—'}</td>
-            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveLostFound(item._id)} /></td>
+            <td className="px-6 py-4 text-right"><RestoreButton onClick={() => unarchiveLostFound(item.lostId)} /></td>
           </tr>
         ));
     }
