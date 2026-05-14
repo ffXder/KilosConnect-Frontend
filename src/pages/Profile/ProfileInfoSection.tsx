@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import type { ProfileData } from "./ProfileMain";
 
 interface ProfileInfoSectionProps {
@@ -6,14 +6,19 @@ interface ProfileInfoSectionProps {
   isEditing: boolean;
   onEditToggle: () => void;
   onSave: (updated: ProfileData) => void;
+  onUploadAvatar: (file: File) => void;
+  onRemoveAvatar: () => void;
 }
 
 export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
   profile,
   isEditing,
   onEditToggle,
+  onUploadAvatar,
+  onRemoveAvatar
 }) => {
   const fullName = `${profile.firstName} ${profile.lastName}`;
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showPhotoPopup, setShowPhotoPopup] = useState(false);
 
   const togglePhotoPopup = () => {
@@ -30,13 +35,17 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
           {/* Clickable Profile Icon */}
           <div 
             onClick={togglePhotoPopup}
-            className={`w-[72px] h-[72px] rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+            className={`w-[72px] h-[72px] rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 overflow-hidden ${
               isEditing ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            <svg className="w-9 h-9 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-            </svg>
+            {profile.avatarUrl ? (
+              <img src={profile.avatarUrl} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+            ) : (
+              <svg className="w-9 h-9 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            )}
           </div>
           
           <h2 className="mt-3 text-[17px] font-bold text-[#0d1f1a]">{fullName}</h2>
@@ -55,6 +64,19 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
           >
             {isEditing ? "Cancel Edit" : "Edit Profile"}
           </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                onUploadAvatar(file);
+                setShowPhotoPopup(false);
+              }
+            }}
+          />
         </div>
       </div>
 
@@ -74,14 +96,14 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
 
               <div className="flex flex-col gap-3">
                 <button 
-                  onClick={() => setShowPhotoPopup(false)}
+                  onClick={() => fileInputRef.current?.click()}
                   className="w-full py-3.5 px-4 bg-[#05211a] text-white rounded-2xl font-bold text-sm hover:bg-[#0a362b] transition-all active:scale-[0.98]"
                 >
                   Upload New Photo
                 </button>
                 
                 <button 
-                  onClick={() => setShowPhotoPopup(false)}
+                  onClick={() => { onRemoveAvatar(); setShowPhotoPopup(false); }}
                   className="w-full py-3.5 px-4 bg-white text-[#ef4444] border-2 border-[#fee2e2] rounded-2xl font-bold text-sm hover:bg-[#fff1f1] transition-all active:scale-[0.98]"
                 >
                   Remove Photo
