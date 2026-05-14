@@ -57,3 +57,22 @@ export const archiveAsset = async(id: string): Promise<void> => {
     return res.json();
 }
 
+export const unarchiveAsset = async(id: string): Promise<void> => {
+    const res = await apiRequest(`/assets/${id}/unarchive`, { method: 'PATCH' });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message);
+    }
+    return res.json();
+}
+
+export const getArchivedAssets = async (): Promise<Asset[]> => {
+    const res = await apiRequest('/assets/archived', { method: 'GET' });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Could not load archived users');
+    }
+    return await res.json();
+};
+
