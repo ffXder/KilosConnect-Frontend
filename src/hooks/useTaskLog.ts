@@ -11,7 +11,6 @@ export function useTaskLogs(date?: string, status?: string) {
         setLoading(true);
         try {
             const data = await LogService.getTaskLogs(date, status);
-            console.log('logs:', data); //test
             setLogs(data);
             setError(null);
         } catch (err: any) {
