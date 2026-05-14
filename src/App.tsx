@@ -14,6 +14,8 @@ import { LogsPage } from './pages/LogsModule/LogsMain'
 import { ManageAccountsPage } from './pages/ManageAccounts/ManageAccountPage'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import ArchivePage from './pages/Archives'
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/ResetPasswordPage'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -44,6 +46,8 @@ function App() {
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
+        <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+        <Route path='/reset-password' element={<ResetPasswordPage />} />
         
         {/* protected routes */}
         <Route path='/dashboard' 
