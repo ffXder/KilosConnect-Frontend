@@ -48,7 +48,9 @@ export function useProfile() {
     setSaving(true);
     try {
       const avatar = await updateProfileImage(userId, imageFile);
-      setProfile((prev) => prev ? { ...prev, avatarUrl: avatar.url } : prev);
+      setProfile((prev) =>
+        prev ? { ...prev, profileImage: { url: avatar.url, public_id: avatar.public_id } } : prev
+    );
     } catch (err: any) {
       alert(err.message);
     } finally {

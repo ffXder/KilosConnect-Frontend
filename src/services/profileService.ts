@@ -35,7 +35,7 @@ export const updateProfileImage = async (
 
  
   const res = await apiRequest(`/users/${userId}/profile`, {
-    method: "PATCH",
+    method: "PUT",
     body: formData,
   });
 
@@ -45,5 +45,5 @@ export const updateProfileImage = async (
   }
 
   const data = await res.json();
-  return data.avatar;
+  return data.profileImage;
 };
