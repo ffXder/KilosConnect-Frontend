@@ -66,9 +66,9 @@ export const LostAndFoundPage: React.FC = () => {
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto">
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto">
         {/* Header structure from IncidentReporting_2.tsx with icons removed[cite: 22] */}
-        <header className="flex justify-between items-start px-10 py-8">
+        <header className="flex flex-col gap-4 items-center text-center px-4 py-6 sm:px-6 lg:px-10 lg:flex-row lg:items-start lg:text-left">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Lost & Found</h1>
             <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage items stored in facility zones</p>
@@ -76,8 +76,8 @@ export const LostAndFoundPage: React.FC = () => {
           {/* Action buttons container removed[cite: 22] */}
         </header>
 
-        <div className="px-10 pb-10 space-y-8">
-          <div className="grid grid-cols-3 gap-6">
+        <div className="px-4 pb-10 sm:px-6 lg:px-10 space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             <StatCard label="Total Items" count={items.length} color="text-[#1e4d46]" iconBg="bg-[#e6fffa]" icon={Archive} />
             <StatCard label="Unclaimed" count={items.filter(i => i.status === "Unclaimed").length} color="text-[#b45309]" iconBg="bg-[#fffbeb]" icon={AlertCircle} />
             <StatCard label="Claimed" count={items.filter(i => i.status === "Claimed").length} color="text-[#15803d]" iconBg="bg-[#f0fdf4]" icon={CheckCircle} />

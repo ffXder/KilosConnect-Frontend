@@ -68,9 +68,9 @@ export const TaskMonitorPage: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className="flex-1 ml-[240px] p-8">
+      <main className="flex-1 lg:ml-[240px] p-4 sm:p-6 lg:p-8">
         
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col gap-4 items-center text-center justify-between mb-8 lg:flex-row lg:items-end lg:text-left">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Task Tracking</h1>
             <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
@@ -80,7 +80,7 @@ export const TaskMonitorPage: React.FC = () => {
 
           {/* Admin Toggle Tabs */}
           {userRole === 'admin' && (
-            <div className="flex bg-gray-200/50 p-1 rounded-xl">
+            <div className="flex flex-col sm:flex-row gap-2 bg-gray-200/50 p-1 rounded-xl">
               <button 
                 onClick={() => setActiveTab('monitor')}
                 className={`px-4 py-2 rounded-lg text-sm font-bold transition cursor-pointer ${activeTab === 'monitor' ? 'bg-white shadow-sm text-[#113129]' : 'text-gray-500'}`}

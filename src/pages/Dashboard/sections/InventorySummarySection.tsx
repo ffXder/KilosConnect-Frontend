@@ -50,8 +50,8 @@ export const InventorySummarySection: React.FC = () => {
     <>
       <section className="w-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 gap-3 flex-wrap border-b border-[#f0f0f0]">
-          <div className="flex items-center gap-3 flex-wrap">
+        <div className="px-6 pt-5 pb-4 border-b border-[#f0f0f0]">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
             <h2 className="font-semibold text-[#1a1a1a] text-lg m-0">Inventory Overview</h2>
             <div className="flex gap-2">
               {(["assets", "consumables"] as const).map((tab) => (
@@ -70,11 +70,11 @@ export const InventorySummarySection: React.FC = () => {
           </div>
 
           {/* Stats */}
-          <div className="flex gap-4 sm:gap-6 flex-wrap">
+          <div className="flex gap-4 sm:gap-6 flex-wrap justify-center sm:justify-start">
             {summaryStats.map((s) => (
               <div key={s.label} className="flex flex-col items-center gap-0.5">
-                <span className={`font-bold text-xl leading-none ${s.valueColor}`}>{s.value}</span>
-                <span className="font-normal text-[#999] text-[10px] whitespace-nowrap">{s.label}</span>
+                <span className={`font-bold text-2xl leading-none ${s.valueColor}`}>{s.value}</span>
+                <span className="font-normal text-[#999] text-xs whitespace-nowrap">{s.label}</span>
               </div>
             ))}
           </div>

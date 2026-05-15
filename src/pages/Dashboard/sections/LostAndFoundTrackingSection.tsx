@@ -9,20 +9,20 @@ export const LostAndFoundTrackingSection: React.FC = () => {
 
   return (
     <section className="w-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-[#f0f0f0] flex-wrap gap-3">
-        <h2 className="font-semibold text-[#1a1a1a] text-xl">Lost and Found</h2>
-        <div className="flex gap-6">
+      <div className="px-6 pt-5 pb-3 border-b border-[#f0f0f0]">
+        <h2 className="font-semibold text-[#1a1a1a] text-xl mb-4">Lost and Found</h2>
+        <div className="flex gap-4 sm:gap-6 flex-wrap justify-center sm:justify-start">
           <div className="flex flex-col items-center gap-0.5">
-            <span className="font-bold text-xl leading-none text-[#1a1a1a]">{allItems.length}</span>
-            <span className="text-[#999] text-[10px]">Total</span>
+            <span className="font-bold text-2xl leading-none text-[#1a1a1a]">{allItems.length}</span>
+            <span className="text-[#999] text-xs">Total</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <span className="font-bold text-xl leading-none text-[#e07000]">{unclaimedCount}</span>
-            <span className="text-[#999] text-[10px]">Unclaimed</span>
+            <span className="font-bold text-2xl leading-none text-[#e07000]">{unclaimedCount}</span>
+            <span className="text-[#999] text-xs">Unclaimed</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <span className="font-bold text-xl leading-none text-[#1b9640]">{allItems.filter(i => i.status === "Claimed").length}</span>
-            <span className="text-[#999] text-[10px]">Claimed</span>
+            <span className="font-bold text-2xl leading-none text-[#1b9640]">{allItems.filter(i => i.status === "Claimed").length}</span>
+            <span className="text-[#999] text-xs">Claimed</span>
           </div>
         </div>
       </div>

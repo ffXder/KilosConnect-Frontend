@@ -106,9 +106,9 @@ export const InventoryPage = () => {
       <SidebarNavigationSection userRole={userRole}/>
       
       {/* Main content area that handles scrolling for the whole page */}
-      <div className="flex flex-col flex-1 min-w-0 ml-[240px] overflow-y-auto h-full">
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto h-full">
         {/* Sticky Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-8 pb-4">
+        <header className="flex flex-col gap-4 items-center text-center px-4 py-6 sm:px-6 lg:px-10 lg:flex-row lg:items-start lg:text-left">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
               Inventory Management

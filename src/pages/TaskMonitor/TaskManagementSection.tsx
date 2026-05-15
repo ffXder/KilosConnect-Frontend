@@ -26,7 +26,8 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
 
   return (
     <div className="bg-white border border-gray-200 rounded-[32px] overflow-hidden shadow-sm">
-      <table className="w-full text-left border-collapse">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse min-w-[600px]">
         <thead className="bg-gray-50 border-b border-gray-100">
           <tr>
             <th className="px-6 py-4 text-[11px] font-black text-gray-400 uppercase tracking-widest">Task Detail</th>
@@ -98,6 +99,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

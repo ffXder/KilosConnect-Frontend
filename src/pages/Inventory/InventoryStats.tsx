@@ -35,8 +35,8 @@ export const InventoryStats: React.FC<Props> = ({
   underRepairCount,
 }) => {
   return (
-    <div className="flex items-center justify-between mb-8">
-      <div className="flex items-center gap-6">
+    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mb-8">
+      <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
         {activeCategory === "Consumables" ? (
           <>
             <StatItem value={outOfStockCount} label="Out of Stock" color="text-red-500" />

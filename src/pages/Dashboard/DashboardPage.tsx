@@ -45,17 +45,15 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto h-full">
 
         {/* Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <div>
-              <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
-                Dashboard
-              </h1>
+        <header className="flex flex-col gap-4 items-center text-center px-4 py-6 sm:px-6 lg:px-10 lg:flex-row lg:items-start lg:text-left">
+          <div className="flex flex-col gap-2">
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+              Dashboard
+            </h1>
               <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
                 Welcome back, {user?.firstName || "User"}!
               </p>
             </div>
-          </div>
         </header>
 
         <div className="px-4 sm:px-6 -mb-1">

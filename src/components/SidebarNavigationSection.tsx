@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logOut } from "../services/authService";
 
@@ -76,13 +76,37 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
   };
 
   const visibleItems = navItems.filter((item) => item.roles.includes(userRole));
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <aside
-      className="fixed top-0 left-0 w-[240px] h-screen bg-[#072821] flex flex-col z-50"
-      aria-label="Sidebar navigation"
-      style={{ borderRight: "4px solid #072821" }}
-    >
+    <>
+      <button
+        type="button"
+        className="fixed top-4 left-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-[#072821]/95 text-[#FDFFE0] shadow-lg transition hover:bg-[#0f503e] lg:hidden"
+        aria-label="Open navigation menu"
+        onClick={() => setIsOpen(true)}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`fixed top-0 left-0 h-screen w-[240px] bg-[#072821] flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+        aria-label="Sidebar navigation"
+        style={{ borderRight: "4px solid #072821" }}
+      >
       {/* Logo */}
       <div className="flex items-center justify-center py-8 px-6">
         <img className="w-[140px] object-contain" alt="Kilos logo" src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png" />
@@ -94,6 +118,7 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
           <NavLink
             key={item.label}
             to={item.path}
+            onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 w-full px-4 py-3 rounded-[10px] transition-all cursor-pointer border-l-4 ${
                 isActive
@@ -130,5 +155,6 @@ export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRol
         </button>
       </div>
     </aside>
+    </>
   );
 };

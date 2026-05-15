@@ -29,20 +29,20 @@ export const SafetyIncidentReportSection: React.FC = () => {
 
   return (
     <section className="w-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-[#f0f0f0] flex-wrap gap-3">
-        <h2 className="font-semibold text-[#1a1a1a] text-xl">Recent Incident Reports</h2>
-        <div className="flex gap-6">
+      <div className="px-6 pt-5 pb-3 border-b border-[#f0f0f0]">
+        <h2 className="font-semibold text-[#1a1a1a] text-xl mb-4">Recent Incident Reports</h2>
+        <div className="flex gap-4 sm:gap-6 flex-wrap justify-center sm:justify-start">
           <div className="flex flex-col items-center gap-1">
-            <span className="font-bold text-xl leading-none text-[#1a1a1a]">{incidents.length}</span>
-            <span className="text-[#999] text-[10px]">Total</span>
+            <span className="font-bold text-2xl leading-none text-[#1a1a1a]">{incidents.length}</span>
+            <span className="text-[#999] text-xs">Total</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <span className="font-bold text-xl leading-none text-[#0056d2]">{incidents.filter(i => i.status === "Open").length}</span>
-            <span className="text-[#999] text-[10px]">Open</span>
+            <span className="font-bold text-2xl leading-none text-[#0056d2]">{incidents.filter(i => i.status === "Open").length}</span>
+            <span className="text-[#999] text-xs">Open</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <span className="font-bold text-xl leading-none text-[#1b9640]">{incidents.filter(i => i.status === "Resolved").length}</span>
-            <span className="text-[#999] text-[10px]">Resolved</span>
+            <span className="font-bold text-2xl leading-none text-[#1b9640]">{incidents.filter(i => i.status === "Resolved").length}</span>
+            <span className="text-[#999] text-xs">Resolved</span>
           </div>
         </div>
       </div>

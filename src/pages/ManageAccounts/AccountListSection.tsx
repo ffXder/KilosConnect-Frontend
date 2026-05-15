@@ -17,8 +17,8 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
   onDeleteClick 
 }) => {
   return (
-    <div className="w-full">
-      <table className="w-full text-left">
+    <div className="w-full overflow-x-auto">
+      <table className="min-w-[900px] w-full text-left">
         <thead className="font-semibold text-[#555] text-[11px] uppercase tracking-wider text-left py-2 pr-4">
           <tr>
             <th className="px-6 py-4">Name</th>

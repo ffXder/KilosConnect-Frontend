@@ -13,18 +13,18 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
 }) => {
   return (
     <>
-      <div className="flex items-center justify-between px-6 py-5 border-b border-[#eef1f3]">
+      <div className="flex flex-col gap-3 px-4 py-5 border-b border-[#eef1f3] sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <span className="font-semibold text-xl">User Accounts ({totalAccounts})</span>
         <button 
           type="button" // Explicitly button to prevent form triggers
           onClick={onAddNewUser}
-          className="bg-[#0b3026] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#08241d]"
+          className="w-full sm:w-auto bg-[#0b3026] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#08241d]"
         >
           + Add New User
         </button>
       </div>
 
-      <div className="px-6 py-4">
+      <div className="px-4 py-4 sm:px-6">
         <input
           type="text"
           placeholder="Search users..."

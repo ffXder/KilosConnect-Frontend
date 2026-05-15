@@ -34,15 +34,15 @@ export const InventoryToolbar: React.FC<Props> = ({
   return (
     <div className="space-y-4 mb-6">
       {/* Row 1: Tabs + Filters + Add Button */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-center gap-4 flex-wrap">
         
         {/* Inventory Types Tabs */}
-        <div className="flex gap-1 bg-[#f4f5f6] p-1 rounded-xl">
+        <div className="flex flex-wrap justify-center gap-1 bg-[#f4f5f6] p-1 rounded-xl w-full">
           {tabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => setActiveInventory(tab.value)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
                 activeInventory === tab.value
                   ? "bg-[#0a2e27] text-white shadow-md"
                   : "text-gray-400 hover:text-gray-600"
@@ -55,90 +55,40 @@ export const InventoryToolbar: React.FC<Props> = ({
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Consumables Filters */}
-          {activeInventory === "Consumables" && (
-            <>
-              {/* Category Dropdown */}
-              {/* <div className="relative">
-                  <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  <select
-                      value={selectedArea}
-                      onChange={(e) => setSelectedArea(e.target.value)}
-                      className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
-                  >
-                      {["ALL CATEGORIES", "General Storage", "Maintenance Storage"].map(cat => (
-                          <option key={cat} value={cat}>
-                              {cat === "ALL CATEGORIES" ? "All Categories" : cat}
-                          </option>
-                      ))}
-                  </select>
-                  <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div> */}
+          {/* Area Filter - shown for both tabs */}
+          <div className="relative">
+            <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <select
+              value={activeInventory === "Assets" ? selectedAssetArea : selectedArea}
+              onChange={(e) => activeInventory === "Assets" ? setSelectedAssetArea(e.target.value) : setSelectedArea(e.target.value)}
+              className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
+            >
+              {(activeInventory === "Assets" ? assetZones : ["All Areas", "General Storage", "Maintenance Storage"]).map(area => (
+                <option key={area} value={area}>{area}</option>
+              ))}
+            </select>
+            <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
 
-              {/* Area Dropdown */}
-              <div className="relative">
-                  <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  <select
-                      value={selectedArea}
-                      onChange={(e) => setSelectedArea(e.target.value)}
-                      className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
-                  >
-                    <option value="All Areas">All Areas</option>
-                    <option value="General Storage">General Storage</option>
-                    <option value="Maintenance Storage">Maintenance Storage</option>
-                  </select>
-                  <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
-
-              {/* Stock Status Dropdown */}
-              <div className="relative">
-                  <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  <select
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                      className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
-                  >
-                      {[
-                          { label: "All Stock", value: "ALL" },
-                          { label: "Low Stock", value: "LOW STOCK" },
-                          { label: "Out of Stock", value: "OUT OF STOCK" },
-                      ].map(f => (
-                          <option key={f.value} value={f.value}>{f.label}</option>
-                      ))}
-                  </select>
-                  <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
-            </>
-          )}
-
-          {/* Asset Filters */}
-          {activeInventory === "Assets" && (
-            <>
-              <div className="relative">
-                <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                <select
-                  value={selectedCondition}
-                  onChange={(e) => setSelectedCondition(e.target.value)}
-                  className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
-                >
-                  {assetConditions.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-                <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
-
-              <div className="relative">
-                <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                <select
-                  value={selectedAssetArea}
-                  onChange={(e) => setSelectedAssetArea(e.target.value)}
-                  className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
-                >
-                  {assetZones.map(zone => <option key={zone} value={zone}>{zone}</option>)}
-                </select>
-                <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
-            </>
-          )}
+          {/* Status/Condition Filter */}
+          <div className="relative">
+            <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <select
+              value={activeInventory === "Assets" ? selectedCondition : filter}
+              onChange={(e) => activeInventory === "Assets" ? setSelectedCondition(e.target.value) : setFilter(e.target.value)}
+              className="appearance-none pl-8 pr-8 py-2 bg-white border border-[#e8e8e8] rounded-xl text-[11px] font-bold text-gray-600 cursor-pointer focus:outline-none focus:border-[#0a2e27] transition-colors"
+            >
+              {activeInventory === "Assets" 
+                ? assetConditions.map(c => <option key={c} value={c}>{c}</option>)
+                : [
+                    { label: "All Stock", value: "ALL" },
+                    { label: "Low Stock", value: "LOW STOCK" },
+                    { label: "Out of Stock", value: "OUT OF STOCK" },
+                  ].map(f => <option key={f.value} value={f.value}>{f.label}</option>)
+              }
+            </select>
+            <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
 
           {/* Add Button */}
           <button

@@ -41,15 +41,17 @@ export const TaskStatusPanelSection: React.FC = () => {
 
   return (
     <aside aria-label="Task Overview" className="w-full h-full bg-white rounded-[16px] border border-[#e8e8e8] shadow-sm flex flex-col overflow-hidden">
-      <h2 className="font-semibold text-[#1a1a1a] text-xl px-5 pt-5 pb-0 m-0">Task Overview</h2>
+      <div className="px-5 pt-5 pb-3 border-b border-[#f0f0f0]">
+        <h2 className="font-semibold text-[#1a1a1a] text-xl mb-4">Task Overview</h2>
 
-      <div className="flex gap-3 px-5 pt-4 pb-3">
-        {summaryCards.map((card) => (
-          <div key={card.label} className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-3 rounded-[10px] ${card.bg}`}>
-            <span className={`font-bold text-[28px] leading-none ${card.countColor}`}>{card.count}</span>
-            <span className={`font-medium text-[11px] text-center leading-tight ${card.labelColor}`}>{card.label}</span>
-          </div>
-        ))}
+        <div className="flex gap-4 sm:gap-6 flex-wrap justify-center">
+          {summaryCards.map((card) => (
+            <div key={card.label} className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-3 rounded-[10px] ${card.bg}`}>
+              <span className={`font-bold text-2xl leading-none ${card.countColor}`}>{card.count}</span>
+              <span className={`font-medium text-xs text-center leading-tight ${card.labelColor}`}>{card.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 flex flex-col gap-2.5">

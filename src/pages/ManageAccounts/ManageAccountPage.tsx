@@ -121,10 +121,10 @@ export const ManageAccountsPage: React.FC = () => {
     <div className="flex h-screen bg-[#f4f5f6] overflow-hidden font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole}/>
 
-      <div className="flex flex-col flex-1 min-w-0 ml-60 overflow-y-auto">
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto">
         <AccountsStatsSection />
 
-        <main className="p-6">
+        <main className="pt-0 p-4 sm:p-6 lg:p-8">
           <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden">
             <AccountsFilterSection 
               totalAccounts={filteredAccounts.length}
