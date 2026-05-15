@@ -71,7 +71,7 @@ export const ProfilePage: React.FC = () => {
     phone: rawProfile.phoneNumber,
     role: rawProfile.role,
     dateJoined: rawProfile.createdAt.split("T")[0], 
-    avatarUrl: "",
+     avatarUrl: rawProfile.profileImage?.url ?? "",
   } : form;
 
   // Sync form when real profile loads
@@ -84,7 +84,7 @@ export const ProfilePage: React.FC = () => {
         phone: rawProfile.phoneNumber,
         role: rawProfile.role,
         dateJoined: rawProfile.createdAt.split("T")[0],
-        avatarUrl: "",
+         avatarUrl: rawProfile.profileImage?.url ?? "",
       });
     }
   }, [rawProfile]);
