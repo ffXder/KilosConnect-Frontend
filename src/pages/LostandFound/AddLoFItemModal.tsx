@@ -24,27 +24,28 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
     areaFound: Areas[0], 
     date: new Date().toISOString().split('T')[0],
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);       // ← actual File
   const [imagePreview, setImagePreview] = useState<string | null>(null); // ← just for preview
 
   const isFormValid = 
     formData.item.trim() !== "" && 
-    formData.date !== "" &&
-    imageFile !== null; // ← image is now required
+    formData.date !== "";
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file); // ← store the actual File
-      setImagePreview(URL.createObjectURL(file)); // ← just for preview
+      setImageFile(file); 
+      setImagePreview(URL.createObjectURL(file)); 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid && imageFile) {
-      onSubmit(formData, imageFile); // ← pass File separately
-    }
+    if (!isFormValid || !imageFile || isSubmitting) return;
+    setIsSubmitting(true);
+    await onSubmit(formData, imageFile);
+    setIsSubmitting(false);
   };
 
   return (
@@ -153,15 +154,15 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
             </button>
             <button 
               type="submit" 
-              disabled={!isFormValid}
+              disabled={!isFormValid || isSubmitting}
               className={`flex-1 py-3 rounded-[8px] text-sm font-semibold transition-all ${
-                isFormValid 
-                  ? "bg-[#d86125] text-[#FDFFE0] hover:bg-[#ba6300] cursor-pointer shadow-md" 
-                  : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed"
+                  isFormValid && !isSubmitting
+                      ? "bg-[#d86125] text-[#FDFFE0] hover:bg-[#ba6300] cursor-pointer shadow-md" 
+                      : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed"
               }`}
-            >
-              Add to Inventory
-            </button>
+          >
+              {isSubmitting ? "Adding..." : "Add to Inventory"}
+          </button>
           </div>
         </form>
       </div>
