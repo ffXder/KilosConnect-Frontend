@@ -24,9 +24,9 @@ const moduleToFilterType = (moduleName: string) => {
       return 'Inventory';
     case 'Task':
       return 'Tasks';
-    case 'IncidentReport':
+    case 'Incident Report':
       return 'Incidents';
-    case 'LostAndFound':
+    case 'Lost And Found':
       return 'Lost & Found';
     default:
       return 'All Logs';
@@ -54,9 +54,9 @@ const moduleToEntryIcon = (moduleName: string) => {
       return <InventoryIcon />;
     case 'Task': 
       return <TaskIcon />;
-    case 'IncidentReport': 
+    case 'Incident Report': 
       return <IncidentIcon />;
-    case 'LostAndFound': 
+    case 'Lost And Found': 
       return <LostFoundIcon />;
     default: 
       return <InventoryIcon />; // Default fallback
@@ -67,8 +67,8 @@ const moduleToEntryBg = (moduleName: string) => {
   switch (moduleName) {
     case 'Inventory': return 'bg-blue-50';
     case 'Task': return 'bg-[#e6f9f0]';
-    case 'IncidentReport': return 'bg-red-50';
-    case 'LostAndFound': return 'bg-purple-50';
+    case 'Incident Report': return 'bg-red-50';
+    case 'Lost And Found': return 'bg-purple-50';
     default: return 'bg-blue-50';
   }
 };
