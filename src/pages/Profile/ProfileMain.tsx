@@ -14,7 +14,7 @@ export interface ProfileData {
   phone: string;
   role: string;
   dateJoined: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 }
 
 export interface PerformanceStats {
@@ -52,6 +52,7 @@ export const ProfilePage: React.FC = () => {
   const { profile: rawProfile, loading, error, handleSaveProfile, handleUpdateAvatar } = useProfile();
 
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+  const [avatarOverride, setAvatarOverride] = useState<string | null | undefined>(undefined);
 
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState<ProfileData>({
@@ -71,7 +72,7 @@ export const ProfilePage: React.FC = () => {
     phone: rawProfile.phoneNumber,
     role: rawProfile.role,
     dateJoined: rawProfile.createdAt.split("T")[0], 
-     avatarUrl: rawProfile.profileImage?.url ?? "",
+    avatarUrl: avatarOverride !== undefined ? avatarOverride : rawProfile.profileImage?.url ?? "",
   } : form;
 
   // Sync form when real profile loads
@@ -134,9 +135,11 @@ export const ProfilePage: React.FC = () => {
 
   const handleUploadAvatar = async (file: File) => {
     await handleUpdateAvatar(file);
+    setAvatarOverride(undefined);
   };
 
   const handleRemoveAvatar = () => {
+    setAvatarOverride(null); 
     setForm((prev) => ({ ...prev, avatarUrl: "" }));
   };
 
