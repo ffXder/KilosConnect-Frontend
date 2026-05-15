@@ -12,6 +12,7 @@ export interface UserAccount {
   dateAdded: string;
   phoneNumber: string;
   createdAt: string;
+  profileImage?: { url: string; public_id: string } | null;
 }
 
 export interface NewUserForm {
