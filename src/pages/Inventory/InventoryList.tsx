@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { Layers, Trash2, Wrench, Package } from "lucide-react";
+import { formatDate } from "../../utils/formatter";
 
 interface Props {
   activeInventory: string;
@@ -109,7 +110,7 @@ export const InventoryList: React.FC<Props> = ({
               <span className="px-2 py-0.5 bg-[#f5f0ff] text-[#7c3aed] text-[10px] font-bold rounded-md">Asset</span>
             </div>
             <p className="text-xs font-medium text-gray-400 uppercase tracking-tight mt-0.5">
-              {asset.assetId} • {asset.area || asset.zone}
+              {asset.assetId} • {asset.area || asset.zone} • Quantity {asset.quantity} • Date of Purchase {formatDate(asset.purchaseDate)}
             </p>
           </div>
         </div>
