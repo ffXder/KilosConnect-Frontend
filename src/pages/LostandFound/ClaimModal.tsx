@@ -4,7 +4,7 @@ import { X, CheckCircle, ImagePlus } from 'lucide-react';
 interface ClaimModalProps {
   itemName: string;
   onClose: () => void;
-  onConfirm: (claimedBy: string, imageFile: File) => void; // ← simplified, removed claimedDate since backend sets claimedAt itself
+  onConfirm: (claimedBy: string, imageFile: File) => void;
 }
 
 export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onConfirm }) => {
