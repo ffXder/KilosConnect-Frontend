@@ -57,29 +57,7 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
         </header>
-
-        <div className="px-4 sm:px-6 -mb-1">
-          <NotificationAlertBanner
-            outOfStockCount={outOfStockCount}
-            lowStockCount={lowStockCount}
-          />
-        </div>
-        {/* Dashboard Grid */}
-        <div className="flex flex-col xl:flex-row flex-1 gap-5 p-4 sm:p-6">
-
-          {/* Left column — stacks on mobile */}
-          <div className="flex flex-col gap-5 flex-1 min-w-0">
-            <InventorySummarySection />
-            <SafetyIncidentReportSection />
-            <LostAndFoundTrackingSection />
-          </div>
-
-          {/* Right column — full width on mobile, fixed width on xl+ */}
-          <div className="w-full xl:w-[300px] xl:flex-shrink-0">
-            <TaskStatusPanelSection />
-          </div>
-
-        </div>
+        
       </div>
     </div>
   );
