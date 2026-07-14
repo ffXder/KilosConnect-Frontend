@@ -5,7 +5,7 @@ import { LoadingPage } from './pages/Loading'
 import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import { DashboardPage } from './pages/Dashboard/DashboardPage'
-import { InventoryPage } from './pages//Inventory/InventoryPage'
+import { AssetRegistryPage } from './pages/AssetRegistry/AssetRegistryPage'
 import { TaskMonitorPage } from './pages/TaskMonitor/TaskMonitor'
 import { LostAndFoundPage } from './pages/LostandFound/LostAndFound'
 import { IncidentReportPage } from './pages/IncidentReport/IncidentReporting'
@@ -57,10 +57,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/inventory'
+        <Route path='/asset-registry'
         element={
           <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <InventoryPage />
+              <AssetRegistryPage />
           </ProtectedRoute>
         }
         />
