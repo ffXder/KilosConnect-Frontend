@@ -5,7 +5,7 @@ import type { Asset } from '../../types/asset';
 export type ArchivedInventoryItem =
   | (Asset & { kind: 'asset' })
 
-export function useArchivedInventory() {
+export function useArchivedAssetRegistry() {
   const [archivedAssets, setArchivedAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
