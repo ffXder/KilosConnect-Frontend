@@ -3,7 +3,7 @@ import { SidebarNavigationSection } from '../components/SidebarNavigationSection
 import { Search, RotateCcw, Package, Users, ClipboardList, AlertTriangle, Archive, Calendar } from 'lucide-react';
 import { useArchivedUsers } from '../hooks/archives/useArchivedUsers';
 import { useArchivedTasks } from '../hooks/archives/useArchivedTask';
-import { useArchivedInventory } from '../hooks/archives/useArchivedInventory';
+import { useArchivedAssetRegistry } from '../hooks/archives/useArchivedAssetRegistry';
 import { useArchivedIncidents } from '../hooks/archives/useArchivedIncidents';
 import { useArchivedLostFound } from '../hooks/archives/useArchivedLostFound';
 import { formatDate } from '../utils/formatter';
@@ -18,7 +18,7 @@ const ArchivePage: React.FC = () => {
 
   const { archivedUsers, loading: loadingUsers, handleUnarchive: unarchiveUser } = useArchivedUsers();
   const { archivedTasks, loading: loadingTasks, handleUnarchive: unarchiveTask } = useArchivedTasks();
-  const { archivedAssets, loading: loadingInventory, handleUnarchiveAsset } = useArchivedInventory();
+  const { archivedAssets, loading: loadingInventory, handleUnarchiveAsset } = useArchivedAssetRegistry();
   const { archivedIncidents, loading: loadingIncidents, handleUnarchive: unarchiveIncident } = useArchivedIncidents();
   const { archivedItems, loading: loadingLostFound, handleUnarchive: unarchiveLostFound } = useArchivedLostFound();
 
@@ -187,7 +187,6 @@ const ArchivePage: React.FC = () => {
               <tr key={asset._id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="px-6 py-4">
                   <p className="text-[14px] font-bold text-slate-900">{asset.name}</p>
-                  <p className="text-[12px] text-slate-400 mt-0.5">Qty: {asset.quantity}</p>
                 </td>
                 <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{asset.assetId}</td>
                 <td className="px-6 py-4">
