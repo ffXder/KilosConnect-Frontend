@@ -1,5 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { getAllAssets, createAsset, updateAsset, updateAssetCondition, archiveAsset } from "../services/assetService";
+import { 
+    getAllAssets, 
+    getAssetForScan, 
+    createAsset, 
+    updateAsset, 
+    updateAssetCondition, 
+    archiveAsset, 
+    unarchiveAsset 
+} from "../services/assetService";
 import type { Asset, NewAsset, UpdateAsset } from "../types/asset";
 
 export function useAssets() {
@@ -59,6 +67,16 @@ export function useAssets() {
             setError(err.message); 
         }
     };
-    
-    return { assets, loading, error, refresh: fetchAssets, handleCreate, handleUpdate, handleUpdateCondition, handleArchive };
+
+    const handleScan = async (assetId: string) => {
+        try {
+            const asset = await getAssetForScan(assetId);
+            return asset;
+        } catch (err: any) {
+            setError(err.message);
+            throw err;
+        }
+    };
+
+    return { assets, loading, error, refresh: fetchAssets, handleCreate, handleUpdate, handleUpdateCondition, handleArchive, handleScan };
 }
