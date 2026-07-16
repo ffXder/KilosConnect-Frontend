@@ -4,7 +4,11 @@ export interface LogEntry {
   id: string; 
   title: string;
   description: string;
-  user: string;
+  performedBy: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+  } | null;
   timestamp: string;
   rawDate: string;
   type: string;
@@ -37,7 +41,7 @@ export const LogsListSection: React.FC<Props> = ({ logs, activeFilter }) => {
               <h3 className="font-bold text-gray-800 text-lg leading-tight">{log.title}</h3>
               <p className="text-gray-500 text-sm mt-0.5">{log.description}</p>
               <div className="flex gap-2 items-center mt-3 text-gray-400 text-xs font-medium">
-                <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-600">{log.user}</span>
+                <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-600">{log.performedBy?.userId}</span>
                 <span className="text-[10px] mx-1">📅</span>
                 <span>{log.timestamp}</span>
               </div>
