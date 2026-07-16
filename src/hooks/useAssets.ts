@@ -68,6 +68,14 @@ export function useAssets() {
         }
     };
 
+    const handleUnarchive = async (id: string) => {
+        try {
+            await unarchiveAsset(id);
+            await fetchAssets();
+        } catch (err: any) {
+            setError(err.message);
+        }
+    }
     const handleScan = async (assetId: string) => {
         try {
             const asset = await getAssetForScan(assetId);
