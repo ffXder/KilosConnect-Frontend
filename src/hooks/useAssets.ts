@@ -19,7 +19,17 @@ export function useAssets() {
         setLoading(true);
         try {
             const data = await getAllAssets();
-            setAssets(data);
+            
+            if (Array.isArray(data)) {
+                setAssets(data);
+            } else if (data && typeof data === "object" && Array.isArray((data as any).assets)) {
+                setAssets((data as any).assets);
+            } else if (data && typeof data === "object" && Array.isArray((data as any).data)) {
+                setAssets((data as any).data);
+            } else {
+                setAssets([]);
+            }
+
             setError(null);
         } catch (err: any) {
             setError(err.message);
