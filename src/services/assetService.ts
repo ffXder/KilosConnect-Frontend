@@ -26,7 +26,7 @@ export const createAsset = async(data: NewAsset): Promise<Asset> => {
 
 //PUT
 export const updateAsset = async(id: string, data: UpdateAsset): Promise<Asset> => {
-    const res = await apiRequest(`/asset/${id}`, {
+    const res = await apiRequest(`/assets/${id}`, {
         method: 'PUT',
         body: JSON.stringify(data)
     });
@@ -76,3 +76,12 @@ export const getArchivedAssets = async (): Promise<Asset[]> => {
     return await res.json();
 };
 
+//for qr scanner
+export const getAssetForScan = async (assetId: string): Promise<Asset> => {
+    const res = await apiRequest(`/assets/scan/${assetId}`, { method: 'GET' });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Asset not found');
+    }
+    return res.json();
+}
