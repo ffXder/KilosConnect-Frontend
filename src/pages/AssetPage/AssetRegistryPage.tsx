@@ -3,8 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import { Plus, Search, ChevronDown, Archive, AlertCircle, CheckCircle } from "lucide-react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { useAuth } from '../../hooks/useAuth';
-import { useAssets } from '../../hooks/useAssets';
 import type { Asset, NewAsset } from "../../types/asset";
+import { useAssets } from '../../hooks/useAssets';
+import { useRepairLogs } from "../../hooks/useRepairLogs";
 
 // assets sub-components
 import { AssetRegistryStats } from "./AssetRegistryStats";
@@ -37,6 +38,13 @@ const assetConditions = [
   "Decommissioned",
 ];
 
+const assetCategory = [
+  "All Categories",
+  "Equipment",
+  "Machine",
+  "Tool"
+]
+
 export const AssetRegistryPage = () => {
   const [activeTab, setActiveTab] = React.useState<"Equipment" | "LostFound">("Equipment");
 
@@ -45,10 +53,11 @@ export const AssetRegistryPage = () => {
   const searchQuery = searchParams.get("q") ?? "";
   const selectedZone = searchParams.get("area") ?? "All Zones";
   const selectedStatus = searchParams.get("condition") ?? "All Statuses";
+  const selectedCategory = searchParams.get("category") ?? "All Categories"
 
   const updateParam = (key: string, value: string) => {
     const next = new URLSearchParams(searchParams);
-    if (!value || value === "All Zones" || value === "All Statuses") {
+    if (!value || value === "All Zones" || value === "All Statuses" || value === "All Categories") {
       next.delete(key);
     } else {
       next.set(key, value);
@@ -57,7 +66,7 @@ export const AssetRegistryPage = () => {
   };
 
   const {
-    assets,
+    assets = [],
     loading,
     error,
     handleCreate,
@@ -75,6 +84,8 @@ export const AssetRegistryPage = () => {
   const { role } = useAuth();
   const userRole = (role ?? 'admin') as any;
 
+  
+
   // area, conditon filter using URL params
   const filteredAssets = assets.filter((asset) => {
     const matchesSearch =
@@ -82,7 +93,8 @@ export const AssetRegistryPage = () => {
       asset.assetId.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesZone = selectedZone === "All Zones" || asset.area === selectedZone;
     const matchesStatus = selectedStatus === "All Statuses" || asset.condition === selectedStatus;
-    return matchesSearch && matchesZone && matchesStatus;
+    const matchesCategory = selectedCategory == "All Categories" || asset.category == selectedCategory;
+    return matchesSearch && matchesZone && matchesStatus && matchesCategory;
   });
 
   // calling the hooks for assets
@@ -142,6 +154,7 @@ export const AssetRegistryPage = () => {
 
                 {/* filters */}
                 <div className="flex items-center gap-3 flex-wrap">
+                  {/* area/zone filter */}
                   <div className="relative">
                     <select
                       value={selectedZone}
@@ -153,6 +166,7 @@ export const AssetRegistryPage = () => {
                     <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
+                  {/* condition/status filter */}
                   <div className="relative">
                     <select
                       value={selectedStatus}
@@ -160,6 +174,18 @@ export const AssetRegistryPage = () => {
                       className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
                     >
                       {assetConditions.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
+
+                  {/* category/types filter */}
+                  <div className="relative">
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => updateParam("category", e.target.value)}
+                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                    >
+                      {assetCategory.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                     <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
