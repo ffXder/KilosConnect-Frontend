@@ -18,7 +18,7 @@ const ArchivePage: React.FC = () => {
 
   const { archivedUsers, loading: loadingUsers, handleUnarchive: unarchiveUser } = useArchivedUsers();
   const { archivedTasks, loading: loadingTasks, handleUnarchive: unarchiveTask } = useArchivedTasks();
-  const { archivedAssets, archivedConsumables, loading: loadingInventory, handleUnarchiveAsset, handleUnarchiveConsumable } = useArchivedInventory();
+  const { archivedAssets, loading: loadingInventory, handleUnarchiveAsset } = useArchivedInventory();
   const { archivedIncidents, loading: loadingIncidents, handleUnarchive: unarchiveIncident } = useArchivedIncidents();
   const { archivedItems, loading: loadingLostFound, handleUnarchive: unarchiveLostFound } = useArchivedLostFound();
 
@@ -65,11 +65,6 @@ const ArchivePage: React.FC = () => {
     isWithinDateRange(a.archivedAt)
   );
 
-  const filteredConsumables = archivedConsumables.filter(c =>
-    matchesSearch(`${c.name} ${c.category} ${c.location}`) &&
-    isWithinDateRange(c.archivedAt)
-  );
-
   const filteredIncidents = archivedIncidents.filter(i =>
     matchesSearch(`${i.title} ${i.area}`) &&
     isWithinDateRange(i.archivedAt)
@@ -84,7 +79,7 @@ const ArchivePage: React.FC = () => {
     switch (activeCategory) {
       case 'users': return filteredUsers.length;
       case 'tasks': return filteredTasks.length;
-      case 'inventory': return filteredAssets.length + filteredConsumables.length;
+      case 'inventory': return filteredAssets.length
       case 'incidents': return filteredIncidents.length;
       case 'lostfound': return filteredLostFound.length;
     }
@@ -205,21 +200,6 @@ const ArchivePage: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 text-[13px] text-slate-400">{asset.archivedAt ? formatDate(asset.archivedAt) : '—'}</td>
                 <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveAsset(asset.assetId)} /></td>
-              </tr>
-            ))}
-            {filteredConsumables.map(consumable => (
-              <tr key={consumable._id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4">
-                  <p className="text-[14px] font-bold text-slate-900">{consumable.name}</p>
-                  <p className="text-[12px] text-slate-400 mt-0.5">{consumable.unit} · Qty: {consumable.quantity}</p>
-                </td>
-                <td className="px-6 py-4 text-[13px] text-slate-500 font-mono">{consumable.consumableId}</td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-600">Consumable</span>
-                </td>
-                <td className="px-6 py-4 text-[13px] text-slate-600">{consumable.category}</td>
-                <td className="px-6 py-4 text-[13px] text-slate-400">{consumable.archivedAt ? formatDate(consumable.archivedAt) : '—'}</td>
-                <td className="px-6 py-4 text-right"><RestoreButton onClick={() => handleUnarchiveConsumable(consumable.consumableId)} /></td>
               </tr>
             ))}
           </>
