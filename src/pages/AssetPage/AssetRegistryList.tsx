@@ -56,7 +56,7 @@ export const AssetRegistryList: React.FC<Props> = ({ filteredAssets, onAssetClic
               <td className="py-4 px-6">
                 <div className="font-bold text-gray-900">{asset.name}</div>
                 <div className="text-xs text-gray-400 mt-0.5">
-                  {asset.assetId} • {asset.type}
+                  {asset.assetId} • {asset.category}
                 </div>
               </td>
 
@@ -91,11 +91,21 @@ export const AssetRegistryList: React.FC<Props> = ({ filteredAssets, onAssetClic
 
               {/* Maintenance Schedule logs */}
               <td className="py-4 px-6 text-xs text-gray-600 font-medium">
-                <div>{asset.maintenanceCount} times</div>
-                <div className="flex items-center gap-1 text-gray-400 mt-0.5">
-                  <Calendar size={12} />
-                  {asset.lastMaintenanceDate}
-                </div>
+                {/* renders the maintenance date is there is maintenance info exist */}
+                {asset.maintenanceCount ? (
+                  <>
+                    <div>{asset.maintenanceCount} times</div>
+
+                    {asset.lastMaintenanceDate && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <Calendar size={12} />
+                        <span>{asset.lastMaintenanceDate}</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-gray-400">No recorded maintenance</div>
+                )}
               </td>
 
               {/* Recommendations */}
