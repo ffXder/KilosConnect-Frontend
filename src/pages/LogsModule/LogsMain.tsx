@@ -97,7 +97,7 @@ export const LogsPage: React.FC = () => {
         type: moduleToFilterType(log.module),
         title: `${actionToFriendlyLabel(log.action)} ${log.module}`,
         description: log.details || 'No additional details',
-        user: log.performedBy || 'System',
+        performedBy: log.performedBy || null,
         rawDate: log.createdAt, 
         timestamp: new Date(log.createdAt).toLocaleString('en-PH', { 
           month: 'short', 
