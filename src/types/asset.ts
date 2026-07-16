@@ -14,7 +14,7 @@ export interface Asset {
     isArchived: boolean;
     archivedAt: string | null;
     archivedBy: string | null;
-   recommendation?: 'Replace Immediately' | 'Monitor Closely' | 'Healthy' | 'Unknown SRP, cannot determine replacement recommendation';
+    recommendation?: 'Replace Immediately' | 'Monitor Closely' | 'Healthy' | 'Unknown SRP, cannot determine replacement recommendation';
 }
 
 //create
