@@ -16,6 +16,8 @@ import UnauthorizedPage from './pages/UnauthorizedPage'
 import ArchivePage from './pages/Archives'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { ResetPasswordPage } from './pages/ResetPasswordPage'
+import { ScannerPage } from './pages/ScannerPage'
+import { AssetScanPage } from './pages/AssetScanPage'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -48,7 +50,9 @@ function App() {
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
-        
+        <Route path='/qr-scanner' element={<ScannerPage />} />
+        <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
+
         {/* protected routes */}
         <Route path='/dashboard' 
         element={
