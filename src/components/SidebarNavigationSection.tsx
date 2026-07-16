@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logOut } from "../services/authService";
 
@@ -18,10 +18,16 @@ const navItems = [
     icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>,
   },
   {
-    label: "Task Monitor",
+    label: "Live Task Monitor",
     path: "/task-monitor",
     roles: ["admin", "custodian"] as Role[],
-    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>,
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>,
+  },
+  {
+    label: "Manage Tasks",
+    path: "/manage-task",
+    roles: ["admin"] as Role[],
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" /><rect x="9" y="3" width="6" height="4" rx="1" ry="1" /></svg>,
   },
   {
     label: "Lost and Found",
@@ -67,68 +73,124 @@ const navItems = [
   },
 ];
 
-export const SidebarNavigationSection: React.FC<{ userRole: Role }> = ({ userRole }) => {
+export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRole }) => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleLogoutClick = () => {
     logOut();
     navigate("/login");
   };
 
-  const visibleItems = navItems.filter((item) => item.roles.includes(userRole));
+  const visibleItems = userRole ? navItems.filter((item) => item.roles.includes(userRole)) : navItems;
 
   return (
-    <aside
-      className="fixed top-0 left-0 w-[240px] h-screen bg-[#072821] flex flex-col z-50"
-      aria-label="Sidebar navigation"
-      style={{ borderRight: "4px solid #072821" }}
-    >
-      {/* Logo */}
-      <div className="flex items-center justify-center py-8 px-6">
-        <img className="w-[140px] object-contain" alt="Kilos logo" src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png" />
-      </div>
+    <>
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
 
-      {/* Nav items */}
-      <nav className="flex-1 flex flex-col px-4 gap-1 overflow-y-auto" aria-label="Main navigation">
-        {visibleItems.map((item) => (
-          <NavLink
-            key={item.label}
-            to={item.path}
-            className={({ isActive }) =>
-              `flex items-center gap-3 w-full px-4 py-3 rounded-[10px] transition-all cursor-pointer border-l-4 ${
-                isActive
-                  ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
-                  : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
-              }`
-            }
+      <div className="w-[78px] h-screen flex-shrink-0 relative" />
+
+      <aside
+        className="fixed top-0 left-0 h-screen bg-[#072821] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]"
+        style={{ 
+          width: isExpanded ? "240px" : "78px",
+          borderRight: "4px solid #072821" 
+        }}
+        aria-label="Sidebar navigation"
+      >
+        <div className="flex items-center justify-between py-6 px-4">
+          <div className={`transition-all duration-300 overflow-hidden ${
+            isExpanded ? "w-[120px] opacity-100" : "w-0 opacity-0"
+          }`}>
+            <img 
+              className="w-full object-contain" 
+              alt="Kilos logo" 
+              src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png" 
+            />
+          </div>
+
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`flex items-center justify-center w-9 h-9 rounded-lg text-[#FDFFE0] hover:bg-white/10 transition-colors ${
+              !isExpanded ? "mx-auto" : ""
+            }`}
           >
-            {({ isActive }) => (
-              <>
-                <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>{item.icon}</span>
-                <span className="[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap">
-                  {item.label}
-                </span>
-              </>
+            {isExpanded ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="4" y1="18" x2="20" y2="18" />
+              </svg>
             )}
-          </NavLink>
-        ))}
-      </nav>
+          </button>
+        </div>
 
-      {/* Log Out */}
-      <div className="px-4 pb-8">
-        <button
-          type="button"
-          onClick={handleLogoutClick}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-[10px] text-[#c8d8d5] hover:bg-white/5 transition-colors cursor-pointer border-l-4 border-transparent"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FDFFE0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-          <span className="[font-family:'Poppins',Helvetica] font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap">Log Out</span>
-        </button>
-      </div>
-    </aside>
+        <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar" aria-label="Main navigation">
+          {visibleItems.map((item) => (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              title={!isExpanded ? item.label : undefined}
+              className={({ isActive }) =>
+                `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
+                  isActive
+                    ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                    : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
+                } ${!isExpanded ? "justify-center px-0" : "gap-3 px-4"}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
+                    {item.icon}
+                  </span>
+                  
+                  <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+                    isExpanded ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
+                  }`}>
+                    {item.label}
+                  </span>
+                </>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="px-4 pb-8">
+          <button
+            type="button"
+            onClick={handleLogoutClick}
+            title={!isExpanded ? "Log Out" : undefined}
+            className={`flex items-center rounded-[10px] text-[#c8d8d5] hover:bg-white/5 transition-colors cursor-pointer border-l-4 border-transparent py-3 ${
+              !isExpanded ? "justify-center px-0" : "gap-3 px-4 w-full"
+            }`}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FDFFE0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span className={`[font-family:'Poppins',Helvetica] font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+              isExpanded ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
+            }`}>
+              Log Out
+            </span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
