@@ -107,7 +107,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
         aria-label="Sidebar navigation"
       >
         <div className="flex items-center justify-between py-6 px-4">
-          <div className={`transition-all duration-300 overflow-hidden ${
+          <div className={`transition-all duration-600 overflow-hidden ${
             isExpanded ? "w-[120px] opacity-100" : "w-0 opacity-0"
           }`}>
             <img 
