@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { AreaQRCode } from '../types/task';
-import { generateAreaQRCodes } from '../services/areaService';
+import { generateAreaQRCodes } from '../services/areaQRService';
 
 export const useAreaQR = () => {
   const [qrCodes, setQrCodes] = useState<AreaQRCode[]>([]);
