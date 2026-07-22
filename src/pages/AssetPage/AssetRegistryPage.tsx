@@ -84,8 +84,6 @@ export const AssetRegistryPage = () => {
   const { role } = useAuth();
   const userRole = (role ?? 'admin') as any;
 
-  
-
   // area, conditon filter using URL params
   const filteredAssets = assets.filter((asset) => {
     const matchesSearch =
@@ -119,10 +117,10 @@ export const AssetRegistryPage = () => {
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className="flex-1 w-full overflow-hidden">
+      <main className="flex-1 w-full overflow-hidden pt-20 md:pt-0">
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Smart Facility Asset Registry</h1>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Smart Facility Asset Registry</h1>
             <p className="text-gray-500 text-sm mt-1">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>
           </div>
 
