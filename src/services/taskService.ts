@@ -2,8 +2,13 @@ import { apiRequest } from "./authService";
 import type { Task, NewTask, UpdateTask } from "../types/task";
 
 //GET
-export const getAllTasks = async (): Promise<Task[]> => {
-    const res = await apiRequest('/tasks', { method: 'GET' });
+export const getAllTasks = async (frequency?: string, dayType?: string): Promise<Task[]> => {
+    const query = new URLSearchParams();
+    if (frequency) query.append('frequency', frequency);
+    if (dayType) query.append('dayType', dayType);
+
+    const endpoint = query.toString() ? `/tasks?${query.toString()}` : '/tasks';
+    const res = await apiRequest(endpoint, { method: 'GET' });
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Failed to fetch tasks');
