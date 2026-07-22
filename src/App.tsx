@@ -6,7 +6,8 @@ import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import { DashboardPage } from './pages/Dashboard/DashboardPage'
 import { AssetRegistryPage } from './pages/AssetPage/AssetRegistryPage'
-import { TaskMonitorPage } from './pages/TaskMonitor/TaskMonitor'
+import { TaskMonitorPage } from './pages/TaskMonitor/TaskMonitorPage'
+import { TaskManagementPage } from './pages/TaskManager/TaskManagementPage'
 import { LostAndFoundPage } from './pages/LostandFound/LostAndFound'
 import { IncidentReportPage } from './pages/IncidentReport/IncidentReporting'
 import { ProfilePage } from './pages/Profile/ProfileMain'
@@ -70,8 +71,15 @@ function App() {
         />
         <Route path='/task-monitor'
         element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+          <ProtectedRoute allowedRoles={['admin']}>
               <TaskMonitorPage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path='/manage-task'
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+              <TaskManagementPage />
           </ProtectedRoute>
         }
         />
@@ -118,7 +126,7 @@ function App() {
         }
         />
       {/* redirects to login if not found or authenticated */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
       </Routes>
     </BrowserRouter>
   
