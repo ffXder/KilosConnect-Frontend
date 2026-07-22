@@ -29,8 +29,15 @@ export type NewTask = Omit<Task, '_id' | 'isArchived' | 'createdAt' | 'updatedAt
 // update 
 export type UpdateTask = Partial<Omit<Task, '_id' | 'createdAt' | 'updatedAt'>>;
 
-export type TaskLogStatus = 'Pending' | 'In Progress' | 'Completed' | 'Missed';
+export type TaskLogStatus = 'Pending' | 'In Progress' | 'Completed' | 'Missed' | 'Disputed';
 
+export type VerificationStatus = 'Not Required' | 'Pending Review' | 'Verified' | 'Rejected' | 'Disputed';
+
+export interface UserSummary {
+  _id: string;
+  firstName: string;
+  lastName?: string;
+}
 //for task log
 export interface TaskLog {
   _id: string;
@@ -38,6 +45,18 @@ export interface TaskLog {
   status: TaskLogStatus;
   completedBy?: { _id: string; firstName: string };
   completedAt?: string;
+
+  // for live photo verification
+  submittedPhoto?: string | null;
+  verifiedBy?: { _id: string; firstName: string } | null;
+  verificationStatus: VerificationStatus;
+  verificationNote?: string | null;
   createdAt: string;
   updatedAt: string;
 }   
+
+export interface AreaQRCode {
+  area: string;
+  url: string;
+  qrCode: string;
+}
