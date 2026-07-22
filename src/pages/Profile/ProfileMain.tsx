@@ -1,0 +1,254 @@
+import React, { useState, useEffect } from "react";
+import ProfileInfoSection from "./ProfileInfoSection";
+import ProfileStatsSection from "./ProfileStatsSection";
+import ProfileActivitySection from "./RecentActivitySection";
+import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
+import { useAuth } from "../../hooks/useAuth";
+import { useProfile } from "../../hooks/useProfile"; // Imported missing hook
+
+export interface ProfileData {
+  firstName: string;
+  lastName: string;
+  username: string;
+  phone: string;
+  role: string;
+  dateJoined: string;
+  location?: string;
+  avatarUrl?: string;
+}
+
+export interface PerformanceStats {
+  maintenanceTasks: number;
+  incidentsReported: number;
+  assetUpdates: number;
+  itemsFound: number;
+  maintenanceCompletionRate: number;
+  tasksThisWeek: number;
+}
+
+export interface ActivityItem {
+  id: string;
+  type: "maintenance" | "incident" | "lostfound";
+  title: string;
+  timeAgo: string;
+}
+
+const mockStats: PerformanceStats = {
+  maintenanceTasks: 42,
+  incidentsReported: 15,
+  assetUpdates: 28,
+  itemsFound: 8,
+  maintenanceCompletionRate: 95,
+  tasksThisWeek: 12,
+};
+
+const mockActivity: ActivityItem[] = [
+  { id: "1", type: "maintenance", title: "Completed maintenance verification for Mezzanine", timeAgo: "2 hours ago" },
+  { id: "2", type: "incident", title: "Reported cable fraying on Machine B", timeAgo: "5 hours ago" },
+  { id: "3", type: "lostfound", title: "Added Black Water Bottle to lost & found", timeAgo: "1 day ago" },
+];
+
+// Helper function to format date strings safely
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return isNaN(date.getTime())
+    ? dateString
+    : date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+};
+
+const ProfileMain: React.FC = () => {
+  const { role } = useAuth();
+  const { profile: rawProfile, loading, error, handleSaveProfile } = useProfile();
+
+  const userRole = (role ?? "custodian") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [form, setForm] = useState<ProfileData>({
+    firstName: "",
+    lastName: "",
+    username: "",
+    phone: "",
+    role: "",
+    dateJoined: "",
+    location: "Kilos PH, Pasig City",
+    avatarUrl: "",
+  });
+
+  const profile: ProfileData = rawProfile
+    ? {
+        firstName: rawProfile.firstName,
+        lastName: rawProfile.lastName,
+        username: rawProfile.email,
+        phone: rawProfile.phoneNumber,
+        role: rawProfile.role,
+        dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "",
+        location: "Kilos PH, Pasig City",
+        avatarUrl: rawProfile.profileImage?.url ?? "",
+      }
+    : form;
+
+  useEffect(() => {
+    if (rawProfile) {
+      setForm({
+        firstName: rawProfile.firstName,
+        lastName: rawProfile.lastName,
+        username: rawProfile.email,
+        phone: rawProfile.phoneNumber,
+        role: rawProfile.role,
+        dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "",
+        location: "Kilos PH, Pasig City",
+        avatarUrl: rawProfile.profileImage?.url ?? "",
+      });
+    }
+  }, [rawProfile]);
+
+  const handleEditToggle = () => setIsEditing((prev) => !prev);
+
+  const formatPhoneNumber = (value: string) => {
+    const numbers = value.replace(/\D/g, "");
+    const cleanNumbers = numbers.startsWith("63") ? numbers.slice(2) : numbers;
+    let formatted = "+63";
+    if (cleanNumbers.length > 0) formatted += " " + cleanNumbers.substring(0, 3);
+    if (cleanNumbers.length > 3) formatted += " " + cleanNumbers.substring(3, 6);
+    if (cleanNumbers.length > 6) formatted += " " + cleanNumbers.substring(6, 10);
+    return formatted.trim();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "phone") {
+      setForm((prev) => ({ ...prev, [name]: formatPhoneNumber(value) }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSave = async () => {
+    if (!form.username.includes("@")) {
+      alert("Please enter a valid email address containing '@'");
+      return;
+    }
+    await handleSaveProfile({
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.username,
+      phoneNumber: form.phone,
+    });
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setForm(profile);
+    setIsEditing(false);
+  };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">Loading...</div>;
+  if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
+
+  return (
+    <div className="flex min-h-screen bg-[#f4f5f6]">
+      <SidebarNavigationSection userRole={userRole} />
+      <main className="flex-1 ml-[240px] p-8">
+        <div className="mb-6">
+          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
+          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
+          {/* Left Column */}
+          <div className="flex flex-col gap-5">
+            <ProfileInfoSection
+              profile={profile}
+              form={form}
+              isEditing={isEditing}
+              onEditToggle={handleEditToggle}
+              onChange={handleChange}
+              onSave={handleSave}
+              onCancel={handleCancel}
+            />
+          </div>
+
+          {/* Right Column */}
+          <div className="flex flex-col gap-5">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb]">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-base font-semibold text-[#0d1f1a]">Personal Information</h2>
+                {isEditing && (
+                  <div className="flex gap-2">
+                    <button onClick={handleSave} className="bg-[#183a30] hover:bg-[#336658] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
+                    <button onClick={handleCancel} className="border border-[#d1d5db] hover:bg-[#f9fafb] text-[#374151] text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Cancel</button>
+                  </div>
+                )}
+              </div>
+
+              {isEditing ? (
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+                  {[
+                    { name: "firstName", label: "First Name", type: "text" },
+                    { name: "lastName", label: "Last Name", type: "text" },
+                    { name: "username", label: "Email Address", type: "email" },
+                    { name: "phone", label: "Phone Number", type: "tel" },
+                  ].map(({ name, label, type }) => (
+                    <div key={name}>
+                      <label className="block text-xs text-[#6b7280] mb-1.5 font-medium">{label}</label>
+                      <input
+                        name={name}
+                        type={type}
+                        value={form[name as keyof ProfileData] || ""}
+                        onChange={handleChange}
+                        placeholder={name === "phone" ? "+63 000 000 0000" : ""}
+                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] ${
+                          name === "username" && !form.username.includes("@") && form.username.length > 0
+                            ? "border-red-400 ring-red-100"
+                            : "border-[#d1d5db]"
+                        }`}
+                      />
+                      {name === "username" && !form.username.includes("@") && form.username.length > 0 && (
+                        <p className="text-[10px] text-red-500 mt-1 animate-pulse">Email must contain an "@" symbol</p>
+                      )}
+                      {name === "phone" && (
+                        <p className="text-[10px] text-[#9ca3af] mt-1 italic">Format: +63 XXX XXX XXXX</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+                  <InfoField label="First Name" value={profile.firstName} />
+                  <InfoField label="Last Name" value={profile.lastName} />
+                  <InfoField label="Email Address" value={profile.username} icon="user" />
+                  <InfoField label="Phone Number" value={profile.phone} icon="phone" />
+                  <InfoField label="Role" value={profile.role} icon="shield" />
+                  <InfoField label="Date Joined" value={formatDate(profile.dateJoined)} icon="calendar" />
+                </div>
+              )}
+            </div>
+
+            <ProfileStatsSection stats={mockStats} />
+          <ProfileActivitySection activities={mockActivity} />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const iconMap: Record<string, React.ReactNode> = {
+  user: <svg className="w-3.5 h-3.5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 1114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>,
+  phone: <svg className="w-3.5 h-3.5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>,
+  shield: <svg className="w-3.5 h-3.5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>,
+  calendar: <svg className="w-3.5 h-3.5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>,
+};
+
+const InfoField: React.FC<{ label: string; value: string; icon?: string }> = ({ label, value, icon }) => (
+  <div>
+    <div className="flex items-center gap-1.5 mb-1">
+      {icon && iconMap[icon]}
+      <span className="text-xs text-[#9ca3af] font-medium">{label}</span>
+    </div>
+    <p className="text-sm font-medium text-[#111827]">{value}</p>
+  </div>
+);
+
+export default ProfileMain;
