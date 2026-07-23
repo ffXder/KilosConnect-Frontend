@@ -96,7 +96,7 @@ export const IncidentReportPage: React.FC = () => {
     <div className="flex min-h-screen bg-[#F8FAFC] font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className={`flex-1 ${sidebarMargin} p-10 overflow-y-auto transition-all duration-300`}>
+      <main className={`flex-1 ${sidebarMargin} p-8 overflow-y-auto transition-all duration-300`}>
         <header className="flex justify-between items-start mb-8">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Incident Reporting</h1>

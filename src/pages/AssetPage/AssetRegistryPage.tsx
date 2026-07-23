@@ -122,8 +122,8 @@ export const AssetRegistryPage = () => {
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 ${sidebarMargin} w-full overflow-hidden transition-all duration-300`}>
-        <div className="p-8 max-w-[1600px] mx-auto">
+      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
+        <div className="max-w-[1600px]">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Smart Facility Asset Registry</h1>
             <p className="text-gray-500 text-sm mt-1">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>

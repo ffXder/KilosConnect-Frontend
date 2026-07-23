@@ -72,7 +72,7 @@ export const LostAndFoundPage: React.FC = () => {
       <div className={`flex flex-col flex-1 min-w-0 ${sidebarMargin} overflow-y-auto h-full transition-all duration-300`}>
 
         {/* Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">
+        <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">
           <div className="flex items-center gap-3">
             <div>
               <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
@@ -85,7 +85,7 @@ export const LostAndFoundPage: React.FC = () => {
           </div>
         </header>
 
-        <div className="px-10 pb-10 space-y-8">
+        <div className="p-8 space-y-8">
           <div className="grid grid-cols-3 gap-6">
             <StatCard label="Total Items" count={items.length} color="text-[#1e4d46]" iconBg="bg-[#e6fffa]" icon={Archive} />
             <StatCard label="Unclaimed" count={items.filter(i => i.status === "Unclaimed").length} color="text-[#b45309]" iconBg="bg-[#fffbeb]" icon={AlertCircle} />

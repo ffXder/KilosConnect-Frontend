@@ -97,8 +97,6 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
         }
       `}</style>
 
-      <div className="w-[78px] h-screen flex-shrink-0 relative" />
-
       <aside
         className="fixed top-0 left-0 h-screen bg-[#072821] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]"
         style={{ 
