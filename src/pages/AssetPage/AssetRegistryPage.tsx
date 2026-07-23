@@ -122,9 +122,9 @@ export const AssetRegistryPage = () => {
   return (
     <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
         <div className="max-w-[1600px]">
-          <div className="mb-8">
+          <div className="mb-4 sm:mb-6 lg:mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Smart Facility Asset Registry</h1>
             <p className="text-gray-500 text-sm mt-1">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>
           </div>
@@ -143,9 +143,13 @@ export const AssetRegistryPage = () => {
               {loading && <p className="text-sm text-gray-400 mb-3">Loading assets...</p>}
               {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
 
+              <div className="mb-4">
+                <AssetRegistryStats assets={assets} />
+              </div>
+
               <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm w-full">
-                {/* search barr */}
-                <div className="relative flex-1 min-w-[280px]">
+                {/* search bar */}
+                <div className="relative flex-1 min-w-[200px] sm:min-w-[280px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                   <input
                     value={searchQuery}
@@ -156,17 +160,17 @@ export const AssetRegistryPage = () => {
                 </div>
 
                 {/* filters */}
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                   {/* area/zone filter */}
                   <div className="relative">
                     <select
                       value={selectedZone}
                       onChange={(e) => updateParam("area", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-3 pr-8 py-2 text-xs sm:text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
                     >
                       {assetAreas.map((a) => <option key={a} value={a}>{a}</option>)}
                     </select>
-                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
                   {/* condition/status filter */}
@@ -174,11 +178,11 @@ export const AssetRegistryPage = () => {
                     <select
                       value={selectedStatus}
                       onChange={(e) => updateParam("condition", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-3 pr-8 py-2 text-xs sm:text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
                     >
                       {assetConditions.map((c) => <option key={c} value={c}>{c}</option>)}
                     </select>
-                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
                   {/* category/types filter */}
@@ -186,25 +190,21 @@ export const AssetRegistryPage = () => {
                     <select
                       value={selectedCategory}
                       onChange={(e) => updateParam("category", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-3 pr-8 py-2 text-xs sm:text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
                     >
                       {assetCategory.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
-                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
                   {/* add item button */}
-                  <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors">
-                    <Plus size={16} /> Add Asset
+                  <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap">
+                    <Plus size={14} /> <span className="hidden sm:inline">Add Asset</span><span className="sm:hidden">Add</span>
                   </button>
                 </div>
               </div>
 
-              <div className="m-5">
-                <AssetRegistryStats assets={assets} />
-              </div>
-
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-x-auto w-full mt-4">
                 <AssetRegistryList
                   filteredAssets={filteredAssets}
                   onAssetClick={(asset) => { setSelectedAssetForEdit(asset); setIsUpdateModalOpen(true); }}

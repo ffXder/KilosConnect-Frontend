@@ -113,11 +113,11 @@ const ArchivesMain: React.FC = () => {
   return (
     <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole}/>
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
         
-        <div className="mb-6">
-          <h1 className="text-[28px] font-bold text-[#0f172a] tracking-tight">Archives</h1>
-          <p className="text-sm text-[#64748b] mt-0.5">Historical records of completed and decommissioned items</p>
+        <div className="mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl lg:text-[28px] font-bold text-[#0f172a] tracking-tight">Archives</h1>
+          <p className="text-xs sm:text-sm text-[#64748b] mt-0.5">Historical records of completed and decommissioned items</p>
         </div>
 
         <ArchivesInfoSection

@@ -96,15 +96,15 @@ export const IncidentReportPage: React.FC = () => {
     <div className="flex min-h-screen w-full bg-[#F8FAFC] font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 overflow-y-auto transition-all duration-300 overflow-x-hidden`}>
-        <header className="flex justify-between items-start mb-8">
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 overflow-y-auto transition-all duration-300 overflow-x-hidden`}>
+        <header className="flex justify-between items-start mb-4 sm:mb-6 lg:mb-8">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Incident Reporting</h1>
             <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Track and manage equipment issues and safety hazards</p>
           </div>
         </header>
 
-        <div className="flex gap-5 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5 mb-8">
           <StatCard 
             label="Open" 
             count={incidents.filter(i => i.status === 'Open').length} 

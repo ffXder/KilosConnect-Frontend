@@ -45,18 +45,18 @@ export default function LogsHeaderSection({ logs }: Props) {
   ];
 
   return (
-    <div className="flex items-start justify-between">
-      <div>
-        <h1 className="text-[24px] font-bold text-[#1E293B]">
+    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
+      <div className="shrink-0">
+        <h1 className="text-xl sm:text-2xl lg:text-[24px] font-bold text-[#1E293B]">
           Activity Logs
         </h1>
 
-        <p className="text-sm text-[#64748B] mt-1">
+        <p className="text-xs sm:text-sm text-[#64748B] mt-0.5 sm:mt-1">
           Immutable audit trail of all system activities
         </p>
       </div>
 
-      <div className="flex gap-4">
+      <div className="grid grid-cols-2 sm:flex sm:gap-3 gap-2 w-full sm:w-auto">
         {cards.map((card, index) => {
           const Icon = card.icon;
 
@@ -67,25 +67,26 @@ export default function LogsHeaderSection({ logs }: Props) {
                 bg-white
                 border
                 border-[#E5E7EB]
-                rounded-xl
+                rounded-lg
                 shadow-sm
-                px-4
-                py-3
+                px-2 sm:px-3 lg:px-4
+                py-1.5 sm:py-2 lg:py-3
                 flex
                 items-center
-                gap-3
+                gap-1.5 sm:gap-2
+                min-w-0
               "
             >
               <Icon
-                size={24}
-                className={card.color}
+                size={16}
+                className={`${card.color} sm:size-[18px] lg:size-[24px] shrink-0`}
               />
 
-              <div>
-                <span className="font-semibold text-sm block">
+              <div className="min-w-0">
+                <span className="font-semibold text-[11px] sm:text-xs lg:text-sm block leading-tight">
                   {card.value}
                 </span>
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[8px] sm:text-[9px] lg:text-[10px] text-gray-400 leading-tight">
                   {card.label}
                 </span>
               </div>

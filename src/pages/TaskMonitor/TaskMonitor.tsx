@@ -42,12 +42,12 @@ export const TaskMonitorPage: React.FC = () => {
   return (
     <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-4 sm:p-6 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
         
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex justify-between items-end mb-4 sm:mb-6 lg:mb-8">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Live Task Monitor</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
+            <h1 className="[font-family:'Poppins',Helvetica] text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Live Task Monitor</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-xs sm:text-sm mt-0.5">
               Live maintenance monitor
             </p>
           </div>
@@ -57,7 +57,7 @@ export const TaskMonitorPage: React.FC = () => {
         
         {/* generates an error message */}
         {generateMessage && (
-            <div className={`mt-4 px-4 py-3.5 rounded-xl border text-sm font-semibold flex items-center gap-2 ${
+            <div className={`mt-3 sm:mt-4 px-3 sm:px-4 py-2.5 sm:py-3.5 rounded-xl border text-xs sm:text-sm font-semibold flex items-center gap-2 ${
                 generateMessage.includes('generated')
                     ? 'border-green-200 bg-green-50 text-green-700'  // success
                     : 'border-yellow-200 bg-yellow-50 text-yellow-700' // warning
@@ -69,7 +69,7 @@ export const TaskMonitorPage: React.FC = () => {
             </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 lg:mt-8">
           <TaskFilterSection 
             onAddTask={() => {}}
             onGenerate={handleGenerateClick}
@@ -87,7 +87,7 @@ export const TaskMonitorPage: React.FC = () => {
           />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 lg:mt-8">
           <TaskListSection 
             tasks={filteredLogs} 
             onToggleStatus={handleComplete} 

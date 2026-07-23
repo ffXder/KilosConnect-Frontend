@@ -58,7 +58,7 @@ const DashboardReplacementRecommendations: React.FC<DashboardReplacementRecommen
   subtitle = "Assets flagged for potential replacement based on repair costs",
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mt-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-100 text-rose-600">

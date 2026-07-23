@@ -152,10 +152,10 @@ const ProfileMain: React.FC = () => {
   return (
     <div className="flex min-h-screen w-full bg-[#f4f5f6]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
-        <div className="mb-6">
-          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
-          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
+        <div className="mb-4 sm:mb-6">
+          <h1 className="[font-family:'Poppins',Helvetica] text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
+          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-xs sm:text-sm mt-0.5">Manage your account information and view your activity</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">

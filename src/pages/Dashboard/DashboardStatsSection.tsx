@@ -47,19 +47,19 @@ interface DashboardStatsSectionProps {
 
 const DashboardStatsSection: React.FC<DashboardStatsSectionProps> = ({ stats = defaultStats }) => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-5 mb-8">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 lg:gap-5 mb-8">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white p-2 sm:p-3 md:p-4 lg:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 sm:gap-3 lg:gap-5 min-w-0"
+          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0"
         >
-          <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${stat.colorClass}`}>
-            {iconMap[stat.label] || <Box size={14} strokeWidth={2} className="sm:size-[16px] md:size-[20px] lg:size-[28px]" />}
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${stat.colorClass}`}>
+            {iconMap[stat.label] || <Box size={14} strokeWidth={2} className="sm:size-[16px] md:size-[20px] lg:size-[24px]" />}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-base sm:text-lg md:text-xl lg:text-3xl font-bold text-gray-800 leading-tight">{stat.count}</div>
-            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium">{stat.label}</div>
-            <div className="text-[8px] sm:text-[10px] md:text-xs text-gray-400 mt-0.5">{stat.sublabel}</div>
+            <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight">{stat.count}</div>
+            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate">{stat.label}</div>
+            <div className="text-[8px] sm:text-[10px] md:text-xs text-gray-400 mt-0.5 truncate">{stat.sublabel}</div>
           </div>
         </div>
       ))}

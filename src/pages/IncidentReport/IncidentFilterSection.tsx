@@ -41,105 +41,111 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
   const quickRanges = ['Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days', 'Custom Range'];
 
   return (
-    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans">
+    <div className="bg-white p-3 sm:p-4 md:p-5 rounded-[12px] sm:rounded-[16px] border border-[#e2e8f0] flex flex-col gap-2 sm:gap-3 font-sans">
 
       {/* Row 1: Search + Date Picker + Add */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] placeholder:text-gray-400 transition-all"
+            className="w-full pl-9 pr-3 sm:pr-4 py-2 sm:py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[12px] sm:text-[13px] focus:outline-none focus:border-[#113129] placeholder:text-gray-400 transition-all"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
           />
         </div>
 
-        {/* Date Picker */}
-        <div className="relative">
-          <button
-            onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-[8px] border text-[13px] font-medium transition-all ${
-              isDatePickerOpen
-                ? 'border-[#113129] bg-white shadow-md'
-                : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100'
-            }`}
-          >
-            <Calendar size={15} className={isDatePickerOpen ? 'text-[#113129]' : 'text-gray-400'} />
-            <span className="text-gray-700 whitespace-nowrap">
-              {dateRange === 'Custom Range' && customStart && customEnd
-                ? `${customStart} → ${customEnd}`
-                : dateRange}
-            </span>
-            <ChevronDown size={13} className={`transition-transform ${isDatePickerOpen ? 'rotate-180' : ''}`} />
-          </button>
+        <div className="flex gap-2">
+          {/* Date Picker */}
+          <div className="relative">
+            <button
+              onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+              className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 rounded-[8px] border text-[11px] sm:text-[13px] font-medium transition-all ${
+                isDatePickerOpen
+                  ? 'border-[#113129] bg-white shadow-md'
+                  : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100'
+              }`}
+            >
+              <Calendar size={13} className={isDatePickerOpen ? 'text-[#113129]' : 'text-gray-400'} />
+              <span className="text-gray-700 whitespace-nowrap hidden sm:inline">
+                {dateRange === 'Custom Range' && customStart && customEnd
+                  ? `${customStart} → ${customEnd}`
+                  : dateRange}
+              </span>
+              <span className="text-gray-700 whitespace-nowrap sm:hidden">
+                {dateRange === 'Custom Range' ? 'Custom' : dateRange === 'Last 7 Days' ? '7d' : dateRange === 'Last 30 Days' ? '30d' : dateRange === 'Today' ? 'Today' : 'Yest'}
+              </span>
+              <ChevronDown size={11} className={`transition-transform ${isDatePickerOpen ? 'rotate-180' : ''}`} />
+            </button>
 
-          {isDatePickerOpen && (
-            <>
-              <div className="fixed inset-0 z-40" onClick={() => setIsDatePickerOpen(false)} />
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
-                <div className="p-2">
-                  {quickRanges.map((range) => (
-                    <button
-                      key={range}
-                      onClick={() => {
-                        setDateRange(range);
-                        if (range !== 'Custom Range') setIsDatePickerOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2.5 text-[13px] font-semibold rounded-lg transition-colors ${
-                        dateRange === range
-                          ? 'bg-[#113129] text-white'
-                          : 'text-gray-500 hover:bg-gray-50 hover:text-[#113129]'
-                      }`}
-                    >
-                      {range}
-                    </button>
-                  ))}
-
-                  {dateRange === 'Custom Range' && (
-                    <div className="mt-2 flex flex-col gap-2 border-t border-gray-100 pt-3 px-1">
-                      <div>
-                        <label className="text-xs font-bold text-gray-400 mb-1 block">Start Date</label>
-                        <input
-                          type="date"
-                          value={customStart}
-                          onChange={(e) => setCustomStart(e.target.value)}
-                          className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs font-bold text-gray-400 mb-1 block">End Date</label>
-                        <input
-                          type="date"
-                          value={customEnd}
-                          min={customStart}
-                          onChange={(e) => setCustomEnd(e.target.value)}
-                          className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
-                        />
-                      </div>
+            {isDatePickerOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsDatePickerOpen(false)} />
+                <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+                  <div className="p-2">
+                    {quickRanges.map((range) => (
                       <button
-                        onClick={() => setIsDatePickerOpen(false)}
-                        disabled={!customStart || !customEnd}
-                        className="w-full py-2 rounded-xl bg-[#113129] text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+                        key={range}
+                        onClick={() => {
+                          setDateRange(range);
+                          if (range !== 'Custom Range') setIsDatePickerOpen(false);
+                        }}
+                        className={`w-full text-left px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-[13px] font-semibold rounded-lg transition-colors ${
+                          dateRange === range
+                            ? 'bg-[#113129] text-white'
+                            : 'text-gray-500 hover:bg-gray-50 hover:text-[#113129]'
+                        }`}
                       >
-                        Apply
+                        {range}
                       </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+                    ))}
 
-        <button
-          onClick={onAddClick}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#113129] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
-        >
-          <Plus size={15} strokeWidth={2.5} />
-          Report incident
-        </button>
+                    {dateRange === 'Custom Range' && (
+                      <div className="mt-2 flex flex-col gap-2 border-t border-gray-100 pt-3 px-1">
+                        <div>
+                          <label className="text-[10px] sm:text-xs font-bold text-gray-400 mb-1 block">Start</label>
+                          <input
+                            type="date"
+                            value={customStart}
+                            onChange={(e) => setCustomStart(e.target.value)}
+                            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] sm:text-xs font-bold text-gray-400 mb-1 block">End</label>
+                          <input
+                            type="date"
+                            value={customEnd}
+                            min={customStart}
+                            onChange={(e) => setCustomEnd(e.target.value)}
+                            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
+                          />
+                        </div>
+                        <button
+                          onClick={() => setIsDatePickerOpen(false)}
+                          disabled={!customStart || !customEnd}
+                          className="w-full py-1.5 sm:py-2 rounded-xl bg-[#113129] text-white text-xs sm:text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={onAddClick}
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 bg-[#113129] text-white rounded-[8px] text-[11px] sm:text-[13px] font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
+          >
+            <Plus size={13} strokeWidth={2.5} />
+            <span className="hidden sm:inline">Report incident</span>
+            <span className="sm:hidden">Add</span>
+          </button>
+        </div>
       </div>
 
       {/* Row 2: Filters — unchanged */}

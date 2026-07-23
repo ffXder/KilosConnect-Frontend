@@ -47,18 +47,18 @@ const ManageTaskPage: React.FC = () => {
   return (
     <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-4 sm:p-6 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
         
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex justify-between items-end mb-4 sm:mb-6 lg:mb-8">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Manage Tasks</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
+            <h1 className="[font-family:'Poppins',Helvetica] text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Manage Tasks</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-xs sm:text-sm mt-0.5">
               Manage master task templates
             </p>
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 lg:mt-8">
           <TaskFilterSection 
             onAddTask={() => setIsModalOpen(true)}
             statusFilter="All Tasks"
@@ -75,7 +75,7 @@ const ManageTaskPage: React.FC = () => {
           />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 lg:mt-8">
           <TaskManagementSection 
             tasks={filteredMasterTasks} 
             onArchive={handleArchive} 

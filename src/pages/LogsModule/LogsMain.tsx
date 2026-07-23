@@ -93,8 +93,8 @@ export default function LogsMain() {
     <div className="flex min-h-screen w-full bg-[#F5F7FB]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
-        <div className="space-y-4">
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
+        <div className="space-y-3 sm:space-y-4">
           <LogsHeaderSection logs={logs} />
 
           <LogsFilterSection

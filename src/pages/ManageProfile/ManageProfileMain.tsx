@@ -148,7 +148,7 @@ const ManageAccountsMain: React.FC = () => {
     <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole}/>
       
-      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-3 sm:p-5 lg:p-8 transition-all duration-300 overflow-x-hidden`}>
         <AccountsStatsSection />
 
         <div className="bg-white rounded-2xl shadow-sm border border-[#e2e8f0] overflow-hidden">

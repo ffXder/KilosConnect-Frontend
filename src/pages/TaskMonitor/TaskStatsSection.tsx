@@ -24,14 +24,16 @@ const TaskStatsSection: React.FC<TaskStatsProps> = ({ tasks }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
       {stats.map((stat, index) => (
-        <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
-          <div className={`${stat.bg} ${stat.color} p-3 rounded-xl`}>{stat.icon}</div>
+        <div key={index} className="bg-white p-2 sm:p-3 md:p-5 rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-100 flex items-center gap-2 sm:gap-3 shadow-sm">
+          <div className={`${stat.bg} ${stat.color} p-1.5 sm:p-2 md:p-2.5 rounded-lg shrink-0`}>
+            {React.cloneElement(stat.icon, { size: 16 })}
+          </div>
           <div>
-            <div className="flex items-baseline gap-2">
-              <p className="text-2xl font-semibold text-[#0f172a]">{stat.value}</p>
-              <p className="text-[15px] font-semibold text-gray-400 tracking-wider uppercase">{stat.label}</p>
+            <div className="flex items-baseline gap-1 sm:gap-2">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#0f172a]">{stat.value}</p>
+              <p className="text-[10px] sm:text-[11px] md:text-[13px] font-semibold text-gray-400 tracking-wider uppercase whitespace-nowrap">{stat.label}</p>
             </div>
           </div>
         </div>

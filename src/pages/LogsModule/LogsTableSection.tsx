@@ -33,82 +33,84 @@ export default function LogsTableSection({
 }: Props) {
   return (
     <div className="bg-white border border-[#E5E7EB] rounded-[20px] shadow-sm overflow-hidden">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b bg-white">
-            <th className="px-5 py-4 text-left text-xs font-semibold text-[#475569]">
-              TIMESTAMP
-            </th>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px]">
+          <thead>
+            <tr className="border-b bg-white">
+              <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#475569]">
+                TIMESTAMP
+              </th>
 
-            <th className="px-5 py-4 text-left text-xs font-semibold text-[#475569]">
-              USER
-            </th>
+              <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#475569]">
+                USER
+              </th>
 
-            <th className="px-5 py-4 text-left text-xs font-semibold text-[#475569]">
-              TYPE
-            </th>
+              <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#475569]">
+                TYPE
+              </th>
 
-            <th className="px-5 py-4 text-left text-xs font-semibold text-[#475569]">
-              ACTION
-            </th>
+              <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#475569]">
+                ACTION
+              </th>
 
-            <th className="px-5 py-4 text-left text-xs font-semibold text-[#475569]">
-              DETAILS
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {logs.length === 0 ? (
-            <tr>
-              <td
-                colSpan={5}
-                className="text-center py-10 text-gray-500"
-              >
-                No logs found.
-              </td>
+              <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-xs font-semibold text-[#475569]">
+                DETAILS
+              </th>
             </tr>
-          ) : (
-            logs.map((log, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-200 last:border-b-0"
-              >
-                <td className="px-5 py-5 text-sm">
-                  {log.timestamp}
-                </td>
+          </thead>
 
-                <td className="px-5 py-5 text-sm">
-                  {log.user}
-                </td>
-
-                <td className="px-5 py-5">
-                  <span
-                    className={`
-                      px-3
-                      py-1
-                      rounded-full
-                      text-xs
-                      font-medium
-                      ${getBadge(log.type)}
-                    `}
-                  >
-                    {log.type}
-                  </span>
-                </td>
-
-                <td className="px-5 py-5 text-sm font-medium">
-                  {log.action}
-                </td>
-
-                <td className="px-5 py-5 text-sm text-[#64748B]">
-                  {log.details}
+          <tbody>
+            {logs.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="text-center py-10 text-gray-500"
+                >
+                  No logs found.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              logs.map((log, index) => (
+                <tr
+                  key={index}
+                  className="border-b border-gray-200 last:border-b-0"
+                >
+                  <td className="px-3 sm:px-5 py-3 sm:py-5 text-xs sm:text-sm">
+                    {log.timestamp}
+                  </td>
+
+                  <td className="px-3 sm:px-5 py-3 sm:py-5 text-xs sm:text-sm">
+                    {log.user}
+                  </td>
+
+                  <td className="px-3 sm:px-5 py-3 sm:py-5">
+                    <span
+                      className={`
+                        px-2 sm:px-3
+                        py-0.5 sm:py-1
+                        rounded-full
+                        text-[10px] sm:text-xs
+                        font-medium
+                        ${getBadge(log.type)}
+                      `}
+                    >
+                      {log.type}
+                    </span>
+                  </td>
+
+                  <td className="px-3 sm:px-5 py-3 sm:py-5 text-xs sm:text-sm font-medium">
+                    {log.action}
+                  </td>
+
+                  <td className="px-3 sm:px-5 py-3 sm:py-5 text-xs sm:text-sm text-[#64748B] max-w-[200px] truncate">
+                    {log.details}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

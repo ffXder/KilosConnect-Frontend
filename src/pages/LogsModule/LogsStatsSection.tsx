@@ -23,7 +23,7 @@ export default function LogsStatsSection({ logs }: Props) {
   ];
 
   return (
-    <div className="grid grid-cols-6 gap-3">
+    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
       {stats.map((item) => (
         <div
           key={item.label}
@@ -31,16 +31,16 @@ export default function LogsStatsSection({ logs }: Props) {
             bg-white
             border
             border-[#E5E7EB]
-            rounded-xl
+            rounded-lg sm:rounded-xl
             shadow-sm
-            p-4
+            p-2 sm:p-3 md:p-4
           "
         >
-          <p className="text-[11px] text-[#64748B]">
+          <p className="text-[9px] sm:text-[11px] text-[#64748B]">
             {item.label}
           </p>
 
-          <p className="mt-1 text-[28px] font-semibold text-[#0F172A]">
+          <p className="mt-0.5 sm:mt-1 text-lg sm:text-xl md:text-[28px] font-semibold text-[#0F172A]">
             {item.value}
           </p>
         </div>
