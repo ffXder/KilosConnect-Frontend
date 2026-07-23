@@ -62,14 +62,14 @@ export const LostAndFoundPage: React.FC = () => {
 
   const { role,  } = useAuth()
   const { isExpanded } = useSidebar();
-  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-[#f8fafc] overflow-hidden font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div className={`flex flex-col flex-1 min-w-0 ${sidebarMargin} overflow-y-auto h-full transition-all duration-300`}>
+      <div className={`flex flex-col flex-1 min-w-0 w-full ${sidebarMargin} overflow-y-auto h-full transition-all duration-300 overflow-x-hidden`}>
 
         {/* Header */}
         <header className="sticky top-0 z-20 flex items-center justify-between px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">

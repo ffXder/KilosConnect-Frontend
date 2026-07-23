@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from '../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
+import { useSidebar } from "../../contexts/SidebarContext";
 import type { UserAccount, NewUserForm } from "../../types/manageAccount";
 import { AccountsFilterSection } from "./AccountFilterSection";
 import AccountsListSection from "./AccountListSection";
@@ -113,14 +114,15 @@ export const ManageAccountsPage: React.FC = () => {
 };
 
   const { role } = useAuth();
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
-  
 
   return (
-    <div className="flex min-h-screen bg-[#f4f5f6] font-sans text-[#1a1a1a]">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole}/>
 
-      <main className="flex-1 ml-[240px] p-8">
+      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Manage Accounts</h1>
           <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Add, edit, and manage user accounts</p>

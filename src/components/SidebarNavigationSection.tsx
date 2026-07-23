@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logOut } from "../services/authService";
 import { useSidebar } from "../contexts/SidebarContext";
@@ -76,7 +76,18 @@ const navItems = [
 
 export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRole }) => {
   const navigate = useNavigate();
-  const { isExpanded, toggleSidebar } = useSidebar();
+  const { isExpanded, toggleSidebar, setSidebarExpanded } = useSidebar();
+
+  // Close on Escape key (mobile only)
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isExpanded && window.innerWidth < 1024) {
+        setSidebarExpanded(false);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [isExpanded, setSidebarExpanded]);
 
   const handleLogoutClick = () => {
     logOut();
@@ -96,6 +107,15 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
           scrollbar-width: none;
         }
       `}</style>
+
+      {/* Backdrop overlay for small/medium screens when sidebar is expanded */}
+      {isExpanded && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarExpanded(false)}
+          aria-hidden="true"
+        />
+      )}
 
       <aside
         className="fixed top-0 left-0 h-screen bg-[#072821] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]"

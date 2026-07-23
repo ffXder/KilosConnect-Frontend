@@ -12,7 +12,7 @@ const ManageTaskPage: React.FC = () => {
   const { tasks, loading, handleCreate, handleUpdate, handleArchive } = useTasks();
   const { role } = useAuth();
   const { isExpanded } = useSidebar();
-  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
 
   const userRole = (role ?? 'custodian') as 'admin' | 'custodian';
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,9 +45,9 @@ const ManageTaskPage: React.FC = () => {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
         
         <div className="flex justify-between items-end mb-8">
           <div>

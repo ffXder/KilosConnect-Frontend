@@ -84,7 +84,7 @@ export const AssetRegistryPage = () => {
 
   const { role } = useAuth();
   const { isExpanded } = useSidebar();
-  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'admin') as any;
 
   
@@ -120,9 +120,9 @@ export const AssetRegistryPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
         <div className="max-w-[1600px]">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Smart Facility Asset Registry</h1>

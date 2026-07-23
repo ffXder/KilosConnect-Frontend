@@ -11,16 +11,15 @@ import DashboardReplacementRecommendations from "./DashboardReplacementRecommend
 export const DashboardPage: React.FC = () => {
   const { role } = useAuth();
   const { isExpanded } = useSidebar();
-  const sidebarWidth = isExpanded ? 240 : 78;
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
 
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen w-full bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
       <main
-        className="p-4 lg:p-8 transition-all duration-300 max-w-full overflow-x-hidden"
-        style={{ marginLeft: `${sidebarWidth}px`, width: `calc(100% - ${sidebarWidth}px)` }}
+        className={`flex-1 w-full p-4 lg:p-8 transition-all duration-300 overflow-x-hidden ${sidebarMargin}`}
       >
         {/* Header */}
         <div className="flex justify-between items-end mb-8">

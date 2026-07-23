@@ -61,7 +61,7 @@ const formatDate = (dateString?: string) => {
 const ProfileMain: React.FC = () => {
   const { role } = useAuth();
   const { isExpanded } = useSidebar();
-  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
   const { profile: rawProfile, loading, error, handleSaveProfile } = useProfile();
 
   const userRole = (role ?? "custodian") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -150,9 +150,9 @@ const ProfileMain: React.FC = () => {
   if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (
-    <div className="flex min-h-screen bg-[#f4f5f6]">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
           <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>

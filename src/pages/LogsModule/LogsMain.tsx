@@ -19,7 +19,7 @@ export interface LogItem {
 export default function LogsMain() {
   const { role } = useAuth();
   const { isExpanded } = useSidebar();
-  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
+  const sidebarMargin = isExpanded ? "lg:ml-[240px]" : "ml-[78px]";
 
   const userRole =
     (role ?? "custodian") as React.ComponentProps<
@@ -90,10 +90,10 @@ export default function LogsMain() {
   }, [logs, search, selectedType]);
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FB]">
+    <div className="flex min-h-screen w-full bg-[#F5F7FB]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
+      <main className={`flex-1 w-full ${sidebarMargin} p-8 transition-all duration-300 overflow-x-hidden`}>
         <div className="space-y-4">
           <LogsHeaderSection logs={logs} />
 
