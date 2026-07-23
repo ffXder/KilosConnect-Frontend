@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logOut } from "../services/authService";
+import { useSidebar } from "../contexts/SidebarContext";
 
 type Role = "admin" | "custodian";
 
@@ -75,7 +76,7 @@ const navItems = [
 
 export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRole }) => {
   const navigate = useNavigate();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { isExpanded, toggleSidebar } = useSidebar();
 
   const handleLogoutClick = () => {
     logOut();
@@ -118,7 +119,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
           </div>
 
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={toggleSidebar}
             className={`flex items-center justify-center w-9 h-9 rounded-lg text-[#FDFFE0] hover:bg-white/10 transition-colors ${
               !isExpanded ? "mx-auto" : ""
             }`}

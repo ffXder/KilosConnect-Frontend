@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoadingPage } from './pages/Loading'
 import { LoginPage } from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
+import { SidebarProvider } from './contexts/SidebarContext'
 import { DashboardPage } from './pages/Dashboard/DashboardPage'
 import { AssetRegistryPage } from './pages/AssetPage/AssetRegistryPage'
 import { TaskMonitorPage } from './pages/TaskMonitor/TaskMonitor'
@@ -58,92 +59,93 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        {/* public routes */}
-        <Route path='/' element={<Navigate to={DEV_MODE_SKIP_LOGIN ? "/dashboard" : "/login"} replace />} />
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/unauthorized' element={<UnauthorizedPage />} />
-        <Route path='/forgot-password' element={<ForgotPasswordPage />} />
-        <Route path='/reset-password' element={<ResetPasswordPage />} />
-        <Route path='/qr-scanner' element={<ScannerPage />} />
-        <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
+      <SidebarProvider>
+        <Routes>
+          {/* public routes */}
+          <Route path='/' element={<Navigate to={DEV_MODE_SKIP_LOGIN ? "/dashboard" : "/login"} replace />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/unauthorized' element={<UnauthorizedPage />} />
+          <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+          <Route path='/reset-password' element={<ResetPasswordPage />} />
+          <Route path='/qr-scanner' element={<ScannerPage />} />
+          <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
 
-        {/* protected routes */}
-        <Route path='/dashboard' 
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <DashboardPage />
+          {/* protected routes */}
+          <Route path='/dashboard' 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/asset-registry'
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <AssetRegistryPage />
             </ProtectedRoute>
           }
-        />
-        <Route path='/asset-registry'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <AssetRegistryPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/task-monitor'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <TaskMonitorPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/manage-task'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <ManageTaskPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/lost-and-found'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <LostAndFoundPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/incident-report'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <IncidentReportPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/audit-logs'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <LogsMain />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/profile'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <ProfileMain />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/manage-accounts'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <ManageProfileMain />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/archives'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <ArchivesMain />
-          </ProtectedRoute>
-        }
-        />
-      {/* redirects to login if not found or authenticated */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+          />
+          <Route path='/task-monitor'
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <TaskMonitorPage />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/manage-task'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+                <ManageTaskPage />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/lost-and-found'
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <LostAndFoundPage />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/incident-report'
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <IncidentReportPage />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/audit-logs'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+                <LogsMain />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/profile'
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'custodian']}>
+                <ProfileMain />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/manage-accounts'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+                <ManageProfileMain />
+            </ProtectedRoute>
+          }
+          />
+          <Route path='/archives'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+                <ArchivesMain />
+            </ProtectedRoute>
+          }
+          />
+        {/* redirects to login if not found or authenticated */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </SidebarProvider>
     </BrowserRouter>
-  
   );
 }
 
