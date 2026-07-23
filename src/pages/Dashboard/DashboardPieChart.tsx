@@ -42,10 +42,10 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex items-center justify-center gap-10">
+      <div className="flex-1 flex items-center justify-center py-4">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-10 w-full max-w-md md:max-w-none">
           {/* Donut Chart SVG */}
-          <div className="relative w-52 h-52 shrink-0">
+          <div className="relative w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 shrink-0">
             <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
               {data.map((item) => (
                 <circle
@@ -62,22 +62,22 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-800">{total}</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-800">{total}</div>
                 <div className="text-[10px] text-gray-400 font-medium">Total</div>
               </div>
             </div>
           </div>
 
           {/* Legend */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 w-full max-w-[200px]">
             {data.map((item) => (
               <div key={item.label} className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-sm ${item.color}`} />
+                <div className={`w-3 h-3 rounded-sm shrink-0 ${item.color}`} />
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-gray-700">{item.label}</div>
-                  <div className="text-[11px] text-gray-400">{item.count} assets</div>
+                  <div className="text-xs sm:text-sm font-semibold text-gray-700">{item.label}</div>
+                  <div className="text-[10px] sm:text-[11px] text-gray-400">{item.count} assets</div>
                 </div>
-                <div className="text-sm font-bold text-gray-600">{item.value}</div>
+                <div className="text-xs sm:text-sm font-bold text-gray-600 shrink-0">{item.value}</div>
               </div>
             ))}
           </div>
