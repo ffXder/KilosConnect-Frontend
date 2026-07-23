@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
+import { useSidebar } from "../../contexts/SidebarContext";
 import { LostAndFoundFilters } from "./LostAndFoundFillters";
 import { AddLoFItemModal } from "./AddLoFItemModal";
 import { LoFItemCard } from "./LoFItemCard";
@@ -60,13 +61,15 @@ export const LostAndFoundPage: React.FC = () => {
   });
 
   const { role,  } = useAuth()
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
   return (
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto h-full">
+      <div className={`flex flex-col flex-1 min-w-0 ${sidebarMargin} overflow-y-auto h-full transition-all duration-300`}>
 
         {/* Header */}
         <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import IncidentItem from './IncidentItem';
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
+import { useSidebar } from '../../contexts/SidebarContext';
 import StatCard from './StatCard';
 import IncidentFilterSection from './IncidentFilterSection'; 
 import IncidentAddItemModal from './IncidentAddItemModal';
@@ -87,13 +88,15 @@ export const IncidentReportPage: React.FC = () => {
 });
 
   const { role } = useAuth()
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] font-sans">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 ml-[240px] p-10 overflow-y-auto">
+      <main className={`flex-1 ${sidebarMargin} p-10 overflow-y-auto transition-all duration-300`}>
         <header className="flex justify-between items-start mb-8">
           <div>
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Incident Reporting</h1>

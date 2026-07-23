@@ -4,11 +4,14 @@ import TaskStatsSection from './TaskStatsSection';
 import TaskFilterSection from './TaskFilterSection';
 import TaskListSection from './TaskListSection';
 import { useAuth } from '../../hooks/useAuth';
+import { useSidebar } from '../../contexts/SidebarContext';
 import { useTaskLogs } from '../../hooks/useTaskLog';
 
 export const TaskMonitorPage: React.FC = () => {
   const { logs, loading: logsLoading, handleComplete, handleGenerate } = useTaskLogs();
   const { role } = useAuth();
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
 
   const userRole = (role ?? 'custodian') as 'admin' | 'custodian';
   
@@ -39,7 +42,7 @@ export const TaskMonitorPage: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className="flex-1 ml-[240px] p-8">
+      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
         
         <div className="flex justify-between items-end mb-8">
           <div>

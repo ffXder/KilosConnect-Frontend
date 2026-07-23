@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { useAuth } from "../../hooks/useAuth";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 import LogsHeaderSection from "./LogsHeaderSection";
 import LogsFilterSection from "./LogsFilterSection";
@@ -17,6 +18,8 @@ export interface LogItem {
 
 export default function LogsMain() {
   const { role } = useAuth();
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
 
   const userRole =
     (role ?? "custodian") as React.ComponentProps<
@@ -90,7 +93,7 @@ export default function LogsMain() {
     <div className="flex min-h-screen bg-[#F5F7FB]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 ml-[240px] p-6">
+      <main className={`flex-1 ${sidebarMargin} p-6 transition-all duration-300`}>
         <div className="space-y-4">
           <LogsHeaderSection logs={logs} />
 

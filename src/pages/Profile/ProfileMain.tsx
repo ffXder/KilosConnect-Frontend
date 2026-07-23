@@ -4,6 +4,7 @@ import ProfileStatsSection from "./ProfileStatsSection";
 import ProfileActivitySection from "./RecentActivitySection";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { useAuth } from "../../hooks/useAuth";
+import { useSidebar } from "../../contexts/SidebarContext";
 import { useProfile } from "../../hooks/useProfile"; // Imported missing hook
 
 export interface ProfileData {
@@ -59,6 +60,8 @@ const formatDate = (dateString?: string) => {
 
 const ProfileMain: React.FC = () => {
   const { role } = useAuth();
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const { profile: rawProfile, loading, error, handleSaveProfile } = useProfile();
 
   const userRole = (role ?? "custodian") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -149,7 +152,7 @@ const ProfileMain: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-[#f4f5f6]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className="flex-1 ml-[240px] p-8">
+      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
           <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>

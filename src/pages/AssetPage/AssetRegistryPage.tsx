@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Plus, Search, ChevronDown, Archive, AlertCircle, CheckCircle } from "lucide-react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import { useAuth } from '../../hooks/useAuth';
+import { useSidebar } from "../../contexts/SidebarContext";
 import type { Asset, NewAsset } from "../../types/asset";
 import { useAssets } from '../../hooks/useAssets';
 import { useRepairLogs } from "../../hooks/useRepairLogs";
@@ -82,6 +83,8 @@ export const AssetRegistryPage = () => {
   const [assetToArchive, setAssetToArchive] = React.useState<Asset | null>(null);
 
   const { role } = useAuth();
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'admin') as any;
 
   
@@ -119,7 +122,7 @@ export const AssetRegistryPage = () => {
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole} />
-      <main className="flex-1 w-full overflow-hidden">
+      <main className={`flex-1 ${sidebarMargin} w-full overflow-hidden transition-all duration-300`}>
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Smart Facility Asset Registry</h1>

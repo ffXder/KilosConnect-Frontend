@@ -4,6 +4,7 @@ import ArchivesStatsSection from "./ArchivesStatsSection";
 import RecentArchivesSection from "./RecentArchivesSection";
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
 import { useAuth } from "../../hooks/useAuth";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 export interface ArchiveItem {
   id: string;
@@ -105,12 +106,14 @@ const ArchivesMain: React.FC = () => {
   };
 
   const { role } = useAuth()
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'admin') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
   return (
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole}/>
-      <main className="flex-1 ml-[240px] p-8">
+      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
         
         <div className="mb-6">
           <h1 className="text-[28px] font-bold text-[#0f172a] tracking-tight">Archives</h1>

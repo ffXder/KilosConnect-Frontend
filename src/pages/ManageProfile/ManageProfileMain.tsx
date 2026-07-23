@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
 import { useAuth } from "../../hooks/useAuth";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 // Modular Imports
 import type { UserAccount, NewUserForm } from "./types";
@@ -138,6 +139,8 @@ const ManageAccountsMain: React.FC = () => {
   };
 
   const { role } = useAuth()
+  const { isExpanded } = useSidebar();
+  const sidebarMargin = isExpanded ? "ml-[240px]" : "ml-[78px]";
   const userRole = (role ?? 'custodian, admin') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
 
 
@@ -145,7 +148,7 @@ const ManageAccountsMain: React.FC = () => {
     <div className="flex min-h-screen bg-[#f8fafc]">
       <SidebarNavigationSection userRole={userRole}/>
       
-      <main className="flex-1 ml-[240px] p-8">
+      <main className={`flex-1 ${sidebarMargin} p-8 transition-all duration-300`}>
         <AccountsStatsSection />
 
         <div className="bg-white rounded-2xl shadow-sm border border-[#e2e8f0] overflow-hidden">
