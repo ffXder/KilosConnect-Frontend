@@ -23,7 +23,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Dashboard content goes here */}
-
+          
         </div>
       </main>
     </div>
