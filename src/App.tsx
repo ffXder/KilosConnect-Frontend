@@ -1,24 +1,37 @@
+// imports
 import './App.css'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { LoadingPage } from './pages/Loading'
-import { LoginPage } from './pages/Login'
+import { LoadingPage } from './components/Loading'
 import ProtectedRoute from './components/ProtectedRoute'
-import { DashboardPage } from './pages/Dashboard/DashboardPage'
-import { AssetRegistryPage } from './pages/AssetPage/AssetRegistryPage'
-import { TaskMonitorPage } from './pages/TaskMonitor/TaskMonitorPage'
-import { TaskManagementPage } from './pages/TaskManager/TaskManagementPage'
-import { LostAndFoundPage } from './pages/LostandFound/LostAndFound'
-import { IncidentReportPage } from './pages/IncidentReport/IncidentReporting'
-import { ProfilePage } from './pages/Profile/ProfileMain'
-import { LogsPage } from './pages/LogsModule/LogsMain'
-import { ManageAccountsPage } from './pages/ManageAccounts/ManageAccountPage'
+
+// auth 
+import { LoginPage } from './pages/auth/Login'
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
+
+// shared/public pages
 import UnauthorizedPage from './pages/UnauthorizedPage'
-import ArchivePage from './pages/Archives'
-import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
-import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { ScannerPage } from './pages/ScannerPage'
 import { AssetScanPage } from './pages/AssetScanPage'
+import { ProfilePage } from './pages/admin/Profile/ProfileMain'
+
+// admin pages
+import { DashboardPage } from './pages/admin/Dashboard/DashboardPage'
+import { AssetRegistryPage } from './pages/admin/AssetPage/AssetRegistryPage'
+import { TaskMonitorPage } from './pages/admin/TaskMonitor/TaskMonitorPage'
+import { TaskManagementPage } from './pages/admin/TaskManager/TaskManagementPage'
+import { LostAndFoundPage } from './pages/admin/LostandFound/LostAndFound'
+import { IncidentReportPage } from './pages/admin/IncidentReport/IncidentReporting'
+import { LogsPage } from './pages/admin/LogsModule/LogsMain'
+import { ManageAccountsPage } from './pages/admin/ManageAccounts/ManageAccountPage'
+import ArchivePage from './pages/admin/Archives'
+
+// custodian pages
+import CustodianDashboardPage from './pages/custodian/Dashboard/DashboardPage'
+import ScanQRPage from './pages/custodian/ScanQR/ScanQRPage'
+import BuddySystemPage from './pages/custodian/BuddySystem/BuddySystemPage'
+import TaskMain from './pages/custodian/TaskOperation/TaskOperationPage'
 
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -45,7 +58,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* public routes */}
+        {/* PUBLIC ROUTES */}
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
@@ -54,78 +67,35 @@ function App() {
         <Route path='/qr-scanner' element={<ScannerPage />} />
         <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
 
-        {/* protected routes */}
-        <Route path='/dashboard' 
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path='/asset-registry'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <AssetRegistryPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/task-monitor'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <TaskMonitorPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/manage-task'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <TaskManagementPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/lost-and-found'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <LostAndFoundPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/incident-report'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <IncidentReportPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/audit-logs'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <LogsPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/profile'
-        element={
-          <ProtectedRoute allowedRoles={['admin', 'custodian']}>
-              <ProfilePage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/manage-accounts'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <ManageAccountsPage />
-          </ProtectedRoute>
-        }
-        />
-        <Route path='/archives'
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-              <ArchivePage />
-          </ProtectedRoute>
-        }
-        />
-      {/* redirects to login if not found or authenticated */}
+        {/* SHARED PROTECTED ROUTES */}
+        <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
+          <Route path="/asset-registry" element={<AssetRegistryPage />} />
+          <Route path="/lost-and-found" element={<LostAndFoundPage />} />
+          <Route path="/incident-report" element={<IncidentReportPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+
+        {/* ADMIN ONLY ROUTES */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/task-monitor" element={<TaskMonitorPage />} />
+          <Route path="/manage-task" element={<TaskManagementPage />} />
+          <Route path="/audit-logs" element={<LogsPage />} />
+          <Route path="/manage-accounts" element={<ManageAccountsPage />} />
+          <Route path="/archives" element={<ArchivePage />} />
+        </Route>
+
+        {/* CUSTODIAN ONLY ROUTES */}
+        <Route element={<ProtectedRoute allowedRoles={['custodian']} />}>
+          <Route path="/custodian-dashboard" element={<CustodianDashboardPage />} />
+          <Route path="/scan-qr" element={<ScanQRPage />} />
+          <Route path="/buddy-system" element={<BuddySystemPage />} />
+          <Route path="/task-operations" element={<TaskMain />} />
+        </Route>
+
+
+
+      {/* fallback redirects to login if not found or authenticated */}
       {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
       </Routes>
     </BrowserRouter>
