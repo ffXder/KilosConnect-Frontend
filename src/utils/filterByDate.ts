@@ -15,6 +15,11 @@ export function isWithinDateRange(params: DateFilterParams): boolean {
         endDate = "",
     }  = params;
 
+    console.log("--- DEBUG DATE FILTER ---");
+    console.log("Selected Preset:", selectedDate);
+    console.log("Log Date Raw:", logDate);
+    console.log("Parsed Log Date:", new Date(logDate!));
+
     const normalizedPreset = String(selectedDate || "").trim();
 
     if (!normalizedPreset || normalizedPreset === "All" || normalizedPreset === "All Dates") {
@@ -31,22 +36,32 @@ export function isWithinDateRange(params: DateFilterParams): boolean {
 
     switch (normalizedPreset) {
         case "Today":
-            return date >= todayStart;
+            const todayEnd = new Date(todayStart);
+            todayEnd.setHours(23, 59, 59, 999);
+            return date >= todayStart && date <= todayEnd;
         
         case "Last 7 Days": {
             const sevenDaysAgo = new Date(todayStart);
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            return date >= sevenDaysAgo;
+            
+            const endOfToday = new Date(todayStart);
+            endOfToday.setHours(23, 59, 59, 999);
+
+            return date >= sevenDaysAgo && date <= endOfToday;
         }
 
         case "Last 30 Days": {
             const thirtyDaysAgo = new Date(todayStart);
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            return date >= thirtyDaysAgo
+
+            const endOfToday = new Date(todayStart);
+            endOfToday.setHours(23, 59, 59, 999);
+
+            return date >= thirtyDaysAgo && date <= endOfToday;
         }
 
         case "Custom": {
-            if (!startDate) return true;
+            if (!startDate && !endDate) return true;
             const start = new Date(startDate);
             start.setHours(0, 0, 0, 0); // start day
 
@@ -57,8 +72,12 @@ export function isWithinDateRange(params: DateFilterParams): boolean {
         }
 
         default: {
-            const formattedLogDate = date.toISOString().split("T")[0];
-            return formattedLogDate === selectedDate;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const formattedLocalLogDate = `${year}-${month}-${day}`;
+
+            return formattedLocalLogDate === selectedDate;
         }
             
     }
