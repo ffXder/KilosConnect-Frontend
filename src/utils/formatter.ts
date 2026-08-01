@@ -49,3 +49,22 @@ export const convertTo24h = (hour: string, minute: string, period: string): stri
   if (period === 'PM' && h !== 12) h += 12;
   return `${String(h).padStart(2, '0')}:${minute}`;
 };
+
+// formatter for module names
+export const formatModuleName = (moduleName: string): string => {
+  if (!moduleName) return "N/A";
+
+  // camelCase/PascalCase are formated
+  const customLabels: Record<string, string> = {
+    TaskLog: "Task Log",
+    IncidentReport: "Incident Report",
+    LostAndFound: "Lost & Found",
+  };
+
+  if (customLabels[moduleName]) {
+    return customLabels[moduleName];
+  }
+
+  // fallsback and add space before capital letter
+  return moduleName.replace(/([a-z])([A-Z])/g, "$1 $2");
+};
