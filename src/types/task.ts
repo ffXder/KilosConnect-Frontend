@@ -7,7 +7,15 @@ export type DayType =
 
 export type Priority = 'Low' | 'Medium' | 'High';
 
+// for cloundinary
+export interface CloudinaryImage {
+    url: string;
+    public_id: string;
+}
+
+
 export interface Task {
+  standardPhotoUrl?: CloudinaryImage,
   _id: string;
   title: string;
   description?: string;
@@ -41,7 +49,7 @@ export interface UserSummary {
 //for task log
 export interface TaskLog {
   _id: string;
-  task: Pick<Task, '_id' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority'>;
+  task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority'>;
   status: TaskLogStatus;
   completedBy?: { _id: string; firstName: string };
   completedAt?: string;
