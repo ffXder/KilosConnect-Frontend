@@ -25,8 +25,16 @@ export const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await login(formValues.username, formValues.password);
-      navigate("/dashboard");
+      const user = await login(formValues.username, formValues.password);
+      const role = user?.role || localStorage.getItem("userRole");
+
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else if (role === "custodian") {
+        navigate("/custodian/dashboard");
+      } else {
+        navigate("/unauthorized");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
