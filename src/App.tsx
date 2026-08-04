@@ -87,10 +87,10 @@ function App() {
 
         {/* CUSTODIAN ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={['custodian']} />}>
-          <Route path="/custodian-dashboard" element={<CustodianDashboardPage />} />
-          <Route path="/scan-qr" element={<ScanQRPage />} />
-          <Route path="/buddy-system" element={<BuddySystemPage />} />
-          <Route path="/task-operations" element={<TaskMain />} />
+          <Route path="/custodian/dashboard" element={<CustodianDashboardPage />} />
+          <Route path="/custodian/scan-qr" element={<ScanQRPage />} />
+          <Route path="/custodian/buddy-system" element={<BuddySystemPage />} />
+          <Route path="/custodian/task-operations" element={<TaskMain />} />
         </Route>
 
 
