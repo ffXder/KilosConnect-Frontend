@@ -1,6 +1,7 @@
 import React from "react";
 import { MapPin, Calendar, Edit3, Trash2, AlertCircle, Wrench, Eye, CheckCircle2 } from "lucide-react";
 import type { Asset } from "../../../types/asset";
+import { formatDateTime } from "../../../utils/formatter";
 
 // set temporarily to any[] for now, will refine later
 interface Props {
@@ -115,8 +116,8 @@ export const AssetRegistryList: React.FC<Props> = ({ filteredAssets, onAssetClic
                   <div><span className="text-gray-400">Value:</span> <span className="text-gray-700">{formatPHP(asset.value)}</span></div>
                   <div>
                     <span className="text-gray-400">Repairs:</span>{" "}
-                    <span className={asset.repairsCost > 0 ? "text-red-500 font-bold" : "text-gray-700"}>
-                      {formatPHP(asset.repairsCost)}
+                    <span className={asset.cumulativeRepairCost > 0 ? "text-red-500 font-bold" : "text-gray-700"}>
+                      {formatPHP(asset.cumulativeRepairCost)}
                     </span>
                   </div>
                 </td>
@@ -129,7 +130,7 @@ export const AssetRegistryList: React.FC<Props> = ({ filteredAssets, onAssetClic
                       {asset.lastMaintenanceDate && (
                         <div className="flex items-center gap-1 mt-1 text-gray-500">
                           <Calendar size={12} />
-                          <span>{asset.lastMaintenanceDate}</span>
+                          <span>{formatDateTime(asset.lastMaintenanceDate)}</span>
                         </div>
                       )}
                     </>
