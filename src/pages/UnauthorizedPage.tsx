@@ -5,6 +5,17 @@ import { useNavigate } from 'react-router-dom';
 const UnauthorizedPage: React.FC = () => {
   const navigate = useNavigate();
 
+  const handleReturnToDashboard = () => {
+    const role = localStorage.getItem('role');
+    if (role === 'admin') {
+      navigate('/dashboard');
+    } else if (role === 'custodian') {
+      navigate('/custodian/dashboard');
+    } else {
+      navigate('/login');
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-[32px] shadow-xl p-10 text-center border border-gray-100">
@@ -35,7 +46,7 @@ const UnauthorizedPage: React.FC = () => {
           </button>
           
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => handleReturnToDashboard()}
             className="w-full flex items-center justify-center gap-2 py-3.5 bg-gray-50 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-all border border-gray-200"
           >
             <Home size={18} />
