@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoadingPage } from './components/Loading'
 import ProtectedRoute from './components/ProtectedRoute'
+import { useAuth } from './hooks/useAuth'
 
 // auth 
 import { LoginPage } from './pages/auth/Login'
@@ -12,6 +13,7 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
 
 // shared/public pages
 import UnauthorizedPage from './pages/UnauthorizedPage'
+import NotFoundPage from './pages/NotFoundPage'
 import { ScannerPage } from './pages/ScannerPage'
 import { AssetScanPage } from './pages/AssetScanPage'
 import { ProfilePage } from './pages/admin/Profile/ProfileMain'
@@ -33,8 +35,37 @@ import ScanQRPage from './pages/custodian/ScanQR/ScanQRPage'
 import BuddySystemPage from './pages/custodian/BuddySystem/BuddySystemPage'
 import TaskMain from './pages/custodian/TaskOperation/TaskOperationPage'
 
+// redirect user who logged in
+function DashboardRedirect() {
+  const { isLoggedIn, role } = useAuth();
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (role === 'admin') {
+    return <Navigate to="/dashboard" replace />;
+  } else if (role === 'custodian') {
+    return <Navigate to="/custodian/dashboard" replace />;
+  } else {
+    return <Navigate to="/unauthorized" replace />;
+  }
+}
+
+function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { isLoggedIn, role } = useAuth();
+  
+  if (isLoggedIn) {
+    if (role === 'admin') return <Navigate to="/dashboard" replace />;
+    if (role === 'custodian') return <Navigate to="/custodian/dashboard" replace />;
+    return <Navigate to="/unauthorized" replace />;
+  }
+  return <>{children}</>;
+}
+
 function App() {
   const [isPageLoading, setIsPageLoading] = useState(true);
+  
 
   useEffect(() => {
   const initApp = async () => {
@@ -59,9 +90,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* PUBLIC ROUTES */}
-        <Route path='/' element={<Navigate to="/login" replace />} />
-        <Route path='/login' element={<LoginPage />} />
+        <Route path='/' element={<DashboardRedirect />} />
+        <Route path='/login' element={
+          <PublicOnlyRoute>
+            <LoginPage />
+          </PublicOnlyRoute>
+        } />
         <Route path='/unauthorized' element={<UnauthorizedPage />} />
+        <Route path='/not-found' element={<NotFoundPage />} />
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
         <Route path='/qr-scanner' element={<ScannerPage />} />
@@ -93,10 +129,8 @@ function App() {
           <Route path="/custodian/task-operations" element={<TaskMain />} />
         </Route>
 
-
-
       {/* fallback redirects to login if not found or authenticated */}
-      {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
+      <Route path="*" element={<Navigate to="/not-found" replace />} />
       </Routes>
     </BrowserRouter>
   
