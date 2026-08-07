@@ -1,5 +1,40 @@
 const API_URL = '/api';
+
+export function parseJwt(token: string | null) {
+  if (!token) return null;
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+      .split('')
+      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+export function getRole(): 'admin' | 'custodian' | null {
+  const token = localStorage.getItem('token');
+  const decoded = parseJwt(token);
+  return decoded?.role || null;
+}
  
+export function getUser() {
+  const user = localStorage.getItem('user');
+  if (user) {
+    try {
+      return JSON.parse(user);
+    } catch (e) {
+      return null; // if parsing fails
+    }
+  }
+  const token = localStorage.getItem('token');
+  return parseJwt(token);
+}
 
 //login
 export async function login(username: string, password: string) {
@@ -38,16 +73,6 @@ export const refreshAccessToken = async () => {
     return data; 
 };
 
-
-export function getRole() {
-  return localStorage.getItem('role') as 'admin' | 'custodian' | null;
-}
- 
-export function getUser() {
-  const user = localStorage.getItem('user');
-  return user ? JSON.parse(user) : null;
-}
-
 // api interceptir
 export async function apiRequest(endpoint: string, options: any = {}) {
   let token = localStorage.getItem('token');
@@ -71,10 +96,14 @@ export async function apiRequest(endpoint: string, options: any = {}) {
   if (res.status === 401 || res.status === 403) {
     try {
       const data = await refreshAccessToken();
-      const newToken = data.accessToken || data.token; 
+      const newToken = data.accessToken || data.token;
+
+      if (!newToken) throw new Error('No new token received');
+
       localStorage.setItem('token', newToken);
 
-      headers['Authorization'] = `Bearer ${data.accessToken}`;
+      headers['Authorization'] = `Bearer ${data.newToken}`;
+      
       res = await fetch(`${API_URL}${endpoint}`, { 
         ...options, 
         headers, 
@@ -83,7 +112,6 @@ export async function apiRequest(endpoint: string, options: any = {}) {
     } catch (err) {
       console.error("Session dead, logging out...", err);
       logOut(); // this logouts if the session is dead
-      window.location.replace('/login');
       return Promise.reject(err);
     }
   }
