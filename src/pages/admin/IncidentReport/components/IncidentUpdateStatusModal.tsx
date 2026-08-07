@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Trash2 } from 'lucide-react';
-import type { IncidentReport } from '../../../types/incident';
+import type { IncidentReport } from '../../../../types/incident';
 
 interface IncidentUpdateStatusModalProps {
   isOpen: boolean;

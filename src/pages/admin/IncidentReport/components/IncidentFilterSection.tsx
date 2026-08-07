@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, ChevronDown, Calendar } from 'lucide-react';
+import { Plus, Search, ChevronDown, Calendar, RotateCcw } from 'lucide-react';
 
 interface IncidentFilterSectionProps {
   activeStatus: string;
@@ -11,7 +11,6 @@ interface IncidentFilterSectionProps {
   searchTerm: string; 
   onSearchChange: (val: string) => void; 
   onAddClick: () => void;
-  // NEW
   dateRange: string;
   setDateRange: (range: string) => void;
   customStart: string;
@@ -34,11 +33,31 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 
   const statusOptions = ['All', 'Open', 'In Progress', 'Resolved'];
   const severityOptions = ['Any Severity', 'Low', 'Medium', 'High', 'Urgent', 'Critical'];
-  const area = [
+  const areaOptions = [
     'All Areas', 'Mezzanine', 'Powerlifting Area', 'Open WOD Area', 
     'CrossFit Area', 'Café', 'General Storage', 'Maintenance Storage'
   ];
   const quickRanges = ['Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days', 'Custom Range'];
+
+  // Check if any filter is modified from defaults
+  const isFiltered = 
+    activeStatus !== 'All' ||
+    activeSeverity !== 'Any Severity' ||
+    activeArea !== 'All Areas' ||
+    searchTerm !== '' ||
+    dateRange !== 'Last 30 Days' ||
+    customStart !== '' ||
+    customEnd !== '';
+
+  const handleResetFilters = () => {
+    onStatusChange('All');
+    onSeverityChange('Any Severity');
+    onAreaChange('All Areas');
+    onSearchChange('');
+    setDateRange('Last 30 Days');
+    setCustomStart('');
+    setCustomEnd('');
+  };
 
   return (
     <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans">
@@ -56,9 +75,10 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           />
         </div>
 
-        {/* Date Picker */}
+        {/* Date Picker Dropdown */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-[8px] border text-[13px] font-medium transition-all ${
               isDatePickerOpen
@@ -83,6 +103,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                   {quickRanges.map((range) => (
                     <button
                       key={range}
+                      type="button"
                       onClick={() => {
                         setDateRange(range);
                         if (range !== 'Custom Range') setIsDatePickerOpen(false);
@@ -119,6 +140,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                         />
                       </div>
                       <button
+                        type="button"
                         onClick={() => setIsDatePickerOpen(false)}
                         disabled={!customStart || !customEnd}
                         className="w-full py-2 rounded-xl bg-[#113129] text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
@@ -133,7 +155,9 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           )}
         </div>
 
+        {/* Report Incident Action */}
         <button
+          type="button"
           onClick={onAddClick}
           className="flex items-center gap-2 px-4 py-2.5 bg-[#113129] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
         >
@@ -142,52 +166,79 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
         </button>
       </div>
 
-      {/* Row 2: Filters — unchanged */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <span className="text-[11px] font-medium text-gray-400">Status</span>
-        <div className="flex bg-gray-100 rounded-[8px] p-0.5 gap-0.5">
-          {statusOptions.map((s) => (
-            <button
-              key={s}
-              onClick={() => onStatusChange(s)}
-              className={`px-3 py-1.5 rounded-[6px] text-[12px] font-medium transition-all ${
-                activeStatus === s
-                  ? 'bg-white text-[#113129] border border-[#e2e8f0]'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
+      {/* Row 2: Dropdown Filters & Reset */}
+      <div className="flex items-center gap-3 flex-wrap pt-1">
+        
+        {/* Status Dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-medium text-gray-400">Status</span>
+          <div className="relative">
+            <select
+              value={activeStatus}
+              onChange={(e) => onStatusChange(e.target.value)}
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
             >
-              {s}
+              {statusOptions.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+        </div>
+
+        <div className="h-4 w-px bg-gray-200" />
+
+        {/* Severity Dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-medium text-gray-400">Severity</span>
+          <div className="relative">
+            <select
+              value={activeSeverity}
+              onChange={(e) => onSeverityChange(e.target.value)}
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
+            >
+              {severityOptions.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+        </div>
+
+        <div className="h-4 w-px bg-gray-200" />
+
+        {/* Area Dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-medium text-gray-400">Area</span>
+          <div className="relative">
+            <select
+              value={activeArea}
+              onChange={(e) => onAreaChange(e.target.value)}
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
+            >
+              {areaOptions.map((a) => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Conditional Reset Button */}
+        {isFiltered && (
+          <>
+            <div className="h-4 w-px bg-gray-200" />
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] text-[12px] font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all ml-auto sm:ml-0"
+              title="Reset all filter criteria"
+            >
+              <RotateCcw size={13} />
+              Reset filters
             </button>
-          ))}
-        </div>
-
-        <div className="h-5 w-px bg-gray-200" />
-
-        <span className="text-[11px] font-medium text-gray-400">Severity</span>
-        <div className="relative">
-          <select
-            value={activeSeverity}
-            onChange={(e) => onSeverityChange(e.target.value)}
-            className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer"
-          >
-            {severityOptions.map((s) => <option key={s}>{s}</option>)}
-          </select>
-          <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-        </div>
-
-        <div className="h-5 w-px bg-gray-200" />
-
-        <span className="text-[11px] font-medium text-gray-400">Area</span>
-        <div className="relative">
-          <select
-            value={activeArea}
-            onChange={(e) => onAreaChange(e.target.value)}
-            className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer"
-          >
-            {area.map((a) => <option key={a}>{a}</option>)}
-          </select>
-          <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

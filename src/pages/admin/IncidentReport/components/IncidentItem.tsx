@@ -1,7 +1,7 @@
 import React from 'react';
-import type { IncidentReport } from '../../../types/incident';
+import type { IncidentReport } from '../../../../types/incident';
 import { Eye } from 'lucide-react';
-import { formatDateTime } from '../../../utils/formatter';
+import { formatDateTime } from '../../../../utils/formatter';
 
 interface IncidentItemProps {
   incident: IncidentReport;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus, ChevronDown } from 'lucide-react';
-import { useAssets } from '../../../hooks/useAssets'; // Import your hook
-import type { NewIncidentReport } from '../../../types/incident';
+import { useAssets } from '../../../../hooks/useAssets'; // Import your hook
+import type { NewIncidentReport } from '../../../../types/incident';
 
 interface IncidentAddItemModalProps {
   isOpen: boolean;

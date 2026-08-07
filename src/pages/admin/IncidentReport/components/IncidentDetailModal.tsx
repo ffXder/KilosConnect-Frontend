@@ -12,8 +12,8 @@ import {
   Package, 
   Activity 
 } from 'lucide-react';
-import type { IncidentReport } from '../../../types/incident';
-import { formatDateTime } from '../../../utils/formatter';
+import type { IncidentReport } from '../../../../types/incident';
+import { formatDateTime } from '../../../../utils/formatter';
 
 interface IncidentDetailedModalProps {
   isOpen: boolean;
