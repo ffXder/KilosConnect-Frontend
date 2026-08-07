@@ -15,6 +15,9 @@ export interface Asset {
     archivedAt: string | null;
     archivedBy: string | null;
     recommendation?: 'Replace Immediately' | 'Monitor Closely' | 'Healthy' | 'Unknown SRP, cannot determine replacement recommendation';
+    maintenanceCount?: number;
+    lastMaintenanceDate?: string | null;
+    value?: number; 
 }
 
 //create
