@@ -21,12 +21,13 @@ const getBadge = (type: string) => {
     case "Asset":
       return "bg-blue-50 text-blue-600 border-blue-200";
 
-    case "Maintenance":
+    case "RepairLog":
     case "Task":
-      return "bg-emerald-50 text-emerald-600 border-emerald-200";
+      return "bg-yellow-50 text-yellow-600 border-yellow-200";
 
-    case "Incident Report":
-    case "Incident":
+    case "IncidentReport":
+      return "bg-purple-50 text-purple-600 border-purple-200";
+      
     case "TaskLog":
       return "bg-red-50 text-red-600 border-red-200";
 
