@@ -2,7 +2,7 @@ import React, { useId, useState } from "react";
 import type { FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
-import { login } from "../../services/authService";
+import { login, getRole } from "../../services/authService";
 import KilosGymImg from "../../assets/images/image-5.png";
 import KILOSWhiteLogo1 from "../../assets/images/KILOS-white-logo-1.png";
 
@@ -20,13 +20,13 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError("");
-    setLoading(true);
-
     try {
-      const user = await login(formValues.username, formValues.password);
-      const role = user?.role || localStorage.getItem("userRole");
+      event.preventDefault();
+      setError("");
+      setLoading(true);
+
+      await login(formValues.username, formValues.password);
+      const role = getRole();
 
       if (role === "admin") {
         navigate("/dashboard");
