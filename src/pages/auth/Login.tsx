@@ -25,7 +25,15 @@ export const LoginPage: React.FC = () => {
       setError("");
       setLoading(true);
 
-      await login(formValues.username, formValues.password);
+      const data = await login(formValues.username, formValues.password);
+
+      if (data?.mustChangePassword) {
+        navigate(`/setup/new-password?accountId=${data.accountId}`, {
+          state: { accountId: data.accountId }
+        });
+        return;
+      }
+
       const role = getRole();
 
       if (role === "admin") {
