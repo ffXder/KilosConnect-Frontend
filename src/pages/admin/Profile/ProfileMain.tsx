@@ -149,7 +149,7 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f4f5f6] flex">
       <SidebarNavigationSection userRole={userRole} />
-      <div className="flex-1 min-w-0 lg:pl-[280px] p-8">
+      <div className="flex-1 min-w-0 lg:pl-[100px] p-8">
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
           <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>
