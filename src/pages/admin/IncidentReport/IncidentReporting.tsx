@@ -4,14 +4,15 @@ import {
   Clock, 
   CircleCheckBig, 
   TriangleAlert,
+  Loader2,
 } from 'lucide-react';
-import IncidentItem from './IncidentItem';
+import IncidentRow from './components/IncidentRow';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
-import StatCard from './StatCard';
-import IncidentFilterSection from './IncidentFilterSection'; 
-import IncidentAddItemModal from './IncidentAddItemModal';
-import IncidentUpdateStatusModal from './IncidentUpdateStatusModal';
-import IncidentDetailedModal from './IncidentDetailModal';
+import StatCard from './components/StatCard';
+import IncidentFilterSection from './components/IncidentFilterSection'; 
+import IncidentAddItemModal from './components/IncidentAddItemModal';
+import IncidentUpdateStatusModal from './components/IncidentUpdateStatusModal';
+import IncidentDetailedModal from './components/IncidentDetailModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { useIncidentReports } from '../../../hooks/useIncident';
 import type { IncidentReport, NewIncidentReport } from '../../../types/incident';
@@ -23,7 +24,6 @@ export interface StatCardProps {
   icon: React.ReactNode;
   colorClass: string;
 }
-
 
 export const IncidentReportPage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState('All');
@@ -44,7 +44,7 @@ export const IncidentReportPage: React.FC = () => {
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
     await handleCreate(newIncident);
-};
+  };
 
   const handleUpdateStatus = async (id: string, newStatus: IncidentReport['status']) => {
     await handleUpdate(id, { status: newStatus });
@@ -69,38 +69,48 @@ export const IncidentReportPage: React.FC = () => {
   const endDate = customEnd ? new Date(customEnd) : null;
 
   const filteredIncidents = incidents.filter(incident => {
-  const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
-  const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
-  const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
-  const matchesSearch = (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
+    const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
+    const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
+    const matchesSearch = (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
 
-  const incidentDate = new Date(incident.dateAndTime); // adjust field name if different
-  const matchesStart = threshold ? incidentDate >= threshold : true;
-  const matchesEnd = isYesterday
-    ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
-    : endDate
-      ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
-      : true;
+    const incidentDate = new Date(incident.dateAndTime);
+    const matchesStart = threshold ? incidentDate >= threshold : true;
+    const matchesEnd = isYesterday
+      ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
+      : endDate
+        ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
+        : true;
 
-  return matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd;
-});
+    return matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd;
+  });
 
-  const { role } = useAuth()
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
+  const { role } = useAuth();
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] font-sans">
+    <div className="flex min-h-screen bg-[#f4f5f6]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 ml-[240px] p-10 overflow-y-auto">
-        <header className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Incident Reporting</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Track and manage equipment issues and safety hazards</p>
-          </div>
-        </header>
+      
+      <div className="p-4 md:p-8 max-w-[1400px] space-y-6">
+          
+          <div className="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
+                Incident Reporting
+              </h1>
+              <p className="text-gray-500 text-sm mt-1">
+                Track and manage equipment issues and safety hazards
+              </p>
+            </div>
 
+            {/* temporary gone */}
+            {/* <LogsHeaderSection /> */} 
+          </div>
+
+        {/* Summary Stat Cards */}
         <div className="flex gap-5 mb-8">
           <StatCard 
             label="Open" 
@@ -122,6 +132,7 @@ export const IncidentReportPage: React.FC = () => {
           />
         </div>
 
+        {/* Filters */}
         <IncidentFilterSection 
           activeStatus={activeStatus} 
           onStatusChange={setActiveStatus}
@@ -140,24 +151,62 @@ export const IncidentReportPage: React.FC = () => {
           setCustomEnd={setCustomEnd}
         />
 
-        <div className="bg-white rounded-[24px] border border-[#e2e8f0] overflow-hidden mt-6 mb-10">
-          {filteredIncidents.length > 0 ? (
-            filteredIncidents.map((incident) => (
-              <IncidentItem 
-                key={incident.incidentId} 
-                incident={incident} 
-                onClick={handleItemClick}
-                onViewClick={handleViewDetails} // Pass the new handler here
-              />
-            ))
-          ) : (
-            <div className="p-16 text-center">
-              <TriangleAlert className="text-gray-300 mx-auto mb-4" size={32} />
-              <p className="text-gray-400 font-medium italic">No incidents match the selected filters.</p>
-            </div>
-          )}
+        {/* Error Banner */}
+        {error && (
+          <div className="mt-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+            <TriangleAlert size={18} />
+            <span>Failed to load incidents. Please try refreshing the page.</span>
+          </div>
+        )}
+
+        {/* Table Container */}
+        <div className="bg-white rounded-[20px] border border-[#e2e8f0] overflow-hidden shadow-sm mt-6 mb-10">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                  <th scope="col" className="py-3.5 px-5">ID</th>
+                  <th scope="col" className="py-3.5 px-5">Status</th>
+                  <th scope="col" className="py-3.5 px-5">Severity</th>
+                  <th scope="col" className="py-3.5 px-5">Incident Details</th>
+                  <th scope="col" className="py-3.5 px-5">Area</th>
+                  <th scope="col" className="py-3.5 px-5">Reported By</th>
+                  <th scope="col" className="py-3.5 px-5">Date & Time</th>
+                  <th scope="col" className="py-3.5 px-5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#f1f5f9]">
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="py-16 text-center">
+                      <Loader2 className="animate-spin text-[#0F6E56] mx-auto mb-2" size={28} />
+                      <p className="text-gray-400 text-sm">Loading incident reports...</p>
+                    </td>
+                  </tr>
+                ) : filteredIncidents.length > 0 ? (
+                  filteredIncidents.map((incident) => (
+                    <IncidentRow 
+                      key={incident.incidentId} 
+                      incident={incident} 
+                      onClick={handleItemClick}
+                      onViewClick={handleViewDetails}
+                    />
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="py-16 text-center">
+                      <TriangleAlert className="text-gray-300 mx-auto mb-3" size={32} />
+                      <p className="text-gray-500 font-medium text-sm">No incidents match the selected filters.</p>
+                      <p className="text-gray-400 text-xs mt-1">Try resetting your date range or filter criteria.</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
+        {/* Modals */}
         <IncidentAddItemModal 
           isOpen={isAddModalOpen} 
           onClose={() => setIsAddModalOpen(false)} 
@@ -172,14 +221,12 @@ export const IncidentReportPage: React.FC = () => {
           onDelete={handleDelete}
         />
 
-        {/* Add the Detailed Modal component here */}
         <IncidentDetailedModal 
           isOpen={isDetailedModalOpen}
           onClose={() => setIsDetailedModalOpen(false)}
           incident={selectedIncident}
         />
-      </main>
+      </div>
     </div>
   );
 };
-
