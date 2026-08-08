@@ -10,6 +10,7 @@ import { useAuth } from './hooks/useAuth'
 import { LoginPage } from './pages/auth/Login'
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
+import { NewAccountPasswordSetupPage } from './pages/auth/AccountPasswordSetupPage'
 
 // shared/public pages
 import UnauthorizedPage from './pages/UnauthorizedPage'
@@ -27,13 +28,14 @@ import { LostAndFoundPage } from './pages/admin/LostandFound/LostAndFound'
 import { IncidentReportPage } from './pages/admin/IncidentReport/IncidentReporting'
 import { LogsPage } from './pages/admin/LogsModule/LogsMain'
 import { ManageAccountsPage } from './pages/admin/ManageAccounts/ManageAccountPage'
-import ArchivePage from './pages/admin/Archives'
+import { ArchivesPage } from './pages/admin/ArchivesModule/ArchivesMain'
 
 // custodian pages
 import CustodianDashboardPage from './pages/custodian/Dashboard/DashboardPage'
 import ScanQRPage from './pages/custodian/ScanQR/ScanQRPage'
 import BuddySystemPage from './pages/custodian/BuddySystem/BuddySystemPage'
 import TaskMain from './pages/custodian/TaskOperation/TaskOperationPage'
+import ZoneTaskPage from './pages/custodian/TaskOperation/AreaTaskPage'
 
 // redirect user who logged in
 function DashboardRedirect() {
@@ -58,7 +60,7 @@ function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
   if (isLoggedIn) {
     if (role === 'admin') return <Navigate to="/dashboard" replace />;
     if (role === 'custodian') return <Navigate to="/custodian/dashboard" replace />;
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/login" replace />;
   }
   return <>{children}</>;
 }
@@ -102,6 +104,7 @@ function App() {
         <Route path='/reset-password' element={<ResetPasswordPage />} />
         <Route path='/qr-scanner' element={<ScannerPage />} />
         <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
+        <Route path='/setup/new-password' element={<NewAccountPasswordSetupPage />} />
 
         {/* SHARED PROTECTED ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
@@ -118,7 +121,7 @@ function App() {
           <Route path="/manage-task" element={<TaskManagementPage />} />
           <Route path="/audit-logs" element={<LogsPage />} />
           <Route path="/manage-accounts" element={<ManageAccountsPage />} />
-          <Route path="/archives" element={<ArchivePage />} />
+          <Route path="/archives" element={<ArchivesPage />} />
         </Route>
 
         {/* CUSTODIAN ONLY ROUTES */}
@@ -127,6 +130,7 @@ function App() {
           <Route path="/custodian/scan-qr" element={<ScanQRPage />} />
           <Route path="/custodian/buddy-system" element={<BuddySystemPage />} />
           <Route path="/custodian/task-operations" element={<TaskMain />} />
+          <Route path="/custodian/zone-tasks" element={<ZoneTaskPage />} />
         </Route>
 
       {/* fallback redirects to login if not found or authenticated */}
