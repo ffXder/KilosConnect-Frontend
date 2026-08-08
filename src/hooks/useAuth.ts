@@ -2,16 +2,22 @@ import { useState, useEffect } from 'react';
 import { getRole, getUser } from '../services/authService';
 
 export function useAuth() {
-  const [auth, setAuth] = useState({
+  const [auth, setAuth] = useState(() => ({
     role: getRole(),
     user: getUser()
-  });
+  }));
 
   useEffect(() => {
-    setAuth({
-      role: getRole(),
-      user: getUser()
-    });
+    // Sync state when localStorage changes across tabs or custom dispatch
+    const syncAuth = () => {
+      setAuth({
+        role: getRole(),
+        user: getUser()
+      });
+    };
+
+    window.addEventListener('storage', syncAuth);
+    return () => window.removeEventListener('storage', syncAuth);
   }, []);
 
   const user = auth.user;
@@ -20,6 +26,6 @@ export function useAuth() {
     isLoggedIn: !!auth.role && !!auth.user,
     role: auth.role,
     user,
-    userId: user?.id ?? user?.sub ?? null, // cover both shapes
+    userId: user?._id ?? user?.userId ?? user?.id ?? null,
   };
 }
