@@ -1,24 +1,63 @@
 import React, { useState } from 'react';
-import { Upload, X, Loader2, FileImage } from 'lucide-react';
+import { Html5Qrcode } from 'html5-qrcode';
+import { Upload, X, Loader2, FileImage, AlertTriangle } from 'lucide-react';
 
 interface ImageUploadViewProps {
-  isProcessing: boolean;
-  onProcessImage: () => void;
+  onScanSuccess: (decodedText: string) => void;
 }
 
-export default function ImageUploadView({ isProcessing, onProcessImage }: ImageUploadViewProps) {
+export default function ImageUploadView({ onScanSuccess }: ImageUploadViewProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
+      setError(null);
+      setSelectedFile(file);
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemove = () => {
+    setSelectedImage(null);
+    setSelectedFile(null);
+    setError(null);
+  };
+
+  const handleVerify = async () => {
+    if (!selectedFile) return;
+
+    setIsProcessing(true);
+    setError(null);
+
+    // Html5Qrcode needs a mounted element id even for file scanning,
+    // it just won't render anything visible since we pass showImage=false.
+    const scanner = new Html5Qrcode('qr-file-reader');
+
+    try {
+      const decodedText = await scanner.scanFile(selectedFile, false);
+      onScanSuccess(decodedText);
+    } catch (err) {
+      console.error('Failed to decode QR from image:', err);
+      setError('No QR code found in that image. Try a clearer photo.');
+    } finally {
+      setIsProcessing(false);
+      try {
+        await scanner.clear();
+      } catch {
+        // no-op — nothing was rendered to clear
+      }
     }
   };
 
   return (
     <div className="w-full max-w-sm flex flex-col items-center font-['Poppins']">
+
+      {/* Hidden mount point required by Html5Qrcode's scanFile */}
+      <div id="qr-file-reader" className="hidden" />
 
       {/* Upload Zone / Image Preview */}
       <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden relative border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] flex flex-col items-center justify-center transition-colors hover:border-[#0a2e27]">
@@ -30,7 +69,7 @@ export default function ImageUploadView({ isProcessing, onProcessImage }: ImageU
               className="w-full h-full object-contain"
             />
             <button
-              onClick={() => setSelectedImage(null)}
+              onClick={handleRemove}
               className="absolute top-3 right-3 bg-black/70 hover:bg-black text-white p-1.5 rounded-full transition-colors"
               title="Remove image"
             >
@@ -54,9 +93,17 @@ export default function ImageUploadView({ isProcessing, onProcessImage }: ImageU
         )}
       </div>
 
+      {/* Decode error */}
+      {error && (
+        <div className="w-full flex items-center gap-2 bg-rose-50 border border-rose-100 text-rose-500 text-xs font-medium px-3.5 py-2.5 rounded-xl mb-4">
+          <AlertTriangle size={15} className="shrink-0" />
+          {error}
+        </div>
+      )}
+
       {/* Process Button */}
       <button
-        onClick={onProcessImage}
+        onClick={handleVerify}
         disabled={!selectedImage || isProcessing}
         className="w-full bg-[#0a2e27] text-white font-bold text-sm py-3.5 rounded-xl hover:bg-[#08241f] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
       >
