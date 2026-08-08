@@ -51,13 +51,37 @@ export async function login(username: string, password: string) {
   }
  
   const data = await res.json();
-  localStorage.setItem('role', data.user.role);  
-  localStorage.setItem('user', JSON.stringify(data.user));
-  localStorage.setItem('token', data.token)
+
+  if (data.mustChangePassword) return data;
+  
+  if (data.user) {
+    localStorage.setItem('role', data.user.role);  
+    localStorage.setItem('user', JSON.stringify(data.user));
+  }
+
+  if (data.token) {
+    localStorage.setItem('token', data.token)
+  }
  
   return data;
 };
- 
+
+ // complete temporary password setup
+export async function completeAccountSetup(accountId: string, newPassword: string) {
+  const res = await fetch(`${API_URL}/auth/complete-account-setup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ accountId, newPassword })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Failed to complete setup');
+  }
+
+  return await res.json();
+}
+
 export function logOut() {
   localStorage.clear();
   window.location.href = '/login';
@@ -102,7 +126,7 @@ export async function apiRequest(endpoint: string, options: any = {}) {
 
       localStorage.setItem('token', newToken);
 
-      headers['Authorization'] = `Bearer ${data.newToken}`;
+      headers['Authorization'] = `Bearer ${newToken}`;
       
       res = await fetch(`${API_URL}${endpoint}`, { 
         ...options, 
