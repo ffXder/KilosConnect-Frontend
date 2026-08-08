@@ -1,14 +1,47 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
-import { Camera, Image, CheckCircle2 } from 'lucide-react';
-import CameraScannerView from "./CameraScannerView";
+import { Camera, Image, CheckCircle2, Wrench, MapPin, AlertTriangle } from 'lucide-react';
+import QRScanner from "../../../components/QRScanner";
 import ImageUploadView from "./ImageUploadView";
+
+// Maps a scanned QR's URL path to how the success state should look and behave.
+// Add new QR types here as new patterns are introduced.
+const SCAN_TYPES = [
+  {
+    type: 'equipment' as const,
+    pattern: /^\/asset\/scan\/([^/]+)$/,
+    icon: Wrench,
+    title: 'Equipment Recognized',
+    getLabel: (id: string) => decodeURIComponent(id),
+    getMessage: (label: string) => `Opening issue report for ${label}...`,
+  },
+  {
+    type: 'zone' as const,
+    pattern: /^\/task\/scan-zone\/([^/]+)$/,
+    icon: MapPin,
+    title: 'Zone Recognized',
+    getLabel: (area: string) => decodeURIComponent(area),
+    getMessage: (label: string) => `Loading available tasks for ${label}...`,
+  },
+];
+
+interface ScanResult {
+  icon: typeof CheckCircle2;
+  title: string;
+  message: string;
+  pathname: string;
+  search: string;
+  hash: string;
+}
 
 export default function ScanQRPage() {
   const [scanMode, setScanMode] = useState<'camera' | 'upload'>('camera');
   const [scanStatus, setScanStatus] = useState<'idle' | 'scanning' | 'success'>('idle');
-  const [verifiedTarget, setVerifiedTarget] = useState<string | null>(null);
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [scanResetKey, setScanResetKey] = useState(0);
+  const navigate = useNavigate();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
     JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
@@ -25,22 +58,81 @@ export default function ScanQRPage() {
   }, []);
 
   const { role } = useAuth();
-  const userRole = (role ?? "admin") as React.ComponentProps<
-    typeof SidebarNavigationSection
-  >["userRole"];
+  const userRole = (role ?? "admin") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
-  const handleStartScan = () => {
-    setScanStatus('scanning');
-    setTimeout(() => {
+  // Called by QRScanner once a real code is decoded — figures out what kind
+  // of QR it is (equipment, zone, etc.) and shows the matching success state.
+  const handleQRDetected = (decodedText: string) => {
+    let url: URL;
+    try {
+      url = new URL(decodedText);
+    } catch {
+      console.error('Scanned text is not a valid URL:', decodedText);
+      setScanResult({
+        icon: AlertTriangle,
+        title: 'Unrecognized QR Code',
+        message: 'This code isn\'t a valid KilosConnect code.',
+        pathname: '', search: '', hash: '',
+      });
       setScanStatus('success');
-      setVerifiedTarget("Detected Zone Area");
-    }, 2000);
+      return;
+    }
+
+    // Reject anything not from your own app — stops a QR pointing at
+    // an external domain from being trusted at all.
+    if (url.origin !== window.location.origin) {
+      console.warn('Blocked cross-origin QR scan:', url.origin);
+      setScanResult({
+        icon: AlertTriangle,
+        title: 'Unrecognized QR Code',
+        message: 'This code doesn\'t belong to KilosConnect.',
+        pathname: '', search: '', hash: '',
+      });
+      setScanStatus('success');
+      return;
+    }
+
+    const matched = SCAN_TYPES.find((t) => t.pattern.test(url.pathname));
+
+    // No match = don't navigate anywhere. Only known, whitelisted
+    // route shapes (equipment / zone) are allowed to route the user.
+    if (!matched) {
+      console.warn('QR path did not match any known scan type:', url.pathname);
+      setScanResult({
+        icon: AlertTriangle,
+        title: 'Unrecognized QR Code',
+        message: 'This QR code isn\'t linked to any equipment or zone.',
+        pathname: '', search: '', hash: '',
+      });
+      setScanStatus('success');
+      return;
+    }
+
+    const match = matched.pattern.exec(url.pathname)!;
+    const label = matched.getLabel(match[1]);
+
+    setScanResult({
+      icon: matched.icon,
+      title: matched.title,
+      message: matched.getMessage(label),
+      pathname: url.pathname,
+      search: url.search,
+      hash: url.hash,
+    });
+    setScanStatus('success');
+
+    setTimeout(() => {
+      navigate(url.pathname + url.search + url.hash);
+    }, 1800);
   };
 
   const handleReset = () => {
     setScanStatus('idle');
-    setVerifiedTarget(null);
+    setScanResult(null);
+    setScanResetKey((k) => k + 1); // forces QRScanner to fully remount, clearing its `detected` state
   };
+
+  const ResultIcon = scanResult?.icon ?? CheckCircle2;
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins']">
@@ -57,7 +149,7 @@ export default function ScanQRPage() {
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Scan QR Code</h1>
             <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
-              Capture a live photo or upload a saved QR image to access and verify zone maintenance
+              Capture a live photo or upload a saved QR image to access equipment, zones, or tasks
             </p>
           </div>
 
@@ -95,23 +187,17 @@ export default function ScanQRPage() {
             )}
 
             {/* Main Interactive View */}
-            {scanStatus === 'success' ? (
+            {scanStatus === 'success' && scanResult ? (
               <div className="w-full max-w-sm aspect-square bg-[#0a2e27] rounded-2xl flex flex-col items-center justify-center text-white mb-6 p-6 shadow-md">
-                <CheckCircle2 size={64} className="text-emerald-400 mb-3 animate-bounce" />
-                <h3 className="text-xl font-bold">Zone Verified!</h3>
-                <p className="text-xs text-emerald-100/80 mt-1">{verifiedTarget} logged successfully</p>
-                <p className="text-xs text-emerald-200/60 mt-4">Redirecting to task checklist...</p>
+                <ResultIcon size={64} className="text-emerald-400 mb-3 animate-bounce" />
+                <h3 className="text-xl font-bold">{scanResult.title}</h3>
+                <p className="text-xs text-emerald-100/80 mt-1">{scanResult.message}</p>
+                <p className="text-xs text-emerald-200/60 mt-4">Redirecting...</p>
               </div>
             ) : scanMode === 'camera' ? (
-              <CameraScannerView
-                isScanning={scanStatus === 'scanning'}
-                onTriggerScan={handleStartScan}
-              />
+              <QRScanner key={scanResetKey} onScanSuccess={handleQRDetected} />
             ) : (
-              <ImageUploadView
-                isProcessing={scanStatus === 'scanning'}
-                onProcessImage={handleStartScan}
-              />
+              <ImageUploadView onScanSuccess={handleQRDetected} />
             )}
 
             {/* Reset / Rescan Action */}
