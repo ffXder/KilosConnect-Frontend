@@ -112,6 +112,7 @@ function App() {
           <Route path="/lost-and-found" element={<LostAndFoundPage />} />
           <Route path="/incident-report" element={<IncidentReportPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/scan-qr" element={<ScanQRPage />} />
         </Route>
 
         {/* ADMIN ONLY ROUTES */}
@@ -127,7 +128,6 @@ function App() {
         {/* CUSTODIAN ONLY ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={['custodian']} />}>
           <Route path="/custodian/dashboard" element={<CustodianDashboardPage />} />
-          <Route path="/custodian/scan-qr" element={<ScanQRPage />} />
           <Route path="/custodian/buddy-system" element={<BuddySystemPage />} />
           <Route path="/custodian/task-operations" element={<TaskMain />} />
           <Route path="/custodian/zone-tasks" element={<ZoneTaskPage />} />
