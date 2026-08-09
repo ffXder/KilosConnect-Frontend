@@ -23,21 +23,9 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
                 isScanning = false;
                 setDetected(true);
 
-                const goToScannedUrl = () => {
-                    try {
-                        const url = new URL(decodedText);
-                        navigate(url.pathname);
-                        console.log('Decoded text:', decodedText);
-                        console.log('Navigating to:', url.pathname);
-                    } catch {
-                        console.error('Scanned text is not a valid URL:', decodedText);
-                    }
-                };
-
-                // Let the "locked on" animation play briefly before navigating away
                 scanner.stop()
-                    .then(() => setTimeout(goToScannedUrl, 350))
-                    .catch(() => setTimeout(goToScannedUrl, 350));
+                    .then(() => setTimeout(() => onScanSuccess(decodedText), 350))
+                    .catch(() => setTimeout(() => onScanSuccess(decodedText), 350));
             },
             (errorMessage) => {
                 console.warn('QR Code scan error:', errorMessage);
@@ -73,7 +61,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
                         />
                     )}
  
-                    {/* Corner brackets — converge + flash emerald on detect */}
+                    {/* Corner brackets */}
                     <div
                         className={`absolute w-8 h-8 border-t-4 border-l-4 rounded-tl transition-all duration-300 ${
                             detected
