@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { Upload, X, Loader2, FileImage, AlertTriangle } from 'lucide-react';
+import { preprocessImage, cropCenterImage } from '../../../utils/imageUtils';
 
 interface ImageUploadViewProps {
   onScanSuccess: (decodedText: string) => void;
@@ -35,14 +36,53 @@ export default function ImageUploadView({ onScanSuccess }: ImageUploadViewProps)
     setError(null);
 
     const scanner = new Html5Qrcode('qr-file-reader');
+    let decodedText: string | null = null;
 
     try {
-      const decodedText = await scanner.scanFile(selectedFile, false);
-      onScanSuccess(decodedText);
- 
+      // image filtering passes 
+      const passes = [
+        { name: "Pass 1: Raw Original", getFile: async() => selectedFile},
+        {
+          name: "Pass 2: Contrast & Grayscale filter",
+          getFile: async() => {
+            const blob = await preprocessImage(selectedFile);
+            return new File([blob], "processed.png", { type: "image/png" });
+          }
+        },
+        {
+          name: "Pass 3: Auto crop image",
+          getFile: async() => {
+            const blob = await cropCenterImage(selectedFile);
+            return new File([blob], "cropped.png", { type: "image/png" });
+          }
+        }
+      ];
+
+      // loops until one succeeds in scanning QR code
+      for (const pass of passes) {
+        try {
+          console.log(`[QR Scanner] Attemting ${pass.name}...`);
+          const fileToScan = await pass.getFile();
+
+          decodedText = await scanner.scanFile(fileToScan, false);
+
+          if (decodedText) {
+            console.log(`[QR Scanner] Success on ${pass.name}! Decoded:`, decodedText) //test only
+            break;
+          }
+        } catch (passError) {
+          console.warn(`[QR Scanner] ${pass.name} failed to find a QR code.`)
+        }
+      }
+
+      if (decodedText) {
+        onScanSuccess(decodedText);
+      } else {
+        setError('No QR code found in that image. Try reuploading QR code or taking a clearer photo');
+      }
     } catch (err) {
-      console.error('Failed to decode QR from image:', err);
-      setError('No QR code found in that image. Try a clearer photo.');
+      console.error('Failed to analyze image:', err);
+      setError('Error reading file. Please try another image.');
     } finally {
       setIsProcessing(false);
       try {
