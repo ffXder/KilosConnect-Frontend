@@ -71,26 +71,25 @@ export default function ScanQRPage() {
       setScanResult({
         icon: AlertTriangle,
         title: 'Unrecognized QR Code',
-        message: 'This code isn\'t a valid KilosConnect code.',
+        message: 'This QR code isn\'t a valid KilosConnect code.',
         pathname: '', search: '', hash: '',
       });
       setScanStatus('success');
       return;
     }
 
-    // Reject anything not from your own app — stops a QR pointing at
-    // an external domain from being trusted at all.
-    if (url.origin !== window.location.origin) {
-      console.warn('Blocked cross-origin QR scan:', url.origin);
-      setScanResult({
-        icon: AlertTriangle,
-        title: 'Unrecognized QR Code',
-        message: 'This code doesn\'t belong to KilosConnect.',
-        pathname: '', search: '', hash: '',
-      });
-      setScanStatus('success');
-      return;
-    }
+    // reject invalid qr that isn't from the kilos
+    // if (url.origin !== window.location.origin) {
+    //   console.warn('Blocked cross-origin QR scan:', url.origin);
+    //   setScanResult({
+    //     icon: AlertTriangle,
+    //     title: 'Unrecognized QR Code',
+    //     message: 'This QR code doesn\'t belong to KilosConnect.',
+    //     pathname: '', search: '', hash: '',
+    //   });
+    //   setScanStatus('success');
+    //   return;
+    // }
 
     const matched = SCAN_TYPES.find((t) => t.pattern.test(url.pathname));
 
