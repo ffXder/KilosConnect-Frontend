@@ -9,7 +9,6 @@ interface Props {
 
 export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
-    id: "",
     name: "",
     category: "",
     condition: "",
@@ -22,7 +21,6 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        id: "",
         name: "",
         category: "",
         condition: "",
@@ -146,11 +144,6 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
             <div className="space-y-1.5">
               <label className="text-sm font-bold text-[#4a5568]">SRP (PHP)</label>
               <input name="srp" type="number" value={formData.srp} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm" placeholder="15000" />
-            </div>
-            {/* Current value input */}
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Current Valuation (PHP)</label>
-              <input name="value" type="number" value={formData.value} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm" placeholder="12000" />
             </div>
           </div>
 
