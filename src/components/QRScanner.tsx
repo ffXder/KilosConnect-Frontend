@@ -26,6 +26,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
                     .catch(() => setTimeout(() => onScanSuccess(decodedText), 350));
             },
             (errorMessage) => {
+                if (errorMessage.includes('NotFoundException')) return;
                 console.warn('QR Code scan error:', errorMessage);
             }
         ).then(() => {
