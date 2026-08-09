@@ -14,7 +14,7 @@ export const QuickActions: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
 
         <button
-          onClick={() => navigate("/custodian/scan-qr")}
+          onClick={() => navigate("/scan-qr")}
           className="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center gap-3 hover:shadow-md hover:border-[#0a2e27] hover:-translate-y-0.5 transition-all group w-full cursor-pointer"
         >
           <div className="w-12 h-12 rounded-xl bg-[#E6F4EA] text-[#0a2e27] flex items-center justify-center group-hover:bg-[#0a2e27] group-hover:text-white transition-colors shrink-0">
