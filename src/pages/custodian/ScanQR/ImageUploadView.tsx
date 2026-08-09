@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { Upload, X, Loader2, FileImage, AlertTriangle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface ImageUploadViewProps {
   onScanSuccess: (decodedText: string) => void;
@@ -12,7 +11,7 @@ export default function ImageUploadView({ onScanSuccess }: ImageUploadViewProps)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -35,15 +34,12 @@ export default function ImageUploadView({ onScanSuccess }: ImageUploadViewProps)
     setIsProcessing(true);
     setError(null);
 
-    // Html5Qrcode needs a mounted element id even for file scanning,
-    // it just won't render anything visible since we pass showImage=false.
     const scanner = new Html5Qrcode('qr-file-reader');
 
     try {
       const decodedText = await scanner.scanFile(selectedFile, false);
       onScanSuccess(decodedText);
-      const url = new URL(decodedText);
-      navigate(url.pathname);
+ 
     } catch (err) {
       console.error('Failed to decode QR from image:', err);
       setError('No QR code found in that image. Try a clearer photo.');
@@ -52,7 +48,7 @@ export default function ImageUploadView({ onScanSuccess }: ImageUploadViewProps)
       try {
         await scanner.clear();
       } catch {
-        // no-op — nothing was rendered to clear
+        // ignore render
       }
     }
   };
