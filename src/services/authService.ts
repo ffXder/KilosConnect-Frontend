@@ -4,6 +4,8 @@ export function parseJwt(token: string | null) {
   if (!token) return null;
   try {
     const base64Url = token.split('.')[1];
+    if (!base64Url) return null; // returns null if invalid
+
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)
@@ -11,7 +13,15 @@ export function parseJwt(token: string | null) {
       .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
       .join('')
     );
-    return JSON.parse(jsonPayload);
+    
+    const decoded = JSON.parse(jsonPayload);
+
+    // checks if token is expired
+    if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+      return null; 
+    }
+
+    return decoded;
   } catch (e) {
     return null;
   }
@@ -20,20 +30,35 @@ export function parseJwt(token: string | null) {
 export function getRole(): 'admin' | 'custodian' | null {
   const token = localStorage.getItem('token');
   const decoded = parseJwt(token);
-  return decoded?.role || null;
+
+  if (!decoded) {
+    localStorage.removeItem('role');
+    localStorage.removeItem('user');  
+    return null
+  }
+
+  const role = decoded.role || null;
+  if (role) {
+    localStorage.setItem('role', role)
+  }
+
+  return role
 }
  
 export function getUser() {
+  const token = localStorage.getItem('token');
+  const decoded = parseJwt(token);
+  if (!decoded) return null;
+
   const user = localStorage.getItem('user');
   if (user) {
     try {
-      return JSON.parse(user);
-    } catch (e) {
-      return null; // if parsing fails
+      return JSON.parse(user)
+    } catch(e) {
+      return decoded;
     }
   }
-  const token = localStorage.getItem('token');
-  return parseJwt(token);
+  return decoded;
 }
 
 //login
@@ -92,8 +117,25 @@ export const refreshAccessToken = async () => {
         method: 'POST',
         credentials: 'include',
     });
+
     const data = await res.json();
     if (!res.ok) throw new Error('Refresh failed');
+    
+    const newToken = data.accessToken || data.token;
+    if (newToken) {
+      localStorage.setItem('token', newToken);
+
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('role', data.user.role);
+      } else {
+        const decoded = parseJwt(newToken);
+        if (decoded?.role){
+          localStorage.setItem('role', decoded.role);
+        }
+      }
+    }
+    
     return data; 
 };
 
@@ -106,7 +148,7 @@ export async function apiRequest(endpoint: string, options: any = {}) {
     ...options.headers,
   };
 
-  // If body is FormData, we leave it empty so the browser sets it automatically
+  // If body is FormData leave it empty so the browser sets it automatically
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = 'application/json';
   }
