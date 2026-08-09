@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { useNavigate } from 'react-router-dom';
 
 interface QRScannerProps {
     onScanSuccess: (decodedText: string) => void;
@@ -8,7 +7,6 @@ interface QRScannerProps {
 
 const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
     const scannerRef = useRef<Html5Qrcode | null>(null);
-    const navigate = useNavigate();
     const [detected, setDetected] = useState(false);
 
     useEffect(() => {
@@ -41,7 +39,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
                 scannerRef.current?.stop().catch(() => {});
             }
         };
-    }, [navigate]);
+    });
 
     return (
         <div className="w-full max-w-sm flex flex-col items-center font-['Poppins']">
