@@ -7,7 +7,7 @@ import ReviewSubmissionsTab from './ReviewSubmissionsTab';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTasks } from '../../../hooks/useTask';
 import { useTaskLogs } from '../../../hooks/useTaskLog';
-import { X, ZoomIn, SplitSquareHorizontal, Image as ImageIcon, Camera } from 'lucide-react';
+import { X, ZoomIn, Camera } from 'lucide-react';
 import type { TaskLog } from '../../../types/task';
 
 export const TaskMonitorPage: React.FC = () => {
@@ -15,8 +15,8 @@ export const TaskMonitorPage: React.FC = () => {
   const { handleArchive } = useTasks();
   const { role } = useAuth();
 
-  const userRole = (role ?? 'custodian') as 'admin' | 'custodian';
-  
+  const userRole = (role ?? 'custodian') as 'admin';
+
   const [activeMainTab, setActiveMainTab] = useState<'monitor' | 'submissions'>('monitor');
   const [statusFilter, setStatusFilter] = useState('All Tasks');
   const [frequencyFilter, setFrequencyFilter] = useState('All');
@@ -46,7 +46,6 @@ export const TaskMonitorPage: React.FC = () => {
 
   const liveSubmittedPhotoUrl = verificationTask?.submittedPhoto;
 
-  // extract reference photo URL safely from Cloudinary object or string fallback
   const referencePhotoUrl = verificationTask?.task?.standardPhotoUrl?.url || 
     (typeof verificationTask?.task?.standardPhotoUrl === 'string' ? verificationTask.task.standardPhotoUrl : null);
 
@@ -61,7 +60,7 @@ export const TaskMonitorPage: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Task Tracking</h1>
-              <p className="text-gray-500 text-sm mt-1">Live maintenance monitor & visual verification pipeline</p>
+              <p className="text-gray-500 text-sm mt-1">Live maintenance monitor & visual verification</p>
             </div>
 
             {/* Main Tabs Toggle */}
@@ -121,7 +120,7 @@ export const TaskMonitorPage: React.FC = () => {
               />
             </>
           ) : (
-            <ReviewSubmissionsTab />
+            <ReviewSubmissionsTab/>
           )}
         </div>
       </main>
@@ -132,9 +131,9 @@ export const TaskMonitorPage: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col font-sans">
             <div className="flex justify-between items-center border-b pb-4">
               <div>
-                <h3 className="text-xl font-bold text-gray-900">{verificationTask.task.title}</h3>
+                <h3 className="text-xl font-bold text-gray-900">{verificationTask.task?.title}</h3>
                 <p className="text-sm font-medium text-[#113129]">
-                  Location: {verificationTask.task.area} • Completed By: {verificationTask.completedBy?.firstName || 'Custodian'}
+                  Location: {verificationTask.task?.area} • Completed By: {verificationTask.completedBy?.firstName || 'Custodian'}
                 </p>
               </div>
               <button 
