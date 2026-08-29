@@ -95,3 +95,15 @@ export async function cropCenterImage(file: File): Promise<Blob> {
         img.src = objectUrl;
     })
 }
+
+// function to see debugged image
+export function downloadDebugImage(blobOrFile: Blob | File, filename: string) {
+  const url = URL.createObjectURL(blobOrFile);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url); 
+}
