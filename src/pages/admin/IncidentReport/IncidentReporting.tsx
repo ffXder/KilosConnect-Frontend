@@ -90,13 +90,14 @@ export const IncidentReportPage: React.FC = () => {
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
-    <div className="flex min-h-screen bg-[#f4f5f6]">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6]">
       <SidebarNavigationSection userRole={userRole} />
 
-      
-      <div className="p-4 md:p-8 max-w-[1400px] space-y-6">
+      {/* Main Content Area */}
+      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden">
+        <div className="max-w-[1400px] mx-auto space-y-6">
           
-          <div className="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
                 Incident Reporting
@@ -105,128 +106,126 @@ export const IncidentReportPage: React.FC = () => {
                 Track and manage equipment issues and safety hazards
               </p>
             </div>
-
-            {/* temporary gone */}
-            {/* <LogsHeaderSection /> */} 
           </div>
 
-        {/* Summary Stat Cards */}
-        <div className="flex gap-5 mb-8">
-          <StatCard 
-            label="Open" 
-            count={incidents.filter(i => i.status === 'Open').length} 
-            icon={<CircleX className="text-[#EF4444]" size={24} />} 
-            colorClass="bg-[#FEE2E2]" 
+          {/* Summary Stat Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <StatCard 
+              label="Open" 
+              count={incidents.filter(i => i.status === 'Open').length} 
+              icon={<CircleX className="text-[#EF4444]" size={24} />} 
+              colorClass="bg-[#FEE2E2]" 
+            />
+            <StatCard 
+              label="In Progress" 
+              count={incidents.filter(i => i.status === 'In Progress').length} 
+              icon={<Clock className="text-[#3B82F6]" size={24} />} 
+              colorClass="bg-[#DBEAFE]" 
+            />
+            <StatCard 
+              label="Resolved" 
+              count={incidents.filter(i => i.status === 'Resolved').length} 
+              icon={<CircleCheckBig className="text-[#10B981]" size={24} />} 
+              colorClass="bg-[#D1FAE5]" 
+            />
+          </div>
+
+          {/* Filters */}
+          <IncidentFilterSection 
+            activeStatus={activeStatus} 
+            onStatusChange={setActiveStatus}
+            activeSeverity={activeSeverity}     
+            onSeverityChange={setActiveSeverity} 
+            activeArea={activeArea}                
+            onAreaChange={setActiveArea}          
+            searchTerm={searchTerm} 
+            onSearchChange={setSearchTerm} 
+            onAddClick={() => setIsAddModalOpen(true)}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            customStart={customStart}
+            setCustomStart={setCustomStart}
+            customEnd={customEnd}
+            setCustomEnd={setCustomEnd}
           />
-          <StatCard 
-            label="In Progress" 
-            count={incidents.filter(i => i.status === 'In Progress').length} 
-            icon={<Clock className="text-[#3B82F6]" size={24} />} 
-            colorClass="bg-[#DBEAFE]" 
+
+          {/* Error Banner */}
+          {error && (
+            <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+              <TriangleAlert size={18} />
+              <span>Failed to load incidents. Please try refreshing the page.</span>
+            </div>
+          )}
+
+          {/* Table Container */}
+          <div className="bg-white rounded-[20px] border border-[#e2e8f0] overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                    <th scope="col" className="py-3.5 px-5">ID</th>
+                    <th scope="col" className="py-3.5 px-5">Status</th>
+                    <th scope="col" className="py-3.5 px-5">Severity</th>
+                    <th scope="col" className="py-3.5 px-5">Incident Details</th>
+                    <th scope="col" className="py-3.5 px-5">Area</th>
+                    <th scope="col" className="py-3.5 px-5">Reported By</th>
+                    <th scope="col" className="py-3.5 px-5">Date & Time</th>
+                    <th scope="col" className="py-3.5 px-5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#f1f5f9]">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={8} className="py-16 text-center">
+                        <Loader2 className="animate-spin text-[#0F6E56] mx-auto mb-2" size={28} />
+                        <p className="text-gray-400 text-sm">Loading incident reports...</p>
+                      </td>
+                    </tr>
+                  ) : filteredIncidents.length > 0 ? (
+                    filteredIncidents.map((incident) => (
+                      <IncidentRow 
+                        key={incident.incidentId} 
+                        incident={incident} 
+                        onClick={handleItemClick}
+                        onViewClick={handleViewDetails}
+                      />
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={8} className="py-16 text-center">
+                        <TriangleAlert className="text-gray-300 mx-auto mb-3" size={32} />
+                        <p className="text-gray-500 font-medium text-sm">No incidents match the selected filters.</p>
+                        <p className="text-gray-400 text-xs mt-1">Try resetting your date range or filter criteria.</p>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Modals */}
+          <IncidentAddItemModal 
+            isOpen={isAddModalOpen} 
+            onClose={() => setIsAddModalOpen(false)} 
+            onSubmit={handleAddIncident} 
           />
-          <StatCard 
-            label="Resolved" 
-            count={incidents.filter(i => i.status === 'Resolved').length} 
-            icon={<CircleCheckBig className="text-[#10B981]" size={24} />} 
-            colorClass="bg-[#D1FAE5]" 
+
+          <IncidentUpdateStatusModal 
+            isOpen={isUpdateModalOpen}
+            onClose={() => setIsUpdateModalOpen(false)}
+            incident={selectedIncident}
+            onUpdateStatus={handleUpdateStatus}
+            onDelete={handleDelete}
+          />
+
+          <IncidentDetailedModal 
+            isOpen={isDetailedModalOpen}
+            onClose={() => setIsDetailedModalOpen(false)}
+            incident={selectedIncident}
           />
         </div>
-
-        {/* Filters */}
-        <IncidentFilterSection 
-          activeStatus={activeStatus} 
-          onStatusChange={setActiveStatus}
-          activeSeverity={activeSeverity}     
-          onSeverityChange={setActiveSeverity} 
-          activeArea={activeArea}                
-          onAreaChange={setActiveArea}           
-          searchTerm={searchTerm} 
-          onSearchChange={setSearchTerm} 
-          onAddClick={() => setIsAddModalOpen(true)}
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          customStart={customStart}
-          setCustomStart={setCustomStart}
-          customEnd={customEnd}
-          setCustomEnd={setCustomEnd}
-        />
-
-        {/* Error Banner */}
-        {error && (
-          <div className="mt-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
-            <TriangleAlert size={18} />
-            <span>Failed to load incidents. Please try refreshing the page.</span>
-          </div>
-        )}
-
-        {/* Table Container */}
-        <div className="bg-white rounded-[20px] border border-[#e2e8f0] overflow-hidden shadow-sm mt-6 mb-10">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-                  <th scope="col" className="py-3.5 px-5">ID</th>
-                  <th scope="col" className="py-3.5 px-5">Status</th>
-                  <th scope="col" className="py-3.5 px-5">Severity</th>
-                  <th scope="col" className="py-3.5 px-5">Incident Details</th>
-                  <th scope="col" className="py-3.5 px-5">Area</th>
-                  <th scope="col" className="py-3.5 px-5">Reported By</th>
-                  <th scope="col" className="py-3.5 px-5">Date & Time</th>
-                  <th scope="col" className="py-3.5 px-5 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#f1f5f9]">
-                {loading ? (
-                  <tr>
-                    <td colSpan={7} className="py-16 text-center">
-                      <Loader2 className="animate-spin text-[#0F6E56] mx-auto mb-2" size={28} />
-                      <p className="text-gray-400 text-sm">Loading incident reports...</p>
-                    </td>
-                  </tr>
-                ) : filteredIncidents.length > 0 ? (
-                  filteredIncidents.map((incident) => (
-                    <IncidentRow 
-                      key={incident.incidentId} 
-                      incident={incident} 
-                      onClick={handleItemClick}
-                      onViewClick={handleViewDetails}
-                    />
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="py-16 text-center">
-                      <TriangleAlert className="text-gray-300 mx-auto mb-3" size={32} />
-                      <p className="text-gray-500 font-medium text-sm">No incidents match the selected filters.</p>
-                      <p className="text-gray-400 text-xs mt-1">Try resetting your date range or filter criteria.</p>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Modals */}
-        <IncidentAddItemModal 
-          isOpen={isAddModalOpen} 
-          onClose={() => setIsAddModalOpen(false)} 
-          onSubmit={handleAddIncident} 
-        />
-
-        <IncidentUpdateStatusModal 
-          isOpen={isUpdateModalOpen}
-          onClose={() => setIsUpdateModalOpen(false)}
-          incident={selectedIncident}
-          onUpdateStatus={handleUpdateStatus}
-          onDelete={handleDelete}
-        />
-
-        <IncidentDetailedModal 
-          isOpen={isDetailedModalOpen}
-          onClose={() => setIsDetailedModalOpen(false)}
-          incident={selectedIncident}
-        />
-      </div>
+      </main>
     </div>
   );
 };
