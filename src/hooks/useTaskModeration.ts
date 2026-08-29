@@ -4,7 +4,7 @@ import type { TaskLog } from '../types/task';
 import { 
   getDisputedQueue, 
   resolveDispute 
-} from '../services/taskModerationService';
+} from '../services/taskReviewService';
 
 export const useTaskModeration = () => {
   const [disputedQueue, setDisputedQueue] = useState<TaskLog[]>([]);
