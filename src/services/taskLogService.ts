@@ -15,6 +15,15 @@ export const getTaskLogs = async (date?: string, status?: string): Promise<TaskL
     return res.json();
 };
 
+// GET by scanned area
+export const getTasksByArea = async (area:string): Promise<{ message: string, taskLogs: TaskLog[]}> => {
+    const res = await apiRequest(`/task-logs/scan-zone/${encodeURIComponent(area)}`);
+    if (res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to fetch task for this area');
+    }
+    return res.json();
+}
 
 //POST
 export const generateDailyLogs = async (): Promise<{ message: string; skipped?: number }> => {
@@ -33,10 +42,25 @@ export const generateDailyLogs = async (): Promise<{ message: string; skipped?: 
 };
 
 //PATCH
-export const completeTaskLog = async (logId: string): Promise<TaskLog> => {
+export const completeTaskLog = async (logId: string, photoFile?: File, isLiveCamera?: boolean): Promise<TaskLog> => {
+    const headers: Record<string, string> = {};
+    let body: FormData | undefined;
+
+    if (photoFile) {
+        body = new FormData();
+        body.append('file', photoFile);
+    }
+
+    if (isLiveCamera) {
+        headers['x-source-camera'] = 'live-camera' // allows headers to capture live camera
+    }
+
     const res = await apiRequest(`/task-logs/${logId}/complete`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers,
+        body
     });
+
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Failed to complete task log');
