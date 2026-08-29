@@ -24,7 +24,8 @@ export interface Task {
   frequency: Frequency;
   dayType: DayType;
   startTime: string;    
-  endTime: string;       
+  endTime: string;      
+  requiresVerification: boolean; 
   isBreak: boolean;
   isArchived: boolean;
   createdAt: string;
@@ -49,7 +50,7 @@ export interface UserSummary {
 //for task log
 export interface TaskLog {
   _id: string;
-  task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority'>;
+  task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority' | 'requiresVerification'>;
   status: TaskLogStatus;
   completedBy?: { _id: string; firstName: string };
   completedAt?: string;
