@@ -10,6 +10,7 @@ import {
 export const useTaskReviews = () => {
   const [pendingQueue, setPendingQueue] = useState<TaskLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPendingQueue = useCallback(async () => {
@@ -30,6 +31,7 @@ export const useTaskReviews = () => {
   }, [fetchPendingQueue]);
 
   const approve = async (logId: string, note?: string) => {
+    setSubmittingId(logId);
     try {
       await approvePeerTask(logId, note);
       // remove from state queue upon success
@@ -40,6 +42,7 @@ export const useTaskReviews = () => {
   };
 
   const dispute = async (logId: string, reason: string) => {
+    setSubmittingId(logId);
     try {
       await disputePeerTask(logId, reason);
       // remove from state queue upon success
@@ -52,6 +55,7 @@ export const useTaskReviews = () => {
   return {
     pendingQueue,
     loading,
+    submittingId,
     error,
     refresh: fetchPendingQueue,
     approve,
