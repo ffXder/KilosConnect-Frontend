@@ -1,18 +1,20 @@
 export interface IncidentReport {
     _id: string;
     incidentId: string;
-    title: string,
-    description: string;
+    title: string;
+    description: string | null;
     area: string;
     severity: "Low" | "Medium" | "High" | "Urgent" | "Critical";
     status: "Open" | "In Progress" | "Resolved";
     affectedAssets: string[];
-    reportedBy: {
+    reporterType?: "Staff" | "Public";
+    reportedBy?: {
         _id: string;
         userId: string;
         firstName: string;
         lastName: string;
-    };
+    } | null;
+    reportedName?: string | null;
     dateAndTime: string;
     isArchived: boolean;
     archivedAt: string | null;
@@ -20,7 +22,15 @@ export interface IncidentReport {
 }
 
 // for create
-export type NewIncidentReport = Omit<IncidentReport, "_id" | "incidentId" | "status" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">;
+export type NewIncidentReport = Omit<
+    IncidentReport, 
+    "_id" | "incidentId" | "status" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy"
+> & {
+    reporterType?: "Staff" | "Public";
+    reportedName?: string | null;
+};
 
-//for update
-export type UpdateIncidentReport = Partial<Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">>;
+//for updates
+export type UpdateIncidentReport = Partial<
+    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">
+>;
