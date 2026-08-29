@@ -36,7 +36,7 @@ export const LostAndFoundPage: React.FC = () => {
   };
 
   const handleAddItem = async (data: any, imageFile: File) => {
-      await handleCreate(data, imageFile); // pass imageFile
+      await handleCreate(data, imageFile);
       setIsModalOpen(false);
   };
 
@@ -59,36 +59,37 @@ export const LostAndFoundPage: React.FC = () => {
     return matchesStatus && matchesZone && matchesSearch;
   });
 
-  const { role,  } = useAuth()
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"]
+  const { role } = useAuth();
+  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div className="flex flex-col flex-1 min-w-0 lg:ml-[240px] overflow-y-auto h-full">
-
-        {/* Header */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f4f5f6]/90 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
+      {/* Main Container */}
+      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden">
+        <div className="max-w-[1400px] mx-auto space-y-6">
+          
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
                 Lost and Found
               </h1>
-              <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">
+              <p className="text-gray-500 text-sm mt-1">
                 Track your lost and found items here.
               </p>
             </div>
           </div>
-        </header>
 
-        <div className="px-10 pb-10 space-y-8">
-          <div className="grid grid-cols-3 gap-6">
+          {/* Stats Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <StatCard label="Total Items" count={items.length} color="text-[#1e4d46]" iconBg="bg-[#e6fffa]" icon={Archive} />
             <StatCard label="Unclaimed" count={items.filter(i => i.status === "Unclaimed").length} color="text-[#b45309]" iconBg="bg-[#fffbeb]" icon={AlertCircle} />
             <StatCard label="Claimed" count={items.filter(i => i.status === "Claimed").length} color="text-[#15803d]" iconBg="bg-[#f0fdf4]" icon={CheckCircle} />
           </div>
 
+          {/* Filters Bar */}
           <LostAndFoundFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -100,33 +101,37 @@ export const LostAndFoundPage: React.FC = () => {
             onAddItem={() => setIsModalOpen(true)}
           />
 
-          <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-[24px] p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Items Container */}
+          <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredItems.map((item) => (
                 <LoFItemCard key={item.lostId} item={item} onClaim={handleClaimItem} onView={handleViewItem} />
               ))}
             </div>
           </div>
-        </div>
-      </div>
-      {isModalOpen && <AddLoFItemModal onClose={() => setIsModalOpen(false)} onSubmit={handleAddItem} />}
-      
-      {/* CLAIM  */}
-      {claimingItem && (
-      <ClaimModal
-          itemName={claimingItem.item}
-          onClose={() => setClaimingItem(null)}
-          onConfirm={handleConfirmClaim}
-        />
-      )}
 
-      {/* Detailed Modal Trigger */}
-      {viewingItem && (
-        <LoFDetailedModal 
-          item={viewingItem} 
-          onClose={() => setViewingItem(null)} 
-        />
-      )}
+        </div>
+
+        {/* --- MODALS --- */}
+        {isModalOpen && (
+          <AddLoFItemModal onClose={() => setIsModalOpen(false)} onSubmit={handleAddItem} />
+        )}
+        
+        {claimingItem && (
+          <ClaimModal
+            itemName={claimingItem.item}
+            onClose={() => setClaimingItem(null)}
+            onConfirm={handleConfirmClaim}
+          />
+        )}
+
+        {viewingItem && (
+          <LoFDetailedModal 
+            item={viewingItem} 
+            onClose={() => setViewingItem(null)} 
+          />
+        )}
+      </main>
     </div>
   );
 };
