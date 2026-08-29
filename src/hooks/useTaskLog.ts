@@ -35,12 +35,24 @@ export function useTaskLogs(date?: string, status?: string) {
         }
     };
 
-    const handleComplete = async (id: string) => {
+    const handleComplete = async (
+        id: string,
+        photoFile?: File,
+        isLiveCamera: boolean = false
+    ): Promise<TaskLog> => {
         try {
-            await LogService.completeTaskLog(id);
+            setError(null);
+            const updatedLog = await LogService.completeTaskLog(id, photoFile, isLiveCamera);
+            
+            
+            setLogs((prev) => prev.map((log) => (log._id === id ? updatedLog : log)));
             await fetchLogs();
+            
+            return updatedLog;
         } catch (err: any) {
-            setError(err.message);
+            const msg = err.message || 'Failed to complete task log';
+            setError(msg);
+            throw new Error(msg); 
         }
     };
 
