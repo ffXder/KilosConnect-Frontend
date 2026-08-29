@@ -14,7 +14,6 @@ import { useTaskModeration } from '../../../hooks/useTaskModeration'
 import type { TaskLog } from '../../../types/task';
 
 export const ReviewSubmissionsTab: React.FC = () => {
-  // 1. Hook Integration
   const { 
     disputedQueue, 
     loading, 
@@ -126,7 +125,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
                     alt="Submission Proof" 
                     className="w-20 h-20 rounded-xl object-cover border border-gray-200 shadow-xs shrink-0" 
                   />
-                  {/* <div className="space-y-1">
+                  <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <h3 className="text-base font-bold text-gray-900">{sub.task?.title || 'Untitled Task'}</h3>
                       <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 flex items-center gap-1">
@@ -137,19 +136,19 @@ export const ReviewSubmissionsTab: React.FC = () => {
                     <p className="text-sm font-medium text-indigo-600">{sub.task?.area || 'General Area'}</p>
                     <p className="text-xs text-gray-500">
                       Submitted by <span className="font-semibold text-gray-700">
-                        {sub.completedBy ? `${sub.completedBy.firstName} ${sub.completedBy.lastName}` : 'Custodian'}
+                        {sub.completedBy ? `${sub.completedBy.firstName}` : 'Custodian'}
                       </span>
                     </p>
 
-                    {sub.disputeReason && (
+                    {sub.verificationNote && (
                       <div className="text-xs p-2.5 rounded-xl mt-2 bg-purple-50 text-purple-900 border border-purple-200 font-medium flex items-start gap-2">
                         <AlertTriangle size={14} className="shrink-0 mt-0.5 text-purple-700" />
                         <div>
-                          <strong>Dispute Reason:</strong> {sub.disputeReason}
+                          <strong>Dispute Reason:</strong> {sub.verificationNote}
                         </div>
                       </div>
                     )}
-                  </div> */}
+                  </div>
                 </div>
 
                 <div className="flex items-center space-x-3 self-end md:self-center">
@@ -209,22 +208,22 @@ export const ReviewSubmissionsTab: React.FC = () => {
               </button>
             </div>
 
-            {/* {selectedSub.disputeReason && (
+            {selectedSub.verificationNote && (
               <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-purple-900 text-xs">
                 <AlertTriangle size={18} className="text-purple-700 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-purple-900 text-sm">Dispute Detail</p>
-                  <p className="mt-0.5 leading-relaxed">{selectedSub.disputeReason}</p>
+                  <p className="mt-0.5 leading-relaxed">{selectedSub.verificationNote}</p>
                 </div>
               </div>
-            )} */}
+            )}
 
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto p-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto p-1">
               <div className="space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Reference Standard Photo</span>
                 <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
                   <img 
-                    src={selectedSub.task?.standardPhotoUrl || selectedSub.submittedPhoto} 
+                    src={""} 
                     alt="Basis Reference" 
                     className="w-full h-full object-cover" 
                   />
@@ -236,14 +235,14 @@ export const ReviewSubmissionsTab: React.FC = () => {
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">Custodian Live Proof Submission</span>
                 <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden border-2 border-indigo-500 shadow-inner">
                   <img 
-                    src={selectedSub.submittedPhoto} 
+                    src={`${selectedSub.submittedPhoto}`} 
                     alt="Submission Proof" 
                     className="w-full h-full object-cover" 
                   />
                 </div>
                 <p className="text-xs text-gray-500">Uploaded snapshot captured on-site during task wrap-up.</p>
               </div>
-            </div> */}
+            </div>
 
             <div className="flex items-center justify-end space-x-3 pt-4 border-t">
               <button
