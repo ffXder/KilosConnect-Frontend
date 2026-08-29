@@ -18,6 +18,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import { ScannerPage } from './pages/ScannerPage'
 import { AssetScanPage } from './pages/AssetScanPage'
 import { ProfilePage } from './pages/admin/Profile/ProfileMain'
+import { PublicReportingPage } from './pages/PublicReportingPage'
 
 // admin pages
 import { DashboardPage } from './pages/admin/Dashboard/DashboardPage'
@@ -105,6 +106,7 @@ function App() {
         <Route path='/qr-scanner' element={<ScannerPage />} />
         <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
         <Route path='/setup/new-password' element={<NewAccountPasswordSetupPage />} />
+        <Route path='/report-an-issue' element={<PublicReportingPage />} />
 
         {/* SHARED PROTECTED ROUTES */}
         <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
