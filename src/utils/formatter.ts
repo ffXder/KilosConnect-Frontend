@@ -26,6 +26,15 @@ export const formatTime = (dateStr: string) => {
   });
 };
 
+export const formatTo12Hour = (time?: string) => {
+    if (!time) return "--:--";
+    const [hours, minutes] = time.split(':');
+    let hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+    return `${hour}:${minutes} ${ampm}`;
+  };
+
 export const formatTo24Hour = (timeStr: string) => {
     if (!timeStr) return '';
     const date = new Date(`1970-01-01 ${timeStr}`);
