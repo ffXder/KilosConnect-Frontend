@@ -4,10 +4,9 @@ import { SidebarNavigationSection } from "../../../components/SidebarNavigationS
 import { useAuth } from "../../../hooks/useAuth";
 import { Camera, Image, CheckCircle2, Wrench, MapPin, AlertTriangle } from 'lucide-react';
 import QRScanner from "../../../components/QRScanner";
-import ImageUploadView from "./ImageUploadView";
+import ImageUploadView from "../../../components/QRImageUpload";
 
-// Maps a scanned QR's URL path to how the success state should look and behave.
-// Add new QR types here as new patterns are introduced.
+// maps how qr should behave
 const SCAN_TYPES = [
   {
     type: 'equipment' as const,
@@ -122,7 +121,7 @@ export default function ScanQRPage() {
 
     setTimeout(() => {
       navigate(url.pathname + url.search + url.hash);
-    }, 1800);
+    }, 1800); //
   };
 
   const handleReset = () => {
