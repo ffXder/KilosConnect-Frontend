@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import ArchivesInfoSection from "./components/ArchivesInfoSection";
 import ArchivesStatsSection from "./components/ArchivesStatsSection";
 import RecentArchivesSection from "./components/RecentArchivesSection";
@@ -79,22 +79,6 @@ export const ArchivesPage: React.FC = () => {
   const [viewItem, setViewItem] = useState<ArchiveItem | null>(null);
   const [restoreItem, setRestoreItem] = useState<ArchiveItem | null>(null);
 
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-  );
-
-  useEffect(() => {
-    const syncSidebar = () => {
-      setSidebarExpanded(
-        JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-      );
-    };
-
-    const interval = setInterval(syncSidebar, 100);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const filteredArchives = useMemo(() => {
     return archives.filter((item) => {
       const matchesSearch =
@@ -130,43 +114,49 @@ export const ArchivesPage: React.FC = () => {
     >["userRole"];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a]">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div
-        className={`transition-all duration-1000 p-8 flex-1 ${
-          sidebarExpanded
-            ? "md:ml-[10px]"
-            : "md:ml-[10px]"
-        }`}
-      >
-        <div className="mb-6">
-          <h1 className="text-[28px] font-bold text-[#0f172a] tracking-tight">
-            Archives
-          </h1>
-          <p className="text-sm text-[#64748b] mt-0.5">
-            Historical records of completed and decommissioned items
-          </p>
+      {/* Main Container */}
+      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden">
+        <div className="max-w-[1400px] mx-auto space-y-6">
+          
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
+                Archives
+              </h1>
+              <p className="text-gray-500 text-sm mt-1">
+                Historical records of completed and decommissioned items
+              </p>
+            </div>
+          </div>
+
+          {/* Stats Cards */}
+          <ArchivesStatsSection stats={stats} />
+
+          {/* Filters & Information */}
+          <ArchivesInfoSection
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+          />
+
+          {/* Table Container */}
+          <RecentArchivesSection
+            items={filteredArchives}
+            onView={(item) => setViewItem(item)}
+            onRestore={(item) => setRestoreItem(item)}
+          />
+
         </div>
 
-        <ArchivesInfoSection
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
-        />
-
-        <ArchivesStatsSection stats={stats} />
-
-        <RecentArchivesSection
-          items={filteredArchives}
-          onView={(item) => setViewItem(item)}
-          onRestore={(item) => setRestoreItem(item)}
-        />
-
+        {/* --- VIEW MODAL --- */}
         {viewItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-            <div className="bg-white w-full max-w-[540px] rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white w-full max-w-[540px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
               <div className="bg-[#113e33] p-6 text-white flex justify-between items-center">
                 <div>
                   <h3 className="text-[17px] font-bold tracking-tight">{viewItem.title}</h3>
@@ -219,9 +209,10 @@ export const ArchivesPage: React.FC = () => {
           </div>
         )}
 
+        {/* --- RESTORE MODAL --- */}
         {restoreItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-            <div className="bg-white w-full max-w-[440px] rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white w-full max-w-[440px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
               <div className="bg-[#3b82f6] p-6 text-white flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
@@ -256,7 +247,7 @@ export const ArchivesPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };
