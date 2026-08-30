@@ -8,11 +8,11 @@ import { useAssets } from '../../../hooks/useAssets';
 import { useRepairLogs } from "../../../hooks/useRepairLogs";
 
 // assets sub-components
-import { AssetRegistryStats } from "./AssetRegistryStats";
-import { AssetRegistryList } from "./AssetRegistryList";
-import { AddAssetModal } from "./AddAssetModal";
-import { UpdateAssetModal } from "./UpdateAssetModal";
-import { ArchiveConfirmModal } from "./ArchiveConfirmModal";
+import { AssetRegistryStats } from "./components/AssetRegistryStats";
+import { AssetRegistryList } from "./components/AssetRegistryList";
+import { AddAssetModal } from "./components/AddAssetModal";
+import { UpdateAssetModal } from "./components/UpdateAssetModal";
+import { ArchiveConfirmModal } from "./components/ArchiveConfirmModal";
 
 const lofAreas = ["All Areas", "WOD", "Cafe", "Powerlifting", "CrossFit", "Mezzanine", "Other"];
 

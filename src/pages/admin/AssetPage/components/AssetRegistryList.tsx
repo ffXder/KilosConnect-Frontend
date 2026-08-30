@@ -1,7 +1,7 @@
 import React from "react";
 import { MapPin, Calendar, Edit3, Trash2, AlertCircle, Wrench, Eye, CheckCircle2 } from "lucide-react";
-import type { Asset } from "../../../types/asset";
-import { formatDateTime } from "../../../utils/formatter";
+import type { Asset } from "../../../../types/asset";
+import { formatDateTime } from "../../../../utils/formatter";
 
 // set temporarily to any[] for now, will refine later
 interface Props {
