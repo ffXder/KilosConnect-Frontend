@@ -4,10 +4,10 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useAuditLogs } from "../../../hooks/useAuditLogs";
 import { useUrlFilters } from "../../../hooks/useUrlFilters";
 
-import LogsHeaderSection from "./LogsHeaderSection";
-import LogsFilterSection from "./LogsFilterSection";
-import LogsStatsSection from "./LogsStatsSection";
-import LogsTableSection from "./LogsTableSection";
+import LogsHeaderSection from "./components/LogsHeaderSection";
+import LogsFilterSection from "./components/LogsFilterSection";
+import LogsStatsSection from "./components/LogsStatsSection";
+import LogsTableSection from "./components/LogsTableSection";
 
 
 export function LogsPage() {

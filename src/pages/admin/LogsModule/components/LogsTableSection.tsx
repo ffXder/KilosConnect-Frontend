@@ -1,7 +1,7 @@
-import type { AuditLogs } from '../../../types/auditLogs';
-import { formatDateTime } from '../../../utils/formatter';
-import { getDisplayName } from '../../../utils/formatUser';
-import { formatModuleName } from '../../../utils/formatter'
+import type { AuditLogs } from '../../../../types/auditLogs';
+import { formatDateTime } from '../../../../utils/formatter';
+import { getDisplayName } from '../../../../utils/formatUser';
+import { formatModuleName } from '../../../../utils/formatter'
 
 interface PaginationData {
   currentPage: number;
