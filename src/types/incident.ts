@@ -34,3 +34,14 @@ export type NewIncidentReport = Omit<
 export type UpdateIncidentReport = Partial<
     Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">
 >;
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalReports: number;
+}
+
+export interface PaginatedIncidentResponse {
+  incidentReports: IncidentReport[];
+  pagination: Pagination;
+}
