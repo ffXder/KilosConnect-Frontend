@@ -51,7 +51,7 @@ const DashboardStatsSection: React.FC<DashboardStatsSectionProps> = ({ stats = d
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:bg-slate-950 transition-colors duration-300"
+          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:bg-slate-950 transition-colors duration-300 dark: border-slate-600"
         >
           <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${stat.colorClass}`}>
             {iconMap[stat.label] || <Box size={14} strokeWidth={2} className="sm:size-[16px] md:size-[20px] lg:size-[24px]" />}

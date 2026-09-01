@@ -52,7 +52,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
   subtitle = "Asset maintenance notifications",
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-950 transition-colors duration-300">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-100 text-amber-600">
           <Bell size={22} strokeWidth={2} />
