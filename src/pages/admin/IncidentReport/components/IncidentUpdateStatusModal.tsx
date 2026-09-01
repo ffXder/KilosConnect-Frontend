@@ -7,7 +7,6 @@ interface IncidentUpdateStatusModalProps {
   onClose: () => void;
   incident: IncidentReport | null;
   onUpdateStatus: (id: string, newStatus: IncidentReport['status']) => void;
-  onDelete: (id: string) => void;
 }
 
 const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({ 
@@ -15,7 +14,6 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
   onClose, 
   incident, 
   onUpdateStatus,
-  onDelete
 }) => {
   const [selectedStatus, setSelectedStatus] = useState<IncidentReport['status']>('Open');
 
@@ -70,18 +68,6 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
           </div>
 
           <div className="pt-4 space-y-3 border-t border-gray-100">
-            {/* Archive Button[cite: 5] */}
-            <button 
-              onClick={() => {
-                onDelete(incident.incidentId);
-                onClose()
-              }}
-              className="w-full py-3 flex items-center justify-center gap-2 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition-colors border border-gray-200"
-            >
-              <Trash2 size={18} />
-              Delete
-            </button>
-            
             <div className="flex gap-3">
               <button onClick={onClose} className="flex-1 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50">
                 Cancel
