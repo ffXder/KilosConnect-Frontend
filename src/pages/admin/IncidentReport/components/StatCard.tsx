@@ -1,18 +1,43 @@
 import React from 'react';
-import type { StatCardProps } from '../IncidentReporting';
 
-const StatCard: React.FC<StatCardProps> = ({ label, count, icon, colorClass }) => {
+interface StatsCardsProps {
+  total: number;
+  openCount: number;
+  resolvedCount: number;
+  highCount: number;
+  lowCount: number;
+}
+
+export const StatsCards: React.FC<StatsCardsProps> = ({
+  total,
+  openCount,
+  resolvedCount,
+  highCount,
+  lowCount,
+}) => {
+  const stats = [
+    { label: 'Total', value: total, color: 'text-gray-700' },
+    { label: 'Open', value: openCount, color: 'text-[#E67E22]' },
+    { label: 'Resolved', value: resolvedCount, color: 'text-[#2ECC71]' },
+    { label: 'High', value: highCount, color: 'text-[#E74C3C]' },
+    { label: 'Low', value: lowCount, color: 'text-[#3498DB]' },
+  ];
+
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 min-w-[200px] flex-1">
-      <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${colorClass}`}>
-        {icon}
-      </div>
-      <div>
-        <div className="text-3xl font-bold text-gray-800 leading-tight">{count}</div>
-        <div className="text-gray-500 text-sm font-medium">{label}</div>
-      </div>
+    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="bg-white rounded-xl p-4 border border-gray-200 text-center shadow-sm"
+        >
+          <span className={`text-2xl font-black ${stat.color}`}>{stat.value}</span>
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">
+            {stat.label}
+          </p>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default StatCard;
+export default StatsCards;

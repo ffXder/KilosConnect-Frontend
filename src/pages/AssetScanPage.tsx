@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIncidentReports } from '../hooks/useIncident';
 import type { NewIncidentReport } from '../types/incident';
+import kilosImage from '../assets/images/image-5.png';
 
 interface ScannedAsset {
     _id?: string;
@@ -46,7 +47,7 @@ export const AssetScanPage: React.FC = () => {
         fetchAsset();
     }, [assetId]);
 
-   const handleSubmitReport = async (e: React.FormEvent) => {
+    const handleSubmitReport = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!asset) return;
 
@@ -81,74 +82,117 @@ export const AssetScanPage: React.FC = () => {
         }
     };
 
-    if (isLoadingAsset) return <div className="p-6 text-center text-gray-400">Loading asset details...</div>;
+    if (isLoadingAsset) {
+        return (
+            <div className="relative min-h-screen w-full flex items-center justify-center p-4 bg-slate-950 text-slate-400">
+                Loading asset details...
+            </div>
+        );
+    }
 
     if (assetError || !asset) {
         return (
-            <div className="p-6 text-center text-red-500">
+            <div className="relative min-h-screen w-full flex items-center justify-center p-4 bg-slate-950 text-red-400">
                 {assetError || 'Something went wrong.'}
             </div>
         );
     }
 
     return (
-        <div className="max-w-md mx-auto p-6 flex flex-col gap-4 relative min-h-screen">
-            {/* SUCCESS NOTIFICATION */}
-            {successMessage && (
-                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-3 rounded-xl text-sm flex justify-between items-center">
-                    <span>{successMessage}</span>
-                    <button onClick={() => setSuccessMessage(null)} className="text-emerald-600 font-bold">✕</button>
-                </div>
-            )}
+        <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-12 overflow-hidden bg-slate-950">
+            
+            {/* BACKGROUND IMAGE WITH OVERLAY & BLUR */}
+            <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-md scale-105 opacity-40 pointer-events-none"
+                style={{
+                    backgroundImage: `url(${kilosImage})`,
+                }}
+            />
 
-            {/* HOOK ERROR DISPLAY */}
-            {hookError && (
-                <div className="bg-red-50 border border-red-200 text-red-800 p-3 rounded-xl text-sm">
-                    {hookError}
-                </div>
-            )}
+            {/* DARK TINT OVERLAY */}
+            <div className="absolute inset-0 bg-slate-900/5 pointer-events-none" />
 
-            {/* ASSET PREVIEW */}
-            <h1 className="text-xl font-bold text-gray-800">{asset.name}</h1>
-            <p className="text-gray-500 text-sm">{asset.assetId}</p>
+            {/* CENTERED FROSTED-GLASS CARD */}
+            <div className="relative z-10 max-w-xl w-full bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-700/50 p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col gap-6">
+                
+                {/* SUCCESS NOTIFICATION */}
+                {successMessage && (
+                    <div className="bg-emerald-950/80 border border-emerald-700/50 text-emerald-300 p-3 rounded-xl text-sm flex justify-between items-center">
+                        <span>{successMessage}</span>
+                        <button onClick={() => setSuccessMessage(null)} className="text-emerald-400 font-bold">✕</button>
+                    </div>
+                )}
 
-            <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-gray-400 text-xs">Category</p>
-                    <p className="font-medium text-gray-700">{asset.category}</p>
+                {/* HOOK ERROR DISPLAY */}
+                {hookError && (
+                    <div className="bg-red-950/80 border border-red-700/50 text-red-300 p-3 rounded-xl text-sm">
+                        {hookError}
+                    </div>
+                )}
+
+                {/* HEADER TITLE */}
+                <div className="space-y-1">
+                    <h1 className="text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight">
+                        {asset.name}
+                    </h1>
+                    <p className="text-slate-400 text-xs sm:text-sm font-mono">
+                        Asset ID: {asset.assetId}
+                    </p>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-gray-400 text-xs">Condition</p>
-                    <p className="font-medium text-gray-700">{asset.condition}</p>
+
+                {/* ASSET DETAILS GRID */}
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="bg-slate-800/70 rounded-xl p-3 border border-slate-700/60">
+                        <p className="text-slate-400 text-xs">Category</p>
+                        <p className="font-medium text-slate-200 mt-0.5">{asset.category}</p>
+                    </div>
+                    <div className="bg-slate-800/70 rounded-xl p-3 border border-slate-700/60">
+                        <p className="text-slate-400 text-xs">Condition</p>
+                        <p className="font-medium text-slate-200 mt-0.5">{asset.condition}</p>
+                    </div>
+                    <div className="bg-slate-800/70 rounded-xl p-3 border border-slate-700/60 col-span-2">
+                        <p className="text-slate-400 text-xs">Area Location</p>
+                        <p className="font-medium text-slate-200 mt-0.5">{asset.area}</p>
+                    </div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-3 col-span-2">
-                    <p className="text-gray-400 text-xs">Area</p>
-                    <p className="font-medium text-gray-700">{asset.area}</p>
+
+                {/* BASELINE IMAGE */}
+                {asset.baselineImageUrl && (
+                    <div className="rounded-xl overflow-hidden border border-slate-700/60">
+                        <img 
+                            src={asset.baselineImageUrl} 
+                            alt={asset.name} 
+                            className="w-full object-cover max-h-56" 
+                        />
+                    </div>
+                )}
+
+                {/* TRIGGER ACTION BUTTON */}
+                <button
+                    type="button"
+                    onClick={() => setIsReportOpen(true)}
+                    className="w-full bg-[#124d45] hover:bg-[#165c53] text-emerald-100 text-sm font-medium py-3 rounded-xl transition-colors shadow-sm"
+                >
+                    Report an Issue with this Asset
+                </button>
+
+                {/* FOOTER NOTE */}
+                <div className="pt-2 border-t border-slate-700/60">
+                    <p className="text-slate-400 text-xs leading-relaxed text-center sm:text-left">
+                        All reports are anonymous unless you choose to provide contact information. For emergencies, please contact staff immediately.
+                    </p>
                 </div>
             </div>
 
-            {asset.baselineImageUrl && (
-                <img src={asset.baselineImageUrl} alt={asset.name} className="rounded-xl w-full object-cover max-h-56" />
-            )}
-
-            {/* TRIGGER BUTTON */}
-            <button
-                type="button"
-                onClick={() => setIsReportOpen(true)}
-                className="mt-4 bg-red-500 hover:bg-red-600 transition-colors text-white text-center py-3 rounded-xl font-semibold w-full shadow-sm"
-            >
-                Report an issue
-            </button>
-
             {/* MODAL / DRAWER OVERLAY */}
             {isReportOpen && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-                    <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl flex flex-col gap-4 animate-in slide-in-from-bottom duration-200">
-                        <div className="flex justify-between items-center border-b pb-3">
-                            <h2 className="text-lg font-bold text-gray-800">Report Incident</h2>
+                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+                    <div className="bg-slate-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-slate-700/60 p-6 shadow-2xl flex flex-col gap-4 animate-in slide-in-from-bottom duration-200">
+                        <div className="flex justify-between items-center border-b border-slate-700/60 pb-3">
+                            <h2 className="text-lg font-semibold text-slate-100">Report Asset Issue</h2>
                             <button
                                 onClick={() => setIsReportOpen(false)}
-                                className="text-gray-400 hover:text-gray-600 text-lg font-bold"
+                                className="text-slate-400 hover:text-slate-200 text-lg font-bold"
                             >
                                 ✕
                             </button>
@@ -156,21 +200,21 @@ export const AssetScanPage: React.FC = () => {
 
                         <form onSubmit={handleSubmitReport} className="flex flex-col gap-4 text-sm">
                             <div>
-                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Target Asset</label>
+                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Asset</label>
                                 <input
                                     type="text"
                                     disabled
                                     value={`${asset.name} (${asset.assetId})`}
-                                    className="w-full bg-gray-100 border border-gray-200 rounded-xl p-3 text-gray-600 font-medium"
+                                    className="w-full bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 text-slate-300 font-medium cursor-not-allowed"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Issue Type</label>
+                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Issue Type</label>
                                 <select
                                     value={issueCategory}
                                     onChange={(e) => setIssueCategory(e.target.value)}
-                                    className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                                     <option value="Physical Damage">Physical Damage</option>
                                     <option value="Malfunctioning">Malfunctioning / Broken</option>
@@ -180,11 +224,11 @@ export const AssetScanPage: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Severity</label>
+                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Severity</label>
                                 <select
                                     value={severity}
                                     onChange={(e) => setSeverity(e.target.value as any)}
-                                    className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                                     <option value="Low">Low</option>
                                     <option value="Medium">Medium</option>
@@ -195,39 +239,39 @@ export const AssetScanPage: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Description</label>
+                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Description</label>
                                 <textarea
                                     rows={3}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Describe the condition or issue in detail..."
-                                    className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-500"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Your Name (Optional)</label>
+                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Your Name (Optional)</label>
                                 <input
                                     type="text"
                                     value={reportedName}
                                     onChange={(e) => setReportedName(e.target.value)}
                                     placeholder="John Doe"
-                                    className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-500"
                                 />
                             </div>
 
-                            <div className="flex gap-2 pt-2">
+                            <div className="flex gap-3 pt-2">
                                 <button
                                     type="button"
                                     onClick={() => setIsReportOpen(false)}
-                                    className="w-1/2 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-gray-50"
+                                    className="w-1/2 py-3 border border-slate-700/60 rounded-xl text-slate-300 font-medium hover:bg-slate-800 transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-1/2 py-3 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-xl font-semibold transition-colors"
+                                    className="w-1/2 py-3 bg-[#124d45] hover:bg-[#165c53] disabled:opacity-50 text-emerald-100 rounded-xl font-medium transition-colors"
                                 >
                                     {isSubmitting ? 'Submitting...' : 'Submit Report'}
                                 </button>

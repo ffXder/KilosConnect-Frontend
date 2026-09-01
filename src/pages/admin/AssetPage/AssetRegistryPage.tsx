@@ -69,6 +69,7 @@ export const AssetRegistryPage = () => {
     assets = [],
     loading,
     error,
+    refresh,
     handleCreate,
     handleUpdate, // not yet implemented
     handleUpdateCondition,
@@ -115,13 +116,13 @@ export const AssetRegistryPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-color duration-300">
       <SidebarNavigationSection userRole={userRole} />
       <main className="flex-1 w-full overflow-hidden pt-20 md:pt-0">
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Smart Facility Asset Registry</h1>
-            <p className="text-gray-500 text-sm mt-1">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50 font-bold">Smart Facility Asset Registry</h1>
+            <p className="text-gray-500 text-sm mt-1 dark:text-slate-300 ">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>
           </div>
 
           <div className="flex border-b border-gray-200 gap-8 text-sm font-semibold mb-6">
@@ -135,10 +136,18 @@ export const AssetRegistryPage = () => {
 
           {activeTab === "Equipment" ? (
             <>
-              {loading && <p className="text-sm text-gray-400 mb-3">Loading assets...</p>}
-              {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
+              {error && (
+                <div className="mb-4 p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 flex items-center justify-between text-sm text-red-600 dark:text-red-400">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle size={18} />
+                    <span>{error}</span>
+                  </div>
+                  {/* refetch WIP */}
+                  <button onClick={refresh} className="font-semibold underline hover:text-red-700">Retry</button>
+                </div>
+              )}
 
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm w-full">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm w-full mb-5 dark:bg-slate-950 dark:border-slate-600 transition-color duration-300">
                 {/* search barr */}
                 <div className="relative flex-1 min-w-[280px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -146,18 +155,18 @@ export const AssetRegistryPage = () => {
                     value={searchQuery}
                     onChange={(e) => updateParam("q", e.target.value)}
                     placeholder="Search by asset name or ID..."
-                    className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 bg-white"
+                    className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 bg-white dark:bg-slate-800 transition-color duration-300 dark:border-slate-600 dark:text-slate-300"
                   />
                 </div>
 
-                {/* filters */}
+                {/* dropdown filters */}
                 <div className="flex items-center gap-3 flex-wrap">
                   {/* area/zone filter */}
                   <div className="relative">
                     <select
                       value={selectedZone}
                       onChange={(e) => updateParam("area", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none dark:bg-slate-800 dark:border-slate-600 transition-color duration-300 dark:text-slate-300"
                     >
                       {assetAreas.map((a) => <option key={a} value={a}>{a}</option>)}
                     </select>
@@ -169,7 +178,7 @@ export const AssetRegistryPage = () => {
                     <select
                       value={selectedStatus}
                       onChange={(e) => updateParam("condition", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none dark:bg-slate-800 transition-color duration-300 dark:border-slate-600 transition-color duration-300 dark:text-slate-300"
                     >
                       {assetConditions.map((c) => <option key={c} value={c}>{c}</option>)}
                     </select>
@@ -181,7 +190,7 @@ export const AssetRegistryPage = () => {
                     <select
                       value={selectedCategory}
                       onChange={(e) => updateParam("category", e.target.value)}
-                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none"
+                      className="appearance-none pl-4 pr-9 py-2 text-sm border border-gray-200 rounded-lg bg-white font-medium text-gray-700 cursor-pointer focus:outline-none dark:bg-slate-800 transition-color duration-300 dark:border-slate-600 transition-color duration-300 dark:text-slate-300"
                     >
                       {assetCategory.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -189,7 +198,7 @@ export const AssetRegistryPage = () => {
                   </div>
 
                   {/* add item button */}
-                  <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors">
+                  <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors dark:bg-[#207D55] dark:hover:bg-[#07201b]">
                     <Plus size={16} /> Add Asset
                   </button>
                 </div>
@@ -199,8 +208,9 @@ export const AssetRegistryPage = () => {
                 <AssetRegistryStats assets={assets} />
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full dark:bg-slate-950 dark:border-slate-600 transition-color duration-300">
                 <AssetRegistryList
+                  isLoading={loading}
                   filteredAssets={filteredAssets}
                   onAssetClick={(asset) => { setSelectedAssetForEdit(asset); setIsUpdateModalOpen(true); }}
                   onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsArchiveModalOpen(true); }}
