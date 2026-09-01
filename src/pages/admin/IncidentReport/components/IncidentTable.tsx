@@ -8,6 +8,7 @@ interface IncidentTableProps {
   loading: boolean;
   onSelectIncident: (incident: IncidentReport) => void;
   onViewIncident: (incident: IncidentReport) => void;
+  onDeleteIncident: (incident: IncidentReport) => void;
 }
 
 const IncidentTable: React.FC<IncidentTableProps> = ({
@@ -15,23 +16,24 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
   loading,
   onSelectIncident,
   onViewIncident,
+  onDeleteIncident
 }) => {
   return (
     <div className="w-full overflow-x-auto rounded-xl border border-[#e2e8f0] bg-white shadow-sm">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-            <th scope="col" className="py-3 px-4">Status</th>
-            <th scope="col" className="py-3 px-4">Severity</th>
-            <th scope="col" className="py-3 px-4">Incident Details</th>
-            <th scope="col" className="py-3 px-4">Description</th>
-            <th scope="col" className="py-3 px-4">Area</th>
-            <th scope="col" className="py-3 px-4">Reported By</th>
-            <th scope="col" className="py-3 px-4">Date & Time</th>
-            <th scope="col" className="py-3 px-4 text-right">Action</th>
+          <tr className="bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-950 transition-color duration-300 dark:border-slate-600">
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Status</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Severity</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Incident Details</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Description</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Area</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Reported By</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Date & Time</th>
+            <th scope="col" className="py-4 px-6 dark:text-slate-300">Action</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#f1f5f9]">
+        <tbody className="divide-y divide-gray-100 text-sm dark:bg-slate-950 transition-color duration-300 dark:divide-slate-800">
           {loading ? (
             <tr>
               <td colSpan={8} className="py-8 text-center text-gray-400 text-sm">
@@ -48,6 +50,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
                 incident={incident}
                 onClick={onSelectIncident}
                 onViewClick={onViewIncident}
+                onDeleteClick={onDeleteIncident}
               />
             ))
           ) : (
