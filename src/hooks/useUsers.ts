@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAllUsers, toggleArchiveUser } from '../services/manageAccountService';
+import { getAllUsers, archiveUser } from '../services/manageAccountService';
 import type { UserAccount } from '../types/manageAccount';
 
 export function useUsers() {
@@ -27,9 +27,9 @@ export function useUsers() {
   }, [fetchUsers]);
 
   // A helper to handle the archive action and then refresh the UI
-  const handleToggleArchive = async (userId: string, currentStatus: boolean) => {
+  const handleToggleArchive = async (id: string, currentStatus: boolean) => {
     try {
-      await toggleArchiveUser(userId, !currentStatus);
+      await archiveUser(id);
       await fetchUsers(); // Refresh the list automatically!
     } catch (err: any) {
       alert(err.message);
