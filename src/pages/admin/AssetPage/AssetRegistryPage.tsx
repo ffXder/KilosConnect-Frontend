@@ -13,6 +13,7 @@ import { AssetRegistryList } from "./components/AssetRegistryList";
 import { AddAssetModal } from "./components/AddAssetModal";
 import { UpdateAssetModal } from "./components/UpdateAssetModal";
 import { ArchiveConfirmModal } from "./components/ArchiveConfirmModal";
+import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 
 const lofAreas = ["All Areas", "WOD", "Cafe", "Powerlifting", "CrossFit", "Mezzanine", "Other"];
 
@@ -79,6 +80,7 @@ export const AssetRegistryPage = () => {
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
   const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [selectedAssetForEdit, setSelectedAssetForEdit] = React.useState<Asset | null>(null);
   const [assetToArchive, setAssetToArchive] = React.useState<Asset | null>(null);
 
@@ -107,11 +109,18 @@ export const AssetRegistryPage = () => {
     setIsUpdateModalOpen(false);
   };
 
-  const handleConfirmArchive = async () => {
-    if (assetToArchive) {
-      await handleArchive(assetToArchive.assetId);
-      setIsArchiveModalOpen(false);
+    const handleConfirmArchive = async (reason?: string) => {
+    if (!assetToArchive) return;
+
+    try {
+      // 1. Pass both the ID and the optional reason to your archive service
+      await handleArchive(assetToArchive._id, reason);
+
+      // 2. Close modal and clear selected item state on success
+      setIsDeleteModalOpen(false);
       setAssetToArchive(null);
+    } catch (error) {
+      console.error("Failed to archive item:", error);
     }
   };
 
@@ -213,7 +222,7 @@ export const AssetRegistryPage = () => {
                   isLoading={loading}
                   filteredAssets={filteredAssets}
                   onAssetClick={(asset) => { setSelectedAssetForEdit(asset); setIsUpdateModalOpen(true); }}
-                  onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsArchiveModalOpen(true); }}
+                  onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsDeleteModalOpen(true); }}
                 />
               </div>
             </>
@@ -228,8 +237,16 @@ export const AssetRegistryPage = () => {
 
       <AddAssetModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddAsset} />
       <UpdateAssetModal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)} asset={selectedAssetForEdit} onUpdate={handleUpdateAsset} />
-      <ArchiveConfirmModal isOpen={isArchiveModalOpen} onClose={() => setIsArchiveModalOpen(false)} onConfirm={handleConfirmArchive} itemName={assetToArchive?.name || ""} />
-
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setAssetToArchive(null);
+        }}
+        onConfirm={handleConfirmArchive}
+        itemName={assetToArchive?.name || "Selected Asset"}
+        itemType="Asset"
+      />
     </div>
   );
 };
