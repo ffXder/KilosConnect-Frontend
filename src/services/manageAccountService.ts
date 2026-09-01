@@ -39,35 +39,12 @@ export const updateUser = async (userId: string, userData: NewUserForm): Promise
     }
 };
 
-//PATCH
-export const toggleArchiveUser = async (userId: string, isArchived: boolean): Promise<void> => {
-  const res = await apiRequest(`/users/${userId}/archive`, {
-    method: 'PATCH',
-    body: JSON.stringify({ isArchived }) // Sending the new status
-  });
+//POST
+export const archiveUser = async (id: string): Promise<void> => {
+  const res = await apiRequest(`/users/${id}/archive`, { method: 'POST' });
 
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.message || 'Update failed');
   }
-};
-
-export const unarchiveUser = async (userId: string): Promise<void> => {
-    const res = await apiRequest(`/users/${userId}/unarchive`, { method: 'PATCH'});
-    
-    if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Failed to unarchive user');
-    }
-}
-
-//GET Archive
-export const getArchivedUsers = async (): Promise<UserAccount[]> => {
-    const res = await apiRequest('/users/archived', { method: 'GET' });
-
-    if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Could not load archived users');
-    }
-    return await res.json();
 };
