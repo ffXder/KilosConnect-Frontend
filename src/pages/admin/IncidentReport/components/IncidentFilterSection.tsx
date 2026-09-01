@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, ChevronDown, Calendar, RotateCcw } from 'lucide-react';
 
 interface IncidentFilterSectionProps {
@@ -8,8 +8,8 @@ interface IncidentFilterSectionProps {
   onSeverityChange: (severity: string) => void;
   activeArea: string;
   onAreaChange: (location: string) => void;
-  searchTerm: string; 
-  onSearchChange: (val: string) => void; 
+  searchTerm: string;
+  onSearchChange: (val: string) => void;
   onAddClick: () => void;
   dateRange: string;
   setDateRange: (range: string) => void;
@@ -17,30 +17,61 @@ interface IncidentFilterSectionProps {
   setCustomStart: (d: string) => void;
   customEnd: string;
   setCustomEnd: (d: string) => void;
+  onResetFilters?: () => void;
 }
 
-const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({ 
-  activeStatus, onStatusChange,
-  activeSeverity, onSeverityChange,
-  activeArea, onAreaChange,
-  searchTerm, onSearchChange,
+const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
+  activeStatus,
+  onStatusChange,
+  activeSeverity,
+  onSeverityChange,
+  activeArea,
+  onAreaChange,
+  searchTerm,
+  onSearchChange,
   onAddClick,
-  dateRange, setDateRange,
-  customStart, setCustomStart,
-  customEnd, setCustomEnd
+  dateRange,
+  setDateRange,
+  customStart,
+  setCustomStart,
+  customEnd,
+  setCustomEnd,
+  onResetFilters,
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [localSearch, setLocalSearch] = useState(searchTerm);
+
+  // Sync external search updates into local state
+  useEffect(() => {
+    setLocalSearch(searchTerm);
+  }, [searchTerm]);
+
+  // Debounce search update to avoid spamming URL search params
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localSearch !== searchTerm) {
+        onSearchChange(localSearch);
+      }
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [localSearch, searchTerm, onSearchChange]);
 
   const statusOptions = ['All', 'Open', 'In Progress', 'Resolved'];
   const severityOptions = ['Any Severity', 'Low', 'Medium', 'High', 'Urgent', 'Critical'];
   const areaOptions = [
-    'All Areas', 'Mezzanine', 'Powerlifting Area', 'Open WOD Area', 
-    'CrossFit Area', 'Café', 'General Storage', 'Maintenance Storage'
+    'All Areas',
+    'Mezzanine',
+    'Powerlifting Area',
+    'Open WOD Area',
+    'CrossFit Area',
+    'Café',
+    'General Storage',
+    'Maintenance Storage',
   ];
   const quickRanges = ['Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days', 'Custom Range'];
 
-  // Check if any filter is modified from defaults
-  const isFiltered = 
+  const isFiltered =
     activeStatus !== 'All' ||
     activeSeverity !== 'Any Severity' ||
     activeArea !== 'All Areas' ||
@@ -49,29 +80,25 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
     customStart !== '' ||
     customEnd !== '';
 
-  const handleResetFilters = () => {
-    onStatusChange('All');
-    onSeverityChange('Any Severity');
-    onAreaChange('All Areas');
-    onSearchChange('');
-    setDateRange('Last 30 Days');
-    setCustomStart('');
-    setCustomEnd('');
+  const handleReset = () => {
+    setLocalSearch(''); 
+    if (onResetFilters) {
+      onResetFilters()
+    }
   };
 
   return (
-    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans">
-
-      {/* Row 1: Search + Date Picker + Add */}
+    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm">
+      {/* Row 1: Search + Date Picker + Action */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] placeholder:text-gray-400 transition-all"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all"
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
           />
         </div>
 
@@ -98,7 +125,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           {isDatePickerOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setIsDatePickerOpen(false)} />
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+              <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
                 <div className="p-2">
                   {quickRanges.map((range) => (
                     <button
@@ -108,10 +135,10 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                         setDateRange(range);
                         if (range !== 'Custom Range') setIsDatePickerOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-[13px] font-semibold rounded-lg transition-colors ${
+                      className={`w-full text-left px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
                         dateRange === range
                           ? 'bg-[#113129] text-white'
-                          : 'text-gray-500 hover:bg-gray-50 hover:text-[#113129]'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#113129]'
                       }`}
                     >
                       {range}
@@ -126,7 +153,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           type="date"
                           value={customStart}
                           onChange={(e) => setCustomStart(e.target.value)}
-                          className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129]"
                         />
                       </div>
                       <div>
@@ -136,16 +163,16 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           value={customEnd}
                           min={customStart}
                           onChange={(e) => setCustomEnd(e.target.value)}
-                          className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 outline-none focus:border-[#113129]"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setIsDatePickerOpen(false)}
                         disabled={!customStart || !customEnd}
-                        className="w-full py-2 rounded-xl bg-[#113129] text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+                        className="w-full py-2 rounded-lg bg-[#113129] text-white text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
                       >
-                        Apply
+                        Apply Filter
                       </button>
                     </div>
                   )}
@@ -166,10 +193,8 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
         </button>
       </div>
 
-      {/* Row 2: Dropdown Filters & Reset */}
+      {/* Row 2: Select Filters & Clear Button */}
       <div className="flex items-center gap-3 flex-wrap pt-1">
-        
-        {/* Status Dropdown */}
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-medium text-gray-400">Status</span>
           <div className="relative">
@@ -188,7 +213,6 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 
         <div className="h-4 w-px bg-gray-200" />
 
-        {/* Severity Dropdown */}
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-medium text-gray-400">Severity</span>
           <div className="relative">
@@ -207,7 +231,6 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 
         <div className="h-4 w-px bg-gray-200" />
 
-        {/* Area Dropdown */}
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-medium text-gray-400">Area</span>
           <div className="relative">
@@ -224,13 +247,12 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           </div>
         </div>
 
-        {/* Conditional Reset Button */}
         {isFiltered && (
           <>
             <div className="h-4 w-px bg-gray-200" />
             <button
               type="button"
-              onClick={handleResetFilters}
+              onClick={handleReset}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] text-[12px] font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all ml-auto sm:ml-0"
               title="Reset all filter criteria"
             >
