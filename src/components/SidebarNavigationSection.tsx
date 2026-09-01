@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logOut } from "../services/authService";
+import { ThemeToggle } from "./ThemeToggle"
 
 type Role = "admin" | "custodian";
 
@@ -270,6 +271,8 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
 
         {/* Footer / Logout */}
         <div className="px-4 pb-8">
+          {/* for dark mode toggle */}
+          <ThemeToggle isExpanded={isExpanded} isMobileOpen={isMobileOpen} />
           <button
             type="button"
             onClick={handleLogoutClick}
