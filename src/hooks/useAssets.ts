@@ -68,9 +68,9 @@ export function useAssets() {
         }
     };
 
-    const handleArchive = async (id: string,) => {
+    const handleArchive = async (id: string, reason?: string) => {
         try { 
-            await archiveAsset(id); 
+            await archiveAsset(id, reason); 
             await fetchAssets(); 
         } catch (err: any) {
             setError(err.message); 
