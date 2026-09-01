@@ -5,8 +5,7 @@ import {
     createAsset, 
     updateAsset, 
     updateAssetCondition, 
-    archiveAsset, 
-    unarchiveAsset 
+    archiveAsset
 } from "../services/assetService";
 import type { Asset, NewAsset, UpdateAsset } from "../types/asset";
 
@@ -69,7 +68,7 @@ export function useAssets() {
         }
     };
 
-    const handleArchive = async (id: string) => {
+    const handleArchive = async (id: string,) => {
         try { 
             await archiveAsset(id); 
             await fetchAssets(); 
@@ -78,14 +77,6 @@ export function useAssets() {
         }
     };
 
-    const handleUnarchive = async (id: string) => {
-        try {
-            await unarchiveAsset(id);
-            await fetchAssets();
-        } catch (err: any) {
-            setError(err.message);
-        }
-    }
     const handleScan = async (assetId: string) => {
         try {
             const asset = await getAssetForScan(assetId);
@@ -96,5 +87,15 @@ export function useAssets() {
         }
     };
 
-    return { assets, loading, error, refresh: fetchAssets, handleCreate, handleUpdate, handleUpdateCondition, handleArchive, handleScan };
+    return { 
+        assets, 
+        loading, 
+        error, 
+        refresh: fetchAssets, 
+        handleCreate, 
+        handleUpdate, 
+        handleUpdateCondition, 
+        handleArchive, 
+        handleScan 
+    };
 }
