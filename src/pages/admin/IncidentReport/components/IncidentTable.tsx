@@ -1,15 +1,18 @@
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 import type { IncidentReport } from '../../../../types/incident';
 import IncidentRow from './IncidentRow';
 
 interface IncidentTableProps {
   incidents: IncidentReport[];
+  loading: boolean;
   onSelectIncident: (incident: IncidentReport) => void;
   onViewIncident: (incident: IncidentReport) => void;
 }
 
 const IncidentTable: React.FC<IncidentTableProps> = ({
   incidents,
+  loading,
   onSelectIncident,
   onViewIncident,
 }) => {
@@ -21,6 +24,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
             <th scope="col" className="py-3 px-4">Status</th>
             <th scope="col" className="py-3 px-4">Severity</th>
             <th scope="col" className="py-3 px-4">Incident Details</th>
+            <th scope="col" className="py-3 px-4">Description</th>
             <th scope="col" className="py-3 px-4">Area</th>
             <th scope="col" className="py-3 px-4">Reported By</th>
             <th scope="col" className="py-3 px-4">Date & Time</th>
@@ -28,7 +32,16 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-[#f1f5f9]">
-          {incidents.length > 0 ? (
+          {loading ? (
+            <tr>
+              <td colSpan={8} className="py-8 text-center text-gray-400 text-sm">
+                <div className="flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin" size={18} />
+                  <span>Loading incidents...</span>
+                </div>
+              </td>
+            </tr>
+          ) : incidents.length > 0 ? (
             incidents.map((incident) => (
               <IncidentRow
                 key={incident._id}
@@ -39,7 +52,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
             ))
           ) : (
             <tr>
-              <td colSpan={7} className="py-8 text-center text-gray-400 text-sm">
+              <td colSpan={8} className="py-8 text-center text-gray-400 text-sm">
                 No incidents reported.
               </td>
             </tr>
