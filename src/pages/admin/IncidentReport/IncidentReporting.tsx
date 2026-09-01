@@ -9,12 +9,13 @@ import IncidentAddItemModal from './components/IncidentAddItemModal';
 import IncidentUpdateStatusModal from './components/IncidentUpdateStatusModal';
 import IncidentDetailedModal from './components/IncidentDetailModal';
 import StatsCards from './components/StatCard';
-import AnalyticsCharts from './components/AnalyticsChartSection'
+import AnalyticsCharts from './components/AnalyticsChartSection';
+import { DeleteConfirmModal } from '../../../components/DeleteConfirmModal'; // 1. IMPORT MODAL
 
 // HOOKS AND FORMATTER
 import { useAuth } from '../../../hooks/useAuth';
 import { useIncidentReports } from '../../../hooks/useIncident';
-import { useUrlFilters } from '../../../hooks/useUrlFilters'; // Import your hook
+import { useUrlFilters } from '../../../hooks/useUrlFilters';
 import type { IncidentReport, NewIncidentReport } from '../../../types/incident';
 import { getDateThreshold } from '../../../utils/dateHelper';
 
@@ -43,6 +44,10 @@ export const IncidentReportPage: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = React.useState<IncidentReport | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
   const [isDetailedModalOpen, setIsDetailedModalOpen] = React.useState(false);
+
+  // 2. DELETE/ARCHIVE MODAL STATES
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [incidentToDelete, setIncidentToDelete] = React.useState<IncidentReport | null>(null);
 
   // Setters bound to URL updating
   const setActiveStatus = (val: string) => updateParam('status', val, ['All']);
@@ -84,6 +89,24 @@ export const IncidentReportPage: React.FC = () => {
   const handleViewDetails = (incident: IncidentReport) => {
     setSelectedIncident(incident);
     setIsDetailedModalOpen(true);
+  };
+
+  const handleDeleteClick = (incident: IncidentReport) => {
+    setIncidentToDelete(incident);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async (reason?: string) => {
+    if (!incidentToDelete) return;
+
+    try {
+      await handleArchive(incidentToDelete._id);
+      
+      setIsDeleteModalOpen(false);
+      setIncidentToDelete(null);
+    } catch (err) {
+      console.error('Failed to delete incident:', err);
+    }
   };
 
   // Filtering Logic
@@ -195,18 +218,14 @@ export const IncidentReportPage: React.FC = () => {
               <span>Failed to load incidents. Please try refreshing the page.</span>
             </div>
           )}
-          <StatsCards
-            total={analytics.total}
-            openCount={analytics.openCount}
-            resolvedCount={analytics.resolvedCount}
-            highCount={analytics.highCount}
-            lowCount={analytics.lowCount}
-          />
+
+          {/* Incident Table */}
           <IncidentTable
             incidents={filteredIncidents}
             loading={loading}
             onSelectIncident={handleItemClick}
             onViewIncident={handleViewDetails}
+            onDeleteIncident={handleDeleteClick}
           />
 
           {/* Modal Components */}
@@ -221,13 +240,24 @@ export const IncidentReportPage: React.FC = () => {
             onClose={() => setIsUpdateModalOpen(false)}
             incident={selectedIncident}
             onUpdateStatus={handleUpdateStatus}
-            onDelete={handleArchive}
           />
 
           <IncidentDetailedModal
             isOpen={isDetailedModalOpen}
             onClose={() => setIsDetailedModalOpen(false)}
             incident={selectedIncident}
+          />
+
+          {/* 6. DELETE CONFIRMATION MODAL */}
+          <DeleteConfirmModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+              setIncidentToDelete(null);
+            }}
+            onConfirm={handleConfirmDelete}
+            itemName={incidentToDelete?.title || 'Selected Incident'}
+            itemType="Incident"
           />
         </div>
       </main>
