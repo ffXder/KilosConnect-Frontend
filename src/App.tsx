@@ -30,7 +30,7 @@ import { LostAndFoundPage } from './pages/admin/LostandFound/LostAndFound'
 import { IncidentReportPage } from './pages/admin/IncidentReport/IncidentReporting'
 import { LogsPage } from './pages/admin/LogsModule/LogsMain'
 import { ManageAccountsPage } from './pages/admin/ManageAccounts/ManageAccountPage'
-import { ArchivesPage } from './pages/admin/ArchivesModule/ArchivesMain'
+import { ArchivesPage } from './pages/admin/ArchivesModule/ArchivesPage'
 
 // custodian pages
 import CustodianDashboardPage from './pages/custodian/Dashboard/DashboardPage'
