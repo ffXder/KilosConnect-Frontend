@@ -49,31 +49,11 @@ export const updateReport = async (id: string, data: UpdateIncidentReport): Prom
     return res.json();
 };
 
-// PATCH
+// POST
 export const archiveReport = async (id: string): Promise<void> => {
-    const res = await apiRequest(`/incident-reports/${id}/archive`, { method: 'PATCH' });
+    const res = await apiRequest(`/incident-reports/${id}/archive`, { method: 'POST' });
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Could not archive report');
     }
-};
-
-export const unarchiveReport = async (id: string): Promise<void> => {
-    const res = await apiRequest(`/incident-reports/${id}/unarchive`, { method: 'PATCH'});
-    
-    if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Failed to unarchive report');
-    }
-}
-
-//GET ARCHIVED
-export const getArchivedReports = async (): Promise<IncidentReport[]> => {
-    const res = await apiRequest('/incident-reports/archived', { method: 'GET' });
-
-    if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Could not load archived incident reports');
-    }
-    return await res.json();
 };
