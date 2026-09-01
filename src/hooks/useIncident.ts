@@ -3,8 +3,7 @@ import {
     getAllReports, 
     createReport, 
     updateReport, 
-    archiveReport, 
-    unarchiveReport 
+    archiveReport
 } from "../services/incidentService";
 import type { IncidentReport, NewIncidentReport, UpdateIncidentReport } from "../types/incident";
 
@@ -76,15 +75,6 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         }
     };
 
-    const handleUnarchive = async (id: string) => {
-        try {
-            await unarchiveReport(id);
-            await fetchReports();
-        } catch (err: any) {
-            setError(err.message);
-        }
-    };
-
     return { 
         reports, 
         pagination, 
@@ -94,6 +84,5 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         handleCreate, 
         handleUpdate, 
         handleArchive, 
-        handleUnarchive 
     };
 }
