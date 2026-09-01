@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import TaskFilterSection from './TaskFilterSection';
-import TaskManagementSection from './TaskManagementSection';
+import TaskManagementSection from './TaskTableSection';
 import AddTaskModal from './AddITaskModals';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTasks } from '../../../hooks/useTask';
@@ -96,23 +96,23 @@ export const TaskManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-color duration-300">
       <SidebarNavigationSection userRole={(role ?? 'custodian') as 'admin' | 'custodian'} />
       <main className="flex-1 w-full overflow-hidden">
         <div className="p-8 max-w-[1600px] mx-auto space-y-8">
           
           {/* Header & QR Action */}
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold text-gray-900">Manage Tasks</h1>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50 font-bold">Manage Tasks</h1>
             
             {/* Admin-only QR Code Action Button */}
             {role === 'admin' && (
               <button
                 onClick={() => setIsQrModalOpen(true)}
-                className="bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 px-5 py-3 rounded-[16px] text-[14px] font-bold flex items-center gap-2.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 px-5 py-3 rounded-[16px] text-[14px] font-bold flex items-center gap-2.5 transition-all shadow-sm active:scale-95 cursor-pointer dark:bg-slate-950 transition-color duration-300 dark:border-slate-600"
               >
-                <QrCode size={18} className="text-[#113129]" />
-                <span>Area QR Codes</span>
+                <QrCode size={18} className="text-[#113129] dark:text-slate-50" />
+                <span className='dark:text-slate-50'>Area QR Codes</span>
               </button>
             )}
           </div>
