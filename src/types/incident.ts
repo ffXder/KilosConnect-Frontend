@@ -16,15 +16,12 @@ export interface IncidentReport {
     } | null;
     reportedName?: string | null;
     dateAndTime: string;
-    isArchived: boolean;
-    archivedAt: string | null;
-    archivedBy: string | null;
 }
 
 // for create
 export type NewIncidentReport = Omit<
     IncidentReport, 
-    "_id" | "incidentId" | "status" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy"
+    "_id" | "incidentId" | "status" | "reportedBy"
 > & {
     reporterType?: "Staff" | "Public";
     reportedName?: string | null;
@@ -32,7 +29,7 @@ export type NewIncidentReport = Omit<
 
 //for updates
 export type UpdateIncidentReport = Partial<
-    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "isArchived" | "archivedAt" | "archivedBy">
+    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy">
 >;
 
 export interface Pagination {
