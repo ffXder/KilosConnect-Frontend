@@ -26,7 +26,6 @@ export const ScannerPage = () => {
         </header>
 
         <div className="p-4 sm:p-8 flex items-center justify-center">
-          
         </div>
       </div>
     </div>
