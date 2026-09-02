@@ -46,7 +46,6 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
           name: "Pass 2: Contrast & Grayscale filter",
           getFile: async() => {
             const blob = await preprocessImage(selectedFile);
-            downloadDebugImage(blob, 'debugpass2contras.png')
             return new File([blob], "processed.png", { type: "image/png" });
           }
         },
@@ -54,7 +53,6 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
           name: "Pass 3: Auto crop image",
           getFile: async() => {
             const blob = await cropCenterImage(selectedFile);
-            downloadDebugImage(blob, 'debugpass3autocrop.png')
             return new File([blob], "cropped.png", { type: "image/png" });
           }
         }
