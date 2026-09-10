@@ -28,10 +28,10 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white rounded-xl p-4 border border-gray-200 text-center shadow-sm"
+          className="bg-white rounded-xl p-4 border border-gray-200 text-center shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none"
         >
-          <span className={`text-2xl font-black ${stat.color}`}>{stat.value}</span>
-          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">
+          <span className={`text-2xl font-black ${stat.color} dark:text-slate-50`}>{stat.value}</span>
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-0.5 dark:text-slate-400">
             {stat.label}
           </p>
         </div>

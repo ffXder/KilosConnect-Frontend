@@ -26,12 +26,12 @@ const TaskStatsSection: React.FC<TaskStatsProps> = ({ tasks }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {stats.map((stat, index) => (
-        <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm">
+        <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm dark:bg-slate-900 dark:border-slate-700">
           <div className={`${stat.bg} ${stat.color} p-3 rounded-xl`}>{stat.icon}</div>
           <div>
             <div className="flex items-baseline gap-2">
-              <p className="text-2xl font-semibold text-[#0f172a]">{stat.value}</p>
-              <p className="text-[15px] font-semibold text-gray-400 tracking-wider uppercase">{stat.label}</p>
+              <p className="text-2xl font-semibold text-[#0f172a] dark:text-slate-100">{stat.value}</p>
+              <p className="text-[15px] font-semibold text-gray-400 tracking-wider uppercase dark:text-slate-300">{stat.label}</p>
             </div>
           </div>
         </div>

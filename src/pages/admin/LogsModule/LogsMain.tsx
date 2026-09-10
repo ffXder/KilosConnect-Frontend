@@ -77,18 +77,18 @@ export function LogsPage() {
     >["userRole"];
 
   return ( 
-    <div className="flex min-h-screen bg-[#f4f5f6]">
+    <div className="flex min-h-screen bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 w-full overflow-y-auto pt-20 md:pt-0">
+      <main className="flex-1 w-full overflow-y-auto pt-20 md:pt-0 dark:bg-slate-950 transition-colors duration-300">
         <div className="p-4 md:p-8 max-w-[1600px] mx-auto space-y-6">
           
           <div className="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
                 Activity Logs
               </h1>
-              <p className="text-gray-500 text-sm mt-1">
+              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">
                 Immutable audit trail of all system activities
               </p>
             </div>

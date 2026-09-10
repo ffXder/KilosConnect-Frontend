@@ -59,7 +59,7 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-950 transition-color duration-300 dark:border-slate-600">
+          <tr className="bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-900 transition-color duration-300 dark:border-slate-700 dark:shadow-none">
             <th className="py-4 px-6 dark:text-slate-300">QR Code</th>
             <th className="py-4 px-6 dark:text-slate-300">Asset</th>
             <th className="py-4 px-6 dark:text-slate-300">Zone</th>
@@ -70,7 +70,7 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
             <th className="py-4 px-6 text-center dark:text-slate-300">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 text-sm dark:bg-slate-950 transition-color duration-300 dark:divide-slate-800">
+        <tbody className="divide-y divide-gray-100 text-sm dark:bg-slate-900 transition-color duration-300 dark:divide-slate-800">
           {isLoading ? (
             /* Skeleton loading */
             Array.from({ length: 5 }).map((_, index) => (

@@ -14,9 +14,9 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
       {/* Total Assets */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-950 dark:border-gray-600 transition-color duration-300">
+      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
         <p className="text-gray-400 text-xs font-semibold dark:text-slate-400">Total Assets</p>
-        <p className="text-2xl font-bold mt-1 text-black dark:text-slate-300">{total}</p>
+        <p className="text-2xl font-bold mt-1 text-black dark:text-slate-200">{total}</p>
       </div>
       {/* Working */}
       <div className="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm dark:bg-emerald-950 dark:border-emerald-600 transition-color duration-300">

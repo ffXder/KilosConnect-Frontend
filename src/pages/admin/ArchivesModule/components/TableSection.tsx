@@ -53,57 +53,57 @@ export const TableSection: React.FC<TableSectionProps> = ({
 
   if (isLoading) {
     return (
-      <div className="w-full bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-sm animate-pulse space-y-4">
+      <div className="w-full bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-sm animate-pulse space-y-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
         {[1, 2, 3, 4, 5].map((n) => (
-          <div key={n} className="h-12 bg-slate-100 rounded-xl w-full" />
+          <div key={n} className="h-12 bg-slate-100 rounded-xl w-full dark:bg-slate-800" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-[#e2e8f0] shadow-sm overflow-hidden">
+    <div className="w-full bg-white rounded-2xl border border-[#e2e8f0] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse min-w-[900px]">
           {/* Table Header */}
           <thead>
-            <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
-              <th className="py-4 px-6 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] dark:border-slate-700 dark:bg-slate-900/80">
+              <th className="py-4 px-6 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Item / Archive ID
               </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Module
               </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Original Date
               </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Archived Date
               </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Reason
               </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Archived By
               </th>
-              <th className="py-4 px-6 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th className="py-4 px-6 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Actions
               </th>
             </tr>
           </thead>
 
           {/* Table Body */}
-          <tbody className="divide-y divide-[#f1f5f9]">
+          <tbody className="divide-y divide-[#f1f5f9] dark:divide-slate-700">
             {items.length > 0 ? (
               items.map((item) => (
                 <tr
                   key={item.archiveId}
-                  className="hover:bg-slate-50/80 transition-colors duration-150"
+                  className="hover:bg-slate-50/80 transition-colors duration-150 dark:hover:bg-slate-800/80"
                 >
                   {/* Item Title & Archive ID */}
                   <td className="py-4 px-6 vertical-align-top">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#f1f5f9] flex items-center justify-center flex-shrink-0 text-[#64748b]">
+                      <div className="w-9 h-9 rounded-lg bg-[#f1f5f9] flex items-center justify-center flex-shrink-0 text-[#64748b] dark:bg-slate-800 dark:text-slate-300">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -119,10 +119,10 @@ export const TableSection: React.FC<TableSectionProps> = ({
                         </svg>
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-sm font-bold text-[#0f172a] leading-snug truncate max-w-[200px]">
+                        <h3 className="text-sm font-bold text-[#0f172a] leading-snug truncate max-w-[200px] dark:text-slate-100">
                           {getItemTitle(item)}
                         </h3>
-                        <span className="text-xs text-gray-400 block tracking-wide font-mono mt-0.5">
+                        <span className="text-xs text-gray-400 block tracking-wide font-mono mt-0.5 dark:text-slate-400">
                           {item.archiveId || item._id}
                         </span>
                       </div>
@@ -143,28 +143,28 @@ export const TableSection: React.FC<TableSectionProps> = ({
 
                   {/* Original Date */}
                   <td className="py-4 px-4 whitespace-nowrap">
-                    <span className="text-xs font-semibold text-[#334155]">
+                    <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
                       {formatDate(item.createdAt)}
                     </span>
                   </td>
 
                   {/* Archived Date */}
                   <td className="py-4 px-4 whitespace-nowrap">
-                    <span className="text-xs font-semibold text-[#334155]">
+                    <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
                       {formatDate(item.updatedAt)}
                     </span>
                   </td>
 
                   {/* Reason */}
                   <td className="py-4 px-4 max-w-[200px]">
-                    <p className="text-xs text-[#475569] leading-relaxed line-clamp-2">
+                    <p className="text-xs text-[#475569] leading-relaxed line-clamp-2 dark:text-slate-300">
                       {item.reason || "No reason provided."}
                     </p>
                   </td>
 
                   {/* Archived By */}
                   <td className="py-4 px-4 whitespace-nowrap">
-                    <span className="text-xs font-semibold text-[#334155]">
+                    <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
                       {item.archivedBy || "System Admin"}
                     </span>
                   </td>
@@ -180,7 +180,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                           e.preventDefault();
                           onView(item);
                         }}
-                        className="flex items-center gap-1 border border-[#cbd5e1] hover:bg-slate-100 text-[#334155] text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
+                        className="flex items-center gap-1 border border-[#cbd5e1] hover:bg-slate-100 text-[#334155] text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors cursor-pointer active:scale-[0.97] dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                       >
                         <svg
                           className="w-3.5 h-3.5 text-[#475569]"
@@ -209,7 +209,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                           e.preventDefault();
                           onRestore(item);
                         }}
-                        className="flex items-center gap-1 border border-[#3b82f6] hover:bg-[#eff6ff] text-[#3b82f6] text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
+                        className="flex items-center gap-1 border border-[#3b82f6] hover:bg-[#eff6ff] text-[#3b82f6] text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors cursor-pointer active:scale-[0.97] dark:border-blue-500 dark:text-blue-300 dark:hover:bg-slate-800"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +234,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
             ) : (
               <tr>
                 <td colSpan={7} className="py-12 text-center">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-slate-300">
                     No archived records match your criteria.
                   </p>
                 </td>

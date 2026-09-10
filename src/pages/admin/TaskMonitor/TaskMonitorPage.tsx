@@ -50,21 +50,21 @@ export const TaskMonitorPage: React.FC = () => {
     (typeof verificationTask?.task?.standardPhotoUrl === 'string' ? verificationTask.task.standardPhotoUrl : null);
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc]">
+    <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
       
-      <main className="flex-1 w-full overflow-y-auto">
+      <main className="flex-1 w-full overflow-y-auto dark:bg-slate-950 transition-colors duration-300">
         <div className="p-4 md:p-8 max-w-[1600px] mx-auto space-y-8">
           
           {/* Header & View Navigation Tabs */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Task Tracking</h1>
-              <p className="text-gray-500 text-sm mt-1">Live maintenance monitor & visual verification</p>
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">Task Tracking</h1>
+              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">Live maintenance monitor & visual verification</p>
             </div>
 
             {/* Main Tabs Toggle */}
-            <div className="flex gap-2 p-1.5 bg-gray-200/70 rounded-2xl w-fit">
+            <div className="flex gap-2 p-1.5 bg-gray-200/70 rounded-2xl w-fit dark:bg-slate-800">
               <button
                 onClick={() => setActiveMainTab('monitor')}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${

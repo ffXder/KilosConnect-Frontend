@@ -147,12 +147,12 @@ export const ProfilePage: React.FC = () => {
   if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-[#f4f5f6] flex">
+    <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
-      <div className="flex-1 min-w-0 lg:pl-[100px] p-8">
+      <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300">
         <div className="mb-6">
-          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Profile</h1>
-          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5">Manage your account information and view your activity</p>
+          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
+          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
@@ -169,13 +169,13 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-5">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb]">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-semibold text-[#0d1f1a]">Personal Information</h2>
+                <h2 className="text-base font-semibold text-[#0d1f1a] dark:text-slate-100">Personal Information</h2>
                 {isEditing && (
                   <div className="flex gap-2">
                     <button onClick={handleSubmit} className="bg-[#183a30] hover:bg-[#336658] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
-                    <button onClick={handleCancel} className="border border-[#d1d5db] hover:bg-[#f9fafb] text-[#374151] text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Cancel</button>
+                    <button onClick={handleCancel} className="border border-[#d1d5db] hover:bg-[#f9fafb] text-[#374151] text-sm font-medium px-4 py-1.5 rounded-lg transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Cancel</button>
                   </div>
                 )}
               </div>
@@ -189,14 +189,14 @@ export const ProfilePage: React.FC = () => {
                     { name: "phone", label: "Phone Number", type: "tel" },
                   ].map(({ name, label, type }) => (
                     <div key={name}>
-                      <label className="block text-xs text-[#6b7280] mb-1.5 font-medium">{label}</label>
+                      <label className="block text-xs text-[#6b7280] mb-1.5 font-medium dark:text-slate-300">{label}</label>
                       <input
                         name={name}
                         type={type}
                         value={form[name as keyof ProfileData] || ""}
                         onChange={handleChange}
                         placeholder={name === "phone" ? "+63 000 000 0000" : ""}
-                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] ${
+                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 ${
                           name === "username" && !form.username.includes("@") && form.username.length > 0
                             ? "border-red-400 ring-red-100"
                             : "border-[#d1d5db]"
@@ -243,6 +243,6 @@ const InfoField: React.FC<{ label: string; value: string; icon?: string }> = ({ 
       {icon && iconMap[icon]}
       <span className="text-xs text-[#9ca3af] font-medium">{label}</span>
     </div>
-    <p className="text-sm font-medium text-[#111827]">{value}</p>
+    <p className="text-sm font-medium text-[#111827] dark:text-slate-200">{value}</p>
   </div>
 );

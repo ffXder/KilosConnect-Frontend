@@ -109,7 +109,7 @@ export const TaskManagementPage: React.FC = () => {
             {role === 'admin' && (
               <button
                 onClick={() => setIsQrModalOpen(true)}
-                className="bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 px-5 py-3 rounded-[16px] text-[14px] font-bold flex items-center gap-2.5 transition-all shadow-sm active:scale-95 cursor-pointer dark:bg-slate-950 transition-color duration-300 dark:border-slate-600"
+                className="bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 px-5 py-3 rounded-[16px] text-[14px] font-bold flex items-center gap-2.5 transition-all shadow-sm active:scale-95 cursor-pointer dark:bg-slate-900 dark:shadow-none transition-color duration-300 dark:border-slate-700"
               >
                 <QrCode size={18} className="text-[#113129] dark:text-slate-50" />
                 <span className='dark:text-slate-50'>Area QR Codes</span>

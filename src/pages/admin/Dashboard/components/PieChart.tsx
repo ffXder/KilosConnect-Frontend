@@ -1,21 +1,57 @@
-import { PieChart } from 'lucide-react';
+import { PieChart as PieChartIcon } from 'lucide-react';
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 export interface PieChartItem {
-  label: string;
-  color: string;        // tailwind bg class e.g. "bg-green-500"
-  stroke: string;       // hex color e.g. "#22c55e"
-  value: string;        // display percent e.g. "65%"
-  count: number;
-  dashArray: string;    // e.g. "65 35"
-  dashOffset: string;   // e.g. "0"
+  name: string;
+  value: number;
+  color: string;
 }
 
 const defaultPieData: PieChartItem[] = [
-  { label: "Working", color: "bg-green-500", stroke: "#22c55e", value: "65%", count: 101, dashArray: "65 35", dashOffset: "0" },
-  { label: "Under Repair", color: "bg-orange-400", stroke: "#fb923c", value: "15%", count: 23, dashArray: "15 85", dashOffset: "-65" },
-  { label: "Damaged", color: "bg-red-500", stroke: "#ef4444", value: "12%", count: 19, dashArray: "12 88", dashOffset: "-80" },
-  { label: "Decommissioned", color: "bg-gray-400", stroke: "#9ca3af", value: "8%", count: 13, dashArray: "8 92", dashOffset: "-92" },
+  { name: 'Working', value: 65, color: '#22c55e' },
+  { name: 'Damaged', value: 18, color: '#f97316' },
+  { name: 'Under Repair', value: 10, color: '#3b82f6' },
+  { name: 'Hazardous', value: 5, color: '#ef4444' },
+  { name: 'Decommissioned', value: 2, color: '#9ca3af' },
 ];
+
+const fixedLegendItems: Array<{ name: string; color: string }> = [
+  { name: 'Working', color: '#22c55e' },
+  { name: 'Under Repair', color: '#3b82f6' },
+  { name: 'Needs Repair', color: '#ffffff' },
+  { name: 'Damaged', color: '#f97316' },
+  { name: 'Hazardous', color: '#ef4444' },
+  { name: 'Decommissioned', color: '#9ca3af' },
+];
+
+const tooltipTextByStatus: Record<string, string> = {
+  Working: 'Working Assets',
+  Damaged: 'Damaged Assets',
+  'Under Repair': 'Under Repair Assets',
+  Hazardous: 'Hazardous Assets',
+  Decommissioned: 'Decommissioned Assets',
+};
+
+const StatusTooltip = ({ active, payload }: any) => {
+  if (!active || !payload || !payload.length) return null;
+
+  const item = payload[0].payload;
+  const statusName = item?.name ?? 'Asset';
+  const statusColor = item?.color ?? '#64748b';
+  const assetCount = item?.value ?? 0;
+  const textColor = statusName === 'Needs Repair' ? '#111827' : statusColor;
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: textColor }}>
+        {statusName}
+      </div>
+      <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: textColor }}>
+        Assets: {assetCount}
+      </div>
+    </div>
+  );
+};
 
 interface DashboardPieChartProps {
   data?: PieChartItem[];
@@ -26,61 +62,83 @@ interface DashboardPieChartProps {
 
 const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
   data = defaultPieData,
-  total = 156,
-  title = "Asset Status Distribution",
-  subtitle = "Current condition breakdown of all assets",
+  total = 100,
+  title = 'Asset Status Distribution',
+  subtitle = 'Current condition breakdown of all assets',
 }) => {
+  const chartData = data.length > 0 ? data : [];
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
+    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
       <div className="flex items-center gap-3 mb-1">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-100 text-green-600">
-          <PieChart size={22} strokeWidth={2} />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-600">
+          <PieChartIcon size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50 font-bold">{title}</h3>
+          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50">{title}</h3>
           <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center py-4">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-10 w-full max-w-md md:max-w-none">
-          {/* Donut Chart SVG */}
-          <div className="relative w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 shrink-0">
-            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-              {data.map((item) => (
-                <circle
-                  key={item.label}
-                  cx="18" cy="18" r="15.9"
-                  fill="none"
-                  stroke={item.stroke}
-                  strokeWidth="3.2"
-                  strokeDasharray={item.dashArray}
-                  strokeDashoffset={item.dashOffset}
-                  strokeLinecap="round"
+      <div className="flex-1 py-4">
+        <div className="relative h-[200px] w-full">
+          {chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={45}
+                  outerRadius={70}
+                  paddingAngle={2}
+                  stroke="none"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`${entry.name}-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  cursor={{ stroke: '#cbd5e1', strokeWidth: 1 }}
+                  content={<StatusTooltip />}
+                  offset={18}
+                  wrapperStyle={{ pointerEvents: 'none', zIndex: 20 }}
                 />
-              ))}
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-slate-50 font-bold">{total}</div>
-                <div className="text-[10px] text-gray-400 font-medium dark:text-slate-50">Total</div>
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-slate-600">
+                No data
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Legend */}
-          <div className="space-y-3 sm:space-y-4 w-full max-w-[200px]">
-            {data.map((item) => (
-              <div key={item.label} className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-sm shrink-0 ${item.color}`} />
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-50 font-bold">{item.label}</div>
-                  <div className="text-[10px] sm:text-[11px] text-gray-400 dark:text-slate-400">{item.count} assets</div>
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-gray-600 shrink-0 dark:text-slate-50">{item.value}</div>
+          {chartData.length > 0 && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-800 dark:text-slate-50">{total}</div>
+                <div className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-slate-400">Total</div>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-3 gap-x-3 gap-y-2 mt-2">
+          {fixedLegendItems.map((item) => {
+            const matchingItem = chartData.find((entry) => entry.name === item.name);
+            const currentValue = matchingItem?.value ?? 0;
+
+            return (
+              <div key={item.name} className="flex items-center gap-2 min-w-0">
+                <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: item.color }} />
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-semibold text-gray-700 dark:text-slate-200 truncate">{item.name}</div>
+                  <div className="text-[10px] text-gray-400 dark:text-slate-400">{currentValue}</div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -94,19 +94,19 @@ export const ArchivesPage: React.FC = () => {
     : [];
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a]">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       {/* Main Container */}
-      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden">
+      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
         <div className="max-w-[1400px] mx-auto space-y-6">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
                 Archives
               </h1>
-              <p className="text-gray-500 text-sm mt-1">
+              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">
                 Historical records of completed and decommissioned items
               </p>
             </div>

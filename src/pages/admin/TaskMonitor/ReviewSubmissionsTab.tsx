@@ -76,22 +76,22 @@ export const ReviewSubmissionsTab: React.FC = () => {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden dark:bg-slate-900 dark:border-slate-700">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center">
+        <div className="p-6 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center dark:border-slate-700">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Admin Task Moderation Queue</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Review and resolve disputed tasks flagged by custodians or peers.</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">Admin Task Moderation Queue</h2>
+            <p className="text-sm text-gray-500 mt-0.5 dark:text-slate-300">Review and resolve disputed tasks flagged by custodians or peers.</p>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={refresh}
-              className="p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800"
               title="Refresh Queue"
             >
               <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             </button>
-            <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-full border border-purple-200">
+            <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-full border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-700">
               {disputedQueue.length} Disputed Queue
             </span>
           </div>
@@ -107,42 +107,42 @@ export const ReviewSubmissionsTab: React.FC = () => {
 
         {/* Content Queue */}
         {loading && disputedQueue.length === 0 ? (
-          <div className="p-12 flex flex-col items-center justify-center text-slate-400">
+          <div className="p-12 flex flex-col items-center justify-center text-slate-400 dark:text-slate-300">
             <Loader2 className="w-8 h-8 animate-spin text-purple-600 mb-2" />
             <p className="text-xs font-medium">Loading disputed tasks for moderation review...</p>
           </div>
         ) : disputedQueue.length === 0 ? (
-          <div className="p-12 text-center text-slate-400 font-medium text-sm">
+          <div className="p-12 text-center text-slate-400 font-medium text-sm dark:text-slate-300">
             All clear! No disputed tasks waiting for admin resolution.
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-slate-700">
             {disputedQueue.map((sub) => (
-              <div key={sub._id} className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors">
+              <div key={sub._id} className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors dark:hover:bg-slate-800/60">
                 <div className="flex items-start space-x-4">
                   <img 
                     src={sub.submittedPhoto || 'https://via.placeholder.com/150'} 
                     alt="Submission Proof" 
-                    className="w-20 h-20 rounded-xl object-cover border border-gray-200 shadow-xs shrink-0" 
+                    className="w-20 h-20 rounded-xl object-cover border border-gray-200 shadow-xs shrink-0 dark:border-slate-600" 
                   />
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-base font-bold text-gray-900">{sub.task?.title || 'Untitled Task'}</h3>
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 flex items-center gap-1">
+                      <h3 className="text-base font-bold text-gray-900 dark:text-slate-100">{sub.task?.title || 'Untitled Task'}</h3>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 flex items-center gap-1 dark:bg-purple-800/30 dark:text-purple-200">
                         <ShieldAlert size={12} />
                         <span>Disputed</span>
                       </span>
                     </div>
-                    <p className="text-sm font-medium text-indigo-600">{sub.task?.area || 'General Area'}</p>
-                    <p className="text-xs text-gray-500">
-                      Submitted by <span className="font-semibold text-gray-700">
+                    <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">{sub.task?.area || 'General Area'}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-300">
+                      Submitted by <span className="font-semibold text-gray-700 dark:text-slate-200">
                         {sub.completedBy ? `${sub.completedBy.firstName}` : 'Custodian'}
                       </span>
                     </p>
 
                     {sub.verificationNote && (
-                      <div className="text-xs p-2.5 rounded-xl mt-2 bg-purple-50 text-purple-900 border border-purple-200 font-medium flex items-start gap-2">
-                        <AlertTriangle size={14} className="shrink-0 mt-0.5 text-purple-700" />
+                      <div className="text-xs p-2.5 rounded-xl mt-2 bg-purple-50 text-purple-900 border border-purple-200 font-medium flex items-start gap-2 dark:bg-purple-950/40 dark:text-purple-200 dark:border-purple-700">
+                        <AlertTriangle size={14} className="shrink-0 mt-0.5 text-purple-700 dark:text-purple-300" />
                         <div>
                           <strong>Dispute Reason:</strong> {sub.verificationNote}
                         </div>
@@ -154,7 +154,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
                 <div className="flex items-center space-x-3 self-end md:self-center">
                   <button
                     onClick={() => setSelectedSub(sub)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center space-x-1.5 cursor-pointer"
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center space-x-1.5 cursor-pointer dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                   >
                     <Eye size={16} />
                     <span>Inspect</span>
@@ -187,33 +187,32 @@ export const ReviewSubmissionsTab: React.FC = () => {
       {/* INSPECT MODAL */}
       {selectedSub && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl max-w-4xl w-full p-6 space-y-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="flex justify-between items-center border-b pb-4">
+          <div className="bg-white rounded-3xl max-w-4xl w-full p-6 space-y-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col dark:bg-slate-900 dark:text-slate-100">
+            <div className="flex justify-between items-center border-b pb-4 dark:border-slate-700">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-purple-100 text-purple-700 rounded-2xl">
+                <div className="p-2.5 bg-purple-100 text-purple-700 rounded-2xl dark:bg-purple-900/40 dark:text-purple-300">
                   <ShieldAlert size={22} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{selectedSub.task?.title}</h3>
-                  <p className="text-sm font-medium text-indigo-600">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100">{selectedSub.task?.title}</h3>
+                  <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">
                     Location: {selectedSub.task?.area} • Submitted by {selectedSub.completedBy?.firstName || 'Custodian'}
                   </p>
                 </div>
               </div>
               <button 
                 onClick={() => setSelectedSub(null)}
-                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
               >
                 <X size={20} />
               </button>
             </div>
 
             {selectedSub.verificationNote && (
-              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-purple-900 text-xs">
-                <AlertTriangle size={18} className="text-purple-700 shrink-0 mt-0.5" />
+              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-purple-900 text-xs dark:bg-purple-950/40 dark:border-purple-700 dark:text-purple-200">
+                <AlertTriangle size={18} className="text-purple-700 shrink-0 mt-0.5 dark:text-purple-300" />
                 <div>
-                  <p className="font-bold text-purple-900 text-sm">Dispute Detail</p>
-                  <p className="mt-0.5 leading-relaxed">{selectedSub.verificationNote}</p>
+                  <p className="font-bold text-purple-900 text-sm dark:text-purple-200">Dispute Detail</p>
                 </div>
               </div>
             )}

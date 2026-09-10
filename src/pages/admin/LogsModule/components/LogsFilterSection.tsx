@@ -25,8 +25,8 @@ export default function LogsFilterSection({
   setEndDate,
 }: Props) {
   return (
-    <div className="bg-white border border-[#E5E7EB] rounded-2xl p-4 sm:p-5 shadow-sm space-y-3 sm:space-y-4">
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+    <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 shadow-sm space-y-3 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+      <div className="flex flex-col sm:flex-row gap-3">
         {/* Search Input */}
         <input
           type="text"
@@ -36,13 +36,12 @@ export default function LogsFilterSection({
           className="
             w-full
             sm:flex-1
-            h-11
-            sm:h-12
-            px-4
+            h-10
+            px-3
             text-sm
             text-[#0f2942]
             placeholder-gray-400
-            rounded-xl
+            rounded-lg
             border
             border-[#E5E7EB]
             bg-white
@@ -51,6 +50,11 @@ export default function LogsFilterSection({
             focus:border-[#0f2942]
             focus:ring-2
             focus:ring-[#0f2942]/10
+            dark:bg-slate-800
+            dark:border-slate-600
+            dark:text-slate-200
+            dark:placeholder-slate-400
+            dark:focus:border-slate-400
           "
         />
 
@@ -63,12 +67,11 @@ export default function LogsFilterSection({
             className="
               w-full
               sm:w-40
-              h-11
-              sm:h-12
-              px-3.5
+              h-10
+              px-3
               text-sm
               text-[#0f2942]
-              rounded-xl
+              rounded-lg
               border
               border-[#E5E7EB]
               bg-white
@@ -78,6 +81,10 @@ export default function LogsFilterSection({
               focus:border-[#0f2942]
               focus:ring-2
               focus:ring-[#0f2942]/10
+              dark:bg-slate-800
+              dark:border-slate-600
+              dark:text-slate-200
+              dark:focus:border-slate-400
             "
           >
             <option value="All">All Types</option>
@@ -96,12 +103,11 @@ export default function LogsFilterSection({
             className="
               w-full
               sm:w-40
-              h-11
-              sm:h-12
-              px-3.5
+              h-10
+              px-3
               text-sm
               text-[#0f2942]
-              rounded-xl
+              rounded-lg
               border
               border-[#E5E7EB]
               bg-white
@@ -111,6 +117,10 @@ export default function LogsFilterSection({
               focus:border-[#0f2942]
               focus:ring-2
               focus:ring-[#0f2942]/10
+              dark:bg-slate-800
+              dark:border-slate-600
+              dark:text-slate-200
+              dark:focus:border-slate-400
             "
           >
             <option value="All Dates">All Dates</option>
@@ -125,9 +135,9 @@ export default function LogsFilterSection({
 
       {/* Custom Date Pickers (Shown only when "Custom" is selected) */}
       {selectedDate === "Custom" && setStartDate && setEndDate && (
-        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 border-t border-dashed border-[#E5E7EB]">
+        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 border-t border-dashed border-[#E5E7EB] dark:border-slate-700">
           <div className="w-full sm:w-auto flex items-center gap-2">
-            <span className="text-xs text-gray-500 font-medium">From:</span>
+            <span className="text-xs text-gray-500 font-medium dark:text-slate-300">From:</span>
             <input
               type="date"
               value={startDate}
@@ -145,12 +155,16 @@ export default function LogsFilterSection({
                 bg-white
                 outline-none
                 focus:border-[#0f2942]
+                dark:bg-slate-800
+                dark:border-slate-600
+                dark:text-slate-200
+                dark:focus:border-slate-400
               "
             />
           </div>
 
           <div className="w-full sm:w-auto flex items-center gap-2">
-            <span className="text-xs text-gray-500 font-medium">To:</span>
+            <span className="text-xs text-gray-500 font-medium dark:text-slate-300">To:</span>
             <input
               type="date"
               value={endDate}
@@ -168,6 +182,10 @@ export default function LogsFilterSection({
                 bg-white
                 outline-none
                 focus:border-[#0f2942]
+                dark:bg-slate-800
+                dark:border-slate-600
+                dark:text-slate-200
+                dark:focus:border-slate-400
               "
             />
           </div>
