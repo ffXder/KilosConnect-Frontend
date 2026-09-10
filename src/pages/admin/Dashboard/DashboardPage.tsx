@@ -38,7 +38,7 @@ export const DashboardPage: React.FC = () => {
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   const assetStatusData = useMemo(() => {
-    const activeAssets = assets.filter((asset) => !asset.isArchived);
+    const activeAssets = assets;
     const counts: Record<string, number> = {};
 
     activeAssets.forEach((asset) => {
@@ -104,7 +104,6 @@ export const DashboardPage: React.FC = () => {
     const areaMap = new Map<string, { open: number; resolved: number }>();
 
     incidentReports
-      .filter((incident) => !incident.isArchived)
       .forEach((incident) => {
         const area = incident.area || 'Unassigned';
         const existing = areaMap.get(area) ?? { open: 0, resolved: 0 };
