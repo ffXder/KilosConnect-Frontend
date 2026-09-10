@@ -25,8 +25,8 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
     date: new Date().toISOString().split('T')[0],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);       // ← actual File
-  const [imagePreview, setImagePreview] = useState<string | null>(null); // ← just for preview
+  const [imageFile, setImageFile] = useState<File | null>(null);       // actual File
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // just for preview
 
   const isFormValid = 
     formData.item.trim() !== "" && 

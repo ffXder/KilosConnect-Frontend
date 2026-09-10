@@ -4,9 +4,6 @@ import { X, Trash2 } from "lucide-react";
 export interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  /**
-   * Called on confirm. Passes the optional reason string if provided.
-   */
   onConfirm: (reason?: string) => void;
   itemName: string;
   /**
