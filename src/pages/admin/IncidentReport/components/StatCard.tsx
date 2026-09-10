@@ -16,7 +16,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
   lowCount,
 }) => {
   const stats = [
-    { label: 'Total', value: total, color: 'text-gray-700' },
+    { label: 'Total', value: total, color: 'text-gray-700 dark:text-slate-300' },
     { label: 'Open', value: openCount, color: 'text-[#E67E22]' },
     { label: 'Resolved', value: resolvedCount, color: 'text-[#2ECC71]' },
     { label: 'High', value: highCount, color: 'text-[#E74C3C]' },

@@ -11,9 +11,6 @@ export interface Asset {
     area: string;
     baselineImageUrl?: string | null;
     description?: string;
-    isArchived: boolean;
-    archivedAt: string | null;
-    archivedBy: string | null;
     recommendation?: 'Replace Immediately' | 'Monitor Closely' | 'Healthy' | 'Unknown SRP, cannot determine replacement recommendation';
     maintenanceCount?: number;
     lastMaintenanceDate?: string | null;
@@ -21,7 +18,7 @@ export interface Asset {
 }
 
 //create
-export type NewAsset = Omit<Asset, '_id' | 'assetId' | 'qrCode' | 'cumulativeRepairCost' | 'isArchived' | 'archivedAt' | 'archivedBy' | 'recommendation'>;
+export type NewAsset = Omit<Asset, '_id' | 'assetId' | 'qrCode' | 'cumulativeRepairCost' | 'recommendation'>;
 
 //update
-export type UpdateAsset = Partial<Omit<Asset, '_id' | 'assetId' | 'qrCode' | 'isArchived' | 'archivedAt' | 'archivedBy' | 'recommendation'>>;
+export type UpdateAsset = Partial<Omit<Asset, '_id' | 'assetId' | 'qrCode' | 'recommendation'>>;

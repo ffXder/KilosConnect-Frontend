@@ -27,13 +27,12 @@ export interface Task {
   endTime: string;      
   requiresVerification: boolean; 
   isBreak: boolean;
-  isArchived: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
 // create 
-export type NewTask = Omit<Task, '_id' | 'isArchived' | 'createdAt' | 'updatedAt'>;
+export type NewTask = Omit<Task, '_id' | 'createdAt' | 'updatedAt'>;
 
 // update 
 export type UpdateTask = Partial<Omit<Task, '_id' | 'createdAt' | 'updatedAt'>>;

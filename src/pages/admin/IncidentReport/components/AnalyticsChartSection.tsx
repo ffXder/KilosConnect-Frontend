@@ -48,6 +48,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           </ResponsiveContainer>
         </div>
         <div className="flex justify-center gap-4 text-xs font-semibold text-gray-600 dark:text-slate-300">
+        <div className="flex justify-center gap-4 text-xs font-semibold text-gray-600 dark:text-slate-300">
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#E67E22]" /> Open</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#2ECC71]" /> Resolved</span>
         </div>
@@ -77,6 +78,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           </ResponsiveContainer>
         </div>
         <div className="flex justify-center gap-3 text-xs font-semibold text-gray-600 flex-wrap dark:text-slate-300">
+        <div className="flex justify-center gap-3 text-xs font-semibold text-gray-600 flex-wrap dark:text-slate-300">
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#E74C3C]" /> High</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#F1C40F]" /> Medium</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#3498DB]" /> Low</span>
@@ -87,7 +89,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
       <div className="md:col-span-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
         <h3 className="text-xs font-bold uppercase text-gray-500 tracking-wider dark:text-slate-200">By Area</h3>
         <div className="h-[180px] w-full mt-2">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" className="">
             <BarChart layout="vertical" data={areaData} margin={{ top: 10, right: 20, left: 40, bottom: 0 }}>
               <XAxis type="number" allowDecimals={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }} stroke="#cbd5e1" />
               <YAxis dataKey="name" type="category" tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }} width={120} stroke="#cbd5e1" />

@@ -28,14 +28,14 @@ const statusConfig: Record<string, { label: string; icon: React.ReactNode; bgCla
     icon: <Wrench size={14} strokeWidth={2.5} />,
     bgClass: "bg-red-50 dark:bg-red-100",
     textClass: "text-red-700",
-    badgeClass: "bg-red-100 text-red-700 border-red-200",
+    badgeClass: "bg-red-100 text-red-700 border-red-200 dark:text-red-100 dark:bg-red-500",
   },
   monitor: {
     label: "Monitor Closely",
     icon: <Eye size={14} strokeWidth={2.5} />,
     bgClass: "bg-amber-50 dark:bg-amber-100",
     textClass: "text-amber-700",
-    badgeClass: "bg-amber-100 text-amber-700 border-amber-200",
+    badgeClass: "bg-amber-100 text-amber-700 border-amber-200 dark:text-amber-50 dark:bg-amber-500",
   },
   none: {
     label: "",

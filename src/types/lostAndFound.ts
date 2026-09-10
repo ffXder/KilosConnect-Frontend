@@ -17,9 +17,6 @@ export interface LostAndFound {
     claimedAt: string | null;
     claimedImage: CloudinaryImage;
     reportedBy: string;
-    isArchived: boolean;
-    archivedAt: string | null;
-    archivedBy: string | null;
 }
 
 // create

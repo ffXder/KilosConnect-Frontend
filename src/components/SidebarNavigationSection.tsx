@@ -278,7 +278,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
             onClick={handleLogoutClick}
             title={!isExpanded && !isMobileOpen ? "Log Out" : undefined}
             className={`flex items-center rounded-[10px] text-[#c8d8d5] hover:bg-white/5 transition-colors cursor-pointer border-l-4 border-transparent py-3 ${
-              !isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4 w-full"
+              !isExpanded && !isMobileOpen ? "justify-center w-full border-l-0" : "gap-3 px-4 w-full"
             }`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FDFFE0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

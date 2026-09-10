@@ -6,9 +6,6 @@ export interface UserAccount {
   lastName: string;
   email: string;
   role: "admin" | "custodian";
-  isArchived: boolean;
-  archivedBy: string | null;
-  archivedAt: string | null;
   dateAdded: string;
   phoneNumber: string;
   createdAt: string;

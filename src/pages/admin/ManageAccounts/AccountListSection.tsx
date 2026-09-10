@@ -1,5 +1,5 @@
 import React from "react";
-import { User, ShieldAlert, Search } from "lucide-react"; // Assuming you use lucide-react, otherwise use your AccountsIcons
+import { User, Edit3, Trash2} from "lucide-react"; // Assuming you use lucide-react, otherwise use your AccountsIcons
 import type { UserAccount } from "../../../types/manageAccount";
 import { formatDateTime } from "../../../utils/formatter";
 
@@ -26,7 +26,6 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
             <th className="px-6 py-4">Username</th>
             <th className="px-6 py-4">Phone Number</th>
             <th className="px-6 py-4">Role</th>
-            <th className="px-6 py-4">Status</th>
             <th className="px-6 py-4">Date Added</th>
             <th className="px-6 py-4 text-center">Actions</th>
           </tr>
@@ -85,14 +84,6 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                   {acc.role}
                 </span>
               </td>
-              <td className="px-6 py-4">
-                <span className={`flex items-center gap-1.5 font-bold text-[11px] ${
-                  !acc.isArchived ? "text-green-600" : "text-gray-400"
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${!acc.isArchived ? "bg-green-500" : "bg-gray-300"}`} />
-                  {acc.isArchived ? "Inactive" : "Active"}
-                </span>
-              </td>
               <td className="px-6 py-4 text-gray-400 dark:text-slate-400">{formatDateTime(acc.createdAt)}</td>
               <td className="px-6 py-4">
                 <div className="flex justify-center gap-4">
@@ -100,13 +91,13 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                     onClick={() => onEditClick(acc)} 
                     className="text-[#0b3026] font-bold text-xs hover:underline decoration-2 dark:text-emerald-300"
                   >
-                    Edit
+                    <Edit3 size={15} />
                   </button>
                   <button 
                     onClick={() => onDeleteClick(acc.userId, acc.firstName)} 
                     className="text-red-500 font-bold text-xs hover:underline decoration-2"
                   >
-                    Delete
+                    <Trash2 size={15} />
                   </button>
                 </div>
               </td>
