@@ -10,7 +10,7 @@ interface StatCardProps {
 }
 
 export const StatCard: React.FC<StatCardProps> = ({ label, count, color, iconBg, icon: Icon }) => (
-<div className="flex items-center gap-6 p-7 bg-white border border-[#e2e8f0] rounded-[28px] flex-1 shadow-sm transition-all hover:shadow-md dark:bg-slate-900 dark:border-slate-700">
+<div className="flex items-center gap-6 p-7 bg-white border border-[#e2e8f0] rounded-[20px] flex-1 shadow-sm transition-all hover:shadow-md dark:bg-slate-900 dark:border-slate-700">
     <div className={`w-14 h-14 flex items-center justify-center rounded-[18px] ${iconBg} shrink-0`}>
       <Icon size={24} className={color} />
     </div>
