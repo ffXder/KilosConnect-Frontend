@@ -89,7 +89,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                 <div className="flex justify-center gap-4">
                   <button 
                     onClick={() => onEditClick(acc)} 
-                    className="text-[#0b3026] font-bold text-xs hover:underline decoration-2 dark:text-emerald-300"
+                    className="text-blue-500 font-bold text-xs hover:underline decoration-2 "
                   >
                     <Edit3 size={15} />
                   </button>
