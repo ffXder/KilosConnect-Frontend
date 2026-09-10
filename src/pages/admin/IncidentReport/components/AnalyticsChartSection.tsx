@@ -48,7 +48,6 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           </ResponsiveContainer>
         </div>
         <div className="flex justify-center gap-4 text-xs font-semibold text-gray-600 dark:text-slate-300">
-        <div className="flex justify-center gap-4 text-xs font-semibold text-gray-600 dark:text-slate-300">
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#E67E22]" /> Open</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#2ECC71]" /> Resolved</span>
         </div>
@@ -77,7 +76,6 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex justify-center gap-3 text-xs font-semibold text-gray-600 flex-wrap dark:text-slate-300">
         <div className="flex justify-center gap-3 text-xs font-semibold text-gray-600 flex-wrap dark:text-slate-300">
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#E74C3C]" /> High</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#F1C40F]" /> Medium</span>
