@@ -166,14 +166,14 @@ export const IncidentReportPage: React.FC = () => {
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>['userRole'];
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f4f5f6]">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] dark:bg-slate-950 transition-color duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden">
         <div className="max-w-[1400px] mx-auto space-y-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-[#0f2942]">Incident Reporting</h1>
-            <p className="text-gray-500 text-sm mt-1">Track and manage equipment issues and safety hazards</p>
+            <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">Incident Reporting</h1>
+            <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">Track and manage equipment issues and safety hazards</p>
           </div>
 
           {/* Metric Cards Component */}
