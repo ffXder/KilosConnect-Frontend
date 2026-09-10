@@ -28,7 +28,7 @@ const IncidentRow: React.FC<IncidentRowProps> = ({ incident, onClick, onViewClic
   return (
     <tr
       onClick={() => onViewClick(incident)}
-      className="border-b border-[#f1f5f9] hover:bg-[#f8fafc] cursor-pointer transition-colors group text-[13px] last:border-b-0"
+      className="border-b border-[#f1f5f9] hover:bg-[#f8fafc] cursor-pointer transition-colors group text-[13px] last:border-b-0 dark:text-slate-300 hover:bg-slate-900"
     >
       {/* ID */}
       <td className="py-4 px-6">
@@ -53,7 +53,7 @@ const IncidentRow: React.FC<IncidentRowProps> = ({ incident, onClick, onViewClic
 
       {/* Title & Description */}
       <td className="py-4 px-6">
-        <div className="font-semibold text-gray-900 group-hover:text-[#0F6E56] transition-colors truncate">
+        <div className="font-semibold text-gray-900 group-hover:text-[#0F6E56] transition-colors truncate dark:text-slate-300">
           {incident.title}
         </div>
         <div className="text-gray-400 text-[12px] truncate">
