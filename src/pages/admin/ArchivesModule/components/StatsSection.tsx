@@ -12,7 +12,7 @@ const ArchivesStatsSection: React.FC<{ stats: ArchiveStats }> = ({ stats }) => {
       </div>
 
       <div className="bg-[#fff5f5] border border-[#fecaca] p-5 rounded-2xl shadow-sm dark:bg-red-950/40 dark:border-red-800">
-        <span className="text-xs font-semibold text-[#ef4444] dark:text-red-300">Incidents</span>
+        <span className="text-xs font-semibold text-[#ef4444] dark:text-red-300">Incidents Report</span>
         <div className="text-2xl font-bold text-[#ef4444] mt-1.5 dark:text-red-300">
           {stats?.byModule?.IncidentReport ?? 0}
         </div>
