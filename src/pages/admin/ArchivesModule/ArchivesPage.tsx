@@ -78,7 +78,7 @@ export const ArchivesPage: React.FC = () => {
   const formattedStats = {
     total: stats?.total ?? 0,
     byModule: {
-      Incident: stats?.byModule?.Incident ?? 0,
+      IncidentReport: stats?.byModule?.IncidentReport ?? 0,
       Asset: stats?.byModule?.Asset ?? 0,
       Task: stats?.byModule?.Task ?? 0,
       User: stats?.byModule?.User ?? 0,
