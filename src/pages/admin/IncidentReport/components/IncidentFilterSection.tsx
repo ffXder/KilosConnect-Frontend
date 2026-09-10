@@ -88,15 +88,15 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
   };
 
   return (
-    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm">
-      {/* Row 1: Search + Date Picker + Action */}
+    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 shadow-sm dark:bg-slate-950 transition-colors duration-300">
+      {/* Search */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all"
+            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 transition-color duration-300 dark:border-slate-600 dark:text-slate-300"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
           />
