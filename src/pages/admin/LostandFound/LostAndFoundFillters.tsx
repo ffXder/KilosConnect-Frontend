@@ -23,7 +23,7 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
   onAddItem,
 }) => {
   return (
-    <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans">
+    <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       
       {/* Primary Action Row: Search & Add */}
       <div className="flex items-center gap-4">
@@ -32,7 +32,7 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
           <input
             type="text"
             placeholder="Search items by name, description, or found by..."
-            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] text-[15px] focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400"
+            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] text-[15px] focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:placeholder-slate-400 dark:focus:border-slate-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -52,15 +52,15 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
         {/* Status Group */}
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Status:</span>
-          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px]">
+          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px] dark:bg-slate-800">
             {(["All", "Unclaimed", "Claimed"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setStatusFilter(tab)}
                 className={`px-5 py-2 rounded-[9px] text-[13px] font-bold transition-all ${
                   statusFilter === tab
-                    ? "bg-white text-[#113129] shadow-sm"
-                    : "text-[#64748b] hover:text-[#1a1a1a]"
+                    ? "bg-white text-[#113129] shadow-sm dark:bg-slate-700 dark:text-slate-50"
+                    : "text-[#64748b] hover:text-[#1a1a1a] dark:text-slate-300 dark:hover:text-slate-100"
                 }`}
               >
                 {tab}
@@ -78,7 +78,7 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
             <select
               value={zoneFilter}
               onChange={(e) => setZoneFilter(e.target.value)}
-              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1]"
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:hover:border-slate-500"
             >
               {zones.map((zone) => (
                 <option key={zone} value={zone}>

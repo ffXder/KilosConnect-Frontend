@@ -53,13 +53,16 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
             justify-between
             transition-shadow
             hover:shadow-md
+            dark:bg-slate-900
+            dark:border-slate-700
+            dark:hover:shadow-none
           "
         >
-          <p className="text-[11px] font-medium tracking-wide uppercase text-[#64748B] truncate">
+          <p className="text-[11px] font-medium tracking-wide uppercase text-[#64748B] truncate dark:text-slate-300">
             {item.label}
           </p>
 
-          <p className="mt-1 text-2xl sm:text-[28px] font-bold text-[#0f2942]">
+          <p className="mt-1 text-2xl sm:text-[28px] font-bold text-[#0f2942] dark:text-slate-100">
             {isLoading ? "..." : item.count.toLocaleString()}
           </p>
         </div>

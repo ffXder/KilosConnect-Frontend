@@ -28,7 +28,7 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
   const chartData = data.length > 0 ? data : [{ month: 'No Data', completed: 0, pending: 0 }];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
+    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-100 text-green-600">
           <TrendingUp size={22} strokeWidth={2} />

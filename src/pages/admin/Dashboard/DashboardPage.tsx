@@ -13,13 +13,21 @@ import DashboardReplacementRecommendations from "./components/ReplacementRecomme
 
 const ASSET_STATUS_COLORS: Record<string, string> = {
   Working: '#22c55e',
-  Damaged: '#f97316',
-  'Needs Repair': '#ffffff',
   'Under Repair': '#3b82f6',
-  'Needs Replacement': '#ef4444',
+  'Needs Repair': '#ffffff',
+  Damaged: '#f97316',
   Hazardous: '#dc2626',
   Decommissioned: '#9ca3af',
 };
+
+const DISPLAYED_ASSET_STATUS_ORDER = [
+  'Working',
+  'Under Repair',
+  'Needs Repair',
+  'Damaged',
+  'Hazardous',
+  'Decommissioned',
+];
 
 export const DashboardPage: React.FC = () => {
   const { role } = useAuth();
@@ -35,12 +43,20 @@ export const DashboardPage: React.FC = () => {
 
     activeAssets.forEach((asset) => {
       const condition = asset.condition || 'Working';
+      if (!DISPLAYED_ASSET_STATUS_ORDER.includes(condition)) return;
       counts[condition] = (counts[condition] ?? 0) + 1;
     });
 
-    return Object.entries(counts)
-      .map(([name, value]) => ({ name, value, color: ASSET_STATUS_COLORS[name] ?? '#94a3b8' }))
-      .sort((a, b) => b.value - a.value);
+    return DISPLAYED_ASSET_STATUS_ORDER.flatMap((status) => {
+      const value = counts[status] ?? 0;
+      if (value === 0) return [];
+
+      return [{
+        name: status,
+        value,
+        color: ASSET_STATUS_COLORS[status] ?? '#94a3b8',
+      }];
+    });
   }, [assets]);
 
   const maintenanceTrendData = useMemo(() => {

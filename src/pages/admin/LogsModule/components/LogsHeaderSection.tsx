@@ -34,7 +34,7 @@ export default function LogsHeaderSection() {
   ];
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 flex-wrap">
         {cards.map((card, index) => {
         const Icon = card.icon;
 
@@ -52,6 +52,8 @@ export default function LogsHeaderSection() {
                 flex
                 items-center
                 gap-3
+                dark:bg-slate-900
+                dark:border-slate-700
               "
             >
               <Icon
@@ -60,11 +62,11 @@ export default function LogsHeaderSection() {
               />
 
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">
+                <span className="font-semibold text-sm dark:text-slate-100">
                   {card.value}
                 </span>
 
-                <span className="text-[10px] text-green-500">
+                <span className="text-[10px] text-green-500 dark:text-emerald-400">
                   {card.percent}
                 </span>
               </div>

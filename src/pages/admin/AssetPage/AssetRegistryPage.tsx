@@ -156,7 +156,7 @@ export const AssetRegistryPage = () => {
                 </div>
               )}
 
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm w-full mb-5 dark:bg-slate-950 dark:border-slate-600 transition-color duration-300">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm w-full mb-5 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
                 {/* search barr */}
                 <div className="relative flex-1 min-w-[280px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -217,7 +217,7 @@ export const AssetRegistryPage = () => {
                 <AssetRegistryStats assets={assets} />
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full dark:bg-slate-950 dark:border-slate-600 transition-color duration-300">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
                 <AssetRegistryList
                   isLoading={loading}
                   filteredAssets={filteredAssets}

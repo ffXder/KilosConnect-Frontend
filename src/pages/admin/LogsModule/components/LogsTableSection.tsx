@@ -46,7 +46,7 @@ const getBadge = (type: string) => {
 export default function LogsTableSection({ logs, pagination, onPageChange }: Props) {
   if (logs.length === 0) {
     return (
-      <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-8 text-center text-sm text-gray-500 shadow-sm">
+      <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-8 text-center text-sm text-gray-500 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:shadow-none">
         No logs found.
       </div>
     );
@@ -57,14 +57,14 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
   const totalLogs = pagination?.totalLogs || logs.length;
   
   return (
-    <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl shadow-sm overflow-hidden">
+    <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       
       {/* MOBILE VIEW */}
-      <div className="block md:hidden divide-y divide-[#E5E7EB]">
+      <div className="block md:hidden divide-y divide-[#E5E7EB] dark:divide-slate-700">
         {logs.map((log, index) => {
           const logKey = (log as any)._id || (log as any).id || index;
           return (
-            <div key={logKey} className="p-4 space-y-3 bg-white">
+            <div key={logKey} className="p-4 space-y-3 bg-white dark:bg-slate-900">
               {/* Card Header: Type Badge & Timestamp */}
               <div className="flex items-center justify-between gap-2">
                 <span
@@ -89,18 +89,18 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
 
               {/* Main Action & Details */}
               <div>
-                <p className="text-sm font-semibold text-[#0f2942]">
+                <p className="text-sm font-semibold text-[#0f2942] dark:text-slate-100">
                   {log.action}
                 </p>
-                <p className="text-sm text-gray-500 mt-1 leading-snug">
+                <p className="text-sm text-gray-500 mt-1 leading-snug dark:text-slate-300">
                   {log.details}
                 </p>
               </div>
 
               {/* Footer Info: User */}
-              <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs">
-                <span className="text-gray-400">Performed by</span>
-                <span className="font-medium text-[#0f2942]">
+              <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs dark:border-slate-700">
+                <span className="text-gray-400 dark:text-slate-400">Performed by</span>
+                <span className="font-medium text-[#0f2942] dark:text-slate-200">
                   {getDisplayName(`${log.performedBy?.firstName || ''} ${log.performedBy?.lastName || ''}`.trim() || 'System')}
                 </span>
               </div>
@@ -113,48 +113,48 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-[#E5E7EB] bg-gray-50/60">
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[270px]">
+            <tr className="border-b border-[#E5E7EB] bg-gray-50/60 dark:border-slate-700 dark:bg-slate-900/80">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[270px] dark:text-slate-400">
                 Timestamp
               </th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[170px]">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[170px] dark:text-slate-400">
                 User ID
               </th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[140px]">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[140px] dark:text-slate-400">
                 Name
               </th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[130px]">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[130px] dark:text-slate-400">
                 Type
               </th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[130px]">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 w-[130px] dark:text-slate-400">
                 Action
               </th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">
                 Details
               </th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-[#E5E7EB]">
+          <tbody className="divide-y divide-[#E5E7EB] dark:divide-slate-700">
             {logs.map((log, index) => {
               const logKey = (log as any)._id || (log as any).id || index;
               return (
                 <tr
                   key={logKey}
-                  className="hover:bg-gray-50/80 transition-colors"
+                  className="hover:bg-gray-50/80 transition-colors dark:hover:bg-slate-800/80"
                 >
                   {/* date */}
-                  <td className="px-5 py-4 text-sm text-[#0f2942] whitespace-nowrap">
+                  <td className="px-5 py-4 text-sm text-[#0f2942] whitespace-nowrap dark:text-slate-200">
                     {formatDateTime(log.createdAt)}
                   </td>
 
                   {/* user id */}
-                  <td className="px-5 py-4 text-sm font-medium text-[#0f2942] whitespace-nowrap">
+                  <td className="px-5 py-4 text-sm font-medium text-[#0f2942] whitespace-nowrap dark:text-slate-200">
                     {log.performedBy?.userId || 'N/A'}
                   </td>
 
                   {/* user name */}
-                  <td className="px-5 py-4 text-sm font-medium text-[#0f2942] whitespace-nowrap">
+                  <td className="px-5 py-4 text-sm font-medium text-[#0f2942] whitespace-nowrap dark:text-slate-200">
                     {getDisplayName(`${log.performedBy?.firstName || ''} ${log.performedBy?.lastName || ''}`.trim() || 'System')}
                   </td>
 
@@ -176,11 +176,11 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
                     </span>
                   </td>
 
-                  <td className="px-5 py-4 text-sm font-semibold text-[#0f2942] whitespace-nowrap">
+                  <td className="px-5 py-4 text-sm font-semibold text-[#0f2942] whitespace-nowrap dark:text-slate-100">
                     {log.action}
                   </td>
 
-                  <td className="px-5 py-4 text-sm text-gray-500">
+                  <td className="px-5 py-4 text-sm text-gray-500 dark:text-slate-300">
                     {log.details || "N/A"}
                   </td>
                 </tr>
@@ -192,19 +192,19 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
 
       {/* PAGINATION FOOTER */}
       {onPageChange && (
-        <div className="px-5 py-3.5 border-t border-[#E5E7EB] bg-white flex items-center justify-between">
-          <p className="text-xs text-gray-500">
-            Showing <span className="font-semibold text-[#0f2942]">{logs.length}</span> of{" "}
-            <span className="font-semibold text-[#0f2942]">{totalLogs}</span> entries (Page{" "}
-            <span className="font-semibold text-[#0f2942]">{currentPage}</span> of{" "}
-            <span className="font-semibold text-[#0f2942]">{totalPages}</span>)
+        <div className="px-5 py-3.5 border-t border-[#E5E7EB] bg-white flex items-center justify-between dark:border-slate-700 dark:bg-slate-900">
+          <p className="text-xs text-gray-500 dark:text-slate-300">
+            Showing <span className="font-semibold text-[#0f2942] dark:text-slate-100">{logs.length}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalLogs}</span> entries (Page{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{currentPage}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalPages}</span>)
           </p>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors"
+              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
             >
               Previous
             </button>
@@ -212,7 +212,7 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors"
+              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
             >
               Next
             </button>

@@ -88,15 +88,15 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
   };
 
   return (
-    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm">
+    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       {/* Row 1: Search + Date Picker + Action */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400" />
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all"
+            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-slate-500 dark:focus:bg-slate-800"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
           />
@@ -109,12 +109,12 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-[8px] border text-[13px] font-medium transition-all ${
               isDatePickerOpen
-                ? 'border-[#113129] bg-white shadow-md'
-                : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100'
+                ? 'border-[#113129] bg-white shadow-md dark:border-slate-500 dark:bg-slate-800'
+                : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700'
             }`}
           >
-            <Calendar size={15} className={isDatePickerOpen ? 'text-[#113129]' : 'text-gray-400'} />
-            <span className="text-gray-700 whitespace-nowrap">
+            <Calendar size={15} className={isDatePickerOpen ? 'text-[#113129]' : 'text-gray-400 dark:text-slate-300'} />
+            <span className="text-gray-700 whitespace-nowrap dark:text-slate-200">
               {dateRange === 'Custom Range' && customStart && customEnd
                 ? `${customStart} → ${customEnd}`
                 : dateRange}
@@ -125,7 +125,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           {isDatePickerOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setIsDatePickerOpen(false)} />
-              <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+              <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden dark:bg-slate-900 dark:border-slate-700">
                 <div className="p-2">
                   {quickRanges.map((range) => (
                     <button
@@ -138,7 +138,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                       className={`w-full text-left px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
                         dateRange === range
                           ? 'bg-[#113129] text-white'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#113129]'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#113129] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
                       }`}
                     >
                       {range}
@@ -196,54 +196,54 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
       {/* Row 2: Select Filters & Clear Button */}
       <div className="flex items-center gap-3 flex-wrap pt-1">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-medium text-gray-400">Status</span>
+          <span className="text-[11px] font-medium text-gray-400 dark:text-slate-400">Status</span>
           <div className="relative">
             <select
               value={activeStatus}
               onChange={(e) => onStatusChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
             >
               {statusOptions.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none dark:text-slate-300" />
           </div>
         </div>
 
-        <div className="h-4 w-px bg-gray-200" />
+        <div className="h-4 w-px bg-gray-200 dark:bg-slate-600" />
 
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-medium text-gray-400">Severity</span>
+          <span className="text-[11px] font-medium text-gray-400 dark:text-slate-400">Severity</span>
           <div className="relative">
             <select
               value={activeSeverity}
               onChange={(e) => onSeverityChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
             >
               {severityOptions.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none dark:text-slate-300" />
           </div>
         </div>
 
-        <div className="h-4 w-px bg-gray-200" />
+        <div className="h-4 w-px bg-gray-200 dark:bg-slate-600" />
 
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-medium text-gray-400">Area</span>
+          <span className="text-[11px] font-medium text-gray-400 dark:text-slate-400">Area</span>
           <div className="relative">
             <select
               value={activeArea}
               onChange={(e) => onAreaChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors"
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
             >
               {areaOptions.map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}
             </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none dark:text-slate-300" />
           </div>
         </div>
 

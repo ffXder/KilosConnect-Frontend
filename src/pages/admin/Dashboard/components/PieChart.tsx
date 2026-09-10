@@ -42,7 +42,7 @@ const StatusTooltip = ({ active, payload }: any) => {
   const textColor = statusName === 'Needs Repair' ? '#111827' : statusColor;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm">
+    <div className="rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95">
       <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: textColor }}>
         {statusName}
       </div>
@@ -69,7 +69,7 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
   const chartData = data.length > 0 ? data : [];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
+    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-600">
           <PieChartIcon size={22} strokeWidth={2} />

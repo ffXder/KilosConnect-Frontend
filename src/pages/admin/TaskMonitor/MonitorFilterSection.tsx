@@ -43,16 +43,16 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   ];
 
   return (
-    <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans">
+    <div className="bg-white p-8 rounded-[24px] border border-[#e2e8f0] shadow-sm space-y-7 font-sans dark:bg-slate-900 dark:border-slate-700">
       
       {/* Primary Action Row: Search & Add */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8] dark:text-slate-400" />
           <input
             type="text"
             placeholder="Search tasks..."
-            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] text-[15px] focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400"
+            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[16px] text-[15px] focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-slate-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -107,8 +107,8 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
         )}
 
         <div className="flex items-center gap-3">
-          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest">Type:</span>
-          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px] gap-1">
+          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest dark:text-slate-300">Type:</span>
+          <div className="flex bg-[#f1f5f9] p-1 rounded-[12px] gap-1 dark:bg-slate-800">
             {frequencyOptions.map((opt) => (
               <button 
                 key={opt.label} 
@@ -116,7 +116,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
                 className={`px-4 py-2 rounded-[9px] font-semibold text-[10px] transition-all cursor-pointer ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
-                    : "text-slate-400 hover:bg-white/50"  
+                    : "text-slate-400 hover:bg-white/50 dark:text-slate-300 dark:hover:bg-slate-700"  
                 }`}
               >
                 {opt.label.toUpperCase()}
@@ -125,15 +125,15 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
           </div>
         </div>
 
-        <div className="h-6 w-px bg-gray-200" />
+        <div className="h-6 w-px bg-gray-200 dark:bg-slate-600" />
 
         <div className="flex items-center gap-3">
-          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">Area:</span>
+          <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap dark:text-slate-300">Area:</span>
           <div className="relative">
             <select
               value={areaFilter}
               onChange={(e) => setAreaFilter(e.target.value)}
-              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1]"
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:border-slate-500"
             >
               {zones.map((z) => (
                 <option key={z} value={z}>
@@ -141,7 +141,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
                 </option>
               ))}
             </select>
-            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#94a3b8]">
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#94a3b8] dark:text-slate-300">
               <ChevronDown size={16} />
             </div>
           </div>

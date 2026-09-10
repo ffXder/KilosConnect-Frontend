@@ -13,8 +13,8 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
 }) => {
   return (
     <>
-      <div className="flex items-center justify-between px-6 py-5 border-b border-[#eef1f3]">
-        <span className="font-semibold text-xl">User Accounts ({totalAccounts})</span>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-[#eef1f3] dark:border-slate-700">
+        <span className="font-semibold text-xl dark:text-slate-100">User Accounts ({totalAccounts})</span>
         <button 
           type="button" // Explicitly button to prevent form triggers
           onClick={onAddNewUser}
@@ -28,7 +28,7 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
         <input
           type="text"
           placeholder="Search users..."
-          className="w-full bg-[#fafbfc] border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none"
+          className="w-full bg-[#fafbfc] border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"
           onChange={(e) => onSearchChange(e.target.value)}
           // Prevent 'Enter' key from triggering parent form submits
           onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}

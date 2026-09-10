@@ -31,10 +31,10 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
   }
 
   return (
-    <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden w-full dark:bg-slate-950 dark:border-slate-600 transition-color duration-300">
+    <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden w-full dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className='bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-950 transition-color duration-300 dark:border-slate-600'>
+          <tr className='bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-900 transition-color duration-300 dark:border-slate-700'>
             <th className="py-4 px-6 dark:text-slate-300">Task Detail</th>
             <th className="py-4 px-6 dark:text-slate-300">Time</th>
             <th className="py-4 px-6 dark:text-slate-300">Area</th>
@@ -43,7 +43,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
             <th className="py-4 px-6 text-right dark:text-slate-300">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 text-sm dark:bg-slate-950 transition-color duration-300 dark:divide-slate-800">
+        <tbody className="divide-y divide-gray-100 text-sm dark:bg-slate-900 transition-color duration-300 dark:divide-slate-800">
           {tasks.length === 0 ? (
             <tr>
               <td colSpan={4} className="p-16 text-center text-gray-400">

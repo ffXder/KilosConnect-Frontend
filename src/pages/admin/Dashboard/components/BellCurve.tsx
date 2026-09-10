@@ -98,7 +98,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 dark:dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
+    <div ref={containerRef} className="relative bg-white rounded-2xl shadow-sm p-4 sm:p-6 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-100 text-purple-600">
           <Activity size={22} strokeWidth={2} />
@@ -111,7 +111,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
       {hoveredPoint && (
         <div
-          className="pointer-events-none absolute z-20 rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm"
+          className="pointer-events-none absolute z-20 rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95"
           style={{
             left: hoveredPoint.x,
             top: hoveredPoint.y,

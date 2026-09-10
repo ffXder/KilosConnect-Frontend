@@ -51,14 +51,14 @@ const DashboardStatsSection: React.FC<DashboardStatsSectionProps> = ({ stats = d
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:bg-slate-950 transition-colors duration-300 dark: border-slate-600"
+          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:bg-slate-900 dark:shadow-none dark:border dark:border-slate-700 transition-colors duration-300"
         >
           <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${stat.colorClass}`}>
             {iconMap[stat.label] || <Box size={14} strokeWidth={2} className="sm:size-[16px] md:size-[20px] lg:size-[24px]" />}
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">{stat.count}</div>
-            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate  dark:text-slate-400">{stat.label}</div>
+            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{stat.label}</div>
             <div className="text-[8px] sm:text-[10px] md:text-xs text-gray-400 mt-0.5 truncate dark:text-slate-400">{stat.sublabel}</div>
           </div>
         </div>

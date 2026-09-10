@@ -14,10 +14,10 @@ const ArchivesInfoSection: React.FC<ArchivesInfoSectionProps> = ({
   setSelectedType,
 }) => {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#e2e8f0] flex flex-col sm:flex-row gap-4 items-center mb-6">
+    <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#e2e8f0] flex flex-col sm:flex-row gap-4 items-center mb-6 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       <div className="relative w-full flex-1">
         <svg
-          className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"
+          className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 dark:text-slate-400"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -34,7 +34,7 @@ const ArchivesInfoSection: React.FC<ArchivesInfoSectionProps> = ({
           placeholder="Search by title, asset, or ID..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-white border border-[#e2e8f0] rounded-xl pl-11 pr-4 py-2.5 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#113e33] transition-all"
+          className="w-full bg-white border border-[#e2e8f0] rounded-xl pl-11 pr-4 py-2.5 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#113e33] transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:ring-slate-500"
         />
       </div>
 
@@ -42,7 +42,7 @@ const ArchivesInfoSection: React.FC<ArchivesInfoSectionProps> = ({
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
-          className="w-full bg-white border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#113e33] appearance-none cursor-pointer bg-no-repeat bg-[right_16px_center]"
+          className="w-full bg-white border border-[#e2e8f0] rounded-xl px-4 py-2.5 text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#113e33] appearance-none cursor-pointer bg-no-repeat bg-[right_16px_center] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:focus:ring-slate-500"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
             backgroundSize: "16px",
