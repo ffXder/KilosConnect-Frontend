@@ -25,8 +25,8 @@ export default function LogsFilterSection({
   setEndDate,
 }: Props) {
   return (
-    <div className="bg-white border border-[#E5E7EB] rounded-2xl p-4 sm:p-5 shadow-sm space-y-3 sm:space-y-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+    <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 shadow-sm space-y-3 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+      <div className="flex flex-col sm:flex-row gap-3">
         {/* Search Input */}
         <input
           type="text"
@@ -36,13 +36,12 @@ export default function LogsFilterSection({
           className="
             w-full
             sm:flex-1
-            h-11
-            sm:h-12
-            px-4
+            h-10
+            px-3
             text-sm
             text-[#0f2942]
             placeholder-gray-400
-            rounded-xl
+            rounded-lg
             border
             border-[#E5E7EB]
             bg-white
@@ -68,12 +67,11 @@ export default function LogsFilterSection({
             className="
               w-full
               sm:w-40
-              h-11
-              sm:h-12
-              px-3.5
+              h-10
+              px-3
               text-sm
               text-[#0f2942]
-              rounded-xl
+              rounded-lg
               border
               border-[#E5E7EB]
               bg-white
@@ -105,12 +103,11 @@ export default function LogsFilterSection({
             className="
               w-full
               sm:w-40
-              h-11
-              sm:h-12
-              px-3.5
+              h-10
+              px-3
               text-sm
               text-[#0f2942]
-              rounded-xl
+              rounded-lg
               border
               border-[#E5E7EB]
               bg-white

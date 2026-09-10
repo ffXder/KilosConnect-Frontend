@@ -57,8 +57,20 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
     return () => clearTimeout(handler);
   }, [localSearch, searchTerm, onSearchChange]);
 
-  const statusOptions = ['All', 'Open', 'In Progress', 'Resolved'];
-  const severityOptions = ['Any Severity', 'Low', 'Medium', 'High', 'Urgent', 'Critical'];
+  const statusOptions = [
+    { label: 'All', value: 'All', active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100' },
+    { label: 'Open', value: 'Open', active: 'bg-sky-500 text-white shadow-sm', inactive: 'text-sky-600 hover:text-sky-700 dark:text-sky-300 dark:hover:text-sky-200' },
+    { label: 'In Progress', value: 'In Progress', active: 'bg-blue-500 text-white shadow-sm', inactive: 'text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200' },
+    { label: 'Resolved', value: 'Resolved', active: 'bg-emerald-500 text-white shadow-sm', inactive: 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-300 dark:hover:text-emerald-200' },
+  ];
+  const severityOptions = [
+    { label: 'Any Severity', value: 'Any Severity', active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100' },
+    { label: 'Low', value: 'Low', active: 'bg-blue-500 text-white shadow-sm', inactive: 'text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200' },
+    { label: 'Medium', value: 'Medium', active: 'bg-amber-400 text-slate-900 shadow-sm', inactive: 'text-amber-600 hover:text-amber-700 dark:text-yellow-300 dark:hover:text-yellow-200' },
+    { label: 'High', value: 'High', active: 'bg-orange-500 text-white shadow-sm', inactive: 'text-orange-600 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200' },
+    { label: 'Urgent', value: 'Urgent', active: 'bg-red-500 text-white shadow-sm', inactive: 'text-red-600 hover:text-red-700 dark:text-red-300 dark:hover:text-red-200' },
+    { label: 'Critical', value: 'Critical', active: 'bg-violet-500 text-white shadow-sm', inactive: 'text-violet-600 hover:text-violet-700 dark:text-violet-300 dark:hover:text-violet-200' },
+  ];
   const areaOptions = [
     'All Areas',
     'Mezzanine',
@@ -88,15 +100,15 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
   };
 
   return (
-    <div className="bg-white p-5 rounded-[16px] border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       {/* Row 1: Search + Date Picker + Action */}
       <div className="flex items-center gap-3">
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400" />
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-[#e2e8f0] rounded-[8px] text-[13px] focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-slate-500 dark:focus:bg-slate-800"
+            className="w-full h-10 pl-9 pr-3 bg-gray-50 border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-slate-500 dark:focus:bg-slate-800"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
           />
@@ -107,7 +119,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           <button
             type="button"
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-[8px] border text-[13px] font-medium transition-all ${
+            className={`flex items-center gap-2 h-10 px-3 rounded-lg border text-sm font-medium transition-all ${
               isDatePickerOpen
                 ? 'border-[#113129] bg-white shadow-md dark:border-slate-500 dark:bg-slate-800'
                 : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700'
@@ -186,28 +198,33 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
         <button
           type="button"
           onClick={onAddClick}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#113129] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
+          className="flex items-center gap-2 h-10 px-4 bg-[#113129] text-white rounded-lg text-sm font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
         >
           <Plus size={15} strokeWidth={2.5} />
           Report incident
         </button>
       </div>
 
-      {/* Row 2: Select Filters & Clear Button */}
+      {/* Row 2: Toggle Filters & Clear Button */}
       <div className="flex items-center gap-3 flex-wrap pt-1">
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-medium text-gray-400 dark:text-slate-400">Status</span>
-          <div className="relative">
-            <select
-              value={activeStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
-            >
-              {statusOptions.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none dark:text-slate-300" />
+          <div className="relative flex bg-gray-100 p-1 rounded-[10px] gap-1 dark:bg-slate-800">
+            {statusOptions.map((option) => {
+              const isActive = activeStatus === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onStatusChange(option.value)}
+                  className={`relative z-10 px-3 py-2 rounded-[8px] text-[11px] font-semibold transition-all duration-300 ${
+                    isActive ? option.active : option.inactive
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -215,17 +232,22 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-medium text-gray-400 dark:text-slate-400">Severity</span>
-          <div className="relative">
-            <select
-              value={activeSeverity}
-              onChange={(e) => onSeverityChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
-            >
-              {severityOptions.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none dark:text-slate-300" />
+          <div className="relative flex flex-wrap bg-gray-100 p-1 rounded-[10px] gap-1 dark:bg-slate-800 max-w-full">
+            {severityOptions.map((option) => {
+              const isActive = activeSeverity === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onSeverityChange(option.value)}
+                  className={`relative z-10 px-3 py-2 rounded-[8px] text-[11px] font-semibold transition-all duration-300 ${
+                    isActive ? option.active : option.inactive
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
