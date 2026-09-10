@@ -16,7 +16,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
   lowCount,
 }) => {
   const stats = [
-    { label: 'Total', value: total, color: 'text-gray-700' },
+    { label: 'Total', value: total, color: 'text-gray-700 dark:text-slate-300' },
     { label: 'Open', value: openCount, color: 'text-[#E67E22]' },
     { label: 'Resolved', value: resolvedCount, color: 'text-[#2ECC71]' },
     { label: 'High', value: highCount, color: 'text-[#E74C3C]' },
@@ -28,10 +28,10 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white rounded-xl p-4 border border-gray-200 text-center shadow-sm"
+          className="bg-white rounded-xl p-4 border border-gray-200 text-center shadow-sm dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600"
         >
           <span className={`text-2xl font-black ${stat.color}`}>{stat.value}</span>
-          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-0.5 dark:text-slate-300">
             {stat.label}
           </p>
         </div>
