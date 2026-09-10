@@ -7,7 +7,7 @@ import AccountsListSection from "./AccountListSection";
 import AccountsIcons from "./AccountIcons";
 import { createUser, updateUser } from "../../../services/manageAccountService";
 import { useUsers } from "../../../hooks/useUsers";
-
+import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal"
 export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const { users, loading, error, refresh, handleToggleArchive } = useUsers();
@@ -232,35 +232,13 @@ export const ManageAccountsPage: React.FC = () => {
           </div>
         )}
 
-        {/* --- DELETE POPUP --- */}
-        {deleteConfirm.isOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-[20px] w-full max-w-[420px] overflow-hidden shadow-2xl">
-              <div className="bg-[#0b3026] px-7 py-5">
-                <h3 className="text-white text-xl font-bold">Confirm Deletion</h3>
-              </div>
-              <div className="p-7">
-                <p className="text-[#4a5568] text-base mb-8">
-                  Are you sure you want to delete the profile for <span className="font-bold text-[#1a1a1a]">{deleteConfirm.name}</span>?
-                </p>
-                <div className="flex justify-center gap-3">
-                  <button 
-                    onClick={() => setDeleteConfirm({ isOpen: false, id: "", name: "" })} 
-                    className="w-full py-2.5 border border-gray-300 rounded-lg text-sm font-bold text-[#1a1a1a] hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={confirmDelete} 
-                    className="w-full py-2.5 bg-[#0b3026] text-white rounded-lg text-sm font-bold hover:bg-[#08241d]"
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <DeleteConfirmModal
+          isOpen={deleteConfirm.isOpen}
+          onClose={() => setDeleteConfirm({ isOpen: false, id: "", name: "" })}
+          onConfirm={confirmDelete}
+          itemName={deleteConfirm.name || "Selected Account"}
+          itemType="User Account"
+        />
       </main>
     </div>
   );
