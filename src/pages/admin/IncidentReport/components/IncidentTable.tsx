@@ -19,7 +19,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
   onDeleteIncident
 }) => {
   return (
-    <div className="w-full overflow-x-auto rounded-xl border border-[#e2e8f0] bg-white shadow-sm">
+    <div className="w-full overflow-x-auto rounded-xl border border-[#e2e8f0] bg-white shadow-sm dark:bg-slate-950 transition-color duration-300 dark:border-slate-600">
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-950 transition-color duration-300 dark:border-slate-600">
