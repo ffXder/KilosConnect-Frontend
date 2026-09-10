@@ -12,7 +12,6 @@ import { AssetRegistryStats } from "./components/AssetRegistryStats";
 import { AssetRegistryList } from "./components/AssetRegistryList";
 import { AddAssetModal } from "./components/AddAssetModal";
 import { UpdateAssetModal } from "./components/UpdateAssetModal";
-import { ArchiveConfirmModal } from "./components/ArchiveConfirmModal";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 
 const lofAreas = ["All Areas", "WOD", "Cafe", "Powerlifting", "CrossFit", "Mezzanine", "Other"];
@@ -135,10 +134,10 @@ export const AssetRegistryPage = () => {
           </div>
 
           <div className="flex border-b border-gray-200 gap-8 text-sm font-semibold mb-6">
-            <button onClick={() => setActiveTab("Equipment")} className={`pb-3 transition-all ${activeTab === "Equipment" ? "text-[#10b981] border-b-2 border-[#10b981]" : "text-gray-400 hover:text-gray-600"}`}>
+            <button onClick={() => setActiveTab("Equipment")} className={`pb-3 transition-all ${activeTab === "Equipment" ? "text-[#10b981] border-b-2 border-[#10b981] dark: text-emerald-500" : "text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:text-slate-100"}`}>
               Equipment Assets
             </button>
-            <button onClick={() => setActiveTab("LostFound")} className={`pb-3 transition-all ${activeTab === "LostFound" ? "text-[#10b981] border-b-2 border-[#10b981]" : "text-gray-400 hover:text-gray-600"}`}>
+            <button onClick={() => setActiveTab("LostFound")} className={`pb-3 transition-all ${activeTab === "LostFound" ? "text-[#10b981] border-b-2 border-[#10b981]  dark: text-emerald-500" : "text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:text-slate-100"}`}>
               Lost & Found
             </button>
           </div>
@@ -176,7 +175,7 @@ export const AssetRegistryPage = () => {
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest dark:text-slate-400">Status:</span>
-                    <div className="flex flex-wrap items-center gap-1.5 bg-[#f1f5f9] p-1 rounded-[12px] dark:bg-slate-800">
+                    <div className="flex flex-wrap items-center gap-1.5 bg-[#f1f5f9] p-1 rounded-[12px] dark:bg-slate-800 transition-color duration-300">
                       {assetConditions.map((statusOption) => {
                         const isActive = selectedStatus === statusOption.value;
                         return (
