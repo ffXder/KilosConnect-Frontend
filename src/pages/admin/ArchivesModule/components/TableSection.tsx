@@ -10,7 +10,7 @@ interface TableSectionProps {
 
 // Module type tag styling map
 const tagStyles: Record<string, string> = {
-  Incident: "bg-red-50 text-red-600 border border-red-200",
+  IncidentReport: "bg-red-50 text-red-600 border border-red-200",
   Asset: "bg-blue-50 text-blue-600 border border-blue-200",
   Task: "bg-amber-50 text-amber-600 border border-amber-200",
   User: "bg-purple-50 text-purple-600 border border-purple-200",
