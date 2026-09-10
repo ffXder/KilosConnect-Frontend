@@ -1,17 +1,18 @@
 import { Activity } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 export interface ZoneActivity {
   zone: string;
-  incidents: number;
-  maintenance: number;
+  open: number;
+  resolved: number;
 }
 
 const defaultZones: ZoneActivity[] = [
-  { zone: "Mezzanine", incidents: 2, maintenance: 4 },
-  { zone: "Powerlifting", incidents: 5, maintenance: 7 },
-  { zone: "WOD Area", incidents: 4, maintenance: 10 },
-  { zone: "Weight Lift", incidents: 4, maintenance: 6 },
-  { zone: "CrossFit", incidents: 1, maintenance: 3 },
+  { zone: 'Mezzanine', open: 2, resolved: 4 },
+  { zone: 'Powerlifting', open: 5, resolved: 7 },
+  { zone: 'WOD Area', open: 4, resolved: 10 },
+  { zone: 'Weight Lift', open: 4, resolved: 6 },
+  { zone: 'CrossFit', open: 1, resolved: 3 },
 ];
 
 function smoothCurvePath(pts: { x: number; y: number }[]): string {
@@ -43,9 +44,19 @@ interface DashboardBellCurveProps {
 const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   data = defaultZones,
   title = "Activity by Zone",
-  subtitle = "Incidents vs Maintenance per area",
+  subtitle = 'Incident activity by zone',
 }) => {
-  const maxVal = Math.max(...data.flatMap((d) => [d.incidents, d.maintenance]), 1);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    label: string;
+    value: number;
+    color: string;
+    x: number;
+    y: number;
+    zone: string;
+  } | null>(null);
+
+  const maxVal = Math.max(...data.flatMap((d) => [d.open, d.resolved]), 1);
   const yMax = Math.ceil(maxVal / 2) * 2;
   const step = 2;
 
@@ -60,14 +71,34 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
   const zoneXPositions = data.map((_, i) => toX(i));
 
-  const dataIncPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.incidents) }));
-  const dataMntPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.maintenance) }));
+  const dataOpenPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.open) }));
+  const dataResolvedPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.resolved) }));
 
   const yLabels: number[] = [];
   for (let v = 0; v <= yMax; v += step) yLabels.push(v);
 
+  const handlePointHover = (
+    event: React.MouseEvent<SVGCircleElement>,
+    label: 'Open' | 'Resolved',
+    value: number,
+    color: string,
+    zone: string,
+  ) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    setHoveredPoint({
+      label,
+      value,
+      color,
+      zone,
+      x: event.clientX - rect.left + 18,
+      y: event.clientY - rect.top - 12,
+    });
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 dark:dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
+    <div ref={containerRef} className="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 dark:dark:bg-slate-950 transition-colors duration-300 dark:border-slate-600">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-100 text-purple-600">
           <Activity size={22} strokeWidth={2} />
@@ -77,6 +108,24 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
           <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
         </div>
       </div>
+
+      {hoveredPoint && (
+        <div
+          className="pointer-events-none absolute z-20 rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm"
+          style={{
+            left: hoveredPoint.x,
+            top: hoveredPoint.y,
+            transform: 'translateZ(0)',
+          }}
+        >
+          <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: hoveredPoint.color }}>
+            {hoveredPoint.label}
+          </div>
+          <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: hoveredPoint.color }}>
+            Reports: {hoveredPoint.value}
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 w-full">
         <svg className="w-full" viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="xMidYMid meet" style={{ fontFamily: 'Poppins, Helvetica, sans-serif' }}>
@@ -98,21 +147,55 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="#d1d5db" strokeWidth="1" strokeDasharray="4 4" />
           ))}
 
-          {/* Red curve - Incidents */}
-          <path d={smoothCurvePath([...dataIncPts])} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Orange curve - Open */}
+          <path d={smoothCurvePath([...dataOpenPts])} fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
-          {/* Green curve - Maintenance */}
-          <path d={smoothCurvePath([...dataMntPts])} fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Green curve - Resolved */}
+          <path d={smoothCurvePath([...dataResolvedPts])} fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
-          {/* Dots on red line */}
-          {dataIncPts.map((p, i) => (
-            <circle key={`i-${i}`} cx={p.x} cy={p.y} r="3.5" fill="#ef4444" stroke="white" strokeWidth="1.5" />
-          ))}
+          {/* Dots on orange line */}
+          {dataOpenPts.map((p, i) => {
+            const zone = data[i]?.zone ?? 'Unknown';
+            const value = data[i]?.open ?? 0;
+
+            return (
+              <circle
+                key={`open-${i}`}
+                cx={p.x}
+                cy={p.y}
+                r="4.5"
+                fill="#f97316"
+                stroke="white"
+                strokeWidth="1.5"
+                className="cursor-pointer transition-all duration-200 hover:r-6"
+                onMouseEnter={(event) => handlePointHover(event, 'Open', value, '#f97316', zone)}
+                onMouseMove={(event) => handlePointHover(event, 'Open', value, '#f97316', zone)}
+                onMouseLeave={() => setHoveredPoint(null)}
+              />
+            );
+          })}
 
           {/* Dots on green line */}
-          {dataMntPts.map((p, i) => (
-            <circle key={`m-${i}`} cx={p.x} cy={p.y} r="3.5" fill="#22c55e" stroke="white" strokeWidth="1.5" />
-          ))}
+          {dataResolvedPts.map((p, i) => {
+            const zone = data[i]?.zone ?? 'Unknown';
+            const value = data[i]?.resolved ?? 0;
+
+            return (
+              <circle
+                key={`resolved-${i}`}
+                cx={p.x}
+                cy={p.y}
+                r="4.5"
+                fill="#22c55e"
+                stroke="white"
+                strokeWidth="1.5"
+                className="cursor-pointer transition-all duration-200 hover:r-6"
+                onMouseEnter={(event) => handlePointHover(event, 'Resolved', value, '#22c55e', zone)}
+                onMouseMove={(event) => handlePointHover(event, 'Resolved', value, '#22c55e', zone)}
+                onMouseLeave={() => setHoveredPoint(null)}
+              />
+            );
+          })}
 
           {/* Zone labels below chart */}
           {data.map((d, i) => (
@@ -134,12 +217,12 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       {/* Legend */}
       <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-red-500" />
-          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Incidents</span>
+          <div className="w-3 h-3 rounded-sm bg-orange-500" />
+          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Open</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-green-500" />
-          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Maintenance</span>
+          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Resolved</span>
         </div>
       </div>
     </div>

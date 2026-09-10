@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useAssets } from '../../../hooks/useAssets';
+import { useIncidentReports } from '../../../hooks/useIncident';
 import { useTaskLogs } from '../../../hooks/useTaskLog';
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import DashboardStatsSection from "./components/StatsSections";
@@ -23,6 +24,7 @@ const ASSET_STATUS_COLORS: Record<string, string> = {
 export const DashboardPage: React.FC = () => {
   const { role } = useAuth();
   const { assets } = useAssets();
+  const { reports: incidentReports } = useIncidentReports();
   const { logs: taskLogs } = useTaskLogs();
 
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -82,6 +84,29 @@ export const DashboardPage: React.FC = () => {
     });
   }, [taskLogs]);
 
+  const zoneActivityData = useMemo(() => {
+    const areaMap = new Map<string, { open: number; resolved: number }>();
+
+    incidentReports
+      .filter((incident) => !incident.isArchived)
+      .forEach((incident) => {
+        const area = incident.area || 'Unassigned';
+        const existing = areaMap.get(area) ?? { open: 0, resolved: 0 };
+
+        if (incident.status === 'Resolved') {
+          existing.resolved += 1;
+        } else {
+          existing.open += 1;
+        }
+
+        areaMap.set(area, existing);
+      });
+
+    return Array.from(areaMap.entries())
+      .map(([zone, values]) => ({ zone, open: values.open, resolved: values.resolved }))
+      .sort((a, b) => b.open + b.resolved - (a.open + a.resolved));
+  }, [incidentReports]);
+
   const totalAssetCount = assetStatusData.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
@@ -119,7 +144,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <DashboardBellCurve />
+          <DashboardBellCurve data={zoneActivityData} />
           <DashboardAlertsSection />
         </div>
 
