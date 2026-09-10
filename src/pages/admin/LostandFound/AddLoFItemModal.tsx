@@ -49,7 +49,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
         <div className="bg-[#1C2D24] p-6 text-[#FDFFE0] flex justify-between items-center">
           <div>

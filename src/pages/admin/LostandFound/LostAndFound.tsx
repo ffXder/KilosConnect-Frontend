@@ -63,7 +63,7 @@ export const LostAndFoundPage: React.FC = () => {
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f4f5f6] font-sans text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
+    <div className="flex min-h-screen w-full bg-[#f4f5f6] text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       {/* Main Container */}

@@ -76,7 +76,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden dark:bg-slate-900 dark:border-slate-700">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
         {/* Header */}
         <div className="p-6 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center dark:border-slate-700">
           <div>

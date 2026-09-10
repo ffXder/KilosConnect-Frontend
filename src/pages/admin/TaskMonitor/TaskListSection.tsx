@@ -77,7 +77,7 @@ const TaskListSection: React.FC<TaskListProps> = ({
   };
 
   return (
-    <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-2xl md:rounded-[24px] overflow-hidden shadow-xs min-h-[350px] flex flex-col justify-between dark:bg-slate-900 dark:border-slate-700">
+    <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-2xl md:rounded-[24px] overflow-hidden shadow-xs min-h-[350px] flex flex-col justify-between dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center py-20">
           <Loader2 className="w-10 h-10 text-[#113129] animate-spin" />

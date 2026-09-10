@@ -64,13 +64,13 @@ export const TaskMonitorPage: React.FC = () => {
             </div>
 
             {/* Main Tabs Toggle */}
-            <div className="flex gap-2 p-1.5 bg-gray-200/70 rounded-2xl w-fit dark:bg-slate-800">
+            <div className="flex gap-2 p-0.5 bg-gray-200/70 rounded-2xl w-fit dark:bg-slate-800">
               <button
                 onClick={() => setActiveMainTab('monitor')}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                   activeMainTab === 'monitor'
                     ? 'bg-[#113129] text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900 dark:text-slate-300 hover:text-slate-100'
                 }`}
               >
                 Live Monitor
@@ -80,7 +80,7 @@ export const TaskMonitorPage: React.FC = () => {
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                   activeMainTab === 'submissions'
                     ? 'bg-[#113129] text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900 dark:text-slate-300 hover:text-slate-100'
                 }`}
               >
                 Review Submissions

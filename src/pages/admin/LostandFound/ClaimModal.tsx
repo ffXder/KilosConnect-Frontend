@@ -31,7 +31,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
         <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
           <div>

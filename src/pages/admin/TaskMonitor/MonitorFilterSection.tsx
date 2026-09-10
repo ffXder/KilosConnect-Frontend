@@ -47,7 +47,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   ];
 
   return (
-    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 dark:bg-slate-900 dark:border-slate-700">
+    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       
       {/* Primary Action Row: Search & Add */}
       <div className="flex items-center gap-3">

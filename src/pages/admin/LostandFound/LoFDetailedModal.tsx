@@ -10,7 +10,7 @@ interface DetailedModalProps {
 
 export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-[800px] overflow-hidden">
         <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
           <div>

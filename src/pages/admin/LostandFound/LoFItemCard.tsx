@@ -10,7 +10,7 @@ interface LoFItemCardProps {
 }
 
 export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim, onView }) => (
-  <div className="flex flex-col bg-white border border-[#e2e8f0] rounded-[16px] p-6 relative transition-all hover:shadow-sm h-full font-sans dark:bg-slate-900 dark:border-slate-700">
+  <div className="flex flex-col bg-white border border-[#e2e8f0] rounded-[16px] p-6 relative transition-all hover:shadow-sm h-full dark:bg-slate-900 dark:border-slate-700">
     {/* Clickable Area for Details */}
     <div className="cursor-pointer flex-1" onClick={() => onView(item)}>
       <span className={`absolute top-6 right-6 px-3 py-1 rounded-full text-[11px] font-bold ${

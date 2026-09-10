@@ -40,7 +40,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   const frequencyOptions = [
     { 
       label: 'All', 
-      active: 'bg-slate-900 text-white dark:bg-slate-200 dark:text-slate-900', 
+      active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', 
       inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' 
     },
     { 
