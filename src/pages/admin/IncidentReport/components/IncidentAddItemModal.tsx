@@ -105,7 +105,7 @@ const IncidentAddItemModal: React.FC<IncidentAddItemModalProps> = ({ isOpen, onC
                 >
                   <option value="">{loading ? 'Loading assets...' : 'Select an asset'}</option>
                   {assets
-                    .filter(a => !a.isArchived) // Only show non-archived
+                    .filter(a => a) // Only show non-archived
                     .map((asset) => (
                       <option key={asset._id} value={asset._id}>
                         {asset.name} ({asset.assetId})
