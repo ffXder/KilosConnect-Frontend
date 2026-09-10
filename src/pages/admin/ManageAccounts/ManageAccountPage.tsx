@@ -8,6 +8,7 @@ import AccountsIcons from "./AccountIcons";
 import { createUser, updateUser } from "../../../services/manageAccountService";
 import { useUsers } from "../../../hooks/useUsers";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal"
+
 export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const { users, loading, error, refresh, handleToggleArchive } = useUsers();
