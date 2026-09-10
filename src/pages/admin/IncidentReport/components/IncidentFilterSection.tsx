@@ -100,7 +100,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] flex flex-col gap-3 font-sans shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] flex flex-col gap-3 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       {/* Row 1: Search + Date Picker + Action */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 min-w-0">

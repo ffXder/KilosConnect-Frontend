@@ -23,7 +23,7 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
   onAddItem,
 }) => {
   return (
-    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 font-sans dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+    <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
       
       {/* Primary Action Row: Search & Add */}
       <div className="flex items-center gap-3">
