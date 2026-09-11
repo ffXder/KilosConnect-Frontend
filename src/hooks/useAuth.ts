@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getRole, getUser } from '../services/authService';
+import { getRole, getUser, subscribeAuth } from '../services/authService';
 
 export function useAuth() {
   const [auth, setAuth] = useState(() => ({
@@ -8,7 +8,7 @@ export function useAuth() {
   }));
 
   useEffect(() => {
-    // Sync state when localStorage changes across tabs or custom dispatch
+    // Sync state when in memory auth state changes
     const syncAuth = () => {
       setAuth({
         role: getRole(),
@@ -16,8 +16,10 @@ export function useAuth() {
       });
     };
 
-    window.addEventListener('storage', syncAuth);
-    return () => window.removeEventListener('storage', syncAuth);
+    syncAuth();
+
+    const unsubscribe = subscribeAuth(syncAuth);
+    return () => unsubscribe();
   }, []);
 
   const user = auth.user;
