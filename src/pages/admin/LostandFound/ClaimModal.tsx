@@ -32,8 +32,8 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
-        <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
+      <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden dark:bg-slate-900 transition-colors duration-300">
+        <div className="bg-[#11382C] p-6 text-white flex justify-between items-center dark:bg-[#1D6650] ">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">Mark as Claimed</h2>
             <p className="text-white/70 text-sm font-normal opacity-90">Recording claim details for: {itemName}</p>
@@ -45,13 +45,13 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
 
         <form className="p-8 space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider dark:text-slate-300 ">
               Claimed By (Full Name) <span className="text-red-500">*</span>
             </label>
             <input 
               required 
               autoFocus
-              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
+              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none dark:text-slate-300" 
               placeholder="e.g. Robert Fox" 
               value={claimedBy}
               onChange={e => setClaimedBy(e.target.value)} 
@@ -59,7 +59,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider dark:text-slate-300">
               Proof of Claim / Claimant Photo <span className="text-red-500">*</span> {/* ← now required */}
             </label>
             <input 
@@ -71,7 +71,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
             />
             <div 
               onClick={() => fileInputRef.current?.click()}
-              className="w-full border-2 border-dashed border-[#e8e8e8] rounded-[12px] p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors bg-[#fcfcfc]"
+              className="w-full border-2 border-dashed border-[#e8e8e8] rounded-[12px] p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors bg-[#fcfcfc] dark:bg-slate-800"
             >
               {imagePreview ? (
                 <div className="flex items-center gap-3">
@@ -81,8 +81,8 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
               ) : (
                 <>
                   <ImagePlus size={24} className="text-[#94a3b8] mb-2" />
-                  <p className="text-[13px] font-medium text-gray-700">Click to upload claimant photo</p>
-                  <p className="text-[11px] text-gray-400">Required for verification</p>
+                  <p className="text-[13px] font-medium text-gray-700 dark:text-slate-300">Click to upload claimant photo</p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-300">Required for verification</p>
                 </>
               )}
             </div>
