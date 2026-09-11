@@ -85,7 +85,7 @@ export const ProfilePage: React.FC = () => {
         phone: rawProfile.phoneNumber,
         role: rawProfile.role,
         dateJoined: rawProfile.createdAt.split("T")[0],
-         avatarUrl: rawProfile.profileImage?.url ?? "",
+        avatarUrl: rawProfile.profileImage?.url ?? "",
       });
     }
   }, [rawProfile]);
@@ -143,7 +143,7 @@ export const ProfilePage: React.FC = () => {
     setForm((prev) => ({ ...prev, avatarUrl: "" }));
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">Loading...</div>;
+  if (loading) return <ProfileSkeleton userRole={userRole} />;
   if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (
@@ -229,6 +229,77 @@ export const ProfilePage: React.FC = () => {
     </div>
   );
 };
+
+const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarNavigationSection>["userRole"] }> = ({ userRole }) => (
+  <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
+    <SidebarNavigationSection userRole={userRole} />
+    <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300 animate-pulse">
+      {/* Page Title & Subtitle Skeleton */}
+      <div className="mb-6">
+        <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
+        <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
+        {/* Left Column Skeletons */}
+        <div className="flex flex-col gap-5">
+          {/* Profile Card Skeleton */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 flex flex-col items-center">
+            <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-slate-800 mb-4" />
+            <div className="h-5 w-36 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
+            <div className="h-4 w-24 bg-gray-200 dark:bg-slate-800 rounded mb-4" />
+            <div className="h-9 w-full bg-gray-200 dark:bg-slate-800 rounded-lg" />
+          </div>
+
+          {/* Stats Skeleton */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
+            <div className="h-5 w-28 bg-gray-200 dark:bg-slate-800 rounded mb-4" />
+            <div className="grid grid-cols-2 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-gray-50 dark:bg-slate-800/50 p-4 rounded-xl border border-gray-100 dark:border-slate-800">
+                  <div className="h-3 w-16 bg-gray-200 dark:bg-slate-700 rounded mb-2" />
+                  <div className="h-6 w-10 bg-gray-200 dark:bg-slate-700 rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column Skeletons */}
+        <div className="flex flex-col gap-5">
+          {/* Personal Info Skeleton */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
+            <div className="h-5 w-44 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
+            <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+              {[...Array(6)].map((_, i) => (
+                <div key={i}>
+                  <div className="h-3 w-20 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
+                  <div className="h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Activity Skeleton */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
+            <div className="h-5 w-36 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
+            <div className="flex flex-col gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-800 shrink-0" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="h-4 w-40 bg-gray-200 dark:bg-slate-800 rounded" />
+                    <div className="h-3 w-24 bg-gray-200 dark:bg-slate-800 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const iconMap: Record<string, React.ReactNode> = {
   user: <svg className="w-3.5 h-3.5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 1114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>,
