@@ -113,7 +113,7 @@ export function LogsPage() {
           <LogsStatsSection stats={stats} isLoading={isLoading} />
 
           {isLoading ? (
-            <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-12 text-center text-sm text-gray-500 shadow-sm">
+            <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-12 text-center text-sm text-gray-500 shadow-sm dark:bg-slate-900">
               Loading audit logs...
             </div>
           ) : error ? (
