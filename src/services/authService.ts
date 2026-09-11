@@ -117,9 +117,13 @@ export async function logOut() {
   } catch(err) {
     console.error('Logout error:', err)
   } finally {
+    sessionStorage.setItem('justLoggedOut', 'true');
+    
     setAccessToken(null);
     currentUser = null;
+    notifyAuthChange();
     localStorage.clear()
+    sessionStorage.clear()
     window.location.href = '/login'
   }
 };

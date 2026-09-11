@@ -34,12 +34,12 @@ export const LoginPage: React.FC = () => {
         return;
       }
 
-      const role = getRole();
+      const role = data?.user?.role() || getRole();
 
       if (role === "admin") {
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       } else if (role === "custodian") {
-        navigate("/custodian/dashboard");
+        navigate("/custodian/dashboard", { replace: true });
       } else {
         navigate("/unauthorized");
       }

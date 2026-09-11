@@ -6,7 +6,8 @@ import { ThemeProvider } from './context/ThemeContext'
 import { LoadingPage } from './components/Loading'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useAuth } from './hooks/useAuth'
-import { refreshAccessToken } from './services/authService';
+import { refreshAccessToken } from './services/authService'
+
 // auth 
 import { LoginPage } from './pages/auth/Login'
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
@@ -62,6 +63,7 @@ function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
   if (isLoggedIn) {
     if (role === 'admin') return <Navigate to="/dashboard" replace />;
     if (role === 'custodian') return <Navigate to="/custodian/dashboard" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
   return <>{children}</>;
 }
@@ -71,25 +73,33 @@ function App() {
   
 
   useEffect(() => {
-  const initApp = async () => {
-    try {
-      // only show loading on first load
-      const hasVisited = sessionStorage.getItem('appLoaded');
-      if (!hasVisited) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        sessionStorage.setItem('appLoaded', 'true');
+    let isMounted = true;
+    const initApp = async () => {
+      try {
+        // only show loading on first load
+        const hasVisited = sessionStorage.getItem('appLoaded');
+        if (!hasVisited) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          sessionStorage.setItem('appLoaded', 'true');
+        }
+
+        const justLoggedOut = sessionStorage.getItem('justLoggedOut');
+        if (justLoggedOut) {
+          sessionStorage.removeItem('justLoggedOut');
+          return;
+        }
+
+        await refreshAccessToken();
+      } finally {
+        setIsPageLoading(false);
       }
-      // restore access token
-      await refreshAccessToken();
-    } catch (error){ 
-      console.log('No active session found')
-    } finally {
-      setIsPageLoading(false);
-    }
-  };
+    };
 
     initApp();
-  }, []);
+  return () => {
+    isMounted = false;
+  };
+}, []);
 
   if (isPageLoading) return <LoadingPage />;
 
