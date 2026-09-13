@@ -75,8 +75,8 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white w-full max-w-[540px] rounded-[32px] shadow-2xl overflow-hidden">
-        <div className="bg-[#0a2e27] p-6 flex justify-between items-start text-white">
+      <div className="bg-white dark:bg-slate-900 w-full max-w-[540px] rounded-[32px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
+        <div className="bg-[#072821] p-6 flex justify-between items-start text-white">
           <div>
             <h2 className="text-xl font-bold">Add Facility Asset</h2>
             <p className="text-white/70 text-xs mt-0.5">Configure tracking settings for new equipment</p>
@@ -90,31 +90,31 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
           <div className="grid grid-cols-2 gap-4">
             {/* Name input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Asset Name *</label>
-              <input name="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm" placeholder="e.g. Rowing Machine #13" />
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">Asset Name *</label>
+              <input name="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400" placeholder="e.g. Rowing Machine #13" />
             </div>
 
             {/* Category input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Category *</label>
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">Category *</label>
               <div className="relative">
-                <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm appearance-none cursor-pointer">
+                <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm appearance-none cursor-pointer text-slate-900 dark:text-slate-100">
                   <option value="" disabled>Select category</option>
                   {categories.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-300 pointer-events-none" size={16} />
               </div>
             </div>
 
             {/* Condition input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Condition *</label>
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">Condition *</label>
               <div className="relative">
-                <select name="condition" value={formData.condition} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm appearance-none cursor-pointer">
+                <select name="condition" value={formData.condition} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm appearance-none cursor-pointer text-slate-900 dark:text-slate-100">
                   <option value="" disabled>Select condition</option>
                   {conditions.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-300 pointer-events-none" size={16} />
               </div>
             </div>
           </div>
@@ -123,33 +123,33 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
           <div className="grid grid-cols-2 gap-4">
             {/* Area/Zone input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Target Area *</label>
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">Target Area *</label>
               <div className="relative">
-                <select name="area" value={formData.area} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm appearance-none cursor-pointer">
+                <select name="area" value={formData.area} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm appearance-none cursor-pointer text-slate-900 dark:text-slate-100">
                   <option value="" disabled>Select area</option>
                   {zones.map((z) => <option key={z} value={z}>{z}</option>)}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-300 pointer-events-none" size={16} />
               </div>
             </div>
             {/* Purchase date input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">Acquisition Date</label>
-              <input name="purchaseDate" type="date" value={formData.purchaseDate} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm" />
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">Acquisition Date</label>
+              <input name="purchaseDate" type="date" value={formData.purchaseDate} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm text-slate-900 dark:text-slate-100" />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             {/* SRP input */}
             <div className="space-y-1.5">
-              <label className="text-sm font-bold text-[#4a5568]">SRP (PHP)</label>
-              <input name="srp" type="number" value={formData.srp} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl text-sm" placeholder="15000" />
+              <label className="text-sm font-bold text-[#4a5568] dark:text-slate-200">SRP (PHP)</label>
+              <input name="srp" type="number" value={formData.srp} onChange={handleChange} className="w-full px-4 py-3 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400" placeholder="15000" />
             </div>
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e2e8f0] rounded-xl font-bold text-[#4a5568] hover:bg-gray-50">Cancel</button>
-            <button type="button" onClick={handleSubmit} className="flex-1 py-3 bg-[#0a2e27] text-white rounded-xl font-bold shadow-lg hover:bg-[#08241f]">+ Register Asset</button>
+            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e2e8f0] dark:border-slate-600 rounded-xl font-bold text-[#4a5568] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800">Cancel</button>
+            <button type="button" onClick={handleSubmit} className="flex-1 py-3 bg-[#0a2e27] dark:bg-[#207D55] text-white rounded-xl font-bold shadow-lg hover:bg-[#08241f] dark:hover:bg-[#114a38]">+ Register Asset</button>
           </div>
         </div>
       </div>

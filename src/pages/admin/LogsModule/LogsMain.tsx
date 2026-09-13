@@ -97,6 +97,8 @@ export function LogsPage() {
             {/* <LogsHeaderSection /> */} 
           </div>
 
+          <LogsStatsSection stats={stats} isLoading={isLoading} />
+
           <LogsFilterSection
             search={search}
             setSearch={setSearch}
@@ -109,8 +111,6 @@ export function LogsPage() {
             endDate={endDate}
             setEndDate={setEndDate}    
           />
-
-          <LogsStatsSection stats={stats} isLoading={isLoading} />
 
           {isLoading ? (
             <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-12 text-center text-sm text-gray-500 shadow-sm">

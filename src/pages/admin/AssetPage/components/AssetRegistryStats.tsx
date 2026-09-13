@@ -12,7 +12,7 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
   const hazardous = assets.filter((a) => a.condition === "Hazardous").length;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
       {/* Total Assets */}
       <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
         <p className="text-gray-400 text-xs font-semibold dark:text-slate-400">Total Assets</p>

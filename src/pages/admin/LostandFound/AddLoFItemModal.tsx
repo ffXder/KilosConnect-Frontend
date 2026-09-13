@@ -50,8 +50,8 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-sans">
-      <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden">
-        <div className="bg-[#1C2D24] p-6 text-[#FDFFE0] flex justify-between items-center">
+      <div className="bg-white dark:bg-slate-900 rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden border border-slate-200 dark:border-slate-700">
+        <div className="bg-[#072821] p-6 text-[#FDFFE0] flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">Add New Inventory Item</h2>
             <p className="text-white/70 text-sm font-normal opacity-90">Fill in the details to record a found item</p>
@@ -63,12 +63,12 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
 
         <form className="p-8 space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-1 uppercase tracking-wider">
               Item Name <span className="text-red-500">*</span>
             </label>
             <input 
               required 
-              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
+              className="w-full px-4 py-2.5 border border-[#e8e8e8] dark:border-slate-600 rounded-[8px] text-sm font-normal bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-[#1e4d46]/10 dark:focus:ring-emerald-500/30 outline-none" 
               placeholder="e.g. Black Water Bottle" 
               value={formData.item}
               onChange={e => setFormData({...formData, item: e.target.value})} 
@@ -76,11 +76,11 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-1 uppercase tracking-wider">
               Description
             </label>
             <textarea 
-              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal h-24 resize-none focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
+              className="w-full px-4 py-2.5 border border-[#e8e8e8] dark:border-slate-600 rounded-[8px] text-sm font-normal h-24 resize-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-[#1e4d46]/10 dark:focus:ring-emerald-500/30 outline-none" 
               placeholder="Include details like brand, color, or markings..." 
               value={formData.description}
               onChange={e => setFormData({...formData, description: e.target.value})} 
@@ -89,12 +89,12 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-1 uppercase tracking-wider">
                 Found In <span className="text-red-500">*</span>
               </label>
               <select 
                 required 
-                className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal bg-white focus:ring-2 focus:ring-[#1e4d46]/10 outline-none"
+                className="w-full px-4 py-2.5 border border-[#e8e8e8] dark:border-slate-600 rounded-[8px] text-sm font-normal bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-[#1e4d46]/10 dark:focus:ring-emerald-500/30 outline-none"
                 value={formData.areaFound}
                 onChange={e => setFormData({...formData, areaFound: e.target.value})}
               >
@@ -106,8 +106,8 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
-              Found Item Photo <span className="text-red-500">*</span> {/* ← now required */}
+            <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-1 uppercase tracking-wider">
+              Found Item Photo <span className="text-red-500">*</span>
             </label>
             <input 
               type="file" 
@@ -118,38 +118,38 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
             />
             <div 
               onClick={() => fileInputRef.current?.click()}
-              className="w-full border-2 border-dashed border-[#e8e8e8] rounded-[12px] p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors bg-[#fcfcfc]"
+              className="w-full border-2 border-dashed border-[#e8e8e8] dark:border-slate-600 rounded-[12px] p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors bg-[#fcfcfc] dark:bg-slate-800/70"
             >
               {imagePreview ? (
                 <div className="flex items-center gap-3">
                   <img src={imagePreview} alt="Preview" className="w-12 h-12 rounded-[6px] object-cover" />
-                  <span className="text-xs text-gray-500 font-medium">{imageFile?.name}</span>
+                  <span className="text-xs text-gray-500 dark:text-slate-300 font-medium">{imageFile?.name}</span>
                 </div>
               ) : (
                 <>
-                  <ImagePlus size={24} className="text-[#94a3b8] mb-2" />
-                  <p className="text-[13px] font-medium text-gray-700">Drag & drop or click to upload</p>
-                  <p className="text-[11px] text-gray-400">Maximum file size: 5MB</p>
+                  <ImagePlus size={24} className="text-[#94a3b8] dark:text-slate-300 mb-2" />
+                  <p className="text-[13px] font-medium text-gray-700 dark:text-slate-200">Drag & drop or click to upload</p>
+                  <p className="text-[11px] text-gray-400 dark:text-slate-400">Maximum file size: 5MB</p>
                 </>
               )}
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-medium text-gray-500 dark:text-slate-300 mb-1 uppercase tracking-wider">
               Date Found <span className="text-red-500">*</span>
             </label>
             <input 
               required 
               type="date" 
               value={formData.date}
-              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none" 
+              className="w-full px-4 py-2.5 border border-[#e8e8e8] dark:border-slate-600 rounded-[8px] text-sm font-normal bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-[#1e4d46]/10 dark:focus:ring-emerald-500/30 outline-none" 
               onChange={e => setFormData({...formData, date: e.target.value})} 
             />
           </div>
 
-          <div className="flex gap-4 pt-4 border-t border-[#f4f5f6]">
-            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e8e8e8] rounded-[8px] text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+          <div className="flex gap-4 pt-4 border-t border-[#f4f5f6] dark:border-slate-700">
+            <button type="button" onClick={onClose} className="flex-1 py-3 border border-[#e8e8e8] dark:border-slate-600 rounded-[8px] text-sm font-medium text-gray-600 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
               Cancel
             </button>
             <button 
