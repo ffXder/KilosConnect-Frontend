@@ -53,7 +53,7 @@ export interface TaskLog {
   status: TaskLogStatus;
   completedBy?: { _id: string; firstName: string };
   completedAt?: string;
-
+  
   // for live photo verification
   submittedPhoto?: string | null;
   verifiedBy?: { _id: string; firstName: string } | null;
