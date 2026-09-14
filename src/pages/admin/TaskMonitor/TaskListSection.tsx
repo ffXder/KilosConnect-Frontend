@@ -52,25 +52,31 @@ const TaskListSection: React.FC<TaskListProps> = ({
       case 'Completed':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <CheckCircle2 size={12} /> COMPLETED
+            <CheckCircle2 size={12} /> Completed
+          </span>
+        );
+      case 'In Progress':
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-200 transition-color duration-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> In Progress
           </span>
         );
       case 'Pending Review':
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> PENDING REVIEW
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-900 animate-pulse" /> Pending Review
           </span>
         );
       case 'Missed':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-            <AlertCircle size={12} /> MISSED
+            <AlertCircle size={12} /> Missed
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
-            PENDING
+            Pending
           </span>
         );
     }
