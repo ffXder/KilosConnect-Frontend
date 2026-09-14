@@ -28,8 +28,8 @@ export const LoginPage: React.FC = () => {
       const data = await login(formValues.username, formValues.password);
 
       if (data?.mustChangePassword) {
-        navigate(`/setup/new-password?accountId=${data.accountId}`, {
-          state: { accountId: data.accountId }
+        navigate(`/setup/new-password?accountId=${data.userId}`, {
+          state: { accountId: data.userId }
         });
         return;
       }
