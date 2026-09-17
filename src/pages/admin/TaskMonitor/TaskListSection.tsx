@@ -57,8 +57,9 @@ const TaskListSection: React.FC<TaskListProps> = ({
         );
       case 'In Progress':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-200 transition-color duration-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> In Progress
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800 transition-colors duration-300">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-[pulse_2.5s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
+            In Progress
           </span>
         );
       case 'Pending Review':
