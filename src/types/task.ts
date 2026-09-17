@@ -13,9 +13,13 @@ export interface CloudinaryImage {
     public_id: string;
 }
 
+export interface ChecklistItem {
+    _id?: string;
+    label: string;
+    isDone: boolean;
+}
 
 export interface Task {
-  standardPhotoUrl?: CloudinaryImage,
   _id: string;
   title: string;
   description?: string;
@@ -27,6 +31,8 @@ export interface Task {
   endTime: string;      
   requiresVerification: boolean; 
   isBreak: boolean;
+  standardPhotoUrl?: CloudinaryImage;
+  checklist?: ChecklistItem[]; 
   createdAt: string;
   updatedAt: string;
 }
@@ -37,7 +43,7 @@ export type NewTask = Omit<Task, '_id' | 'createdAt' | 'updatedAt'>;
 // update 
 export type UpdateTask = Partial<Omit<Task, '_id' | 'createdAt' | 'updatedAt'>>;
 
-export type TaskLogStatus = 'Pending' | 'In Progress' | 'Completed' | 'Missed' | 'Disputed';
+export type TaskLogStatus = 'Pending' | 'In Progress' | 'Completed' | 'Missed' | 'Disputed' | 'Pending Review' | 'Cancelled';
 
 export type VerificationStatus = 'Not Required' | 'Pending Review' | 'Verified' | 'Rejected' | 'Disputed';
 
@@ -51,6 +57,8 @@ export interface TaskLog {
   _id: string;
   task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority' | 'requiresVerification'>;
   status: TaskLogStatus;
+  startedBy?: { _id: string, firstName: string};
+  startedAt?: string;
   completedBy?: { _id: string; firstName: string };
   completedAt?: string;
   
