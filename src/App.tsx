@@ -79,7 +79,7 @@ function App() {
         // only show loading on first load
         const hasVisited = sessionStorage.getItem('appLoaded');
         if (!hasVisited) {
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise(resolve => setTimeout(resolve, 500));
           sessionStorage.setItem('appLoaded', 'true');
         }
 
