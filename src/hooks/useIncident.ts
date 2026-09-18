@@ -22,7 +22,7 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         try {
             const data = await getAllReports();
 
-            // Flexible array extraction matching useAssets pattern
+            // Flexible array extraction
             if (Array.isArray(data)) {
                 setReports(data);
             } else if (data && typeof data === "object" && Array.isArray((data as any).incidentReports)) {
