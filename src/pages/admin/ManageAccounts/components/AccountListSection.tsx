@@ -1,7 +1,7 @@
 import React from "react";
 import { User, Edit3, Trash2} from "lucide-react"; // Assuming you use lucide-react, otherwise use your AccountsIcons
-import type { UserAccount } from "../../../types/manageAccount";
-import { formatDateTime } from "../../../utils/formatter";
+import type { UserAccount } from "../../../../types/manageAccount";
+import { formatDateTime } from "../../../../utils/formatter";
 
 interface AccountsListSectionProps {
   accounts: UserAccount[];
