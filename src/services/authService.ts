@@ -71,26 +71,94 @@ export async function login(username: string, password: string) {
     credentials: 'include',
     body: JSON.stringify({ username, password })
   });
- 
+
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.message || 'Login failed');
   }
- 
+
   const data = await res.json();
 
   if (data.mustChangePassword) return data;
-  
+
+  // Save temporary OTP Token for 2FA Step
+  if (data.otpToken) {
+    sessionStorage.setItem('otpToken', data.otpToken);
+  }
+
   if (data.accessToken) {
-    setAccessToken(data.accessToken)
+    setAccessToken(data.accessToken);
   }
 
   if (data.user) {
     currentUser = data.user;
   }
- 
+
   return data;
-};
+}
+
+// verify otp
+export async function verifyOtp(code: string, customOtpToken?: string) {
+  const otpToken = customOtpToken || sessionStorage.getItem('otpToken');
+
+  if (!otpToken) {
+    throw new Error('Verification session expired. Please log in again.');
+  }
+
+  const res = await fetch(`${API_URL}/auth/verify-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otpToken, code })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Verification failed');
+  }
+
+  const data = await res.json();
+
+  if (data.accessToken) {
+    setAccessToken(data.accessToken);
+    sessionStorage.removeItem('otpToken');
+  }
+
+  if (data.user) {
+    currentUser = data.user;
+  }
+
+  return data;
+}
+
+// resend OTP
+export async function resendOtp(customOtpToken?: string) {
+  const otpToken = customOtpToken || sessionStorage.getItem('otpToken');
+
+  if (!otpToken) {
+    throw new Error('Verification session expired. Please log in again.');
+  }
+
+  const res = await fetch(`${API_URL}/auth/resend-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otpToken })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Failed to resend code');
+  }
+
+  const data = await res.json();
+
+  if (data.otpToken) {
+    sessionStorage.setItem('otpToken', data.otpToken);
+  }
+
+  return data;
+}
 
  // complete temporary password setup
 export async function completeAccountSetup(setupToken: string, newPassword: string) {
