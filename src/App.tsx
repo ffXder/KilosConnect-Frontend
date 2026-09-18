@@ -10,6 +10,7 @@ import { refreshAccessToken } from './services/authService'
 
 // auth 
 import { LoginPage } from './pages/auth/Login'
+import { OtpPage } from './pages/auth/OtpPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
 import { NewAccountPasswordSetupPage } from './pages/auth/AccountPasswordSetupPage'
@@ -112,6 +113,11 @@ function App() {
           <Route path='/login' element={
             <PublicOnlyRoute>
               <LoginPage />
+            </PublicOnlyRoute>
+          } />
+          <Route path='/verify-otp' element={
+            <PublicOnlyRoute>
+              <OtpPage />
             </PublicOnlyRoute>
           } />
           <Route path='/unauthorized' element={<UnauthorizedPage />} />
