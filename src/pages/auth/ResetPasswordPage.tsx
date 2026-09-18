@@ -9,7 +9,7 @@ export const ResetPasswordPage: React.FC = () => {
   const formId = useId();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token"); // grabs ?token=xxx from URL
+  const token = searchParams.get("token"); 
 
   const [formValues, setFormValues] = useState({ newPassword: "", confirmPassword: "" });
   const [showPassword, setShowPassword] = useState(false);
