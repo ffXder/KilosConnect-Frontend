@@ -20,35 +20,44 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    try {
-      event.preventDefault();
-      setError("");
-      setLoading(true);
+  try {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
 
-      const data = await login(formValues.username, formValues.password);
+    const data = await login(formValues.username, formValues.password);
 
-      if (data?.mustChangePassword) {
-        navigate(`/setup/new-password?accountId=${data.userId}`, {
-          state: { accountId: data.userId }
-        });
-        return;
-      }
-
-      const role = data?.user?.role() || getRole();
-
-      if (role === "admin") {
-        navigate("/dashboard", { replace: true });
-      } else if (role === "custodian") {
-        navigate("/custodian/dashboard", { replace: true });
-      } else {
-        navigate("/unauthorized");
-      }
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    // new accounts must change password
+    if (data?.mustChangePassword) {
+      navigate(`/setup/new-password?accountId=${data.userId}`, {
+        state: { accountId: data.userId, setupToken: data.setupToken }
+      });
+      return;
     }
-  };
+
+    // redirects to otp page
+    if (data?.requireOtp || data?.otpToken) {
+      navigate("/verify-otp", {
+        state: { otpToken: data.otpToken }
+      });
+      return;
+    }
+
+    // direct login only if 2FA is disabled
+    const role = data?.user?.role || getRole();
+    if (role === "admin") {
+      navigate("/dashboard", { replace: true });
+    } else if (role === "custodian") {
+      navigate("/custodian/dashboard", { replace: true });
+    } else {
+      navigate("/unauthorized");
+    }
+  } catch (err: any) {
+    setError(err.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen w-full flex flex-col md:flex-row bg-white overflow-x-hidden">
