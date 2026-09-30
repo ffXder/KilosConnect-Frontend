@@ -1,5 +1,29 @@
 const API_URL = '/api';
 
+type AuthListener = () => void;
+const listeners: Set<AuthListener> = new Set();
+let accessToken: string | null = null;
+let currentUser: any = null;
+
+export function subscribeAuth(listener: AuthListener) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+export function notifyAuthChange() {
+  listeners.forEach((listener) => listener());
+}
+
+export function setAccessToken(token: string | null) { //setters
+  accessToken = token;
+  notifyAuthChange();
+}
+
+export function getAccessToken(): string | null { //getters
+  return accessToken
+}
 export function parseJwt(token: string | null) {
   if (!token) return null;
   try {
@@ -28,37 +52,15 @@ export function parseJwt(token: string | null) {
 }
 
 export function getRole(): 'admin' | 'custodian' | null {
-  const token = localStorage.getItem('token');
-  const decoded = parseJwt(token);
-
-  if (!decoded) {
-    localStorage.removeItem('role');
-    localStorage.removeItem('user');  
-    return null
-  }
-
-  const role = decoded.role || null;
-  if (role) {
-    localStorage.setItem('role', role)
-  }
-
-  return role
+  if (!accessToken) return null;
+  const decoded = parseJwt(accessToken);
+  return decoded?.role || null;
 }
  
-export function getUser() {
-  const token = localStorage.getItem('token');
-  const decoded = parseJwt(token);
-  if (!decoded) return null;
-
-  const user = localStorage.getItem('user');
-  if (user) {
-    try {
-      return JSON.parse(user)
-    } catch(e) {
-      return decoded;
-    }
-  }
-  return decoded;
+export function getUser() { 
+  if (currentUser) return currentUser;
+  if (!accessToken) return null;
+  return parseJwt(accessToken);
 }
 
 //login
@@ -69,36 +71,101 @@ export async function login(username: string, password: string) {
     credentials: 'include',
     body: JSON.stringify({ username, password })
   });
- 
+
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.message || 'Login failed');
   }
- 
+
   const data = await res.json();
 
   if (data.mustChangePassword) return data;
 
-  const tokenValue = data.accessToken ?? data.token;
+  // Save temporary OTP Token for 2FA Step
+  if (data.otpToken) {
+    sessionStorage.setItem('otpToken', data.otpToken);
+  }
+
+  if (data.accessToken) {
+    setAccessToken(data.accessToken);
+  }
 
   if (data.user) {
-    localStorage.setItem('role', data.user.role);  
-    localStorage.setItem('user', JSON.stringify(data.user));
+    currentUser = data.user;
   }
 
-  if (tokenValue) {
-    localStorage.setItem('token', tokenValue)
-  }
- 
   return data;
-};
+}
+
+// verify otp
+export async function verifyOtp(code: string, customOtpToken?: string) {
+  const otpToken = customOtpToken || sessionStorage.getItem('otpToken');
+
+  if (!otpToken) {
+    throw new Error('Verification session expired. Please log in again.');
+  }
+
+  const res = await fetch(`${API_URL}/auth/verify-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otpToken, code })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Verification failed');
+  }
+
+  const data = await res.json();
+
+  if (data.accessToken) {
+    setAccessToken(data.accessToken);
+    sessionStorage.removeItem('otpToken');
+  }
+
+  if (data.user) {
+    currentUser = data.user;
+  }
+
+  return data;
+}
+
+// resend OTP
+export async function resendOtp(customOtpToken?: string) {
+  const otpToken = customOtpToken || sessionStorage.getItem('otpToken');
+
+  if (!otpToken) {
+    throw new Error('Verification session expired. Please log in again.');
+  }
+
+  const res = await fetch(`${API_URL}/auth/resend-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otpToken })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Failed to resend code');
+  }
+
+  const data = await res.json();
+
+  if (data.otpToken) {
+    sessionStorage.setItem('otpToken', data.otpToken);
+  }
+
+  return data;
+}
 
  // complete temporary password setup
-export async function completeAccountSetup(accountId: string, newPassword: string) {
+export async function completeAccountSetup(setupToken: string, newPassword: string) {
   const res = await fetch(`${API_URL}/auth/complete-account-setup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ accountId, newPassword })
+    body: JSON.stringify({ setupToken, newPassword })
   });
 
   if (!res.ok) {
@@ -109,41 +176,56 @@ export async function completeAccountSetup(accountId: string, newPassword: strin
   return await res.json();
 }
 
-export function logOut() {
-  localStorage.clear();
-  window.location.href = '/login';
+export async function logOut() {
+  try {
+    await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch(err) {
+    console.error('Logout error:', err)
+  } finally {
+    sessionStorage.setItem('justLoggedOut', 'true');
+    
+    setAccessToken(null);
+    currentUser = null;
+    notifyAuthChange();
+    localStorage.clear()
+    sessionStorage.clear()
+    window.location.href = '/login'
+  }
 };
 
 export const refreshAccessToken = async () => {
-    const res = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
-    });
+  const res = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include',
+  });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error('Refresh failed');
+  if (!res.ok) {
+    setAccessToken(null);
+    currentUser = null;
+    throw new Error('Refresh failed'); 
+  }
     
-    const newToken = data.accessToken ?? data.token;
-    if (newToken) {
-      localStorage.setItem('token', newToken);
+  const data = await res.json();
 
-      if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('role', data.user.role);
-      } else {
-        const decoded = parseJwt(newToken);
-        if (decoded?.role){
-          localStorage.setItem('role', decoded.role);
-        }
-      }
+  if (data.accessToken) {
+    if (data.user) {
+      currentUser = data.user;
+    } else {
+      currentUser = parseJwt(data.accessToken);
     }
     
-    return data; 
+    setAccessToken(data.accessToken);
+  }
+    
+  return data; 
 };
 
 // api interceptir
 export async function apiRequest(endpoint: string, options: any = {}) {
-  let token = localStorage.getItem('token');
+  let token = getAccessToken();
 
   const headers = {
     'Authorization' : `Bearer ${token}`,
@@ -164,11 +246,9 @@ export async function apiRequest(endpoint: string, options: any = {}) {
   if (res.status === 401 || res.status === 403) {
     try {
       const data = await refreshAccessToken();
-      const newToken = data.accessToken ?? data.token;
+      const newToken = data.accessToken;
 
       if (!newToken) throw new Error('No new token received');
-
-      localStorage.setItem('token', newToken);
 
       headers['Authorization'] = `Bearer ${newToken}`;
       
