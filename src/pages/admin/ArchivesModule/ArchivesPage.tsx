@@ -135,7 +135,7 @@ export const ArchivesPage: React.FC = () => {
         {/* --- VIEW MODAL --- */}
         {viewItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white w-full max-w-[540px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-white dark:bg-slate-900 w-full max-w-[540px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-700">
               <div className="bg-[#113e33] p-6 text-white flex justify-between items-center">
                 <div>
                   <h3 className="text-[17px] font-bold tracking-tight">
@@ -154,10 +154,10 @@ export const ArchivesPage: React.FC = () => {
                 {/* Optional Image Preview if present in data payload */}
                 {viewItem.data?.itemImage?.url && (
                   <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">
+                    <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                       Item Image
                     </label>
-                    <div className="rounded-xl overflow-hidden border border-slate-200 max-h-48 flex justify-center bg-slate-50">
+                    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-48 flex justify-center bg-slate-50 dark:bg-slate-800">
                       <img 
                         src={viewItem.data.itemImage.url} 
                         alt={getItemTitle(viewItem)} 
@@ -168,10 +168,10 @@ export const ArchivesPage: React.FC = () => {
                 )}
 
                 <div>
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">
+                  <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                     Description
                   </label>
-                  <p className="text-sm text-[#334155] bg-slate-50 p-3.5 rounded-xl border border-slate-100 leading-relaxed">
+                  <p className="text-sm text-[#334155] dark:text-slate-200 bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700 leading-relaxed">
                     {viewItem.data?.description ||
                       viewItem.data?.details ||
                       viewItem.reason ||
@@ -181,34 +181,34 @@ export const ArchivesPage: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-2">
                   <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                    <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block">
                       Original ID
                     </label>
-                    <span className="text-xs font-mono font-semibold text-[#1e293b] mt-0.5 block">
+                    <span className="text-xs font-mono font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
                       {viewItem.originalId || "N/A"}
                     </span>
                   </div>
                   <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                    <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block">
                       Archived By
                     </label>
-                    <span className="text-sm font-semibold text-[#1e293b] mt-0.5 block">
+                    <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
                       {viewItem.archivedBy || "System Admin"}
                     </span>
                   </div>
                   <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                    <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block">
                       Original Date
                     </label>
-                    <span className="text-sm font-semibold text-[#1e293b] mt-0.5 block">
+                    <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
                       {new Date(viewItem.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                    <label className="text-[11px] font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider block">
                       Archived Date
                     </label>
-                    <span className="text-sm font-semibold text-[#1e293b] mt-0.5 block">
+                    <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
                       {new Date(viewItem.updatedAt).toLocaleDateString()}
                     </span>
                   </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Activity, AlertTriangle, Box, ShieldAlert, Wrench } from "lucide-react";
 
 interface Props {
   assets: any[];
@@ -11,33 +12,61 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
   const underRepair = assets.filter((a) => a.condition === "Under Repair").length;
   const hazardous = assets.filter((a) => a.condition === "Hazardous").length;
 
+  const stats = [
+    {
+      label: "Total Assets",
+      count: total,
+      cardClass: "bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800",
+      iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-200 dark:text-blue-700",
+      icon: Box,
+    },
+    {
+      label: "Working",
+      count: working,
+      cardClass: "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800",
+      iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-200 dark:text-emerald-700",
+      icon: Activity,
+    },
+    {
+      label: "Damaged",
+      count: damaged,
+      cardClass: "bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-800",
+      iconClass: "bg-amber-100 text-amber-600 dark:bg-amber-200 dark:text-amber-700",
+      icon: AlertTriangle,
+    },
+    {
+      label: "Under Repair",
+      count: underRepair,
+      cardClass: "bg-sky-50 border-sky-200 dark:bg-sky-950/40 dark:border-sky-800",
+      iconClass: "bg-sky-100 text-sky-600 dark:bg-sky-200 dark:text-sky-700",
+      icon: Wrench,
+    },
+    {
+      label: "Hazardous",
+      count: hazardous,
+      cardClass: "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800",
+      iconClass: "bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700",
+      icon: ShieldAlert,
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
-      {/* Total Assets */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
-        <p className="text-gray-400 text-xs font-semibold dark:text-slate-400">Total Assets</p>
-        <p className="text-2xl font-bold mt-1 text-black dark:text-slate-200">{total}</p>
-      </div>
-      {/* Working */}
-      <div className="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm dark:bg-emerald-950 dark:border-emerald-600 transition-color duration-300">
-        <p className="text-emerald-600 text-xs font-semibold dark:text-slate-300">Working</p>
-        <p className="text-2xl font-bold mt-1 text-emerald-600">{working}</p>
-      </div>
-      {/* Damaged */}
-      <div className="bg-white p-4 rounded-xl border border-amber-200 shadow-sm dark:bg-amber-950 dark:border-amber-600 transition-color duration-300">
-        <p className="text-amber-600 text-xs font-semibold dark:text-slate-300">Damaged</p>
-        <p className="text-2xl font-bold mt-1 text-amber-600">{damaged}</p>
-      </div>
-      {/* Under Repair */}
-      <div className="bg-white p-4 rounded-xl border border-blue-200 shadow-sm dark:bg-blue-950 dark:border-blue-600 transition-color duration-300">
-        <p className="text-blue-600 text-xs font-semibold dark:text-slate-300">Under Repair</p>
-        <p className="text-2xl font-bold mt-1 text-blue-600">{underRepair}</p>
-      </div>
-      {/* Hazardous */}
-      <div className="bg-white p-4 rounded-xl border border-red-200 shadow-sm dark:bg-red-950 dark:border-red-600 transition-color duration-300">
-        <p className="text-red-600 text-xs font-semibold dark:text-slate-300">Hazardous</p>
-        <p className="text-2xl font-bold mt-1 text-red-600">{hazardous}</p>
-      </div>
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 lg:gap-5 w-full">
+      {stats.map(({ label, count, cardClass, iconClass, icon: Icon }) => (
+        <div
+          key={label}
+          className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
+        >
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
+            <Icon size={16} strokeWidth={2} className="sm:size-[20px] md:size-[24px] lg:size-[28px]" />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">{count}</div>
+            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{label}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

@@ -84,9 +84,9 @@ export const LostAndFoundPage: React.FC = () => {
 
           {/* Stats Section */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <StatCard label="Total Items" count={items.length} color="text-[#1e4d46]" iconBg="bg-[#e6fffa]" icon={Archive} />
-            <StatCard label="Unclaimed" count={items.filter(i => i.status === "Unclaimed").length} color="text-[#b45309]" iconBg="bg-[#fffbeb]" icon={AlertCircle} />
-            <StatCard label="Claimed" count={items.filter(i => i.status === "Claimed").length} color="text-[#15803d]" iconBg="bg-[#f0fdf4]" icon={CheckCircle} />
+            <StatCard label="Total Items" count={items.length} color="text-blue-600 dark:text-blue-400" iconBg="bg-blue-100 dark:bg-blue-200" cardBg="bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800" icon={Archive} />
+            <StatCard label="Unclaimed" count={items.filter(i => i.status === "Unclaimed").length} color="text-amber-600 dark:text-amber-400" iconBg="bg-amber-100 dark:bg-amber-200" cardBg="bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-800" icon={AlertCircle} />
+            <StatCard label="Claimed" count={items.filter(i => i.status === "Claimed").length} color="text-emerald-600 dark:text-emerald-400" iconBg="bg-emerald-100 dark:bg-emerald-200" cardBg="bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800" icon={CheckCircle} />
           </div>
 
           {/* Filters Bar */}

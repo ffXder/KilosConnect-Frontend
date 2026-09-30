@@ -78,14 +78,16 @@ export async function login(username: string, password: string) {
   const data = await res.json();
 
   if (data.mustChangePassword) return data;
-  
+
+  const tokenValue = data.accessToken ?? data.token;
+
   if (data.user) {
     localStorage.setItem('role', data.user.role);  
     localStorage.setItem('user', JSON.stringify(data.user));
   }
 
-  if (data.token) {
-    localStorage.setItem('token', data.token)
+  if (tokenValue) {
+    localStorage.setItem('token', tokenValue)
   }
  
   return data;
@@ -121,7 +123,7 @@ export const refreshAccessToken = async () => {
     const data = await res.json();
     if (!res.ok) throw new Error('Refresh failed');
     
-    const newToken = data.accessToken || data.token;
+    const newToken = data.accessToken ?? data.token;
     if (newToken) {
       localStorage.setItem('token', newToken);
 
@@ -162,7 +164,7 @@ export async function apiRequest(endpoint: string, options: any = {}) {
   if (res.status === 401 || res.status === 403) {
     try {
       const data = await refreshAccessToken();
-      const newToken = data.accessToken || data.token;
+      const newToken = data.accessToken ?? data.token;
 
       if (!newToken) throw new Error('No new token received');
 
