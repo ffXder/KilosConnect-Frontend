@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { AuditLogs } from '../../../../types/auditLogs';
 import { formatDateTime } from '../../../../utils/formatter';
 import { getDisplayName } from '../../../../utils/formatUser';
@@ -44,6 +46,9 @@ const getBadge = (type: string) => {
 };
 
 export default function LogsTableSection({ logs, pagination, onPageChange }: Props) {
+  const [isEditingPage, setIsEditingPage] = useState(false);
+  const [pageInput, setPageInput] = useState('');
+
   if (logs.length === 0) {
     return (
       <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl p-8 text-center text-sm text-gray-500 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:shadow-none">
@@ -52,9 +57,22 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
     );
   }
 
-  const currentPage = pagination?.currentPage || 1;
-  const totalPages = pagination?.totalPages || 1;
+  const totalPages = Math.max(1, pagination?.totalPages || 1);
+  const currentPage = Math.min(totalPages, Math.max(1, pagination?.currentPage || 1));
   const totalLogs = pagination?.totalLogs || logs.length;
+  const firstVisiblePage = Math.max(1, Math.min(currentPage - 1, totalPages - 2));
+  const visiblePages = Array.from(
+    { length: Math.min(3, totalPages) },
+    (_, index) => firstVisiblePage + index,
+  );
+
+  const commitPageInput = () => {
+    const requestedPage = Number(pageInput);
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= totalPages) {
+      onPageChange?.(requestedPage);
+    }
+    setIsEditingPage(false);
+  };
   
   return (
     <div className="w-full bg-white border border-[#E5E7EB] rounded-2xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
@@ -200,21 +218,75 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
             <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalPages}</span>)
           </p>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1" aria-label="Log pages">
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+              aria-label="Previous page"
+              className="w-9 h-9 inline-flex items-center justify-center text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
             >
-              Previous
+              <ChevronLeft size={16} />
             </button>
+
+            {visiblePages.map((pageNumber) => (
+              pageNumber === currentPage ? (
+                <div key={pageNumber} className="flex flex-col items-center">
+                  {isEditingPage ? (
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={pageInput}
+                      autoFocus
+                      aria-label={`Enter page number, from 1 to ${totalPages}`}
+                      onChange={(event) => setPageInput(event.target.value)}
+                      onBlur={commitPageInput}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault();
+                          event.currentTarget.blur();
+                        }
+                      }}
+                      className="w-9 h-9 text-center text-xs font-semibold border border-blue-500 rounded-lg bg-white text-blue-700 outline-none dark:bg-slate-800 dark:text-blue-300 dark:border-blue-400"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPageInput(String(currentPage));
+                        setIsEditingPage(true);
+                      }}
+                      aria-label={`Current page ${currentPage}. Click to enter a page number`}
+                      aria-current="page"
+                      className="w-9 h-9 text-xs font-semibold border border-blue-600 rounded-lg bg-blue-600 text-white dark:bg-blue-500 dark:border-blue-500"
+                    >
+                      {pageNumber}
+                    </button>
+                  )}
+                  <span className="mt-1 whitespace-nowrap text-[9px] leading-none text-gray-500 dark:text-slate-400">
+                    click to enter page
+                  </span>
+                </div>
+              ) : (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => onPageChange(pageNumber)}
+                  aria-label={`Go to page ${pageNumber}`}
+                  className="w-9 h-9 text-xs font-medium border border-[#E5E7EB] rounded-lg hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  {pageNumber}
+                </button>
+              )
+            ))}
 
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="px-3 py-1.5 text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+              aria-label="Next page"
+              className="w-9 h-9 inline-flex items-center justify-center text-xs font-medium border border-[#E5E7EB] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 text-[#0f2942] transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
             >
-              Next
+              <ChevronRight size={16} />
             </button>
           </div>
         </div>
