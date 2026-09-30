@@ -30,7 +30,7 @@ export const LoginPage: React.FC = () => {
     // new accounts must change password
     if (data?.mustChangePassword) {
       navigate(`/setup/new-password?accountId=${data.userId}`, {
-        state: { accountId: data.userId, setupToken: data.setupToken }
+        state: { accountId: data._id, setupToken: data.setupToken }
       });
       return;
     }
@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
       });
       return;
     }
-
+    
     // direct login only if 2FA is disabled
     const role = data?.user?.role || getRole();
     if (role === "admin") {

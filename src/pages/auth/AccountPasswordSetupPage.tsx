@@ -2,7 +2,7 @@ import React, { useId, useState } from "react";
 import type { FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { completeAccountSetup } from "../../services/authService"; // Import your helper
+import { completeAccountSetup } from "../../services/authService";
 import KilosGymImg from "../../assets/images/image-5.png";
 import KILOSWhiteLogo1 from "../../assets/images/KILOS-white-logo-1.png";
 
@@ -12,7 +12,13 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  const accountId = searchParams.get("accountId") || location.state?.accountId;
+  const paramAccountId = searchParams.get("accountId");
+  const accountId =
+    paramAccountId && paramAccountId !== "undefined"
+      ? paramAccountId
+      : location.state?.accountId;
+
+  const setupToken = location.state?.setupToken || searchParams.get("setupToken");
 
   const [formValues, setFormValues] = useState({
     newPassword: "",
@@ -31,8 +37,8 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
     setError("");
     setSuccess("");
 
-    if (!accountId) {
-      return setError("Missing account reference. Please return to login.");
+    if (!setupToken) {
+      return setError("Session expired or invalid setup link. Please return to login.");
     }
 
     if (formValues.newPassword !== formValues.confirmPassword) {
@@ -46,16 +52,15 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
     setLoading(true);
 
     try {
-      // Calls your central service helper
-      await completeAccountSetup(accountId, formValues.newPassword);
+      // Send setupToken and newPassword expected by backend completeAccountSetup handler
+      await completeAccountSetup(setupToken, formValues.newPassword);
 
-      setSuccess("Account set up successfully! Redirecting to login...");
-      
-      // Send user back to log in with their permanent password
       setSuccess("Account set up successfully! Redirecting to login...");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(
+        err.response?.data?.message || err.message || "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
