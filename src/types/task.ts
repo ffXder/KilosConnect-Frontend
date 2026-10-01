@@ -56,15 +56,16 @@ export interface UserSummary {
 export interface TaskLog {
   _id: string;
   task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority' | 'requiresVerification'>;
+  checklist: ChecklistItem[];
   status: TaskLogStatus;
-  startedBy?: { _id: string, firstName: string};
+  startedBy?: UserSummary;
   startedAt?: string;
-  completedBy?: { _id: string; firstName: string };
+  completedBy?: UserSummary;
   completedAt?: string;
   
   // for live photo verification
   submittedPhoto?: string | null;
-  verifiedBy?: { _id: string; firstName: string } | null;
+  verifiedBy?: UserSummary | null;
   verificationStatus: VerificationStatus;
   verificationNote?: string | null;
   createdAt: string;
@@ -75,4 +76,11 @@ export interface AreaQRCode {
   area: string;
   url: string;
   qrCode: string;
+}
+
+// for custidan 
+export interface TaskSummary {
+    activePending: number;
+    flagged: number;
+    completed: number;
 }
