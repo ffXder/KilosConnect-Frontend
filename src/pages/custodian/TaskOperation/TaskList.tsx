@@ -34,7 +34,8 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
         return 'bg-emerald-50 text-emerald-800 border-emerald-100 border';
       case 'In Progress':
         return 'bg-blue-50 text-blue-800 border-blue-100 border';
-      case 'Flagged':
+      case 'Disputed':
+      case 'Missed':
         return 'bg-rose-50 text-rose-800 border-rose-100 border';
       default:
         return 'bg-[#f8fafc] text-gray-700 border-[#e2e8f0] border';
@@ -71,7 +72,7 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
 
                 <div className="flex items-center gap-4 text-xs text-gray-500 font-medium flex-wrap">
                   <span className="flex items-center gap-1.5">
-                    <User size={14} /> {task.assignedTo}
+                    <User size={14} /> {task.startedBy || "Not Started Yet"}
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Clock size={14} /> {task.dueDate}

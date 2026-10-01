@@ -13,6 +13,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { formatTo12Hour } from '../../../utils/formatter'; 
+import { formatDateTime } from '../../../utils/formatter';
 
 interface TaskListProps {
   tasks: TaskLog[]; 
@@ -106,6 +107,8 @@ const TaskListSection: React.FC<TaskListProps> = ({
                 <th className="py-3.5 px-4">Priority</th>
                 <th className="py-3.5 px-4">Proof</th>
                 <th className="py-3.5 px-4">Status</th>
+                <th className="py-3.5 px-4">Started By</th>
+                {/* <th className="py-3.5 px-4">Started At</th> */}
                 <th className="py-3.5 px-4 text-right md:pr-6">Actions</th>
               </tr>
             </thead>
@@ -183,6 +186,20 @@ const TaskListSection: React.FC<TaskListProps> = ({
                         )}
                       </div>
                     </td>
+
+                    {/* Started By (WIP)*/}
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg dark:bg-slate-800 dark:text-slate-200">           
+                        <span>{log.startedBy?.firstName || 'Not started yet'}</span>
+                      </span>
+                    </td>
+
+                    {/* Started At (WIP)
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg dark:bg-slate-800 dark:text-slate-200">           
+                        <span>{formatDateTime(log.startedAt) || 'Not started yet'}</span>
+                      </span>
+                    </td> */}
 
                     {/* Actions Area */}
                     <td className="py-4 px-4 md:pr-6 whitespace-nowrap text-right">
