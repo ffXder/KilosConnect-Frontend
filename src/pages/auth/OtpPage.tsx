@@ -137,7 +137,7 @@ export const OtpPage: React.FC = () => {
         </h1>
 
         <p className="font-poppins text-[#fdffe0]/70 text-sm md:text-base mb-8 text-center max-w-[320px]">
-          Enter the 6-digit security code sent to your registered device.
+          Enter the 6-digit security code sent to your registered email.
         </p>
 
         {/* Error message */}
