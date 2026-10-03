@@ -6,61 +6,25 @@ import { BuddyBanner } from "./components/BuddyBanner";
 import { QuickActions } from "./components/QuickActions";
 import { TasksSection } from "./components/TasksSection";
 import { CheckCircle, Search } from "lucide-react";
-import TaskDetailsModal, { type TaskItem } from "../TaskOperation/TaskDetailsModal";
+import { useTodayTasks } from "../../../hooks/useTodayTask"
+import TaskDetailsModal from "../TaskOperation/TaskDetailsModal";
 
 export default function CustodianDashboardPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  const { tasks, summary, loading, error, start, toggle, complete } = useTodayTasks();
+  const selectedTask = tasks.find(t => t.id === selectedId) ?? null;
+  
   const [activeTab, setActiveTab] = useState<"all" | "pending" | "completed">("all");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [tasks, setTasks] = useState<TaskItem[]>([
-    {
-      id: "TK-101",
-      title: "Sanitize Powerlifting Racks & Plates",
-      zone: "Powerlifting Area",
-      assignedTo: "Custodian John",
-      priority: "High",
-      status: "Pending",
-      dueDate: "09:00 AM",
-      checklist: [
-        { id: 1, text: "Inspect safety pins and barbell collars", completed: false },
-        { id: 2, text: "Sanitize vinyl benches and handles", completed: false }
-      ]
-    },
-    {
-      id: "TK-102",
-      title: "Inspect CrossFit Rig & Carabiners",
-      zone: "CrossFit Area",
-      assignedTo: "Custodian John",
-      priority: "Medium",
-      status: "Pending",
-      dueDate: "11:30 AM",
-      checklist: [
-        { id: 1, text: "Check rig stability and bolts", completed: false },
-        { id: 2, text: "Inspect carabiners for wear and tear", completed: false }
-      ]
-    },
-    {
-      id: "TK-103",
-      title: "Refill Disinfectant Spray Stations",
-      zone: "WOD Area",
-      assignedTo: "Custodian John",
-      priority: "Low",
-      status: "Completed",
-      dueDate: "02:00 PM",
-      checklist: [
-        { id: 1, text: "Refill all 5 spray bottles", completed: true },
-        { id: 2, text: "Restock paper towel dispensers", completed: true }
-      ]
-    },
-  ]);
-
+  
+  
   const [sidebarExpanded, setSidebarExpanded] = useState(
     JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
   );
 
+  
   useEffect(() => {
     const syncSidebar = () => {
       setSidebarExpanded(
@@ -70,45 +34,44 @@ export default function CustodianDashboardPage() {
     const interval = setInterval(syncSidebar, 100);
     return () => clearInterval(interval);
   }, []);
-
-  const { role } = useAuth();
+  
+  const { role, user } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<
-    typeof SidebarNavigationSection
+  typeof SidebarNavigationSection
   >["userRole"];
-
+  
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
-
-  const handleStatusChange = (taskId: string, newStatus: TaskItem['status']) => {
-    setTasks((prev) =>
-      prev.map((t) => {
-        if (t.id === taskId) {
-          triggerToast(`Task "${t.title}" marked as ${newStatus}`);
-          return { ...t, status: newStatus };
-        }
-        return t;
-      })
-    );
+  
+  const handleStart = async (id: string) => {
+    await start(id);
+    triggerToast("Task started");
   };
 
-  const pendingCount = tasks.filter((t) => t.status === "Pending" || t.status === "In Progress").length;
-  const completedCount = 42 + tasks.filter((t) => t.status === "Completed").length;
+  const handleComplete = async (id: string, photo?: Blob) => {
+    await complete(id, photo);
+    triggerToast("Task completed");
+  };
 
-  const filteredTasks = tasks.filter((task) => {
-    const matchesSearch =
-      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.zone.toLowerCase().includes(searchQuery.toLowerCase());
+  const pendingCount = summary.activePending;
+  const completedCount = summary.completed;
 
-    if (!matchesSearch) return false;
-    if (activeTab === "pending") return task.status === "Pending" || task.status === "In Progress";
-    if (activeTab === "completed") return task.status === "Completed";
-    return true;
-  });
+  const filteredTasks = tasks
+    .filter((task) => {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch =
+        task.title.toLowerCase().includes(q) || task.zone.toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+      if (activeTab === "pending") return task.status === "Pending" || task.status === "In Progress";
+      if (activeTab === "completed") return task.status === "Completed";
+      return true;
+    })
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins']">
+    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950">
       <SidebarNavigationSection userRole={userRole} />
 
       {toastMessage && (
@@ -127,10 +90,10 @@ export default function CustodianDashboardPage() {
 
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-              Welcome Back, John!
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight dark:text-slate-50">
+              Welcome Back, {user.firstName}!
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
+            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5 dark:text-slate-300">
               Ready to keep Kilos PH in top shape?
             </p>
           </div>
@@ -141,7 +104,7 @@ export default function CustodianDashboardPage() {
             completedCount={completedCount}
             onTabChange={(tab) => setActiveTab(tab)}
             tasks={tasks}
-            onViewDetails={(task) => setSelectedTask(task)}
+            onViewDetails={(task) => setSelectedId(task.id)}
           />
 
           <BuddyBanner />
@@ -200,20 +163,27 @@ export default function CustodianDashboardPage() {
               </div>
             </div>
 
-            <TasksSection
-              tasks={filteredTasks}
-              onViewDetails={(task) => setSelectedTask(task)}
-              pendingCount={pendingCount}
-            />
-          </div>
+              {loading && <p className="text-sm text-gray-500 font-medium">Loading tasks...</p>}
+              {error && <p className="text-sm text-rose-600 font-medium">{error}</p>}
+
+              {!loading && (
+                <TasksSection
+                  tasks={filteredTasks}
+                  onViewDetails={(task) => setSelectedId(task.id)}
+                  pendingCount={pendingCount}
+                />
+              )}
+          </div>  
         </div>
       </div>
 
       {selectedTask && (
         <TaskDetailsModal
           task={selectedTask}
-          onClose={() => setSelectedTask(null)}
-          onStatusChange={handleStatusChange}
+          onClose={() => setSelectedId(null)}
+          onStart={handleStart}
+          onToggleItem={toggle}
+          onComplete={handleComplete}
         />
       )}
     </div>
