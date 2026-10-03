@@ -15,6 +15,7 @@ export interface TaskItem {
   id: string;
   title: string;
   zone: string;
+  startTime: string;
   startedBy?: string | null;
   completedBy?: string | null;
   priority: 'Low' | 'Medium' | 'High';
@@ -78,7 +79,7 @@ function CameraView({ onCapture, onCancel, accentColor = 'amber' }: CameraViewPr
     };
   }, [facingMode, startCamera]);
 
-  // for live photo time stamp
+  // handles the photo capture
   const handleCapture = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -89,23 +90,6 @@ function CameraView({ onCapture, onCancel, accentColor = 'amber' }: CameraViewPr
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     ctx.drawImage(video, 0, 0);
-
-    // timestamp overlay
-    const stamp = new Date().toLocaleString('en-PH', {
-      timeZone: 'Asia/Manila',
-      dateStyle: 'medium',
-      timeStyle: 'medium',
-    });
-    const fontSize = Math.round(canvas.width * 0.03);
-    const pad = Math.round(fontSize * 0.6);
-    ctx.font = `bold ${fontSize}px sans-serif`;
-    ctx.textBaseline = 'bottom';
-    const textWidth = ctx.measureText(stamp).width;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(0, canvas.height - fontSize - pad * 2, textWidth + pad * 2, fontSize + pad * 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(stamp, pad, canvas.height - pad);
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
     streamRef.current?.getTracks().forEach(t => t.stop());
@@ -410,6 +394,7 @@ export default function TaskDetailsModal({
                 <CheckCircle2 size={18} />
                 {submitting ? 'Submitting...' : 'Complete Task'}
               </button>
+              
               {!allDone && (
                 <p className="text-xs text-gray-500 font-medium text-center">
                   Check off all checklist items to complete this task.
