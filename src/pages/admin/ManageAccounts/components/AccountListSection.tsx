@@ -93,8 +93,8 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                   >
                     <Edit3 size={15} />
                   </button>
-                  <button 
-                    onClick={() => onDeleteClick(acc.userId, acc.firstName)} 
+                  <button     
+                    onClick={() => onDeleteClick(acc._id, acc.firstName)} 
                     className="text-red-500 font-bold text-xs hover:underline decoration-2"
                   >
                     <Trash2 size={15} />
