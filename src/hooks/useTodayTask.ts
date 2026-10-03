@@ -11,11 +11,11 @@ import type { TaskItem } from "../pages/custodian/TaskOperation/TaskDetailsModal
 const fullName = (u?: UserSummary | null) =>
   u ? `${u.firstName} ${u.lastName ?? ''}`.trim() : null;
 
-// backend TaskLog -> shape the UI components expect
 const toTaskItem = (log: TaskLog): TaskItem => ({
     id: log._id,
     title: log.task.title,
     zone: log.task.area,
+    startTime: log.task.startTime,
     startedBy: fullName(log.startedBy),
     completedBy: fullName(log.completedBy),
     priority: log.task.priority,
