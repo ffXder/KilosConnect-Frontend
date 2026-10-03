@@ -6,44 +6,56 @@ interface QRScannerProps {
 }
 
 const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
-    const scannerRef = useRef<Html5Qrcode | null>(null);
     const [detected, setDetected] = useState(false);
+    const onScanSuccessRef = useRef(onScanSuccess);
+
+    // keep latest callback without re-running the effect
+    useEffect(() => {
+        onScanSuccessRef.current = onScanSuccess;
+    }, [onScanSuccess]);
 
     useEffect(() => {
         const scanner = new Html5Qrcode('qr-reader');
-        scannerRef.current = scanner;
-        let isScanning = false;
+        let handled = false;
 
-        scanner.start(
-            { facingMode: 'environment' },
-            { 
-                fps: 15,
-                qrbox: { width: 250, height: 250 },
-            },
-            (decodedText) => {
-                isScanning = false;
-                setDetected(true);
+        const startPromise = scanner
+            .start(
+                { facingMode: 'environment' },
+                { fps: 15, qrbox: { width: 250, height: 250 } },
+                (decodedText) => {
+                    if (handled) return;
+                    handled = true;
+                    setDetected(true);
 
-                scanner.stop()
-                    .then(() => setTimeout(() => onScanSuccess(decodedText), 350))
-                    .catch(() => setTimeout(() => onScanSuccess(decodedText), 350));
-            },
-            (errorMessage) => {
-                if (errorMessage.includes('NotFoundException')) return;
-                console.warn('QR Code scan error:', errorMessage);
-            }
-        ).then(() => {
-            isScanning = true;
-        }).catch((err) => {
-            console.error('Failed to start scanner:', err);
-        });
+                    scanner
+                        .stop()
+                        .catch(() => {})
+                        .finally(() =>
+                            setTimeout(() => onScanSuccessRef.current(decodedText), 350)
+                        );
+                },
+                (errorMessage) => {
+                    if (errorMessage.includes('NotFoundException')) return;
+                    console.warn('QR Code scan error:', errorMessage);
+                }
+            )
+            .catch((err) => {
+                console.error('Failed to start scanner:', err);
+            });
 
         return () => {
-            if (isScanning) {
-                scannerRef.current?.stop().catch(() => {});
-            }
+            // wait for start to settle, then stop whatever is running
+            startPromise.then(() => {
+                try {
+                    if (scanner.isScanning) {
+                        scanner.stop().catch(() => {});
+                    }
+                } catch {
+                    /* already stopped */
+                }
+            });
         };
-    });
+    }, []);
 
     return (
         <div className="w-full max-w-sm flex flex-col items-center font-['Poppins']">
