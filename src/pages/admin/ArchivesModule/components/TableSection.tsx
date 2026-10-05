@@ -10,11 +10,11 @@ interface TableSectionProps {
 
 // Module type tag styling map
 const tagStyles: Record<string, string> = {
-  IncidentReport: "bg-red-50 text-red-600 border border-red-200",
-  Asset: "bg-blue-50 text-blue-600 border border-blue-200",
-  Task: "bg-amber-50 text-amber-600 border border-amber-200",
-  User: "bg-purple-50 text-purple-600 border border-purple-200",
-  LostAndFound: "bg-emerald-50 text-emerald-600 border border-emerald-200",
+  Incident: "bg-red-50 text-red-600 border border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800",
+  Asset: "bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800",
+  Task: "bg-amber-50 text-amber-600 border border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800",
+  User: "bg-purple-50 text-purple-600 border border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800",
+  LostAndFound: "bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800",
 };
 
 export const TableSection: React.FC<TableSectionProps> = ({
@@ -134,7 +134,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                     <span
                       className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
                         tagStyles[item.moduleType] ||
-                        "bg-slate-100 text-slate-600 border border-slate-200"
+                        "bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                       }`}
                     >
                       {item.moduleType}
@@ -183,7 +183,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                         className="flex items-center gap-1 border border-[#cbd5e1] hover:bg-slate-100 text-[#334155] text-xs font-semibold py-1.5 px-2.5 rounded-lg transition-colors cursor-pointer active:scale-[0.97] dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                       >
                         <svg
-                          className="w-3.5 h-3.5 text-[#475569]"
+                          className="w-3.5 h-3.5 text-[#475569] dark:text-slate-300"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
