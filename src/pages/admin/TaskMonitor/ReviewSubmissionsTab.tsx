@@ -212,7 +212,8 @@ export const ReviewSubmissionsTab: React.FC = () => {
               <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-purple-900 text-xs dark:bg-purple-950/40 dark:border-purple-700 dark:text-purple-200">
                 <AlertTriangle size={18} className="text-purple-700 shrink-0 mt-0.5 dark:text-purple-300" />
                 <div>
-                  <p className="font-bold text-purple-900 text-sm dark:text-purple-200">Dispute Detail</p>
+                  <p className="font-bold text-purple-900 text-sm dark:text-purple-200">Dispute Detail:</p>
+                  <p className="text-sm text-purple-700 dark:text-purple-300">{selectedSub.verificationNote}</p>
                 </div>
               </div>
             )}
@@ -247,7 +248,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedSub(null)}
-                className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors cursor-pointer"
+                className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors cursor-pointer dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50 dark:hover:bg-slate-600"
               >
                 Close
               </button>
