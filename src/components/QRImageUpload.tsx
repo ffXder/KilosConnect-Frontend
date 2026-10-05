@@ -100,7 +100,7 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
       <div id="qr-file-reader" className="hidden" />
 
       {/* Upload Zone / Image Preview */}
-      <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden relative border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] flex flex-col items-center justify-center transition-colors hover:border-[#0a2e27]">
+      <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden relative border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] flex flex-col items-center justify-center transition-colors hover:border-[#0a2e27] dark:bg-slate-800 dark:border-slate-500 dark:hover:border-[#207D55]">
         {selectedImage ? (
           <div className="relative w-full h-full bg-black">
             <img
