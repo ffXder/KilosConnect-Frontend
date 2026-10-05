@@ -31,16 +31,12 @@ export const TasksSection: React.FC<TasksProps> = ({
   return (
     <div className="font-['Poppins']">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-extrabold text-gray-900 dark:text-slate-50">
-          Today's Tasks
-        </h3>
-        <span className="text-xs font-bold text-gray-500 dark:text-slate-400">
-          {pendingCount} Tasks Remaining
-        </span>
+        <h3 className="text-base sm:text-lg font-extrabold text-gray-900 dark:text-slate-50">Today's Tasks</h3>
+        <span className="text-xs font-bold text-gray-500 dark:text-slate-400">{pendingCount} Remaining</span>
       </div>
 
       {tasks.length === 0 && (
-        <p className="text-sm text-gray-400 dark:text-slate-500 font-medium text-center py-6">
+        <p className="text-xs text-gray-400 dark:text-slate-400 font-medium mt-0.5 truncate">
           No tasks found.
         </p>
       )}
@@ -87,7 +83,7 @@ export const TasksSection: React.FC<TasksProps> = ({
               </div>
 
               <span
-                className={`text-[10px] font-extrabold px-3 py-1 rounded-full shrink-0 tracking-wider uppercase ${getStatusStyle(task.status)}`}
+                className={`text-[10px] font-extrabold px-2.5 sm:px-3 py-1 rounded-full shrink-0 tracking-wider uppercase ${getStatusStyle(task.status)}`}
               >
                 {isCompleted ? "Done" : task.status}
               </span>
