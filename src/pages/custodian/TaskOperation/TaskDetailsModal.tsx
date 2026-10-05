@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   X, Camera, CheckCircle2,
   AlertTriangle, Clock, User, CheckSquare, SwitchCamera
@@ -170,7 +170,7 @@ export default function TaskDetailsModal({
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
-  const checklist = task.checklist; // always from props (server data)
+  const checklist = task.checklist; 
   const isInProgress = task.status === 'In Progress';
   const completedCount = checklist.filter(c => c.completed).length;
   const allDone = checklist.every(c => c.completed);

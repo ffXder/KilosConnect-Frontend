@@ -10,9 +10,11 @@ interface TaskListProps {
 export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center font-['Poppins']">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center font-['Poppins'] dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
         <AlertCircle className="mx-auto text-gray-400 mb-2" size={32} />
-        <p className="text-sm font-medium text-gray-500">No tasks found matching this filter.</p>
+        <p className="text-sm font-medium text-gray-500 dark:text-slate-300">
+          No tasks found matching this filter.
+        </p>
       </div>
     );
   }
@@ -51,7 +53,7 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
           <div
             key={task.id}
             onClick={() => onViewDetails(task)}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:border-[#e2e8f0] transition cursor-pointer p-4 sm:p-5 flex items-center justify-between gap-4"
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:border-[#e2e8f0] transition cursor-pointer p-4 sm:p-5 flex items-center justify-between gap-4 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700"
           >
             <div className="flex items-start gap-4">
               <div className="bg-emerald-50 p-3 rounded-xl text-[#0a2e27] shrink-0 mt-1">
@@ -68,9 +70,9 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
                   </span>
                 </div>
 
-                <h4 className="font-bold text-gray-900 text-sm sm:text-base">{task.title}</h4>
+                <h4 className="font-bold text-gray-900 text-sm sm:text-base dark:text-gray-200">{task.title}</h4>
 
-                <div className="flex items-center gap-4 text-xs text-gray-500 font-medium flex-wrap">
+                <div className="flex items-center gap-4 text-xs text-gray-500 font-medium flex-wrap dark:text-gray-50">
                   <span className="flex items-center gap-1.5">
                     <User size={14} /> {task.startedBy || "Not Started Yet"}
                   </span>
@@ -86,8 +88,8 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
 
             <div className="flex items-center gap-4 shrink-0">
               <div className="text-right hidden sm:block">
-                <p className="text-xs text-gray-400 font-medium">Checklist</p>
-                <p className="text-sm font-bold text-gray-800">{completedCount}/{task.checklist.length}</p>
+                <p className="text-xs text-gray-400 font-medium dark:text-gray-300">Checklist</p>
+                <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{completedCount}/{task.checklist.length}</p>
               </div>
               <ChevronRight size={22} className="text-gray-400" />
             </div>

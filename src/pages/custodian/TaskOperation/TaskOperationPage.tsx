@@ -72,13 +72,13 @@ export default function TaskMain() {
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-200 gap-4 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
+          <div className="flex border-b border-gray-200 dark:border-slate-700 gap-0 sm:gap-8">
             <button
               onClick={() => setActiveTab("all")}
-              className={`pb-3 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "all"
-                  ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
-                  : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300"
+                  ? "border-[#0a2e27] text-[#0a2e27] dark:border-emerald-500 dark:text-emerald-400"
+                  : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               Facility Tasks
@@ -86,18 +86,18 @@ export default function TaskMain() {
 
             <button
               onClick={() => setActiveTab("pending")}
-              className={`pb-3 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "pending"
-                  ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
-                  : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300"
+                  ? "border-[#0a2e27] text-[#0a2e27] dark:border-emerald-500 dark:text-emerald-400"
+                  : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               Active Queue
               <span
-                className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold ${
+                className={`text-[11px] sm:text-xs min-w-[22px] text-center px-2 py-0.5 rounded-full font-bold ${
                   activeTab === "pending"
-                    ? "bg-[#0a2e27] text-white dark:text-emerald-400"
-                    : "bg-[#e6f0ef] text-[#0a2e27]"
+                    ? "bg-[#0a2e27] text-white dark:bg-emerald-500 dark:text-slate-900"
+                    : "bg-[#e6f0ef] text-[#0a2e27] dark:bg-slate-700 dark:text-slate-200"
                 }`}
               >
                 {summary.activePending}
@@ -107,39 +107,39 @@ export default function TaskMain() {
 
           {/* Stats Cards (numbers come from the backend summary) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0">
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
+              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0 dark:text-slate-900">
                 <Clock size={22} />
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500">Active / Pending Tasks</p>
-                <h3 className="text-xl font-bold text-gray-900">{summary.activePending}</h3>
+                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Active / Pending Tasks</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.activePending}</h3>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
               <div className="p-3 bg-rose-50 text-rose-600 rounded-xl shrink-0">
                 <AlertCircle size={22} />
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500">Flagged Issues</p>
-                <h3 className="text-xl font-bold text-gray-900">{summary.flagged}</h3>
+                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Flagged Issues</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.flagged}</h3>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0">
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
+              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0 dark:text-slate-900">
                 <CheckCircle2 size={22} />
               </div>
               <div>
-                <p className="text-xs font-medium text-gray-500">Completed Today</p>
-                <h3 className="text-xl font-bold text-gray-900">{summary.completed}</h3>
+                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Completed Today</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.completed}</h3>
               </div>
             </div>
           </div>
 
           {/* Search */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
             <div className="relative flex-1 min-w-[260px]">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -147,7 +147,7 @@ export default function TaskMain() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by zone or task name..."
-                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#0a2e27]"
+                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#0a2e27] dark:bg-slate-800 dark:border-slate-600 transition-colors duration-300 dark:placeholder:text-slate-400"
               />
             </div>
           </div>
