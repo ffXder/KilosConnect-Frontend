@@ -59,7 +59,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
 
   const statusOptions = [
     { label: 'All', value: 'All', active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100' },
-    { label: 'Open', value: 'Open', active: 'bg-sky-500 text-white shadow-sm', inactive: 'text-sky-600 hover:text-sky-700 dark:text-sky-300 dark:hover:text-sky-200' },
+    { label: 'Open', value: 'Open', active: 'bg-red-500 text-white shadow-sm', inactive: 'text-red-600 hover:text-red-700 dark:text-red-300 dark:hover:text-red-200' },
     { label: 'In Progress', value: 'In Progress', active: 'bg-blue-500 text-white shadow-sm', inactive: 'text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200' },
     { label: 'Resolved', value: 'Resolved', active: 'bg-emerald-500 text-white shadow-sm', inactive: 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-300 dark:hover:text-emerald-200' },
   ];
