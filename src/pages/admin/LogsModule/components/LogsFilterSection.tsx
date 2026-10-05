@@ -32,7 +32,7 @@ export default function LogsFilterSection({
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by asset name or ID..."
+          placeholder="Search by user ID, name, type, action.."
           className="
             w-full
             sm:flex-1
