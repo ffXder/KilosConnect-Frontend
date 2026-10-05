@@ -20,6 +20,14 @@ const statusStyles: Record<string, { badge: string; icon: React.ReactNode }> = {
     badge: "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-600",
     icon: <Wrench size={12} />
   },
+  "Needs Repair": {
+    badge: "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-600",
+    icon: <Wrench size={12} />
+  },
+  "Needs Replacement": {
+    badge: "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-600",
+    icon: <AlertCircle size={12} />
+  },
   "Damaged": {
     badge: "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-600",
     icon: <AlertCircle size={12} />
@@ -126,7 +134,7 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
           ) : filteredAssets.map((asset) => {
             // renders
             const recommendationTheme = recommendationStyles[asset.recommendation] || {
-              badge: "bg-emerald-50 text-emerald-600 border-emerald-200",
+              badge: "bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800",
               icon: <CheckCircle2 size={12} />,
             };
 
@@ -159,7 +167,7 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
 
                 {/* Status */}
                 <td className="py-4 px-6">
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-full border ${statusStyles[asset.condition]?.badge || "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-full border ${statusStyles[asset.condition]?.badge || "bg-gray-100 text-gray-600 border-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"}`}>
                     {statusStyles[asset.condition]?.icon}
                     {asset.condition}
                   </span>
@@ -178,7 +186,7 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
                 </td>
 
                 {/* Maintenance Schedule logs */}
-                <td className="py-4 px-6 text-xs text-gray-600 font-medium">
+                <td className="py-4 px-6 text-xs text-gray-600 dark:text-slate-300 font-medium">
                   {asset.maintenanceCount ? (
                     <>
                       <div>{asset.maintenanceCount} times</div>
@@ -207,14 +215,14 @@ export const AssetRegistryList: React.FC<Props> = ({ isLoading = false, filtered
                   <div className="flex items-center justify-center gap-3">
                     <button
                       onClick={() => onAssetClick(asset)}
-                      className="text-blue-500 hover:text-blue-600 p-1 hover:bg-blue-50 rounded transition-colors"
+                      className="text-blue-500 hover:text-blue-600 p-1 hover:bg-blue-50 rounded transition-colors dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-slate-700"
                       title="Edit Asset"
                     >
                       <Edit3 size={15} />
                     </button>
                     <button
                       onClick={() => onDeleteAsset(asset)}
-                      className="text-red-400 hover:text-red-500 p-1 hover:bg-red-50 rounded transition-colors"
+                      className="text-red-400 hover:text-red-500 p-1 hover:bg-red-50 rounded transition-colors dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-slate-700"
                       title="Delete Asset"
                     >
                       <Trash2 size={15} />

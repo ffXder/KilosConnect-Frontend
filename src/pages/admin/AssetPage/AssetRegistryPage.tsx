@@ -78,7 +78,6 @@ export const AssetRegistryPage = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [selectedAssetForEdit, setSelectedAssetForEdit] = React.useState<Asset | null>(null);
   const [assetToArchive, setAssetToArchive] = React.useState<Asset | null>(null);
