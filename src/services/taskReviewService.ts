@@ -13,10 +13,21 @@ export const getPendingReviewQueue = async (): Promise<TaskLog[]> => {
     return res.json();
 };
 
+// GET logged-in custodian's own submissions
+export const getMySubmissions = async (): Promise<TaskLog[]> => {
+    const res = await apiRequest('/task-reviews/my-submissions', { method: 'GET' });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to fetch your submissions');
+    }
+    return res.json();
+};
+
 // PATCH custodian approves peer task submission
 export const approvePeerTask = async (logId: string, note?: string): Promise<{ message: string; taskLog: TaskLog }> => {
-    const res = await apiRequest(`/task-reviews/${logId}/approve`, {
+    const res = await apiRequest(`/task-reviews/${logId}/approve-peer`, {
         method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ note })
     });
     if (!res.ok) {
@@ -28,7 +39,7 @@ export const approvePeerTask = async (logId: string, note?: string): Promise<{ m
 
 // PATCH custodian disputes peer task submission
 export const disputePeerTask = async (logId: string, reason: string): Promise<{ message: string; taskLog: TaskLog }> => {
-    const res = await apiRequest(`/task-reviews/${logId}/dispute`, {
+    const res = await apiRequest(`/task-reviews/${logId}/dispute-peer`, {
         method: 'PATCH',
         body: JSON.stringify({ reason })
     });
