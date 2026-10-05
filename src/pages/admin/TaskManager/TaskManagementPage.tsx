@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import TaskFilterSection from './TaskFilterSection';
 import TaskManagementSection from './TaskTableSection';
-import AddTaskModal from './AddITaskModals';
+import AddTaskModal from './AddTaskModals';
 import { AreaQrModal } from './AreaQRModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTasks } from '../../../hooks/useTask';

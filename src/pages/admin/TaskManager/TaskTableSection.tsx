@@ -23,7 +23,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
   
   if (loading) {
     return (
-      <div className="bg-white border border-gray-200 rounded-[32px] py-20 flex flex-col items-center justify-center">
+      <div className="bg-white border border-gray-200 rounded-[32px] py-20 flex flex-col items-center justify-center dark:bg-slate-900 dark:border-slate-700 transition-color duration-300">
         <Loader2 className="w-8 h-8 text-[#113129] animate-spin" />
         <p className="text-gray-400 mt-4 font-medium">Loading master tasks...</p>
       </div>
