@@ -3,7 +3,7 @@ import { X, ImagePlus } from 'lucide-react';
 
 interface ModalProps {
   onClose: () => void;
-  onSubmit: (data: any, imageFile: File) => void; // ← added imageFile
+  onSubmit: (data: any, imageFile: File) => void;
 }
 
 const Areas = [
