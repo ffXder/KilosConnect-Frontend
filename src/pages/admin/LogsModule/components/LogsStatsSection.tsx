@@ -1,3 +1,6 @@
+import React from 'react';
+import { Activity, Boxes, ClipboardCheck, PackageSearch, ShieldAlert, UserRound, Wrench } from 'lucide-react';
+
 interface LogsStatsSectionProps {
   stats?: Record<string, number>; // e.g. { Asset: 12, TaskLog: 5, IncidentReport: 3 }
   isLoading?: boolean;
@@ -5,66 +8,74 @@ interface LogsStatsSectionProps {
 
 export default function LogsStatsSection({ stats = {}, isLoading = false }: LogsStatsSectionProps) {
   const categories = [
-    { 
-      label: "Asset Registry", 
-      count: stats["Asset"] || 0 
+    {
+      label: "Asset Registry",
+      count: stats["Asset"] || 0,
+      cardClass: "bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800",
+      iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-200 dark:text-blue-700",
+      icon: Boxes,
     },
-    { 
-      label: "Task", 
-      count: stats["Task"] || 0 
+    {
+      label: "Task",
+      count: stats["Task"] || 0,
+      cardClass: "bg-violet-50 border-violet-200 dark:bg-violet-950/40 dark:border-violet-800",
+      iconClass: "bg-violet-100 text-violet-600 dark:bg-violet-200 dark:text-violet-700",
+      icon: ClipboardCheck,
     },
-    { 
-      label: "Incident", 
-      count: (stats["IncidentReport"] || 0) + (stats["Incident Report"] || 0) + (stats["Incident"] || 0) 
+    {
+      label: "Incident",
+      count: (stats["IncidentReport"] || 0) + (stats["Incident Report"] || 0) + (stats["Incident"] || 0),
+      cardClass: "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800",
+      iconClass: "bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700",
+      icon: ShieldAlert,
     },
-    { 
-      label: "Task Log", 
-      count: stats["TaskLog"] || 0 
+    {
+      label: "Task Log",
+      count: stats["TaskLog"] || 0,
+      cardClass: "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800",
+      iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-200 dark:text-emerald-700",
+      icon: Activity,
     },
-    { 
-      label: "Lost & Found", 
-      count: (stats["LostAndFound"] || 0) + (stats["Lost And Found"] || 0) + (stats["Lost & Found"] || 0) 
+    {
+      label: "Lost & Found",
+      count: (stats["LostAndFound"] || 0) + (stats["Lost And Found"] || 0) + (stats["Lost & Found"] || 0),
+      cardClass: "bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-800",
+      iconClass: "bg-amber-100 text-amber-600 dark:bg-amber-200 dark:text-amber-700",
+      icon: PackageSearch,
     },
-    { 
-      label: "Repair Log", 
-      count: stats["RepairLog"] || 0 
+    {
+      label: "Repair Log",
+      count: stats["RepairLog"] || 0,
+      cardClass: "bg-sky-50 border-sky-200 dark:bg-sky-950/40 dark:border-sky-800",
+      iconClass: "bg-sky-100 text-sky-600 dark:bg-sky-200 dark:text-sky-700",
+      icon: Wrench,
     },
-    { 
-      label: "User", 
-      count: stats["User"] || 0 
+    {
+      label: "User",
+      count: stats["User"] || 0,
+      cardClass: "bg-slate-50 border-slate-200 dark:bg-slate-900 dark:border-slate-700",
+      iconClass: "bg-slate-100 text-slate-600 dark:bg-slate-200 dark:text-slate-700",
+      icon: UserRound,
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4">
-      {categories.map((item) => (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 md:gap-3 lg:gap-5">
+      {categories.map(({ label, count, cardClass, iconClass, icon: Icon }) => (
         <div
-          key={item.label}
-          className="
-            bg-white
-            border
-            border-[#E5E7EB]
-            rounded-xl
-            shadow-sm
-            p-3.5
-            sm:p-4
-            flex
-            flex-col
-            justify-between
-            transition-shadow
-            hover:shadow-md
-            dark:bg-slate-900
-            dark:border-slate-700
-            dark:hover:shadow-none
-          "
+          key={label}
+          className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
         >
-          <p className="text-[11px] font-medium tracking-wide uppercase text-[#64748B] truncate dark:text-slate-300">
-            {item.label}
-          </p>
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
+            <Icon size={16} strokeWidth={2} className="sm:size-[20px] md:size-[24px] lg:size-[28px]" />
+          </div>
 
-          <p className="mt-1 text-2xl sm:text-[28px] font-bold text-[#0f2942] dark:text-slate-100">
-            {isLoading ? "..." : item.count.toLocaleString()}
-          </p>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">
+              {isLoading ? "..." : count.toLocaleString()}
+            </div>
+            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{label}</div>
+          </div>
         </div>
       ))}
     </div>

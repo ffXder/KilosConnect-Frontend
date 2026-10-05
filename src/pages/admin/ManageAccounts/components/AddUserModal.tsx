@@ -54,53 +54,53 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-[20px] w-full max-w-[420px] overflow-hidden shadow-2xl">
-        <div className="bg-[#1C2D24] px-7 py-5">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 font-sans">
+      <div className="bg-white dark:bg-slate-900 rounded-[20px] w-full max-w-[420px] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700">
+        <div className="bg-[#072821] px-7 py-5">
           <h3 className="text-[#FDFFE0] text-xl font-bold">Add User</h3>
         </div>
         <form className="p-7 space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700">First Name: <span className="text-red-500">*</span></label>
-            <input required name="firstName" value={formData.firstName} onChange={handleChange} className="w-full text-slate-900 border border-gray-300 rounded-lg p-2.5 text-sm" />
+            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">First Name: <span className="text-red-500">*</span></label>
+            <input required name="firstName" value={formData.firstName} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700">Last Name: <span className="text-red-500">*</span></label>
-            <input required name="lastName" value={formData.lastName} onChange={handleChange} className="w-full text-slate-900 border border-gray-300 rounded-lg p-2.5 text-sm" />
+            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Last Name: <span className="text-red-500">*</span></label>
+            <input required name="lastName" value={formData.lastName} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700">Email:</label>
+            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Email:</label>
             <input 
               name="email" 
               type="email" 
               value={formData.email} 
               onChange={handleChange} 
-              className={`w-full text-slate-900 border rounded-lg p-2.5 text-sm ${formData.email && !formData.email.includes("@") ? "border-red-400" : "border-gray-300"}`} 
+              className={`w-full border rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 ${formData.email && !formData.email.includes("@") ? "border-red-400" : "border-gray-300 dark:border-slate-600"}`} 
             />
             {formData.email && !formData.email.includes("@") && (
               <p className="text-[10px] text-red-500 mt-1 animate-pulse">Email must contain an "@" symbol</p>
             )}
           </div>
           <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700">Phone Number: <span className="text-red-500">*</span></label>
+            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Phone Number: <span className="text-red-500">*</span></label>
             <input 
               required 
               name="phoneNumber" 
               placeholder="+63 XXX XXX XXXX"
               value={formData.phoneNumber} 
               onChange={handleChange} 
-              className="w-full text-slate-900 border border-gray-300 rounded-lg p-2.5 text-sm" 
+              className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" 
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700">Role: <span className="text-red-500">*</span></label>
-            <select required name="role" value={formData.role} onChange={handleChange} className="w-full text-slate-900 border border-gray-300 rounded-lg p-2.5 text-sm bg-white">
+            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Role: <span className="text-red-500">*</span></label>
+            <select required name="role" value={formData.role} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
               <option value="custodian">Custodian</option>
               <option value="admin">Admin</option>
             </select>
           </div>
           <div className="flex justify-center gap-3 pt-4">
-            <button type="button" onClick={onClose} className="w-full text-slate-900 py-2.5 border border-gray-300 rounded-lg text-sm font-bold">Cancel</button>
+            <button type="button" onClick={onClose} className="w-full py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-200 dark:bg-slate-800">Cancel</button>
             <button type="submit" disabled={loading} className="w-full py-2.5 bg-[#d86125] text-[#FDFFE0] rounded-lg text-sm font-bold disabled:opacity-50">
               {loading ? "Adding..." : "Add User"}
             </button>
