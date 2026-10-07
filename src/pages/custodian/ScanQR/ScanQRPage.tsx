@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
@@ -41,20 +41,6 @@ export default function ScanQRPage() {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [scanResetKey, setScanResetKey] = useState(0);
   const navigate = useNavigate();
-
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-  );
-
-  useEffect(() => {
-    const syncSidebar = () => {
-      setSidebarExpanded(
-        JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-      );
-    };
-    const interval = setInterval(syncSidebar, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const { role } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -136,12 +122,8 @@ export default function ScanQRPage() {
     <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins']">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div
-        className={`transition-all duration-300 p-4 pt-20 sm:p-6 sm:pt-24 md:p-8 flex-1 min-w-0 ${
-          sidebarExpanded ? "md:ml-[15px]" : "md:ml-[15px]"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden">
+        <div className="space-y-6">
 
           {/* Header */}
           <div>
@@ -210,7 +192,7 @@ export default function ScanQRPage() {
 
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

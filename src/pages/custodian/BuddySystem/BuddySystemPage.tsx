@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
 import { Clock, AlertCircle, CheckCircle2, ShieldAlert } from "lucide-react";
@@ -8,21 +8,6 @@ import ReviewDetailsModal from "./ReviewDetailsModal";
 export default function BuddySystemPage() {
   const [activeTab, setActiveTab] = useState<"pending" | "submissions">("pending");
   const [selectedReview, setSelectedReview] = useState<any | null>(null);
-
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-  );
-
-  useEffect(() => {
-    const syncSidebar = () => {
-      setSidebarExpanded(
-        JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-      );
-    };
-
-    const interval = setInterval(syncSidebar, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const { role } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<
@@ -40,12 +25,7 @@ export default function BuddySystemPage() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans relative">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div
-        className={`transition-all duration-1000 flex-1 flex flex-col ${
-          sidebarExpanded ? "md:ml-[15px]" : "md:ml-[10px]"
-        }`}
-      >
-        <main className="pt-20 p-4 sm:p-8 md:p-10 max-w-7xl mx-auto w-full space-y-6 sm:space-y-8 flex-1">
+      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 space-y-6 overflow-x-hidden">
           
           {/* Header Section */}
           <div>
@@ -143,8 +123,7 @@ export default function BuddySystemPage() {
               <p className="text-gray-500 font-medium">No previous submissions found.</p>
             </div>
           )}
-        </main>
-      </div>
+      </main>
 
       {/* Pop-up Modal */}
       {selectedReview && (
