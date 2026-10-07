@@ -144,19 +144,29 @@ export const ProfilePage: React.FC = () => {
   };
 
   if (loading) return <ProfileSkeleton userRole={userRole} />;
-  if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
+  if (error) {
+    return (
+      <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
+        <SidebarNavigationSection userRole={userRole} />
+        <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950">
+          <div className="mx-auto w-full min-w-0 max-w-[1600px] text-sm text-red-500">{error}</div>
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
+    <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
-      <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300">
-        <div className="mb-6">
-          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
-          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
-        </div>
+      <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
+          <div>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
-          <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
+          <div className="flex flex-col gap-6">
             <ProfileInfoSection
               profile={profile}
               isEditing={isEditing}
@@ -168,7 +178,7 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsSection stats={mockStats} />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-base font-semibold text-[#0d1f1a] dark:text-slate-100">Personal Information</h2>
@@ -225,24 +235,26 @@ export const ProfilePage: React.FC = () => {
             <ProfileActivitySection activities={mockActivity} />
           </div>
         </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
 
 const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarNavigationSection>["userRole"] }> = ({ userRole }) => (
-  <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
+  <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
     <SidebarNavigationSection userRole={userRole} />
-    <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300 animate-pulse">
-      {/* Page Title & Subtitle Skeleton */}
-      <div className="mb-6">
-        <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
-        <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
-      </div>
+    <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300 animate-pulse">
+      <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
+        {/* Page Title & Subtitle Skeleton */}
+        <div>
+          <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
+          <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
         {/* Left Column Skeletons */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
           {/* Profile Card Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-slate-800 mb-4" />
@@ -266,7 +278,7 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
         </div>
 
         {/* Right Column Skeletons */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
           {/* Personal Info Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
             <div className="h-5 w-44 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
@@ -298,6 +310,7 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
         </div>
       </div>
     </div>
+    </main>
   </div>
 );
 

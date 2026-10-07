@@ -50,7 +50,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
   if (isFlagging) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh] dark:bg-slate-900 dark:border dark:border-slate-700">
           
           {/* Header */}
           <div className="bg-rose-700 p-5 flex justify-between items-start shrink-0">
@@ -78,19 +78,19 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
 
           {/* Form Content */}
           <div className="p-6 overflow-y-auto space-y-5">
-            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-3.5 rounded-xl text-xs font-medium flex items-center gap-2.5">
-              <AlertTriangle size={18} className="shrink-0 text-rose-600" />
+            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-3.5 rounded-xl text-xs font-medium flex items-center gap-2.5 dark:bg-rose-950/50 dark:border-rose-900 dark:text-rose-200">
+              <AlertTriangle size={18} className="shrink-0 text-rose-600 dark:text-rose-300" />
               <span>A reference photo is required so admins can verify and resolve this issue promptly.</span>
             </div>
 
             {/* Photo Upload Box */}
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 dark:text-slate-300">
                 Reference Photo <span className="text-rose-500">*</span>
               </label>
 
               {photoPreview ? (
-                <div className="relative rounded-xl overflow-hidden border border-[#e2e8f0] h-52 bg-gray-900">
+                <div className="relative rounded-xl overflow-hidden border border-[#e2e8f0] h-52 bg-gray-900 dark:border-slate-700">
                   <img src={photoPreview} alt="Issue evidence" className="w-full h-full object-cover" />
                   <button 
                     type="button"
@@ -101,12 +101,12 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
                   </button>
                 </div>
               ) : (
-                <label className="border-2 border-dashed border-[#e2e8f0] hover:border-rose-400 bg-[#f8fafc] hover:bg-rose-50/20 rounded-xl h-48 flex flex-col items-center justify-center cursor-pointer transition p-4 text-center">
-                  <div className="bg-rose-100 text-rose-600 p-3 rounded-full mb-2">
+                <label className="border-2 border-dashed border-[#e2e8f0] hover:border-rose-400 bg-[#f8fafc] hover:bg-rose-50/20 rounded-xl h-48 flex flex-col items-center justify-center cursor-pointer transition p-4 text-center dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-rose-950/30">
+                  <div className="bg-rose-100 text-rose-600 p-3 rounded-full mb-2 dark:bg-rose-950 dark:text-rose-300">
                     <Upload size={22} />
                   </div>
-                  <span className="text-sm font-bold text-gray-700">Click to upload reference photo</span>
-                  <span className="text-xs text-gray-400 mt-1">PNG, JPG or WEBP (Max 10MB)</span>
+                  <span className="text-sm font-bold text-gray-700 dark:text-slate-100">Click to upload reference photo</span>
+                  <span className="text-xs text-gray-400 mt-1 dark:text-slate-400">PNG, JPG or WEBP (Max 10MB)</span>
                   <input 
                     type="file" 
                     accept="image/*" 
@@ -119,7 +119,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
 
             {/* Notes / Description */}
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 dark:text-slate-300">
                 Issue Description / Notes
               </label>
               <textarea
@@ -127,7 +127,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
                 value={flagDescription}
                 onChange={(e) => setFlagDescription(e.target.value)}
                 placeholder="Briefly describe what needs attention or repair..."
-                className="w-full rounded-xl border border-[#e2e8f0] p-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent resize-none bg-[#f8fafc]"
+                className="w-full rounded-xl border border-[#e2e8f0] p-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent resize-none bg-[#f8fafc] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
               <button
                 type="button"
                 onClick={() => setIsFlagging(false)}
-                className="flex-1 py-3.5 border border-[#e2e8f0] text-gray-700 font-bold rounded-xl text-sm hover:bg-gray-50 transition"
+                className="flex-1 py-3.5 border border-[#e2e8f0] text-gray-700 font-bold rounded-xl text-sm hover:bg-gray-50 transition dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 Cancel
               </button>
@@ -161,7 +161,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
   /* -------------------------------------------------------------------------- */
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh] dark:bg-slate-900 dark:border dark:border-slate-700">
         
         {/* Dark Green Modal Header */}
         <div className="bg-[#0a2e27] p-5 flex justify-between items-start shrink-0">
@@ -183,22 +183,22 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
           {/* Location / Custodian Meta */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-50 p-2 rounded-lg text-[#0a2e27]">
+              <div className="bg-emerald-50 p-2 rounded-lg text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300">
                 <MapPin size={20} />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">{review.area}</h3>
-                <p className="text-sm text-gray-500 font-medium">{review.cust} · {review.time}</p>
+                <h3 className="font-bold text-gray-900 dark:text-slate-50">{review.area}</h3>
+                <p className="text-sm text-gray-500 font-medium dark:text-slate-300">{review.cust} · {review.time}</p>
               </div>
             </div>
-            <span className="text-emerald-700 font-bold text-sm bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+            <span className="text-emerald-700 font-bold text-sm bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-900">
               {review.progress}
             </span>
           </div>
 
           {/* Custodian Submission Photo */}
           <div>
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2 dark:text-slate-300">
               <Camera size={14} /> Custodian Submission Photo
             </p>
             <div className="bg-[#516173] rounded-xl h-48 flex flex-col items-center justify-center text-white/80 relative">
@@ -213,18 +213,18 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
           {/* Maintenance Checklist */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2 dark:text-slate-300">
                 📋 Maintenance Checklist
               </p>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-900">
                 4/4 done
               </span>
             </div>
             <div className="space-y-2">
               {checklistItems.map((item, index) => (
-                <div key={index} className="flex items-center gap-3 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl">
-                  <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
-                  <span className="text-sm font-medium text-gray-700">{item}</span>
+                <div key={index} className="flex items-center gap-3 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl dark:bg-slate-800 dark:border-slate-700">
+                  <CheckCircle2 size={18} className="text-emerald-600 shrink-0 dark:text-emerald-300" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-slate-200">{item}</span>
                 </div>
               ))}
             </div>
@@ -244,7 +244,7 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
             </button>
             <button 
               onClick={() => setIsFlagging(true)}
-              className="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold py-3.5 rounded-xl transition flex justify-center items-center gap-2"
+              className="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold py-3.5 rounded-xl transition flex justify-center items-center gap-2 dark:bg-rose-950/50 dark:hover:bg-rose-950 dark:text-rose-300 dark:border-rose-900"
             >
               <Flag size={20} />
               Flag Issue
@@ -252,10 +252,10 @@ export default function ReviewDetailsModal({ review, onClose }: ReviewDetailsMod
           </div>
 
           {/* Permanent Log Notice */}
-          <div className="bg-[#f8fafc] border border-[#e2e8f0] rounded-xl p-3 flex items-center gap-3">
-            <ShieldAlert size={16} className="text-gray-400 shrink-0" />
-            <p className="text-xs text-gray-500 font-medium">
-              Your action will be permanently logged under <span className="font-bold text-gray-700">CUST-001</span>
+          <div className="bg-[#f8fafc] border border-[#e2e8f0] rounded-xl p-3 flex items-center gap-3 dark:bg-slate-800 dark:border-slate-700">
+            <ShieldAlert size={16} className="text-gray-400 shrink-0 dark:text-slate-400" />
+            <p className="text-xs text-gray-500 font-medium dark:text-slate-300">
+              Your action will be permanently logged under <span className="font-bold text-gray-700 dark:text-slate-100">CUST-001</span>
             </p>
           </div>
         </div>

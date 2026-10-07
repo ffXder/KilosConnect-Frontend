@@ -119,33 +119,33 @@ export default function ScanQRPage() {
   const ResultIcon = scanResult?.icon ?? CheckCircle2;
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins']">
+    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden">
+      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
         <div className="space-y-6">
 
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Scan QR Code</h1>
-            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight dark:text-slate-50">Scan QR Code</h1>
+            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5 dark:text-slate-300">
               Capture a live photo or upload a saved QR image to access equipment, zones, or tasks
             </p>
           </div>
 
           {/* Scanner Card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col items-center text-center">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col items-center text-center dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
 
             {/* Mode Switcher Tabs */}
             {scanStatus !== 'success' && (
-              <div className="bg-[#f8fafc] border border-[#e2e8f0] p-1.5 rounded-xl flex gap-1 mb-8 w-full max-w-sm">
+              <div className="bg-[#f8fafc] border border-[#e2e8f0] p-1.5 rounded-xl flex gap-1 mb-8 w-full max-w-sm dark:bg-slate-800 dark:border-slate-700">
                 <button
                   type="button"
                   onClick={() => setScanMode('camera')}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
                     scanMode === 'camera'
-                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0]'
-                      : 'text-gray-500 hover:text-gray-700'
+                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-50 dark:border-slate-600'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   <Camera size={15} />
@@ -156,8 +156,8 @@ export default function ScanQRPage() {
                   onClick={() => setScanMode('upload')}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
                     scanMode === 'upload'
-                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0]'
-                      : 'text-gray-500 hover:text-gray-700'
+                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-50 dark:border-slate-600'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   <Image size={15} />
@@ -184,7 +184,7 @@ export default function ScanQRPage() {
             {scanStatus === 'success' && (
               <button
                 onClick={handleReset}
-                className="w-full max-w-sm bg-[#f8fafc] border border-[#e2e8f0] text-gray-700 font-bold text-sm py-3.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                className="w-full max-w-sm bg-[#f8fafc] border border-[#e2e8f0] text-gray-700 font-bold text-sm py-3.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 Scan Another QR Code
               </button>

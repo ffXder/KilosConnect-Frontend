@@ -98,8 +98,8 @@ export const ArchivesPage: React.FC = () => {
       <SidebarNavigationSection userRole={userRole} />
 
       {/* Main Container */}
-      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
-        <div className="max-w-[1400px] mx-auto space-y-6">
+      <main className="flex-1 min-w-0 p-4 md:p-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>

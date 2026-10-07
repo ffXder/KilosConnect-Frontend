@@ -102,7 +102,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
                     </span>
                 </div>
             </div>
-            <p className="text-gray-400 text-sm">Point your camera at a QR code</p>
+            <p className="text-gray-400 text-sm dark:text-slate-400">Point your camera at a QR code</p>
         </div>
     );
 };

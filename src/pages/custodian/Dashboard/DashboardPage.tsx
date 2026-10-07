@@ -94,7 +94,7 @@ export default function CustodianDashboardPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins']">
+    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       {toastMessage && (
@@ -104,15 +104,15 @@ export default function CustodianDashboardPage() {
         </div>
       )}
 
-      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden">
+      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
         <div className="space-y-6">
 
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight dark:text-slate-50">
               Welcome Back, John!
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
+            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5 dark:text-slate-300">
               Ready to keep Kilos PH in top shape?
             </p>
           </div>
@@ -132,13 +132,13 @@ export default function CustodianDashboardPage() {
 
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
-              <div className="bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm flex gap-1 overflow-x-auto w-full sm:w-auto">
+              <div className="bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm flex gap-1 overflow-x-auto w-full sm:w-auto dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
                 <button
                   onClick={() => setActiveTab('all')}
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors ${
                     activeTab === 'all'
                       ? 'bg-[#0a2e27] text-white'
-                      : 'text-gray-500 hover:text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   All Tasks ({tasks.length})
@@ -149,11 +149,11 @@ export default function CustodianDashboardPage() {
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
                     activeTab === 'pending'
                       ? 'bg-[#0a2e27] text-white'
-                      : 'text-gray-500 hover:text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   Active Tasks
-                  <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold">
+                  <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold dark:bg-amber-950 dark:text-amber-200">
                     {pendingCount}
                   </span>
                 </button>
@@ -163,7 +163,7 @@ export default function CustodianDashboardPage() {
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors ${
                     activeTab === 'completed'
                       ? 'bg-[#0a2e27] text-white'
-                      : 'text-gray-500 hover:text-gray-900'
+                      : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   Completed ({tasks.filter((t) => t.status === "Completed").length})
@@ -177,7 +177,7 @@ export default function CustodianDashboardPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by zone or task..."
-                  className="w-full bg-[#f8fafc] border border-[#e2e8f0] rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none focus:border-[#0a2e27]"
+                  className="w-full bg-[#f8fafc] border border-[#e2e8f0] rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none focus:border-[#0a2e27] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-emerald-500"
                 />
               </div>
             </div>

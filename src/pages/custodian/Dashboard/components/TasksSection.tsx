@@ -16,10 +16,10 @@ export const TasksSection: React.FC<TasksProps> = ({
   return (
     <div className="font-['Poppins']">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-extrabold text-gray-900">
+        <h3 className="text-lg font-extrabold text-gray-900 dark:text-slate-50">
           Today's Tasks
         </h3>
-        <span className="text-xs font-bold text-gray-500">
+        <span className="text-xs font-bold text-gray-500 dark:text-slate-400">
           {pendingCount} Tasks Remaining
         </span>
       </div>
@@ -34,8 +34,8 @@ export const TasksSection: React.FC<TasksProps> = ({
               onClick={() => onViewDetails(task)}
               className={`bg-white rounded-2xl p-4 sm:p-5 border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                 isCompleted
-                  ? "border-gray-100 opacity-60 bg-gray-50/80"
-                  : "border-gray-100 hover:border-gray-300 shadow-sm"
+                  ? "border-gray-100 opacity-60 bg-gray-50/80 dark:bg-slate-900/70 dark:border-slate-700"
+                  : "border-gray-100 hover:border-gray-300 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
               }`}
             >
               <div className="flex items-center gap-3 sm:gap-4 min-w-0">
@@ -47,20 +47,20 @@ export const TasksSection: React.FC<TasksProps> = ({
                   className={`w-6 h-6 rounded-lg border flex items-center justify-center shrink-0 transition-colors ${
                     isCompleted
                       ? "bg-[#0a2e27] border-[#0a2e27] text-white"
-                      : "border-gray-300 hover:border-[#0a2e27]"
+                      : "border-gray-300 hover:border-[#0a2e27] dark:border-slate-600 dark:hover:border-emerald-500"
                   }`}
                 >
                   {isCompleted && <Check size={14} />}
                 </button>
                 <div className="min-w-0">
                   <p
-                    className={`text-sm font-bold text-gray-900 truncate ${
-                      isCompleted ? "line-through text-gray-400" : ""
+                      className={`text-sm font-bold text-gray-900 truncate dark:text-slate-50 ${
+                      isCompleted ? "line-through text-gray-400 dark:text-slate-500" : ""
                     }`}
                   >
                     {task.title}
                   </p>
-                  <p className="text-xs text-gray-400 font-medium mt-0.5">
+                  <p className="text-xs text-gray-400 font-medium mt-0.5 dark:text-slate-400">
                     {task.zone} · {task.dueDate}
                   </p>
                 </div>
@@ -69,10 +69,10 @@ export const TasksSection: React.FC<TasksProps> = ({
               <span
                 className={`text-[10px] font-extrabold px-3 py-1 rounded-full shrink-0 tracking-wider uppercase ${
                   isCompleted
-                    ? "bg-gray-200 text-gray-600"
+                    ? "bg-gray-200 text-gray-600 dark:bg-slate-700 dark:text-slate-300"
                     : task.status === "Flagged"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-amber-100 text-amber-800"
+                    ? "bg-red-100 text-red-800 dark:bg-rose-950 dark:text-rose-200"
+                    : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200"
                 }`}
               >
                 {isCompleted ? "DONE" : task.status.toUpperCase()}

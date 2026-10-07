@@ -53,8 +53,8 @@ export const TaskMonitorPage: React.FC = () => {
     <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
       
-      <main className="flex-1 w-full overflow-y-auto dark:bg-slate-950 transition-colors duration-300">
-        <div className="p-4 md:p-8 max-w-[1600px] mx-auto space-y-8">
+      <main className="flex-1 min-w-0 overflow-y-auto dark:bg-slate-950 transition-colors duration-300">
+        <div className="w-full max-w-[1600px] mx-auto p-4 md:p-8 space-y-8">
           
           {/* Header & View Navigation Tabs */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

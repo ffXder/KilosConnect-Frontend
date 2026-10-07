@@ -35,42 +35,42 @@ export const StatsOverview: React.FC<StatsProps> = ({
         {/* Pending Tasks */}
         <div
           onClick={() => { setModalType("pending"); onTabChange("pending"); }}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all"
+          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-xl shrink-0">
+          <div className="p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
             <ListTodo size={22} />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-900">{pendingCount}</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5">Tasks Today</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">{pendingCount}</p>
+            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">Tasks Today</p>
           </div>
         </div>
 
         {/* Completed Count */}
         <div
           onClick={() => { setModalType("completed"); onTabChange("completed"); }}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all"
+          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
+          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
             <CheckCircle size={22} />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-900">{completedCount}</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5">Completed</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">{completedCount}</p>
+            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">Completed</p>
           </div>
         </div>
 
         {/* To Review */}
         <div
           onClick={() => navigate("/buddy-system")}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all"
+          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0">
+          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0 dark:bg-amber-950 dark:text-amber-300">
             <Users size={22} />
           </div>
           <div>
-            <p className="text-xl font-bold text-gray-900">3</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5">To Review</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">3</p>
+            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export const StatsOverview: React.FC<StatsProps> = ({
       {/* POPUP MODAL */}
       {modalType && (
         <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-[32px] max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200 dark:bg-slate-900 dark:border dark:border-slate-700">
             <div className="bg-[#0a2e27] p-6 flex items-center justify-between shrink-0">
               <div>
                 <h3 className="font-extrabold text-lg text-white flex items-center gap-2">
@@ -109,17 +109,17 @@ export const StatsOverview: React.FC<StatsProps> = ({
                     : t.status === "Completed"
                 )
                 .map((task) => (
-                  <div key={task.id} className="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 flex items-start gap-3">
+                  <div key={task.id} className="bg-white border border-gray-100 shadow-sm rounded-2xl p-4 flex items-start gap-3 dark:bg-slate-800 dark:border-slate-700 dark:shadow-none">
                     <div className={`p-2.5 rounded-xl shrink-0 ${
                       modalType === "pending"
-                        ? "bg-[#E6F4EA] text-[#0a2e27]"
-                        : "bg-emerald-50 text-emerald-600"
+                        ? "bg-[#E6F4EA] text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300"
+                        : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300"
                     }`}>
                       {modalType === "pending" ? <ListTodo size={18} /> : <CheckCircle size={18} />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-900 text-sm truncate">{task.title}</h4>
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-500 font-medium">
+                      <h4 className="font-bold text-gray-900 text-sm truncate dark:text-slate-50">{task.title}</h4>
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-500 font-medium dark:text-slate-300">
                         <span className="flex items-center gap-1"><MapPin size={12} /> {task.zone}</span>
                         <span>·</span>
                         <span>{task.dueDate}</span>
@@ -127,8 +127,8 @@ export const StatsOverview: React.FC<StatsProps> = ({
                       <div className="mt-2 flex items-center gap-2">
                         <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                           task.status === "Completed"
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-amber-100 text-amber-800"
+                            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
+                            : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200"
                         }`}>
                           {task.status}
                         </span>

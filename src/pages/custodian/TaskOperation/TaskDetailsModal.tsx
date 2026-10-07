@@ -232,11 +232,11 @@ export default function TaskDetailsModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-white sm:bg-black/60 sm:flex sm:items-center sm:justify-center sm:p-4">
-      <div className="relative bg-white w-full h-full sm:h-auto sm:max-w-xl sm:rounded-[32px] sm:max-h-[90vh] overflow-hidden flex flex-col dark:bg-slate-950">
+    <div className="fixed inset-0 z-50 bg-white sm:bg-black/60 sm:flex sm:items-center sm:justify-center sm:p-4 dark:bg-slate-950 sm:dark:bg-black/60">
+      <div className="relative bg-white w-full h-full sm:h-auto sm:max-w-xl sm:rounded-[32px] sm:max-h-[90vh] overflow-hidden flex flex-col dark:bg-slate-900 dark:border dark:border-slate-700">
 
         {showSuccess && (
-          <div className="success-fade absolute inset-0 z-10 bg-white flex flex-col items-center justify-center gap-3 dark:bg-slate-950">
+          <div className="success-fade absolute inset-0 z-10 bg-white flex flex-col items-center justify-center gap-3 dark:bg-slate-900">
             <style>{`
               @keyframes drawStroke { to { stroke-dashoffset: 0; } }
               @keyframes popIn {
@@ -285,19 +285,19 @@ export default function TaskDetailsModal({
         <div className="p-8 overflow-y-auto space-y-6">
 
           {/* Meta */}
-          <div className="grid grid-cols-2 gap-4 p-4 bg-[#f8fafc] rounded-2xl border border-[#e2e8f0] dark:bg-slate-800 dark:border border-slate-500">
+          <div className="grid grid-cols-2 gap-4 p-4 bg-[#f8fafc] rounded-2xl border border-[#e2e8f0] dark:bg-slate-800 dark:border-slate-700">
             <div className="flex items-center gap-3">
               <User size={18} className="text-gray-400 shrink-0 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Assigned To</p>
-                <p className="text-sm font-bold text-gray-900 dark:text-slate-300">{task.startedBy}</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-slate-100">{task.startedBy}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Clock size={18} className="text-gray-400 shrink-0 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Due Time</p>
-                <p className="text-sm font-bold text-gray-900 dark:text-slate-300">{task.dueDate}</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-slate-100">{task.dueDate}</p>
               </div>
             </div>
           </div>
@@ -308,7 +308,7 @@ export default function TaskDetailsModal({
               <p className="text-sm font-bold text-[#4a5568] flex items-center gap-2 dark:text-slate-100">
                 <CheckSquare size={16} /> Task Action Checklist
               </p>
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md dark:bg-emerald-950 dark:text-emerald-200">
                 {completedCount}/{checklist.length} Done
               </span>
             </div>
@@ -328,16 +328,16 @@ export default function TaskDetailsModal({
                     isInProgress ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'
                   } ${
                     item.completed
-                      ? 'bg-emerald-50/60 border-emerald-100'
-                      : 'bg-white border-[#e2e8f0] hover:border-gray-300 shadow-sm'
+                      ? 'bg-emerald-50/60 border-emerald-100 dark:bg-emerald-950/40 dark:border-emerald-900'
+                      : 'bg-white border-[#e2e8f0] hover:border-gray-300 shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none'
                   }`}
                 >
                   <div className={`w-6 h-6 rounded-md flex items-center justify-center border shrink-0 ${
-                    item.completed ? 'bg-[#0a2e27] border-[#0a2e27] text-white' : 'border-[#e2e8f0]'
+                    item.completed ? 'bg-[#0a2e27] border-[#0a2e27] text-white' : 'border-[#e2e8f0] dark:border-slate-600'
                   }`}>
                     {item.completed && <CheckCircle2 size={16} />}
                   </div>
-                  <span className={`text-sm font-medium ${item.completed ? 'line-through text-gray-400' : 'text-gray-600'}`}>
+                  <span className={`text-sm font-medium ${item.completed ? 'line-through text-gray-400 dark:text-slate-500' : 'text-gray-600 dark:text-slate-200'}`}>
                     {item.text}
                   </span>
                 </div>
@@ -354,14 +354,14 @@ export default function TaskDetailsModal({
                   {task.requiresVerification && <span className="text-rose-500">*</span>}
                 </p>
                 {task.requiresVerification ? (
-                  <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">Required</span>
+                  <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md dark:bg-rose-950 dark:text-rose-200">Required</span>
                 ) : (
-                  <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">Optional</span>
+                  <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md dark:bg-slate-800 dark:text-slate-300">Optional</span>
                 )}
               </div>
 
               {photoPreview ? (
-                <div className="relative rounded-xl overflow-hidden border border-[#e2e8f0] h-48 bg-gray-900">
+                <div className="relative rounded-xl overflow-hidden border border-[#e2e8f0] h-48 bg-gray-900 dark:border-slate-700">
                   <img src={photoPreview} alt="Task Completion Proof" className="w-full h-full object-cover" />
                   <button type="button" onClick={handleRetake} className="absolute top-3 right-3 bg-black/70 hover:bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition">
                     <Camera size={13} /> Retake
@@ -373,16 +373,16 @@ export default function TaskDetailsModal({
               ) : showCamera ? (
                 <CameraView onCapture={handleCapture} onCancel={() => setShowCamera(false)} accentColor="amber" />
               ) : (
-                <button type="button" onClick={() => setShowCamera(true)} className="w-full border-2 border-dashed border-amber-300 hover:border-amber-400 bg-amber-50/50 rounded-xl h-40 flex flex-col items-center justify-center cursor-pointer transition p-4 text-center">
-                  <Camera size={26} className="text-amber-600 mb-2" />
-                  <span className="text-sm font-bold text-gray-800">Open Camera</span>
-                  <span className="text-xs text-gray-500 mt-1">Live photo only — no saved photos</span>
+                <button type="button" onClick={() => setShowCamera(true)} className="w-full border-2 border-dashed border-amber-300 hover:border-amber-400 bg-amber-50/50 rounded-xl h-40 flex flex-col items-center justify-center cursor-pointer transition p-4 text-center dark:border-amber-900 dark:bg-amber-950/20 dark:hover:bg-amber-950/40">
+                  <Camera size={26} className="text-amber-600 mb-2 dark:text-amber-300" />
+                  <span className="text-sm font-bold text-gray-800 dark:text-slate-100">Open Camera</span>
+                  <span className="text-xs text-gray-500 mt-1 dark:text-slate-300">Live photo only — no saved photos</span>
                 </button>
               )}
 
               {task.requiresVerification && !photoPreview && !showCamera && (
-                <p className="text-xs text-amber-700 font-medium mt-2.5 flex items-center gap-1.5">
-                  <AlertTriangle size={14} className="shrink-0 text-amber-600" />
+                <p className="text-xs text-amber-700 font-medium mt-2.5 flex items-center gap-1.5 dark:text-amber-300">
+                  <AlertTriangle size={14} className="shrink-0 text-amber-600 dark:text-amber-300" />
                   You must take a live photo before completing the task.
                 </p>
               )}
@@ -411,7 +411,7 @@ export default function TaskDetailsModal({
                 {submitting ? 'Submitting...' : 'Complete Task'}
               </button>
               {!allDone && (
-                <p className="text-xs text-gray-500 font-medium text-center">
+                <p className="text-xs text-gray-500 font-medium text-center dark:text-slate-300">
                   Check off all checklist items to complete this task.
                 </p>
               )}
@@ -419,7 +419,7 @@ export default function TaskDetailsModal({
           )}
 
           {task.status === 'Completed' && (
-            <div className="bg-emerald-50 text-emerald-800 p-4 rounded-xl text-sm font-bold flex items-center gap-3 border border-emerald-100">
+            <div className="bg-emerald-50 text-emerald-800 p-4 rounded-xl text-sm font-bold flex items-center gap-3 border border-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-900">
               <CheckCircle2 size={20} className="shrink-0" />
               This task has been completed. 
             </div>
