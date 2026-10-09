@@ -132,7 +132,8 @@ function App() {
           {/* SHARED PROTECTED ROUTES */}
           <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
             <Route path="/asset-registry" element={<AssetRegistryPage />} />
-            <Route path="/lost-and-found" element={<LostAndFoundPage />} />
+            <Route path="/asset-registry/lost-and-found" element={<LostAndFoundPage />} />
+            <Route path="/lost-and-found" element={<Navigate to="/asset-registry/lost-and-found" replace />} />
             <Route path="/incident-report" element={<IncidentReportPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/scan-qr" element={<ScanQRPage />} />

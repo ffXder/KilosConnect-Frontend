@@ -1,11 +1,10 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { Plus, Search, ChevronDown, Archive, AlertCircle, CheckCircle } from "lucide-react";
+import { Plus, Search, ChevronDown, AlertCircle } from "lucide-react";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from '../../../hooks/useAuth';
 import type { Asset, NewAsset } from "../../../types/asset";
 import { useAssets } from '../../../hooks/useAssets';
-import { useRepairLogs } from "../../../hooks/useRepairLogs";
 
 // assets sub-components
 import { AssetRegistryStats } from "./components/AssetRegistryStats";
@@ -13,8 +12,6 @@ import { AssetRegistryList } from "./components/AssetRegistryList";
 import { AddAssetModal } from "./components/AddAssetModal";
 import { UpdateAssetModal } from "./components/UpdateAssetModal";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
-
-const lofAreas = ["All Areas", "WOD", "Cafe", "Powerlifting", "CrossFit", "Mezzanine", "Other"];
 
 // real values, matching the model's areaPrefixes and condition enum
 const assetAreas = [
@@ -46,8 +43,6 @@ const assetCategory = [
 ]
 
 export const AssetRegistryPage = () => {
-  const [activeTab, setActiveTab] = React.useState<"Equipment" | "LostFound">("Equipment");
-
   // URL params for filter and searching
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") ?? "";
@@ -71,20 +66,18 @@ export const AssetRegistryPage = () => {
     error,
     refresh,
     handleCreate,
-    handleUpdate, // not yet implemented
     handleUpdateCondition,
     handleArchive,
   } = useAssets();
 
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [selectedAssetForEdit, setSelectedAssetForEdit] = React.useState<Asset | null>(null);
   const [assetToArchive, setAssetToArchive] = React.useState<Asset | null>(null);
 
   const { role } = useAuth();
-  const userRole = (role ?? 'admin') as any;
+  const userRole = (role ?? 'admin') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   // area, conditon filter using URL params
   const filteredAssets = assets.filter((asset) => {
@@ -130,21 +123,10 @@ export const AssetRegistryPage = () => {
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
             <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50 font-bold">Smart Facility Asset Registry</h1>
-            <p className="text-gray-500 text-sm mt-1 dark:text-slate-300 ">Equipment lifecycle monitoring, predictive analytics, and lost-and-found management</p>
+            <p className="text-gray-500 text-sm mt-1 dark:text-slate-300 ">Equipment lifecycle monitoring and predictive analytics</p>
           </div>
 
-          <div className="flex border-b border-gray-200 gap-8 text-sm font-semibold mb-6">
-            <button onClick={() => setActiveTab("Equipment")} className={`pb-3 transition-all ${activeTab === "Equipment" ? "text-[#10b981] border-b-2 border-[#10b981] dark: text-emerald-500" : "text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:text-slate-100"}`}>
-              Equipment Assets
-            </button>
-            <button onClick={() => setActiveTab("LostFound")} className={`pb-3 transition-all ${activeTab === "LostFound" ? "text-[#10b981] border-b-2 border-[#10b981]  dark: text-emerald-500" : "text-gray-400 hover:text-gray-600 dark:text-slate-300 hover:text-slate-100"}`}>
-              Lost & Found
-            </button>
-          </div>
-
-          {activeTab === "Equipment" ? (
-            <>
-              {error && (
+          {error && (
                 <div className="mb-4 p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 flex items-center justify-between text-sm text-red-600 dark:text-red-400">
                   <div className="flex items-center gap-2">
                     <AlertCircle size={18} />
@@ -234,13 +216,6 @@ export const AssetRegistryPage = () => {
                   onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsDeleteModalOpen(true); }}
                 />
               </div>
-            </>
-          ) : (
-         
-            <div className="space-y-6 animate-fadeIn w-full">
-              <h1>Work in progress</h1>
-            </div>
-          )}
         </div>
       </main>
 

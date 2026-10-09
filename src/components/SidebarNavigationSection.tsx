@@ -56,6 +56,13 @@ const navItems = [
     path: "/asset-registry",
     roles: ["admin"] as Role[],
     icon: <Boxes size={20} />,
+    children: [
+      {
+        label: "Lost and Found",
+        path: "/asset-registry/lost-and-found",
+        icon: <Search size={18} />,
+      },
+    ],
   },
   {
     label: "Live Task Monitor",
@@ -68,12 +75,6 @@ const navItems = [
     path: "/manage-task",
     roles: ["admin"] as Role[],
     icon: <ListChecks size={20} />,
-  },
-  {
-    label: "Lost and Found",
-    path: "/lost-and-found",
-    roles: ["admin"] as Role[],
-    icon: <Search size={20} />,
   },
   {
     label: "Incident Report",
@@ -249,32 +250,60 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
         {/* Nav Links List */}
         <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar" aria-label="Main navigation">
           {visibleItems.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              title={!isExpanded && !isMobileOpen ? item.label : undefined}
-              className={({ isActive }) =>
-                `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
-                  isActive
-                    ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
-                    : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
-                } ${!isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4"}`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
-                    {item.icon}
-                  </span>
-                  
-                  <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
-                    isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
-                  }`}>
-                    {item.label}
-                  </span>
-                </>
-              )}
-            </NavLink>
+            <React.Fragment key={item.label}>
+              <NavLink
+                to={item.path}
+                title={!isExpanded && !isMobileOpen ? item.label : undefined}
+                className={({ isActive }) =>
+                  `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
+                    isActive
+                      ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                      : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
+                  } ${!isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4"}`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
+                      {item.icon}
+                    </span>
+                    
+                    <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+                      isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
+                    }`}>
+                      {item.label}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+              {item.children?.map((child) => (
+                <NavLink
+                  key={child.path}
+                  to={child.path}
+                  title={!isExpanded && !isMobileOpen ? child.label : undefined}
+                  className={({ isActive }) =>
+                    `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-2.5 ${
+                      isActive
+                        ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                        : "text-[#c8d8d5] hover:bg-white/5 border-transparent"
+                    } ${isExpanded || isMobileOpen ? "ml-5 gap-3 px-4" : "justify-center px-0"}`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className={isActive ? "text-[#f5a623]" : "text-[#c8d8d5]"}>
+                        {child.icon}
+                      </span>
+                      <span className={`[font-family:'Poppins',Helvetica] font-medium text-xs leading-5 whitespace-nowrap transition-all duration-300 ${
+                        isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
+                      }`}>
+                        {child.label}
+                      </span>
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </React.Fragment>
           ))}
         </nav>
 
