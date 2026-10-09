@@ -16,11 +16,11 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
       icon: Boxes,
     },
     {
-      label: "Task",
-      count: stats["Task"] || 0,
-      cardClass: "bg-violet-50 border-violet-200 dark:bg-violet-950/40 dark:border-violet-800",
-      iconClass: "bg-violet-100 text-violet-600 dark:bg-violet-200 dark:text-violet-700",
-      icon: ClipboardCheck,
+      label: "Task Log",
+      count: stats["TaskLog"] || 0,
+      cardClass: "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800",
+      iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-200 dark:text-emerald-700",
+      icon: Activity,
     },
     {
       label: "Incident",
@@ -28,13 +28,6 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
       cardClass: "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800",
       iconClass: "bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700",
       icon: ShieldAlert,
-    },
-    {
-      label: "Task Log",
-      count: stats["TaskLog"] || 0,
-      cardClass: "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800",
-      iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-200 dark:text-emerald-700",
-      icon: Activity,
     },
     {
       label: "Lost & Found",
@@ -51,6 +44,13 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
       icon: Wrench,
     },
     {
+      label: "Task",
+      count: stats["Task"] || 0,
+      cardClass: "bg-violet-50 border-violet-200 dark:bg-violet-950/40 dark:border-violet-800",
+      iconClass: "bg-violet-100 text-violet-600 dark:bg-violet-200 dark:text-violet-700",
+      icon: ClipboardCheck,
+    },
+    {
       label: "User",
       count: stats["User"] || 0,
       cardClass: "bg-slate-50 border-slate-200 dark:bg-slate-900 dark:border-slate-700",
@@ -59,25 +59,32 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
     },
   ];
 
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 md:gap-3 lg:gap-5">
-      {categories.map(({ label, count, cardClass, iconClass, icon: Icon }) => (
-        <div
-          key={label}
-          className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
-        >
-          <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
-            <Icon size={16} strokeWidth={2} className="sm:size-[20px] md:size-[24px] lg:size-[28px]" />
-          </div>
+  const renderCard = ({ label, count, cardClass, iconClass, icon: Icon }: typeof categories[number]) => (
+    <div
+      key={label}
+      className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
+    >
+      <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
+        <Icon size={16} strokeWidth={2} className="sm:size-[20px] md:size-[24px] lg:size-[28px]" />
+      </div>
 
-          <div className="min-w-0 flex-1">
-            <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">
-              {isLoading ? "..." : count.toLocaleString()}
-            </div>
-            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{label}</div>
-          </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">
+          {isLoading ? "..." : count.toLocaleString()}
         </div>
-      ))}
+        <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{label}</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-2 md:space-y-3 lg:space-y-5 w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3 lg:gap-5">
+        {categories.slice(0, 3).map(renderCard)}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 lg:gap-5">
+        {categories.slice(3).map(renderCard)}
+      </div>
     </div>
   );
 }
