@@ -1,16 +1,19 @@
 import React from "react";
-import { Activity, AlertTriangle, Box, ShieldAlert, Wrench } from "lucide-react";
+import { Activity, AlertTriangle, Archive, Box, ShieldAlert, Wrench } from "lucide-react";
+import type { Asset } from "../../../../types/asset";
 
 interface Props {
-  assets: any[];
+  assets: Asset[];
 }
 
 export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
   const total = assets.length;
   const working = assets.filter((a) => a.condition === "Working").length;
+  const needsRepair = assets.filter((a) => a.condition === "Needs Repair").length;
   const damaged = assets.filter((a) => a.condition === "Damaged").length;
   const underRepair = assets.filter((a) => a.condition === "Under Repair").length;
   const hazardous = assets.filter((a) => a.condition === "Hazardous").length;
+  const decommissioned = assets.filter((a) => a.condition === "Decommissioned").length;
 
   const stats = [
     {
@@ -26,6 +29,13 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
       cardClass: "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800",
       iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-200 dark:text-emerald-700",
       icon: Activity,
+    },
+    {
+      label: "Needs Repair",
+      count: needsRepair,
+      cardClass: "bg-white border-slate-200 dark:bg-slate-800/40 dark:border-slate-700",
+      iconClass: "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300",
+      icon: Wrench,
     },
     {
       label: "Damaged",
@@ -48,11 +58,19 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
       iconClass: "bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700",
       icon: ShieldAlert,
     },
+    {
+      label: "Decommissioned",
+      count: decommissioned,
+      cardClass: "bg-black border-slate-900 dark:bg-white dark:border-slate-300",
+      iconClass: "bg-black text-white shadow-md dark:bg-white dark:text-black",
+      textClass: "text-white dark:text-black",
+      icon: Archive,
+    },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 lg:gap-5 w-full">
-      {stats.map(({ label, count, cardClass, iconClass, icon: Icon }) => (
+    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2 md:gap-3 lg:gap-5 w-full">
+      {stats.map(({ label, count, cardClass, iconClass, textClass, icon: Icon }) => (
         <div
           key={label}
           className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
@@ -62,8 +80,8 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-800 leading-tight dark:text-slate-50 font-bold">{count}</div>
-            <div className="text-gray-500 text-[10px] sm:text-xs md:text-sm font-medium truncate dark:text-slate-400">{label}</div>
+            <div className={`text-sm sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight ${textClass ?? "text-gray-800 dark:text-slate-50"}`}>{count}</div>
+            <div className={`text-[10px] sm:text-xs md:text-sm font-medium truncate ${textClass ?? "text-gray-500 dark:text-slate-400"}`}>{label}</div>
           </div>
         </div>
       ))}
