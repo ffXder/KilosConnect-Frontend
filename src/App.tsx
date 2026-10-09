@@ -142,7 +142,9 @@ function App() {
           {/* ADMIN ONLY ROUTES */}
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/task-monitor" element={<TaskMonitorPage />} />
+            <Route path="/task-monitor" element={<Navigate to="/task-monitor/live-monitor" replace />} />
+            <Route path="/task-monitor/live-monitor" element={<TaskMonitorPage view="monitor" />} />
+            <Route path="/task-monitor/review-submissions" element={<TaskMonitorPage view="submissions" />} />
             <Route path="/manage-task" element={<TaskManagementPage />} />
             <Route path="/audit-logs" element={<LogsPage />} />
             <Route path="/manage-accounts" element={<ManageAccountsPage />} />

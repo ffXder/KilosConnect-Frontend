@@ -10,14 +10,17 @@ import { useTaskLogs } from '../../../hooks/useTaskLog';
 import { X, ZoomIn, Camera } from 'lucide-react';
 import type { TaskLog } from '../../../types/task';
 
-export const TaskMonitorPage: React.FC = () => {
+interface TaskMonitorPageProps {
+  view: 'monitor' | 'submissions';
+}
+
+export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
   const { logs, loading: isLoading, handleComplete, handleGenerate } = useTaskLogs();
   const { handleArchive } = useTasks();
   const { role } = useAuth();
 
   const userRole = (role ?? 'custodian') as 'admin';
 
-  const [activeMainTab, setActiveMainTab] = useState<'monitor' | 'submissions'>('monitor');
   const [statusFilter, setStatusFilter] = useState('All Tasks');
   const [frequencyFilter, setFrequencyFilter] = useState('All');
   const [areaFilter, setAreaFilter] = useState('All Areas');
@@ -56,39 +59,18 @@ export const TaskMonitorPage: React.FC = () => {
       <main className="flex-1 min-w-0 overflow-y-auto dark:bg-slate-950 transition-colors duration-300">
         <div className="w-full max-w-[1600px] mx-auto p-4 md:p-8 space-y-8">
           
-          {/* Header & View Navigation Tabs */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">Task Tracking</h1>
-              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">Live maintenance monitor & visual verification</p>
-            </div>
-
-            {/* Main Tabs Toggle */}
-            <div className="flex gap-2 p-0.5 bg-gray-200/70 rounded-2xl w-fit dark:bg-slate-800">
-              <button
-                onClick={() => setActiveMainTab('monitor')}
-                className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-                  activeMainTab === 'monitor'
-                    ? 'bg-[#113129] text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900 dark:text-slate-300 hover:text-slate-100'
-                }`}
-              >
-                Live Monitor
-              </button>
-              <button
-                onClick={() => setActiveMainTab('submissions')}
-                className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-                  activeMainTab === 'submissions'
-                    ? 'bg-[#113129] text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900 dark:text-slate-300 hover:text-slate-100'
-                }`}
-              >
-                Review Submissions
-              </button>
+              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
+                {view === 'monitor' ? 'Live Monitor' : 'Review Submissions'}
+              </h1>
+              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">
+                {view === 'monitor' ? 'Live maintenance monitor & visual verification' : 'Review task submissions and resolve disputes'}
+              </p>
             </div>
           </div>
 
-          {activeMainTab === 'monitor' ? (
+          {view === 'monitor' ? (
             <>
               <TaskStatsSection tasks={filteredLogs} />
               

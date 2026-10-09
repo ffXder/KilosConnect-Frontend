@@ -24,6 +24,7 @@ type Role = "admin" | "custodian";
 interface SidebarNavItem {
   label: string;
   path: string;
+  sectionPath?: string;
   roles: Role[];
   icon: React.ReactNode;
   children?: Array<{
@@ -84,9 +85,22 @@ const navItems: SidebarNavItem[] = [
   },
   {
     label: "Live Task Monitor",
-    path: "/task-monitor",
+    path: "/task-monitor/live-monitor",
     roles: ["admin"] as Role[],
     icon: <Activity size={20} />,
+    sectionPath: "/task-monitor",
+    children: [
+      {
+        label: "Live Monitor",
+        path: "/task-monitor/live-monitor",
+        icon: <Activity size={18} />,
+      },
+      {
+        label: "Review Submissions",
+        path: "/task-monitor/review-submissions",
+        icon: <ClipboardList size={18} />,
+      },
+    ],
   },
   {
     label: "Manage Tasks",
@@ -268,8 +282,11 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
         {/* Nav Links List */}
         <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar" aria-label="Main navigation">
           {visibleItems.map((item) => {
-            const isSubmenuOpen =
-              item.path === "/asset-registry" && location.pathname.startsWith(item.path);
+            const sectionPath = item.sectionPath ?? item.path;
+            const isSectionActive = location.pathname.startsWith(sectionPath);
+            const isSubmenuOpen = Boolean(
+              item.children && isSectionActive,
+            );
 
             return (
             <React.Fragment key={item.label}>
@@ -282,13 +299,13 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                       navigate(item.path);
                     }}
                     className={`flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
-                      location.pathname.startsWith(item.path)
+                      isSectionActive
                         ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
                         : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
                     } ${!isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4"}`}
                   >
                     <>
-                      <span className={location.pathname.startsWith(item.path) ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
+                      <span className={isSectionActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
                         {item.icon}
                       </span>
                     
