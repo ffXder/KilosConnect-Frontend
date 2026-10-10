@@ -7,9 +7,6 @@ interface TaskStatsProps {
 }
 
 const TaskStatsSection: React.FC<TaskStatsProps> = ({ tasks }) => {
-  if (!tasks || tasks.length === 0) {
-    return <div className="grid grid-cols-1 md:grid-cols-3 gap-4 italic text-gray-400">No data for selected filters...</div>;
-  }
 
   // Calculate based on the tasks passed in (which should be your filtered list)
   const completed = tasks.filter(t => t.status === 'Completed').length;
