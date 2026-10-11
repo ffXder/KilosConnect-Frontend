@@ -40,8 +40,6 @@ import ScanQRPage from './pages/custodian/ScanQR/ScanQRPage'
 import BuddySystemPage from './pages/custodian/BuddySystem/BuddySystemPage'
 import TaskMain from './pages/custodian/TaskOperation/TaskOperationPage'
 import ZoneTaskPage from './pages/custodian/TaskOperation/AreaTaskPage'
-import LostAndFoundFormPage from './pages/custodian/LostAndFoundFormPage'
-import IncidentReportFormPage from './pages/custodian/IncidentReportFormPage'
 
 // redirect user who logged in
 function DashboardRedirect() {
@@ -134,7 +132,8 @@ function App() {
           {/* SHARED PROTECTED ROUTES */}
           <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
             <Route path="/asset-registry" element={<AssetRegistryPage />} />
-            <Route path="/lost-and-found" element={<LostAndFoundPage />} />
+            <Route path="/asset-registry/lost-and-found" element={<LostAndFoundPage />} />
+            <Route path="/lost-and-found" element={<Navigate to="/asset-registry/lost-and-found" replace />} />
             <Route path="/incident-report" element={<IncidentReportPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/scan-qr" element={<ScanQRPage />} />
@@ -143,7 +142,9 @@ function App() {
           {/* ADMIN ONLY ROUTES */}
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/task-monitor" element={<TaskMonitorPage />} />
+            <Route path="/task-monitor" element={<Navigate to="/task-monitor/live-monitor" replace />} />
+            <Route path="/task-monitor/live-monitor" element={<TaskMonitorPage view="monitor" />} />
+            <Route path="/task-monitor/review-submissions" element={<TaskMonitorPage view="submissions" />} />
             <Route path="/manage-task" element={<TaskManagementPage />} />
             <Route path="/audit-logs" element={<LogsPage />} />
             <Route path="/manage-accounts" element={<ManageAccountsPage />} />
@@ -156,8 +157,6 @@ function App() {
             <Route path="/custodian/buddy-system" element={<BuddySystemPage />} />
             <Route path="/custodian/task-operations" element={<TaskMain />} />
             <Route path="/custodian/zone-tasks" element={<ZoneTaskPage />} />
-            <Route path="/custodian/lost-and-found/submit" element={<LostAndFoundFormPage />} />
-            <Route path="/custodian/incident-report/submit" element={<IncidentReportFormPage />} />
           </Route>
 
         {/* fallback redirects to login if not found or authenticated */}

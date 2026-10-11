@@ -4,7 +4,7 @@ export interface Asset {
     qrCode: string;
     name: string;
     category: string;
-    condition: "Working" | "Needs Repair" | "Under Repair" | "Needs Replacement" | "Hazardous" | "Decommissioned";
+    condition: "Working" | "Needs Repair" | "Under Repair" | "Needs Replacement" | "Hazardous" | "Damaged" | "Decommissioned";
     purchaseDate: string;
     srp: number;
     cumulativeRepairCost: number;
