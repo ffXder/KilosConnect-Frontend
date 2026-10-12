@@ -34,47 +34,50 @@ export const StatsOverview: React.FC<StatsProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
 
         {/* Pending Tasks */}
         <div
           onClick={() => { setModalType("pending"); onTabChange("pending"); }}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
-            <ListTodo size={22} />
+          <div className="p-2 sm:p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+            <ListTodo size={18} className="sm:hidden" />
+            <ListTodo size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">{pendingCount}</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">Tasks Today</p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{pendingCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Active</p>
           </div>
         </div>
 
         {/* Completed Count */}
         <div
           onClick={() => { setModalType("completed"); onTabChange("completed"); }}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
-            <CheckCircle size={22} />
+          <div className="p-2 sm:p-3 bg-emerald-50 text-emerald-600 rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+            <CheckCircle size={18} className="sm:hidden" />
+            <CheckCircle size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">{completedCount}</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">Completed</p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{completedCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Done</p>
           </div>
         </div>
 
         {/* To Review */}
         <div
-          onClick={() => navigate("/buddy-system")}
-          className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+          onClick={() => navigate("/custodian/buddy-system")}
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0 dark:bg-amber-950 dark:text-amber-300">
-            <Users size={22} />
+          <div className="p-2 sm:p-3 bg-amber-50 text-amber-600 rounded-lg sm:rounded-xl shrink-0 dark:bg-amber-950 dark:text-amber-300">
+            <Users size={18} className="sm:hidden" />
+            <Users size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold text-gray-900 dark:text-slate-50">3</p>
-            <p className="text-xs font-medium text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{reviewCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
           </div>
         </div>
       </div>

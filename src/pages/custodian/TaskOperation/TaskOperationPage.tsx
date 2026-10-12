@@ -88,34 +88,37 @@ export default function TaskMain() {
           </div>
 
           {/* Stats Cards (numbers come from the backend summary) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
-                <Clock size={22} />
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <div className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="p-2 sm:p-3 bg-emerald-50 text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+                <Clock size={18} className="sm:hidden" />
+                <Clock size={22} className="hidden sm:block" />
               </div>
-              <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Active / Pending Tasks</p>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.activePending}</h3>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="p-3 bg-rose-50 text-rose-600 rounded-xl shrink-0 dark:bg-rose-950 dark:text-rose-300">
-                <AlertCircle size={22} />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Flagged Issues</p>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.flagged}</h3>
+              <div className="min-w-0">
+                <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 dark:text-slate-300">Active / Pending</p>
+                <h3 className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{summary.activePending}</h3>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="p-3 bg-emerald-50 text-[#0a2e27] rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
-                <CheckCircle2 size={22} />
+            <div className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="p-2 sm:p-3 bg-rose-50 text-rose-600 rounded-lg sm:rounded-xl shrink-0 dark:bg-rose-950 dark:text-rose-300">
+                <AlertCircle size={18} className="sm:hidden" />
+                <AlertCircle size={22} className="hidden sm:block" />
               </div>
-              <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-slate-300">Completed Today</p>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-50">{summary.completed}</h3>
+              <div className="min-w-0">
+                <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 dark:text-slate-300">Flagged</p>
+                <h3 className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{summary.flagged}</h3>
+              </div>
+            </div>
+
+            <div className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="p-2 sm:p-3 bg-emerald-50 text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+                <CheckCircle2 size={18} className="sm:hidden" />
+                <CheckCircle2 size={22} className="hidden sm:block" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 dark:text-slate-300">Completed</p>
+                <h3 className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{summary.completed}</h3>
               </div>
             </div>
           </div>

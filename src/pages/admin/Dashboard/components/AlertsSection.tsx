@@ -1,7 +1,8 @@
 import { Bell, AlertCircle, Clock, WifiOff, CheckCircle2 } from 'lucide-react';
 
 export interface AlertItem {
-  asset: string;
+  asset?: string;
+  task?: string;
   status: string;
   severity: "critical" | "warning" | "info" | "success";
 }
@@ -75,7 +76,9 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
                 {cfg.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm text-gray-800">{alert.asset}</div>
+                <div className="font-bold text-sm text-gray-800">
+                  {alert.asset ?? alert.task ?? "Maintenance update"}
+                </div>
                 <div className="text-[12px] text-gray-500 capitalize">{alert.status}</div>
               </div>
               <div className={`w-2.5 h-2.5 rounded-full ${cfg.color} shrink-0`} />

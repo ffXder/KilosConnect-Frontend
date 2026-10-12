@@ -111,7 +111,7 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Incident Report",
     path: "/incident-report",
-    roles: ["admin", "custodian"] as Role[],
+    roles: ["admin"] as Role[],
     icon: <TriangleAlert size={20} />,
   },
   {
@@ -158,6 +158,23 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
     setIsMobileOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMobileOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isMobileOpen]);
+
   const toggleSidebar = () => {
     setIsExpanded((prev) => {
       const nextState = !prev;
@@ -199,7 +216,9 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
           type="button"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="p-2 text-[#FDFFE0] hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-          aria-label="Toggle navigation menu"
+          aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileOpen}
+          aria-controls="app-navigation"
         >
           {isMobileOpen ? (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -218,9 +237,11 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
 
       {/* --- MOBILE OVERLAY BACKDROP --- */}
       {isMobileOpen && (
-        <div 
+        <button
+          type="button"
           onClick={() => setIsMobileOpen(false)}
-          className="md:hidden fixed inset-0 bg-black/60 z-45 backdrop-blur-xs transition-opacity"
+          className="md:hidden fixed inset-0 bg-slate-950/55 z-[45] backdrop-blur-sm"
+          aria-label="Close navigation menu"
         />
       )}
 
@@ -232,20 +253,18 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
 
       {/* --- COMBINED NAVIGATION SIDEBAR / DRAWER --- */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-[#072821] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]
-          ${isMobileOpen ? "translate-x-0 w-[260px]" : "-translate-x-full md:translate-x-0"}
+        id="app-navigation"
+        className={`fixed top-0 left-0 h-screen h-[100dvh] bg-[#072821] flex flex-col z-50 transition-transform duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]
+          ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
-        style={{ 
-          width: undefined, // Controlled dynamically via CSS media query/styles below
-          borderRight: "4px solid #072821" 
+        style={{
+          width: isMobileOpen ? "min(82vw, 280px)" : isExpanded ? "240px" : "78px",
+          borderRight: "4px solid #072821",
         }}
         aria-label="Sidebar navigation"
       >
-        {/* Responsive inline dynamic width override for desktop breakpoint */}
-        <div className="hidden md:block absolute inset-0 pointer-events-none" style={{ width: isExpanded ? "240px" : "78px" }} />
-
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between py-6 px-4 pt-8 md:pt-6">
+        <div className="flex items-center justify-between py-6 px-4 pt-5 md:pt-6">
           <div className={`transition-all duration-300 overflow-hidden ${
             isExpanded || isMobileOpen ? "w-[120px] opacity-100" : "w-0 opacity-0"
           }`}>
@@ -298,7 +317,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                     onClick={() => {
                       navigate(item.path);
                     }}
-                    className={`flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
+                    className={`flex w-full items-center text-left rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
                       isSectionActive
                         ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
                         : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
@@ -310,12 +329,12 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                       </span>
                     
                       <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
-                        isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
+                        isExpanded || isMobileOpen ? "flex-1 min-w-0 truncate opacity-100 scale-100" : "opacity-0 scale-90 w-0 pointer-events-none"
                       }`}>
                         {item.label}
                       </span>
                       {(isExpanded || isMobileOpen) && (
-                        <ChevronDown size={16} className={`ml-auto transition-transform ${isSubmenuOpen ? "rotate-180" : ""}`} />
+                        <ChevronDown size={16} className={`ml-auto flex-shrink-0 transition-transform ${isSubmenuOpen ? "rotate-180" : ""}`} />
                       )}
                     </>
                   </button>
@@ -352,7 +371,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                     end={child.path === item.path}
                     title={!isExpanded && !isMobileOpen ? child.label : undefined}
                   className={({ isActive }) =>
-                    `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-2.5 ${
+                    `flex w-full items-center text-left rounded-[10px] transition-all cursor-pointer border-l-4 py-2.5 ${
                       isActive
                         ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
                         : "text-[#c8d8d5] hover:bg-white/5 border-transparent"

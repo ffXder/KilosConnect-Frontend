@@ -19,9 +19,6 @@ export default function BuddySystemPage() {
     typeof SidebarNavigationSection
   >["userRole"];
 
-  const statCard =
-    "bg-white rounded-2xl p-3 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center sm:gap-5 gap-1.5 text-center sm:text-left dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border-slate-700";
-
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans relative dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
@@ -35,34 +32,37 @@ export default function BuddySystemPage() {
           </div>
 
           {/* Stats Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-5 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="bg-amber-50 p-3.5 rounded-xl text-amber-600 dark:bg-amber-950 dark:text-amber-300">
-                <Clock size={28} />
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6">
+            <div className="min-w-0 bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-5 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="bg-amber-50 p-2 sm:p-3.5 rounded-lg sm:rounded-xl text-amber-600 dark:bg-amber-950 dark:text-amber-300">
+                <Clock size={18} className="sm:hidden" />
+                <Clock size={28} className="hidden sm:block" />
               </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-slate-50">4</p>
-                <p className="text-sm font-semibold text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-5 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="bg-rose-50 p-3.5 rounded-xl text-rose-600 dark:bg-rose-950 dark:text-rose-300">
-                <AlertCircle size={28} />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-slate-50">0</p>
-                <p className="text-sm font-semibold text-gray-500 mt-0.5 dark:text-slate-300">Disputes Filed</p>
+              <div className="min-w-0">
+                <p className="text-lg sm:text-3xl font-bold leading-tight text-gray-900 dark:text-slate-50">{pendingQueue.length}</p>
+                <p className="text-[10px] sm:text-sm font-semibold leading-tight text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-5 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="bg-emerald-50 p-3.5 rounded-xl text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300">
-                <CheckCircle2 size={28} />
+            <div className="min-w-0 bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-5 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="bg-rose-50 p-2 sm:p-3.5 rounded-lg sm:rounded-xl text-rose-600 dark:bg-rose-950 dark:text-rose-300">
+                <AlertCircle size={18} className="sm:hidden" />
+                <AlertCircle size={28} className="hidden sm:block" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-slate-50">2</p>
-                <p className="text-sm font-semibold text-gray-500 mt-0.5 dark:text-slate-300">My Approved</p>
+                <p className="text-lg sm:text-3xl font-bold leading-tight text-gray-900 dark:text-slate-50">0</p>
+                <p className="text-[10px] sm:text-sm font-semibold leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Disputes</p>
+              </div>
+            </div>
+
+            <div className="min-w-0 bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-5 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+              <div className="bg-emerald-50 p-2 sm:p-3.5 rounded-lg sm:rounded-xl text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300">
+                <CheckCircle2 size={18} className="sm:hidden" />
+                <CheckCircle2 size={28} className="hidden sm:block" />
+              </div>
+              <div>
+                <p className="text-lg sm:text-3xl font-bold leading-tight text-gray-900 dark:text-slate-50">2</p>
+                <p className="text-[10px] sm:text-sm font-semibold leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Approved</p>
               </div>
             </div>
           </div>
@@ -128,9 +128,7 @@ export default function BuddySystemPage() {
               )}
             </>
           ) : (
-            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center dark:bg-slate-900 dark:border-slate-700">
-              <p className="text-gray-500 font-medium dark:text-slate-300">No previous submissions found.</p>
-            </div>
+            <MySubmissions />
           )}
       </main>
 
