@@ -42,7 +42,7 @@ const navItems: SidebarNavItem[] = [
     icon: <LayoutDashboard size={20} />,
   },
   {
-    label: "Overview",
+    label: "Dashboard",
     path: "/custodian/dashboard",
     roles: ["custodian"] as Role[],
     icon: <LayoutDashboard size={20} />,
