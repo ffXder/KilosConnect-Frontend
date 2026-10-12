@@ -1,52 +1,36 @@
 import React from 'react';
 import type { TaskLog } from '../../../types/task';
-import { 
-  Clock, 
-  MapPin, 
-  CheckCircle2, 
-  Loader2, 
-  ClipboardX, 
+import {
+  Clock,
+  MapPin,
+  CheckCircle2,
+  Loader2,
+  ClipboardX,
   AlertCircle,
-  Eye,
-  Check,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import { formatTo12Hour } from '../../../utils/formatter'; 
-import { formatDateTime } from '../../../utils/formatter';
+import { VerificationBadge } from './VerificationBadge';
+import { formatTo12Hour } from '../../../utils/formatter';
+import { formatDate } from '../../../utils/formatter';
 
 interface TaskListProps {
-  tasks: TaskLog[]; 
-  onToggleStatus: (id: string, photoFile?: File, isLiveCamera?: boolean) => Promise<TaskLog> | void;
-  onArchive?: (id: string) => Promise<void> | void;
-  onViewVerification?: (taskLog: any) => void;
-  onViewDetails?: (taskLog: TaskLog) => void;
+  tasks: TaskLog[];
+  onViewDetails: (taskLog: TaskLog) => void;
   isLoading?: boolean;
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
 }
 
-const TaskListSection: React.FC<TaskListProps> = ({ 
-  tasks, 
-  onToggleStatus, 
+const TaskListSection: React.FC<TaskListProps> = ({
+  tasks,
   onViewDetails,
   isLoading,
   currentPage = 1,
   totalPages = 1,
   onPageChange
 }) => {
-
-  const getPriorityBadge = (priority?: string) => {
-    switch (priority?.toLowerCase()) {
-      case 'high':
-        return <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-red-50 text-red-700 border border-red-200">HIGH</span>;
-      case 'medium':
-        return <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-50 text-amber-700 border border-amber-200">MEDIUM</span>;
-      default:
-        return <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-slate-100 text-slate-600 border border-slate-200">LOW</span>;
-    }
-  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -59,7 +43,7 @@ const TaskListSection: React.FC<TaskListProps> = ({
       case 'In Progress':
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800 transition-colors duration-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-[pulse_2.5s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-[pulse_2.5s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
             In Progress
           </span>
         );
@@ -103,13 +87,9 @@ const TaskListSection: React.FC<TaskListProps> = ({
               <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:bg-slate-800/80 dark:border-slate-700 dark:text-slate-300">
                 <th className="py-3.5 px-4 md:px-6">Task Details</th>
                 <th className="py-3.5 px-4">Location</th>
-                <th className="py-3.5 px-4">Schedule</th>
-                <th className="py-3.5 px-4">Priority</th>
-                <th className="py-3.5 px-4">Proof</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4">Started By</th>
-                {/* <th className="py-3.5 px-4">Started At</th> */}
-                <th className="py-3.5 px-4 text-right md:pr-6">Actions</th>
+                <th className="py-3.5 px-4">Date & Schedule</th>
+                <th className="py-3.5 px-4 md:pr-6">Status</th>
+                <th className="py-3.5 px-4 md:pr-6">Verification</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white text-sm dark:divide-slate-700 dark:bg-slate-900">
@@ -117,9 +97,9 @@ const TaskListSection: React.FC<TaskListProps> = ({
                 const isCompleted = log.status === 'Completed';
 
                 return (
-                  <tr 
-                    key={log._id} 
-                    onClick={() => onViewDetails && onViewDetails(log)}
+                  <tr
+                    key={log._id}
+                    onClick={() => onViewDetails(log)}
                     className="hover:bg-slate-50/80 transition-colors group cursor-pointer select-none dark:hover:bg-slate-800/60"
                   >
                     {/* Task Title & Description */}
@@ -144,10 +124,13 @@ const TaskListSection: React.FC<TaskListProps> = ({
                       </span>
                     </td>
 
-                    {/* Time & Frequency */}
+                    {/* Date, Time & Frequency */}
                     <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex flex-col text-xs">
-                        <span className="font-semibold text-slate-800 flex items-center gap-1 dark:text-slate-200">
+                      <div className="flex flex-col text-xs gap-0.5">
+                        <span className="font-bold text-slate-800 dark:text-slate-100">
+                          {formatDate(log.createdAt)}
+                        </span>
+                        <span className="font-semibold text-slate-600 flex items-center gap-1 dark:text-slate-300">
                           <Clock size={12} className="text-slate-400 dark:text-slate-400" />
                           {formatTo12Hour(log.task?.startTime)} - {formatTo12Hour(log.task?.endTime)}
                         </span>
@@ -157,82 +140,14 @@ const TaskListSection: React.FC<TaskListProps> = ({
                       </div>
                     </td>
 
-                    {/* Priority Badge */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      {getPriorityBadge(log.task?.priority)}
-                    </td>
 
-                    {/* Photo / Proof */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      {log.submittedPhoto ? (
-                        <img 
-                          src={log.submittedPhoto} 
-                          alt="Proof" 
-                          className="w-9 h-9 rounded-lg object-cover border border-slate-200 shadow-2xs" 
-                        />
-                      ) : (
-                        <span className="text-xs text-slate-300">—</span>
-                      )}
-                    </td>
 
                     {/* Status Badge */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex flex-col items-start gap-0.5">
-                        {getStatusBadge(log.status)}
-                        {isCompleted && log.completedBy && (
-                          <span className="text-[10px] text-slate-400 ml-1 dark:text-slate-400">
-                            by {log.completedBy.firstName}
-                          </span>
-                        )}
-                      </div>
+                    <td className="py-4 px-4 md:pr-6 whitespace-nowrap">
+                      {getStatusBadge(log.status)}
                     </td>
-
-                    {/* Started By (WIP)*/}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg dark:bg-slate-800 dark:text-slate-200">           
-                        <span>{log.startedBy?.firstName || 'Not started yet'}</span>
-                      </span>
-                    </td>
-
-                    {/* Started At (WIP)
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg dark:bg-slate-800 dark:text-slate-200">           
-                        <span>{formatDateTime(log.startedAt) || 'Not started yet'}</span>
-                      </span>
-                    </td> */}
-
-                    {/* Actions Area */}
-                    <td className="py-4 px-4 md:pr-6 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-                        {/* Quick View Button */}
-                        {onViewDetails && (
-                          <button
-                            type="button"
-                            onClick={() => onViewDetails(log)}
-                            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
-                            title="View Full Details"
-                          >
-                            <Eye size={16} />
-                          </button>
-                        )}
-
-                        {/* Quick Complete Toggle */}
-                        {!isCompleted ? (
-                          <button 
-                            type="button"
-                            onClick={() => onToggleStatus(log._id)}
-                            className="inline-flex items-center gap-1 bg-[#113129] hover:bg-[#0a211b] text-white py-1.5 px-3 rounded-lg text-xs font-bold transition-all active:scale-95 shadow-2xs cursor-pointer"
-                          >
-                            <Check size={13} strokeWidth={3} />
-                            <span>Complete</span>
-                          </button>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 px-2 py-1">
-                            <CheckCircle2 size={15} strokeWidth={2.5} />
-                            <span>Done</span>
-                          </span>
-                        )}
-                      </div>
+                    <td className="py-4 px-4 md:pr-6 whitespace-nowrap">
+                      <VerificationBadge status={log.verificationStatus} />
                     </td>
                   </tr>
                 );
