@@ -1,25 +1,26 @@
 import React, { useState } from "react";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
+import { useTaskReviews } from "../../../hooks/useTaskReview";
 import { Clock, AlertCircle, CheckCircle2, ShieldAlert } from "lucide-react";
-import ReviewList from "./ReviewList";
-import ReviewDetailsModal from "./ReviewDetailsModal";
+import ReviewList from "./components/ReviewList";
+import ReviewDetailView from "./components/ReviewDetailsModal";
+import MySubmissions from "./components/MySubmissions";
 
 export default function BuddySystemPage() {
   const [activeTab, setActiveTab] = useState<"pending" | "submissions">("pending");
-  const [selectedReview, setSelectedReview] = useState<any | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const { pendingQueue, loading, submittingId, error, approve, dispute } = useTaskReviews();
+  const selectedReview = pendingQueue.find(r => r._id === selectedId) ?? null;
 
   const { role } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<
     typeof SidebarNavigationSection
   >["userRole"];
 
-  const reviews = [
-    { id: 1, area: "Powerlifting Area", cust: "Custodian #3", time: "Today, 08:42 AM", progress: "4/4", status: "Ready for Audit" },
-    { id: 2, area: "CrossFit Area", cust: "Custodian #5", time: "Today, 09:15 AM", progress: "3/4", status: "In Progress" },
-    { id: 3, area: "WOD Area", cust: "Custodian #2", time: "Today, 10:03 AM", progress: "4/4", status: "Ready for Audit" },
-    { id: 4, area: "Weightlifting Area", cust: "Custodian #6", time: "Today, 11:20 AM", progress: "4/4", status: "Ready for Audit" },
-  ];
+  const statCard =
+    "bg-white rounded-2xl p-3 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center sm:gap-5 gap-1.5 text-center sm:text-left dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border-slate-700";
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans relative dark:bg-slate-950 transition-colors duration-300">
@@ -86,7 +87,7 @@ export default function BuddySystemPage() {
           <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm flex gap-2 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
             <button
               onClick={() => setActiveTab('pending')}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                 activeTab === 'pending'
                   ? 'bg-[#0a2e27] text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800'
@@ -98,13 +99,13 @@ export default function BuddySystemPage() {
                   ? 'bg-amber-400 text-amber-950'
                   : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200'
               }`}>
-                4
+                {pendingQueue.length}
               </span>
             </button>
-            
+
             <button
               onClick={() => setActiveTab('submissions')}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${
+              className={`flex-1 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'submissions'
                   ? 'bg-[#0a2e27] text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800'
@@ -114,12 +115,18 @@ export default function BuddySystemPage() {
             </button>
           </div>
 
-          {/* Review List View */}
+          {/* List */}
           {activeTab === 'pending' ? (
-            <ReviewList 
-              reviews={reviews} 
-              onViewDetails={(review) => setSelectedReview(review)} 
-            />
+            <>
+              {loading && <p className="text-sm text-gray-500 font-medium dark:text-slate-400">Loading reviews...</p>}
+              {error && <p className="text-sm text-rose-600 font-medium">{error}</p>}
+              {!loading && !error && (
+                <ReviewList
+                  reviews={pendingQueue}
+                  onViewDetails={(review) => setSelectedId(review._id)}
+                />
+              )}
+            </>
           ) : (
             <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center dark:bg-slate-900 dark:border-slate-700">
               <p className="text-gray-500 font-medium dark:text-slate-300">No previous submissions found.</p>
@@ -127,11 +134,13 @@ export default function BuddySystemPage() {
           )}
       </main>
 
-      {/* Pop-up Modal */}
       {selectedReview && (
-        <ReviewDetailsModal 
-          review={selectedReview} 
-          onClose={() => setSelectedReview(null)} 
+        <ReviewDetailView
+          review={selectedReview}
+          submitting={submittingId === selectedReview._id}
+          onApprove={approve}
+          onDispute={dispute}
+          onClose={() => setSelectedId(null)}
         />
       )}
     </div>

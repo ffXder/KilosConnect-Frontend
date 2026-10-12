@@ -10,7 +10,9 @@ export interface RepairLog {
 }
 
 export type NewRepairLog = {
-    assetId: string; 
+    assetId: string;
+    cost: number;
     description?: string;
     repairDate: string;
+    incidentId?: string;
 };

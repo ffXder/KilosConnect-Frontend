@@ -34,10 +34,9 @@ export const useTaskReviews = () => {
     setSubmittingId(logId);
     try {
       await approvePeerTask(logId, note);
-      // remove from state queue upon success
-      setPendingQueue((prev) => prev.filter((item) => item._id !== logId));
-    } catch (err: any) {
-      throw new Error(err.message || 'Failed to approve task');
+      setPendingQueue(prev => prev.filter(item => item._id !== logId));
+    } finally {
+      setSubmittingId(null);
     }
   };
 
@@ -45,10 +44,9 @@ export const useTaskReviews = () => {
     setSubmittingId(logId);
     try {
       await disputePeerTask(logId, reason);
-      // remove from state queue upon success
-      setPendingQueue((prev) => prev.filter((item) => item._id !== logId));
-    } catch (err: any) {
-      throw new Error(err.message || 'Failed to dispute task');
+      setPendingQueue(prev => prev.filter(item => item._id !== logId));
+    } finally {
+      setSubmittingId(null);
     }
   };
 

@@ -148,7 +148,7 @@ export default function ScanQRPage() {
                       : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
-                  <Camera size={15} />
+                  <Camera size={15} className="text-gray-500 dark:text-slate-300" />
                   Live Camera
                 </button>
                 <button
@@ -160,7 +160,7 @@ export default function ScanQRPage() {
                       : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
-                  <Image size={15} />
+                  <Image size={15} className="text-gray-500 dark:text-slate-300" />
                   Saved Photo
                 </button>
               </div>

@@ -9,7 +9,7 @@ export interface LostAndFound {
     lostId: string;
     item: string;
     description: string | null;
-    areaFound: 'WOD' | 'Cafe' | 'Powerlifting' | 'CrossFit' | 'Mezzanine' | 'Other';
+    areaFound: string;
     date: string;
     itemImage: CloudinaryImage
     status: 'Unclaimed' | 'Claimed';
@@ -20,7 +20,7 @@ export interface LostAndFound {
 }
 
 // create
-export type NewLostAndFound = Omit<LostAndFound, '_id' | 'lostId' | 'status' | 'claimedBy' | 'claimedAt'>;
+export type NewLostAndFound = Pick<LostAndFound, 'item' | 'description' | 'areaFound' | 'date'>;
 
 // update  only status and claimedBy needed
 export type UpdateLostAndFound = Partial<Omit<LostAndFound, '_id' | 'lostId'>>;

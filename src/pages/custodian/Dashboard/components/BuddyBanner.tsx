@@ -2,8 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, ChevronRight } from "lucide-react";
 
-export const BuddyBanner: React.FC = () => {
+interface BuddyBannerProps {
+  count: number;
+}
+
+export const BuddyBanner: React.FC<BuddyBannerProps> = ({ count }) => {
   const navigate = useNavigate();
+
+  if (count === 0) return null;
 
   return (
     <div
@@ -33,6 +39,20 @@ export const BuddyBanner: React.FC = () => {
           <ChevronRight size={22} />
         </div>
       </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <h3 className="font-extrabold text-gray-900 text-sm truncate dark:text-slate-100">Pending Reviews</h3>
+          <span className="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded-full font-extrabold shrink-0">
+            {count} PENDING
+          </span>
+        </div>
+        <p className="text-xs text-gray-500 font-medium mt-0.5 truncate dark:text-slate-300">
+          Fellow custodians are waiting for your audit
+        </p>
+      </div>
+
+      <ChevronRight size={22} className="text-amber-500 shrink-0" />
     </div>
   );
 };

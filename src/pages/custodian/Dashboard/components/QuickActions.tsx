@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { QrCode, Users, AlertTriangle, Package } from "lucide-react";
 
-export const QuickActions: React.FC = () => {
+interface QuickActionsProps {
+  reviewCount: number;
+}
+
+export const QuickActions: React.FC<QuickActionsProps> = ({ reviewCount }) => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"assets" | "lostAndFound">("assets");
+
+  const card =
+    "bg-white p-3 sm:p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center gap-2 sm:gap-3 hover:shadow-md hover:border-[#0a2e27] sm:hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 group w-full cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:shadow-none";
+  const iconBox =
+    "w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-colors shrink-0";
+  const title = "block font-extrabold text-gray-900 text-[13px] sm:text-sm dark:text-slate-100";
+  const sub = "text-[11px] sm:text-xs text-gray-400 font-medium mt-0.5 block dark:text-slate-300";
 
   return (
     <div className="font-['Poppins']">
       <h3 className="text-lg font-extrabold text-gray-900 mb-4 dark:text-slate-50">
         Quick Actions
       </h3>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
 
         <button
           onClick={() => navigate("/scan-qr")}

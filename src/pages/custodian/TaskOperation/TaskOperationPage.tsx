@@ -57,7 +57,7 @@ export default function TaskMain() {
           <div className="flex border-b border-gray-200 gap-4 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto dark:border-slate-700">
             <button
               onClick={() => setActiveTab("all")}
-              className={`pb-3 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "all"
                   ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
                   : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300 dark:hover:text-slate-100"
@@ -68,7 +68,7 @@ export default function TaskMain() {
 
             <button
               onClick={() => setActiveTab("pending")}
-              className={`pb-3 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "pending"
                   ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
                   : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300 dark:hover:text-slate-100"
@@ -76,7 +76,7 @@ export default function TaskMain() {
             >
               Active Queue
               <span
-                className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold ${
+                className={`text-[11px] sm:text-xs min-w-[22px] text-center px-2 py-0.5 rounded-full font-bold ${
                   activeTab === "pending"
                     ? "bg-[#0a2e27] text-white dark:text-emerald-400"
                     : "bg-[#e6f0ef] text-[#0a2e27] dark:bg-slate-800 dark:text-slate-200"
