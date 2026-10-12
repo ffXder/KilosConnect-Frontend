@@ -40,6 +40,9 @@ import ScanQRPage from './pages/custodian/ScanQR/ScanQRPage'
 import BuddySystemPage from './pages/custodian/BuddySystem/BuddySystemPage'
 import TaskMain from './pages/custodian/TaskOperation/TaskOperationPage'
 import ZoneTaskPage from './pages/custodian/TaskOperation/AreaTaskPage'
+import IncidentReportPageForm  from './pages/custodian/IncidentReportFormPage'
+import LostAndFoundPageForm from './pages/custodian/LostAndFoundFormPage'
+
 
 // redirect user who logged in
 function DashboardRedirect() {
@@ -157,6 +160,8 @@ function App() {
             <Route path="/custodian/buddy-system" element={<BuddySystemPage />} />
             <Route path="/custodian/task-operations" element={<TaskMain />} />
             <Route path="/custodian/zone-tasks" element={<ZoneTaskPage />} />
+            <Route path="/custodian/incident-report/submit" element={<IncidentReportPageForm />} />
+            <Route path="/custodian/lost-and-found/submit" element={<LostAndFoundPageForm />} />
           </Route>
 
         {/* fallback redirects to login if not found or authenticated */}
