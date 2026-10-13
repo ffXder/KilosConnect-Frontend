@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useAuth } from '../../../hooks/useAuth';
-import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
+import React, { useMemo, useState } from "react";
+import { AlertCircle, X } from "lucide-react";
+import { useAuth } from "../../../hooks/useAuth";
+import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import type { UserAccount, NewUserForm } from "../../../types/manageAccount";
 import { AccountsFilterSection } from "./components/AccountFilterSection";
 import AccountsListSection from "./components/AccountListSection";
@@ -10,16 +11,23 @@ import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 import { AddUserModal } from "./components/AddUserModal";
 import { EditUserModal } from "./components/EditUserModal";
 
+const CLOSED_DELETE = { isOpen: false, id: "", name: "" };
+
 export const ManageAccountsPage: React.FC = () => {
-  const [search, setSearch] = useState("");
+  const { role } = useAuth();
+  const userRole = (role ?? "custodian") as React.ComponentProps<
+    typeof SidebarNavigationSection
+  >["userRole"];
+
   const { users, refresh, handleToggleArchive } = useUsers();
-  
+
+  const [search, setSearch] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
-
-  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string}>({
-    isOpen: false, id: "", name: ""
-  });
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string }>(
+    CLOSED_DELETE
+  );
+  const [pageError, setPageError] = useState<string | null>(null);
 
   const handleAddSubmit = async (data: Omit<NewUserForm, "password">) => {
     await createUser(data as NewUserForm);
@@ -32,72 +40,94 @@ export const ManageAccountsPage: React.FC = () => {
   };
 
   const handleResetPassword = async (userId: string) => {
+    // TODO: call the backend (e.g. send a one-time reset link) before shipping
     console.log("Resetting password for user:", userId);
   };
 
   const confirmDelete = async () => {
     try {
       await handleToggleArchive(deleteConfirm.id, false);
-      setDeleteConfirm({ isOpen: false, id: "", name: "" });
+      setDeleteConfirm(CLOSED_DELETE);
     } catch (err: any) {
-      alert("Failed to delete user.");
+      setDeleteConfirm(CLOSED_DELETE);
+      setPageError(err?.message ?? "Failed to delete user.");
     }
   };
 
-  const filteredAccounts = users.filter(a => {
-    const query = search.toLowerCase();
-    const fullName = `${a.firstName} ${a.lastName}`.toLowerCase();
-    return (
-      fullName.includes(query) || 
-      a.userId.toLowerCase().includes(query) ||
-      a.email.toLowerCase().includes(query) ||
-      a.role.toLowerCase().includes(query)
-    );
-  });
-
-  const { role } = useAuth();
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
+  const filteredAccounts = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return users;
+    return users.filter((a) => {
+      const fullName = `${a.firstName} ${a.lastName}`.toLowerCase();
+      return (
+        fullName.includes(query) ||
+        a.userId.toLowerCase().includes(query) ||
+        a.email.toLowerCase().includes(query) ||
+        a.role.toLowerCase().includes(query)
+      );
+    });
+  }, [users, search]);
 
   return (
     <div className="flex min-h-screen w-full bg-[#f4f5f6] text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-x-hidden transition-colors duration-300">
         <div className="max-w-[1400px] mx-auto space-y-6">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
-                Manage Accounts
-              </h1>
-              <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">
-                Add, edit, and manage user accounts
-              </p>
-            </div>
-          </div>
+          {/* Page header */}
+          <header>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
+              Manage accounts
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1.5">
+              Add, edit, and manage user accounts
+            </p>
+          </header>
 
-          <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-            <AccountsFilterSection 
+          {/* Page-level error (replaces browser alert) */}
+          {pageError && (
+            <div
+              role="alert"
+              className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300"
+            >
+              <AlertCircle size={18} className="shrink-0 mt-0.5" />
+              <p className="flex-1">{pageError}</p>
+              <button
+                type="button"
+                onClick={() => setPageError(null)}
+                aria-label="Dismiss"
+                className="shrink-0 -m-1 p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
+          {/* Accounts card */}
+          <section className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-colors duration-300">
+            <AccountsFilterSection
               totalAccounts={filteredAccounts.length}
               onSearchChange={setSearch}
               onAddNewUser={() => setIsAddModalOpen(true)}
             />
 
-            <AccountsListSection 
-              accounts={filteredAccounts} 
+            <AccountsListSection
+              accounts={filteredAccounts}
               onEditClick={(account) => setSelectedUserForEdit(account)}
-              onDeleteClick={(id: string, name: string) => setDeleteConfirm({ isOpen: true, id, name })} 
+              onDeleteClick={(id: string, name: string) =>
+                setDeleteConfirm({ isOpen: true, id, name })
+              }
             />
-          </div>
+          </section>
         </div>
 
-        {/* --- ADD USER MODAL --- */}
+        {/* Modals */}
         <AddUserModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSubmit={handleAddSubmit}
         />
 
-        {/* --- EDIT USER MODAL --- */}
         <EditUserModal
           isOpen={!!selectedUserForEdit}
           user={selectedUserForEdit}
@@ -106,10 +136,9 @@ export const ManageAccountsPage: React.FC = () => {
           onResetPassword={handleResetPassword}
         />
 
-        {/* --- DELETE CONFIRM MODAL --- */}
         <DeleteConfirmModal
           isOpen={deleteConfirm.isOpen}
-          onClose={() => setDeleteConfirm({ isOpen: false, id: "", name: "" })}
+          onClose={() => setDeleteConfirm(CLOSED_DELETE)}
           onConfirm={confirmDelete}
           itemName={deleteConfirm.name || "Selected Account"}
           itemType="User Account"
