@@ -35,6 +35,24 @@ function smoothCurvePath(pts: { x: number; y: number }[]): string {
   return d;
 }
 
+function wrapZoneLabel(label: string, maxChars: number): string[] {
+  const words = label.split(/\s+/);
+  const lines: string[] = [];
+  let line = "";
+
+  for (const word of words) {
+    if (line && `${line} ${word}`.length > maxChars) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = line ? `${line} ${word}` : word;
+    }
+  }
+
+  if (line) lines.push(line);
+  return lines;
+}
+
 interface DashboardBellCurveProps {
   data?: ZoneActivity[];
   title?: string;
@@ -46,6 +64,21 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   title = "Activity by Zone",
   subtitle = 'Incident activity by zone',
 }) => {
+  const chartData = [...data];
+  const normalizeZone = (zone: string) =>
+    zone.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+  const cafeIndex = chartData.findIndex((item) => normalizeZone(item.zone) === "cafe");
+  const maintenanceStorageIndex = chartData.findIndex(
+    (item) => normalizeZone(item.zone) === "maintenance storage",
+  );
+
+  if (cafeIndex >= 0 && maintenanceStorageIndex >= 0) {
+    [chartData[cafeIndex], chartData[maintenanceStorageIndex]] = [
+      chartData[maintenanceStorageIndex],
+      chartData[cafeIndex],
+    ];
+  }
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<{
     label: string;
@@ -56,23 +89,25 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
     zone: string;
   } | null>(null);
 
-  const maxVal = Math.max(...data.flatMap((d) => [d.open, d.resolved]), 1);
+  const maxVal = Math.max(...chartData.flatMap((d) => [d.open, d.resolved]), 1);
   const yMax = Math.ceil(maxVal / 2) * 2;
   const step = 2;
 
   const svgW = 600;
-  const svgH = 280;
-  const pad = { top: 20, right: 20, bottom: 50, left: 40 };
+  const svgH = 292;
+  const pad = { top: 20, right: 20, bottom: 62, left: 40 };
   const chartW = svgW - pad.left - pad.right;
   const chartH = svgH - pad.top - pad.bottom;
+  const maxLabelChars = Math.max(6, Math.floor((chartW / Math.max(chartData.length - 1, 1)) / 5.5));
+  const wrappedZoneLabels = chartData.map((d) => wrapZoneLabel(d.zone, maxLabelChars));
 
-  const toX = (i: number) => pad.left + (i / (data.length - 1)) * chartW;
+  const toX = (i: number) => pad.left + (i / (chartData.length - 1)) * chartW;
   const toY = (v: number) => svgH - pad.bottom - (v / yMax) * chartH;
 
-  const zoneXPositions = data.map((_, i) => toX(i));
+  const zoneXPositions = chartData.map((_, i) => toX(i));
 
-  const dataOpenPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.open) }));
-  const dataResolvedPts = data.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.resolved) }));
+  const dataOpenPts = chartData.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.open) }));
+  const dataResolvedPts = chartData.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.resolved) }));
 
   const yLabels: number[] = [];
   for (let v = 0; v <= yMax; v += step) yLabels.push(v);
@@ -155,8 +190,8 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Dots on orange line */}
           {dataOpenPts.map((p, i) => {
-            const zone = data[i]?.zone ?? 'Unknown';
-            const value = data[i]?.open ?? 0;
+            const zone = chartData[i]?.zone ?? 'Unknown';
+            const value = chartData[i]?.open ?? 0;
 
             return (
               <circle
@@ -177,8 +212,8 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Dots on green line */}
           {dataResolvedPts.map((p, i) => {
-            const zone = data[i]?.zone ?? 'Unknown';
-            const value = data[i]?.resolved ?? 0;
+            const zone = chartData[i]?.zone ?? 'Unknown';
+            const value = chartData[i]?.resolved ?? 0;
 
             return (
               <circle
@@ -198,17 +233,21 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
           })}
 
           {/* Zone labels below chart */}
-          {data.map((d, i) => (
+          {chartData.map((d, i) => (
             <text
               key={d.zone}
               x={zoneXPositions[i]}
-              y={svgH - pad.bottom + 20}
+              y={svgH - pad.bottom + 15}
               textAnchor="middle"
               className="text-[10px]"
               fill="#6b7280"
               fontWeight="600"
             >
-              {d.zone}
+              {wrappedZoneLabels[i].map((line, lineIndex) => (
+                <tspan key={`${d.zone}-${lineIndex}`} x={zoneXPositions[i]} dy={lineIndex === 0 ? 0 : 12}>
+                  {line}
+                </tspan>
+              ))}
             </text>
           ))}
         </svg>
