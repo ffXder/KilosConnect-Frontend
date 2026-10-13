@@ -6,7 +6,7 @@ import { LoFItemCard } from "./LoFItemCard";
 import { StatCard } from "./StatCard";
 import { ClaimModal } from "./ClaimModal";
 import { LoFDetailedModal } from "./LoFDetailedModal";
-import { Archive, AlertCircle, CheckCircle } from "lucide-react"; 
+import { Archive, AlertCircle, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react"; 
 import { useAuth } from "../../../hooks/useAuth";
 import { useLostAndFound } from "../../../hooks/useLostAndFound";
 import type { LostAndFound } from "../../../types/lostAndFound";
@@ -24,12 +24,28 @@ const areas = [
 
 export const LostAndFoundPage: React.FC = () => {
   const { items, loading, error, handleCreate, handleClaim, handleDelete } = useLostAndFound();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isEditingPage, setIsEditingPage] = useState(false);
+  const [pageInput, setPageInput] = useState("");
+  const pageSize = 6;
   const [viewingItem, setViewingItem] = useState<LostAndFound | null>(null);
   const [claimingItem, setClaimingItem] = useState<LostAndFound | null>(null);
   const [filter, setFilter] = useState<"All" | "Unclaimed" | "Claimed">("All");
   const [zoneFilter, setZoneFilter] = useState("All Areas");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const handleStatusFilterChange = (value: "All" | "Unclaimed" | "Claimed") => {
+    setFilter(value);
+    setCurrentPage(1);
+  };
+  const handleZoneFilterChange = (value: string) => {
+    setZoneFilter(value);
+    setCurrentPage(1);
+  };
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1);
+  };
 
   const handleViewItem = (item: LostAndFound) => {
     setViewingItem(item);
@@ -58,6 +74,24 @@ export const LostAndFoundPage: React.FC = () => {
                           (item.description ?? '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesZone && matchesSearch;
   });
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedItems = filteredItems.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
+  const firstVisiblePage = Math.max(1, Math.min(safeCurrentPage - 1, totalPages - 2));
+  const visiblePages = Array.from(
+    { length: Math.min(3, totalPages) },
+    (_, index) => firstVisiblePage + index,
+  );
+  const commitPageInput = () => {
+    const requestedPage = Number(pageInput);
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= totalPages) {
+      setCurrentPage(requestedPage);
+    }
+    setIsEditingPage(false);
+  };
 
   const { role } = useAuth();
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -92,11 +126,11 @@ export const LostAndFoundPage: React.FC = () => {
           {/* Filters Bar */}
           <LostAndFoundFilters
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSearchQuery={handleSearchChange}
             statusFilter={filter}
-            setStatusFilter={setFilter}
+            setStatusFilter={handleStatusFilterChange}
             zoneFilter={zoneFilter}
-            setZoneFilter={setZoneFilter}
+            setZoneFilter={handleZoneFilterChange}
             zones={areas}
             onAddItem={() => setIsModalOpen(true)}
           />
@@ -104,10 +138,100 @@ export const LostAndFoundPage: React.FC = () => {
           {/* Items Container */}
           <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm p-6 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredItems.map((item) => (
+              {paginatedItems.map((item) => (
                 <LoFItemCard key={item.lostId} item={item} onClaim={handleClaimItem} onView={handleViewItem} />
               ))}
             </div>
+            {filteredItems.length === 0 && !loading && (
+              <p className="py-8 text-center text-sm text-gray-500 dark:text-slate-300">
+                No items match your filters.
+              </p>
+            )}
+            {!loading && (
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#e8e8e8] pt-4 dark:border-slate-700">
+                <p className="text-xs text-gray-500 dark:text-slate-300">
+                  Showing{" "}
+                  <span className="font-semibold text-[#0f2942] dark:text-slate-100">{paginatedItems.length}</span>
+                  {" "}of{" "}
+                  <span className="font-semibold text-[#0f2942] dark:text-slate-100">{filteredItems.length}</span>
+                  {" "}items (Page{" "}
+                  <span className="font-semibold text-[#0f2942] dark:text-slate-100">{safeCurrentPage}</span>
+                  {" "}of{" "}
+                  <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalPages}</span>)
+                </p>
+                <nav className="flex items-center gap-1" aria-label="Lost and found pages">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage(safeCurrentPage - 1)}
+                    disabled={safeCurrentPage <= 1}
+                    aria-label="Previous page"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  {visiblePages.map((pageNumber) => (
+                    pageNumber === safeCurrentPage ? (
+                      <div key={pageNumber} className="flex flex-col items-center">
+                        {isEditingPage ? (
+                          <input
+                            type="number"
+                            min={1}
+                            max={totalPages}
+                            value={pageInput}
+                            autoFocus
+                            aria-label={`Enter page number, from 1 to ${totalPages}`}
+                            onChange={(event) => setPageInput(event.target.value)}
+                            onBlur={commitPageInput}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter") {
+                                event.preventDefault();
+                                event.currentTarget.blur();
+                              }
+                            }}
+                            className="h-9 w-9 rounded-lg border border-[#113129] bg-white text-center text-xs font-semibold text-[#113129] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPageInput(String(safeCurrentPage));
+                              setIsEditingPage(true);
+                            }}
+                            aria-current="page"
+                            aria-label={`Current page ${safeCurrentPage}. Click to enter a page number`}
+                            className="h-9 w-9 rounded-lg border border-[#113129] bg-[#113129] text-xs font-semibold text-white dark:border-[#207D55] dark:bg-[#207D55]"
+                          >
+                            {pageNumber}
+                          </button>
+                        )}
+                        <span className="mt-1 whitespace-nowrap text-[9px] leading-none text-gray-500 dark:text-slate-400">
+                          click to enter page
+                        </span>
+                      </div>
+                    ) : (
+                      <button
+                        key={pageNumber}
+                        type="button"
+                        onClick={() => setCurrentPage(pageNumber)}
+                        aria-label={`Go to page ${pageNumber}`}
+                        className="h-9 w-9 rounded-lg border border-[#e2e8f0] text-xs font-medium text-[#0f2942] transition-colors hover:bg-gray-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                      >
+                        {pageNumber}
+                      </button>
+                    )
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage(safeCurrentPage + 1)}
+                    disabled={safeCurrentPage >= totalPages}
+                    aria-label="Next page"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </nav>
+              </div>
+            )}
           </div>
 
         </div>
