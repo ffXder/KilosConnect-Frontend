@@ -1,3 +1,12 @@
+export interface affectedAsset {
+    _id: string;
+    assetId: string;
+    name: string;
+    condition: string;
+    location: string;
+}
+
+
 export interface IncidentReport {
     _id: string;
     incidentId: string;
@@ -6,7 +15,7 @@ export interface IncidentReport {
     area: string;
     severity: "Low" | "Medium" | "High" | "Urgent" | "Critical";
     status: "Open" | "In Progress" | "Resolved";
-    affectedAssets: string[];
+    asset: affectedAsset | null;
     reporterType?: "Staff" | "Public";
     reportedBy?: {
         _id: string;
