@@ -111,7 +111,7 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Incident Report",
     path: "/incident-report",
-    roles: ["admin", "custodian"] as Role[],
+    roles: ["admin"] as Role[],
     icon: <TriangleAlert size={20} />,
   },
   {
