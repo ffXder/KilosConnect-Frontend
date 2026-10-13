@@ -61,7 +61,9 @@ export function useDashboard() {
       const incidentAlerts: (DashboardAlert & { at: string })[] = reports
         .filter((report) => report.status !== 'Resolved')
         .map((report) => {
-          const populatedAssets = report.affectedAssets as unknown[];
+          const populatedAssets = Array.isArray(report.affectedAssets)
+            ? report.affectedAssets as unknown[]
+            : [];
           const firstAsset = populatedAssets.find(
             (asset): asset is { name: string } =>
               typeof asset === 'object' &&
@@ -69,10 +71,16 @@ export function useDashboard() {
               'name' in asset &&
               typeof asset.name === 'string'
           );
+          const populatedAsset =
+            typeof report.asset === 'object' &&
+            report.asset !== null &&
+            typeof report.asset.name === 'string'
+              ? report.asset.name
+              : undefined;
           return {
             id: report._id,
             source: 'incident' as const,
-            asset: firstAsset?.name || report.title || report.area,
+            asset: populatedAsset || firstAsset?.name || report.title || report.area,
             status: `has an open ${report.severity.toLowerCase()} incident`,
             severity:
               report.severity === 'Critical' || report.severity === 'Urgent'

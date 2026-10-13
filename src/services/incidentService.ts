@@ -1,8 +1,8 @@
-import type { IncidentReport, NewIncidentReport, UpdateIncidentReport } from "../types/incident";
+import type { IncidentReport, NewIncidentReport, PaginatedIncidentResponse, UpdateIncidentReport } from "../types/incident";
 import { apiRequest } from "./authService";
 
 // GET ALL
-export const getAllReports = async (): Promise<IncidentReport[]> => {
+export const getAllReports = async (): Promise<PaginatedIncidentResponse> => {
     const res = await apiRequest('/incident-reports', { method: 'GET' });
     
     if (!res.ok) {

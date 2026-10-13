@@ -90,9 +90,9 @@ export const IncidentReportPage: React.FC = () => {
           const matchesTitle =
             incident.title === alertNavigation?.alertTitle ||
             incident.area === alertNavigation?.alertTitle ||
-            incident.affectedAssets.some((assetId) =>
+            (Array.isArray(incident.affectedAssets) && incident.affectedAssets.some((assetId) =>
               assets.some((asset) => asset._id === assetId && asset.name === alertNavigation?.alertTitle)
-            );
+            ));
           const matchesSeverity =
             alertNavigation?.alertSeverity === 'critical'
               ? incident.severity === 'Critical' || incident.severity === 'Urgent'

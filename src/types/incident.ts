@@ -6,7 +6,8 @@ export interface IncidentReport {
     area: string;
     severity: "Low" | "Medium" | "High" | "Urgent" | "Critical";
     status: "Open" | "In Progress" | "Resolved";
-    affectedAssets: string[];
+    affectedAssets?: string[];
+    asset?: string | { _id?: string; name: string } | null;
     reporterType?: "Staff" | "Public";
     reportedBy?: {
         _id: string;
@@ -22,8 +23,9 @@ export interface IncidentReport {
 // for create
 export type NewIncidentReport = Omit<
     IncidentReport, 
-    "_id" | "incidentId" | "status" | "reportedBy"
+    "_id" | "incidentId" | "status" | "reportedBy" | "affectedAssets"
 > & {
+    affectedAssets: string[];
     reporterType?: "Staff" | "Public";
     reportedName?: string | null;
 };
