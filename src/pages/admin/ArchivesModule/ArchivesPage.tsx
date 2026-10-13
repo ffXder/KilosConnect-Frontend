@@ -103,7 +103,7 @@ export const ArchivesPage: React.FC = () => {
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
+              <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
                 Archives
               </h1>
               <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">
