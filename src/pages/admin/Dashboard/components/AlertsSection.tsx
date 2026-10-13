@@ -17,28 +17,38 @@ const defaultAlerts: AlertItem[] = [
   { task: "Dumbbells", status: "maintenance completed", severity: "success", source: "task" },
 ];
 
-const severityConfig: Record<string, { color: string; icon: React.ReactNode; bg: string; border: string }> = {
+const severityConfig: Record<string, {
+  color: string;
+  icon: React.ReactNode;
+  iconColor: string;
+  bg: string;
+  border: string;
+}> = {
   critical: {
     color: "bg-red-500",
     icon: <AlertCircle size={16} className="text-red-500" />,
+    iconColor: "text-red-500",
     bg: "bg-red-50 dark:bg-red-200 transition-color duration-300",
     border: "border-l-red-500",
   },
   warning: {
     color: "bg-orange-500",
     icon: <Clock size={16} className="text-orange-500" />,
+    iconColor: "text-orange-500",
     bg: "bg-orange-50 dark:bg-orange-200 transition-color duration-300",
     border: "border-l-orange-500",
   },
   info: {
     color: "bg-blue-500",
     icon: <WifiOff size={16} className="text-blue-500" />,
+    iconColor: "text-blue-500",
     bg: "bg-blue-50 dark:bg-blue-200 transition-color duration-300",
     border: "border-l-blue-500",
   },
   success: {
     color: "bg-green-500",
     icon: <CheckCircle2 size={16} className="text-green-500" />,
+    iconColor: "text-green-500",
     bg: "bg-green-50 dark:bg-green-200 transition-color duration-300",
     border: "border-l-green-500",
   },
@@ -69,8 +79,8 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 mt-6 space-y-3">
-        {alerts.map((alert, idx) => {
+      <div className="flex-1 mt-4 space-y-2">
+        {alerts.slice(0, 5).map((alert, idx) => {
           const cfg = severityConfig[alert.severity] || severityConfig.info;
           const source = alert.source ?? (alert.task ? "task" : "incident");
           const destination = source === "task" ? "/task-monitor/live-monitor" : "/incident-report";
@@ -90,9 +100,9 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
               key={alert.id ?? idx}
               onClick={() => navigate(destination, { state: recordState })}
               aria-label={`Open ${alertTitle} ${source === "task" ? "maintenance task" : "incident report"}`}
-              className={`flex w-full items-center gap-4 rounded-xl border-l-4 p-4 text-left transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C] focus-visible:ring-offset-2 ${cfg.bg} ${cfg.border}`}
+              className={`group flex w-full items-center gap-4 rounded-xl border-l-4 p-3 text-left transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-md active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C] focus-visible:ring-offset-2 ${cfg.bg} ${cfg.border}`}
             >
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${cfg.bg}`}>
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${cfg.bg} ${cfg.iconColor}`}>
                 {cfg.icon}
               </div>
               <div className="flex-1 min-w-0">
@@ -105,7 +115,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
             </button>
           );
         })}
-        <div className="text-center pt-3">
+        <div className="text-center pt-2">
           <button className="text-[12px] font-semibold text-[#113129] hover:underline cursor-pointer dark:text-slate-100">
             View All Alerts →
           </button>

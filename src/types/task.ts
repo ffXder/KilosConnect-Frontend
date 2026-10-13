@@ -68,6 +68,7 @@ export interface TaskLog {
   verifiedBy?: UserSummary | null;
   verificationStatus: VerificationStatus;
   verificationNote?: string | null;
+  date?: string;
   createdAt: string;
   updatedAt: string;
 }   

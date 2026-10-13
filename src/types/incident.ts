@@ -16,6 +16,7 @@ export interface IncidentReport {
     } | null;
     reportedName?: string | null;
     dateAndTime: string;
+    createdAt?: string;
 }
 
 // for create

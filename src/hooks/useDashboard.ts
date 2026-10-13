@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDashboard } from '../services/dashboardService';
-import type { DashboardData } from '../types/dashboard';
+import { getAllReports } from '../services/incidentService';
+import { getTaskLogs } from '../services/taskLogService';
+import type { DashboardAlert, DashboardData } from '../types/dashboard';
+import type { IncidentReport } from '../types/incident';
+import type { TaskLog } from '../types/task';
 import type { StatCardData } from '../pages/admin/Dashboard/components/StatsSections';
 
 export const ASSET_STATUS_COLORS: Record<string, string> = {
@@ -20,9 +24,109 @@ export function useDashboard() {
 
   const fetchDashboard = useCallback(async () => {
     try {
-      setLoading(true);
+      const [dashboardResult, reportsResult, taskLogsResult] = await Promise.allSettled([
+        getDashboard(),
+        getAllReports(),
+        getTaskLogs(),
+      ]);
+
+      if (dashboardResult.status === 'rejected') {
+        throw dashboardResult.reason;
+      }
+
+      const dashboard = dashboardResult.value;
+      const reportsResponse: unknown =
+        reportsResult.status === 'fulfilled' ? reportsResult.value : [];
+      const reports: IncidentReport[] = Array.isArray(reportsResponse)
+        ? reportsResponse as IncidentReport[]
+        : reportsResponse &&
+            typeof reportsResponse === 'object' &&
+            'incidentReports' in reportsResponse &&
+            Array.isArray((reportsResponse as { incidentReports?: unknown }).incidentReports)
+          ? (reportsResponse as { incidentReports: IncidentReport[] }).incidentReports
+          : [];
+      const taskLogsResponse: unknown = taskLogsResult.status === 'fulfilled' ? taskLogsResult.value : [];
+      const taskLogs: TaskLog[] = Array.isArray(taskLogsResponse)
+        ? taskLogsResponse as TaskLog[]
+        : taskLogsResponse &&
+            typeof taskLogsResponse === 'object' &&
+            'taskLogs' in taskLogsResponse &&
+            Array.isArray((taskLogsResponse as { taskLogs?: unknown }).taskLogs)
+          ? (taskLogsResponse as { taskLogs: TaskLog[] }).taskLogs
+          : [];
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const incidentAlerts: (DashboardAlert & { at: string })[] = reports
+        .filter((report) => report.status !== 'Resolved')
+        .map((report) => {
+          const populatedAssets = report.affectedAssets as unknown[];
+          const firstAsset = populatedAssets.find(
+            (asset): asset is { name: string } =>
+              typeof asset === 'object' &&
+              asset !== null &&
+              'name' in asset &&
+              typeof asset.name === 'string'
+          );
+          return {
+            id: report._id,
+            source: 'incident' as const,
+            asset: firstAsset?.name || report.title || report.area,
+            status: `has an open ${report.severity.toLowerCase()} incident`,
+            severity:
+              report.severity === 'Critical' || report.severity === 'Urgent'
+                ? 'critical' as const
+                : 'warning' as const,
+            at: report.createdAt ?? report.dateAndTime,
+          };
+        });
+
+      const taskAlerts: (DashboardAlert & { at: string })[] = taskLogs
+        .filter((log) => log.status !== 'Cancelled')
+        .map((log) => {
+          const isOpen = log.status === 'Pending' || log.status === 'In Progress';
+          const isOverdue = isOpen && log.date !== undefined && Date.parse(log.date) < today.getTime();
+          let status = 'maintenance scheduled';
+          let severity: DashboardAlert['severity'] = 'info';
+
+          if (log.status === 'Completed') {
+            status = 'maintenance completed';
+            severity = 'success';
+          } else if (log.status === 'Missed') {
+            status = 'task missed';
+            severity = 'critical';
+          } else if (isOverdue) {
+            status = 'overdue for maintenance';
+            severity = 'warning';
+          }
+
+          return {
+            id: log._id,
+            source: 'task',
+            task: log.task?.title || 'Maintenance task',
+            status,
+            severity,
+            at: log.createdAt,
+          };
+        });
+
+      const supplementalAlerts = [...incidentAlerts, ...taskAlerts]
+        .sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
+        .slice(0, 5)
+        .map((alert) => ({
+          id: alert.id,
+          source: alert.source,
+          asset: alert.asset,
+          task: alert.task,
+          status: alert.status,
+          severity: alert.severity,
+        }));
+      const alerts =
+        supplementalAlerts.length > 0 ? supplementalAlerts : dashboard.alerts;
+
+      setData({ ...dashboard, alerts });
       setError(null);
-      setData(await getDashboard());
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong');
     } finally {
@@ -30,8 +134,13 @@ export function useDashboard() {
     }
   }, []);
 
+  const refetch = useCallback(() => {
+    setLoading(true);
+    return fetchDashboard();
+  }, [fetchDashboard]);
+
   useEffect(() => {
-    fetchDashboard();
+    void Promise.resolve().then(fetchDashboard);
   }, [fetchDashboard]);
 
   const stats: StatCardData[] = useMemo(() => {
@@ -53,7 +162,7 @@ export function useDashboard() {
   return {
     loading,
     error,
-    refetch: fetchDashboard,
+    refetch,
     stats,
     assetStatusData,
     totalAssetCount: data?.stats.totalAssets ?? 0,
