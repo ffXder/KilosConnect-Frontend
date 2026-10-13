@@ -401,6 +401,9 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
               Log Out
             </span>
           </button>
+          <p className=" [font-family:'Poppins',Helvetica] text-[#FDFFE0] text-xs leading-5 whitespace-nowrap transition-all duration-300 mt-3 text-center">
+            v1.0.0
+          </p>
         </div>
       </aside>
     </>
