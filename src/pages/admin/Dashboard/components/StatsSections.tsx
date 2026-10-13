@@ -5,6 +5,7 @@ export interface StatCardData {
   count: string | number;
   sublabel: string;
   colorClass: string;
+  cardClass: string;
 }
 
 const defaultStats: StatCardData[] = [
@@ -12,25 +13,29 @@ const defaultStats: StatCardData[] = [
     label: "Total Assets",
     count: 2,
     sublabel: "+1 added this month",
-    colorClass: "bg-blue-100 text-blue-600 dark:bg-blue-200",
+    colorClass: "bg-blue-100 text-blue-600 dark:bg-blue-200 dark:text-blue-700",
+    cardClass: "bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800",
   },
   {
     label: "Active Incidents",
     count: 3,
     sublabel: "2 urgent",
-    colorClass: "bg-red-100 text-red-600 dark:bg-red-200",
+    colorClass: "bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700",
+    cardClass: "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800",
   },
   {
     label: "Maintenance Tasks",
     count: 2,
     sublabel: "1 overdue",
-    colorClass: "bg-orange-100 text-orange-600 dark:bg-orange-200",
+    colorClass: "bg-orange-100 text-orange-600 dark:bg-orange-200 dark:text-orange-700",
+    cardClass: "bg-orange-50 border-orange-200 dark:bg-orange-950/40 dark:border-orange-800",
   },
   {
     label: "Working Equipment",
     count: "94%",
     sublabel: "+5% this week",
-    colorClass: "bg-green-100 text-green-600 dark:bg-green-200",
+    colorClass: "bg-green-100 text-green-600 dark:bg-green-200 dark:text-green-700",
+    cardClass: "bg-green-50 border-green-200 dark:bg-green-950/40 dark:border-green-800",
   },
 ];
 
@@ -51,7 +56,7 @@ const DashboardStatsSection: React.FC<DashboardStatsSectionProps> = ({ stats = d
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:bg-slate-900 dark:shadow-none dark:border dark:border-slate-700 transition-colors duration-300"
+          className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 dark:shadow-none transition-colors duration-300 ${stat.cardClass}`}
         >
           <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${stat.colorClass}`}>
             {iconMap[stat.label] || <Box size={14} strokeWidth={2} className="sm:size-[16px] md:size-[20px] lg:size-[24px]" />}

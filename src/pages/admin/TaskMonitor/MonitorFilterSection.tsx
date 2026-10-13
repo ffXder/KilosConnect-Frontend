@@ -52,7 +52,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
     <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       
       {/* Primary Action Row: Search & Add */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-6">
         <div className="relative flex-1 min-w-0">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] dark:text-slate-400" />
           <input
@@ -87,7 +87,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
       </div>
 
       {/* Secondary Filter Row: Status, Type, & Area */}
-      <div className="flex flex-wrap items-center gap-6">
+      <div className="flex flex-wrap items-center gap-3">
         {!hideStatus && (
           <>
             <div className="flex items-center gap-3">

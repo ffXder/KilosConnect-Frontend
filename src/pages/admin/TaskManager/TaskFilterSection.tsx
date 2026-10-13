@@ -119,8 +119,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <button 
                 key={opt.label} 
                 onClick={() => setFrequencyFilter(opt.label)}
-                style={{ fontSize: '16px' }}
-                className={`px-4 py-2 rounded-[9px] font-semibold transition-all cursor-pointer ${
+                className={`px-3 py-2 rounded-[9px] text-[11px] font-bold transition-all cursor-pointer ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
                     : opt.inactive

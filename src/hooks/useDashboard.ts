@@ -147,10 +147,10 @@ export function useDashboard() {
     if (!data) return [];
     const s = data.stats;
     return [
-      { label: 'Total Assets', count: s.totalAssets, sublabel: `+${s.addedThisMonth} added this month`, colorClass: 'bg-blue-100 text-blue-600 dark:bg-blue-200' },
-      { label: 'Active Incidents', count: s.openIncidents, sublabel: `${s.urgentIncidents} urgent`, colorClass: 'bg-red-100 text-red-600 dark:bg-red-200' },
-      { label: 'Maintenance Tasks', count: s.pendingTasks, sublabel: `${s.overdueTasks} overdue`, colorClass: 'bg-orange-100 text-orange-600 dark:bg-orange-200' },
-      { label: 'Working Equipment', count: `${s.workingPct}%`, sublabel: `${s.working} of ${s.totalAssets} assets`, colorClass: 'bg-green-100 text-green-600 dark:bg-green-200' },
+      { label: 'Total Assets', count: s.totalAssets, sublabel: `+${s.addedThisMonth} added this month`, colorClass: 'bg-blue-100 text-blue-600 dark:bg-blue-200 dark:text-blue-700', cardClass: 'bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800' },
+      { label: 'Active Incidents', count: s.openIncidents, sublabel: `${s.urgentIncidents} urgent`, colorClass: 'bg-red-100 text-red-600 dark:bg-red-200 dark:text-red-700', cardClass: 'bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800' },
+      { label: 'Maintenance Tasks', count: s.pendingTasks, sublabel: `${s.overdueTasks} overdue`, colorClass: 'bg-orange-100 text-orange-600 dark:bg-orange-200 dark:text-orange-700', cardClass: 'bg-orange-50 border-orange-200 dark:bg-orange-950/40 dark:border-orange-800' },
+      { label: 'Working Equipment', count: `${s.workingPct}%`, sublabel: `${s.working} of ${s.totalAssets} assets`, colorClass: 'bg-green-100 text-green-600 dark:bg-green-200 dark:text-green-700', cardClass: 'bg-green-50 border-green-200 dark:bg-green-950/40 dark:border-green-800' },
     ];
   }, [data]);
 
