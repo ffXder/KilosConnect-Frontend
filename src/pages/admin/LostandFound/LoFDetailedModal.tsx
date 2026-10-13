@@ -10,8 +10,8 @@ interface DetailedModalProps {
 
 export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-[24px] shadow-2xl w-full max-w-[800px] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div className="flex max-h-[90vh] w-full max-w-[800px] flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
         <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">Item Details</h2>
@@ -22,19 +22,19 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
           </button>
         </div>
 
-        <div className="p-8">
-          <div className="flex flex-col lg:flex-row gap-8">
+        <div className="overflow-y-auto p-5 sm:p-8">
+          <div className="flex flex-col gap-8 lg:flex-row">
             {/* Images Section */}
-            <div className="w-full lg:w-1/2 space-y-6">
+            <div className="w-full space-y-6 lg:w-1/2">
               {/* Item Photo */}
               <div>
-                <label className="block text-xs font-bold text-gray-400 mb-3 uppercase tracking-widest">Item Photo (Found)</label>
+                <label className="mb-3 block text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-slate-400">Item Photo (Found)</label>
                 {item.itemImage?.url ? (
-                  <div className="w-full h-64 rounded-[16px] overflow-hidden border border-[#e8e8e8]">
-                    <img src={item.itemImage?.url} alt={item.item} className="w-full h-full object-cover" />
+                  <div className="flex max-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[16px] border border-[#e8e8e8] bg-gray-50 p-2 dark:border-slate-700 dark:bg-slate-800">
+                    <img src={item.itemImage.url} alt={item.item} className="h-auto max-h-[55vh] w-auto max-w-full object-contain" />
                   </div>
                 ) : (
-                  <div className="w-full h-48 rounded-[16px] bg-[#f8fafc] border-2 border-dashed border-[#e2e8f0] flex flex-col items-center justify-center text-gray-400">
+                  <div className="flex h-48 w-full flex-col items-center justify-center rounded-[16px] border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] text-gray-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
                     <ImageIcon size={32} strokeWidth={1} className="mb-2 opacity-50" />
                     <span className="text-xs font-medium">No item image</span>
                   </div>
@@ -44,13 +44,13 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
               {/* Claimant Photo (Only shown if Claimed) */}
               {item.status === "Claimed" && (
                 <div>
-                  <label className="block text-xs font-bold text-[#15803d] mb-3 uppercase tracking-widest">Claimant / Proof Photo</label>
+                  <label className="mb-3 block text-xs font-bold uppercase tracking-widest text-[#15803d] dark:text-emerald-400">Claimant / Proof Photo</label>
                   {item.claimedImage ? (
-                    <div className="w-full h-64 rounded-[16px] overflow-hidden border-2 border-[#dcfce7]">
-                      <img src={item.claimedImage?.url} alt="Claimant proof" className="w-full h-full object-cover" />
+                    <div className="flex max-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[16px] border-2 border-[#dcfce7] bg-gray-50 p-2 dark:border-emerald-900 dark:bg-slate-800">
+                      <img src={item.claimedImage.url} alt="Claimant proof" className="h-auto max-h-[55vh] w-auto max-w-full object-contain" />
                     </div>
                   ) : (
-                    <div className="w-full h-48 rounded-[16px] bg-[#f0fdf4] border-2 border-dashed border-[#dcfce7] flex flex-col items-center justify-center text-[#15803d]/50">
+                    <div className="flex h-48 w-full flex-col items-center justify-center rounded-[16px] border-2 border-dashed border-[#dcfce7] bg-[#f0fdf4] text-[#15803d]/50 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400/70">
                       <Camera size={32} strokeWidth={1} className="mb-2" />
                       <span className="text-xs font-medium">No claimant photo recorded</span>
                     </div>
@@ -63,38 +63,40 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
             <div className="w-full lg:w-1/2 space-y-6">
               <div>
                 <span className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold mb-3 ${
-                  item.status === "Unclaimed" ? "bg-[#fef3c7] text-[#b45309]" : "bg-[#dcfce7] text-[#15803d]"
+                  item.status === "Unclaimed"
+                    ? "bg-[#fef3c7] text-[#b45309] dark:bg-amber-950/60 dark:text-amber-300"
+                    : "bg-[#dcfce7] text-[#15803d] dark:bg-emerald-950/60 dark:text-emerald-300"
                 }`}>
                   {item.status}
                 </span>
-                <h3 className="text-2xl font-bold text-[#1a1a1a]">{item.item}</h3>
-                <p className="text-gray-500 text-sm mt-2 leading-relaxed">{item.description || "No description provided."}</p>
+                <h3 className="text-2xl font-bold text-[#1a1a1a] dark:text-slate-100">{item.item}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-slate-300">{item.description || "No description provided."}</p>
               </div>
 
-              <div className="space-y-4 pt-4 border-t border-[#f1f5f9]">
-                <div className="flex items-center gap-3 text-[14px]">
-                  <MapPin size={16} className="text-[#94a3b8]" />
-                  <span className="text-gray-500">Area Found:</span>
-                  <span className="font-semibold text-[#1a1a1a]">{item.areaFound}</span>
+              <div className="space-y-4 border-t border-[#f1f5f9] pt-4 dark:border-slate-700">
+                <div className="flex flex-wrap items-center gap-3 text-[14px]">
+                  <MapPin size={16} className="text-[#94a3b8] dark:text-slate-400" />
+                  <span className="text-gray-500 dark:text-slate-400">Area Found:</span>
+                  <span className="font-semibold text-[#1a1a1a] dark:text-slate-100">{item.areaFound}</span>
                 </div>
-                <div className="flex items-center gap-3 text-[14px]">
-                  <User size={16} className="text-[#94a3b8]" />
-                  <span className="text-gray-500">Found by:</span>
-                  <span className="font-semibold text-[#1a1a1a]">{item.reportedBy}</span>
+                <div className="flex flex-wrap items-center gap-3 text-[14px]">
+                  <User size={16} className="text-[#94a3b8] dark:text-slate-400" />
+                  <span className="text-gray-500 dark:text-slate-400">Found by:</span>
+                  <span className="font-semibold text-[#1a1a1a] dark:text-slate-100">{item.reportedBy}</span>
                 </div>
-                <div className="flex items-center gap-3 text-[14px]">
-                  <Calendar size={16} className="text-[#94a3b8]" />
-                  <span className="text-gray-500">Date Found:</span>
-                  <span className="font-semibold text-[#1a1a1a]">{formatDate(item.date)}</span>
+                <div className="flex flex-wrap items-center gap-3 text-[14px]">
+                  <Calendar size={16} className="text-[#94a3b8] dark:text-slate-400" />
+                  <span className="text-gray-500 dark:text-slate-400">Date Found:</span>
+                  <span className="font-semibold text-[#1a1a1a] dark:text-slate-100">{formatDate(item.date)}</span>
                 </div>
               </div>
 
               {item.status === "Claimed" && (
-                <div className="mt-4 p-4 bg-[#f0fdf4] rounded-[12px] border border-[#dcfce7] space-y-2">
-                  <div className="flex items-center gap-2 text-[#15803d] text-sm">
+                <div className="mt-4 space-y-2 rounded-[12px] border border-[#dcfce7] bg-[#f0fdf4] p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
+                  <div className="flex items-center gap-2 text-sm text-[#15803d] dark:text-emerald-300">
                     <span className="font-bold">Claimed By:</span> {item.claimedBy}
                   </div>
-                  <div className="flex items-center gap-2 text-[#15803d] text-sm">
+                  <div className="flex items-center gap-2 text-sm text-[#15803d] dark:text-emerald-300">
                     <span className="font-bold">Claim Date:</span> {item. claimedAt ? formatDateTime(item.claimedAt): '-'}
                   </div>
                 </div>
@@ -102,10 +104,10 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[#f4f5f6]">
+          <div className="mt-8 border-t border-[#f4f5f6] pt-6 dark:border-slate-700">
             <button 
               onClick={onClose}
-              className="w-full py-3 bg-[#f8fafc] border border-[#e8e8e8] rounded-[12px] text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              className="w-full rounded-[12px] border border-[#e8e8e8] bg-[#f8fafc] py-3 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
             >
               Close Details
             </button>
