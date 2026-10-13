@@ -20,6 +20,8 @@ export const ManageAccountsPage: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState<AccountRoleFilter>("all");
   const [sortBy, setSortBy] = useState<AccountSortField>("name");
   const [sortDirection, setSortDirection] = useState<AccountSortDirection>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const { users, loading, refresh, handleToggleArchive } = useUsers();
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -76,6 +78,12 @@ export const ManageAccountsPage: React.FC = () => {
     }
     return sortDirection === "asc" ? comparison : -comparison;
   });
+  const totalPages = Math.max(1, Math.ceil(sortedAccounts.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedAccounts = sortedAccounts.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
 
   const { role } = useAuth();
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -99,19 +107,35 @@ export const ManageAccountsPage: React.FC = () => {
 
           <AccountsFilterSection 
             totalAccounts={filteredAccounts.length}
-            onSearchChange={setSearch}
+            onSearchChange={(value) => {
+              setSearch(value);
+              setCurrentPage(1);
+            }}
             onAddNewUser={() => setIsAddModalOpen(true)}
             roleFilter={roleFilter}
-            onRoleFilterChange={setRoleFilter}
+            onRoleFilterChange={(value) => {
+              setRoleFilter(value);
+              setCurrentPage(1);
+            }}
             sortBy={sortBy}
-            onSortByChange={setSortBy}
+            onSortByChange={(value) => {
+              setSortBy(value);
+              setCurrentPage(1);
+            }}
             sortDirection={sortDirection}
-            onSortDirectionChange={setSortDirection}
+            onSortDirectionChange={(value) => {
+              setSortDirection(value);
+              setCurrentPage(1);
+            }}
           />
 
           <div className="overflow-x-auto rounded-2xl border border-[#e8e8e8] bg-white shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
             <AccountsListSection 
-              accounts={sortedAccounts} 
+              accounts={paginatedAccounts}
+              totalAccounts={sortedAccounts.length}
+              currentPage={safeCurrentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
               loading={loading}
               onEditClick={(account) => setSelectedUserForEdit(account)}
               onDeleteClick={(id: string, name: string) => setDeleteConfirm({ isOpen: true, id, name })} 

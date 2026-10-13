@@ -1,10 +1,14 @@
 import React from "react";
-import { User, Edit3, Trash2} from "lucide-react"; // Assuming you use lucide-react, otherwise use your AccountsIcons
+import { ChevronLeft, ChevronRight, User, Edit3, Trash2} from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
 import { formatDateTime } from "../../../../utils/formatter";
 
 interface AccountsListSectionProps {
   accounts: UserAccount[];
+  totalAccounts: number;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
   loading?: boolean;
   onEditClick: (account: UserAccount) => void;
   onDeleteClick: (id: string, name: string) => void;
@@ -12,10 +16,29 @@ interface AccountsListSectionProps {
 
 const AccountsListSection: React.FC<AccountsListSectionProps> = ({ 
   accounts, 
+  totalAccounts,
+  currentPage,
+  totalPages,
+  onPageChange,
   loading,
   onEditClick, 
   onDeleteClick 
 }) => {
+  const [isEditingPage, setIsEditingPage] = React.useState(false);
+  const [pageInput, setPageInput] = React.useState("");
+  const firstVisiblePage = Math.max(1, Math.min(currentPage - 1, totalPages - 2));
+  const visiblePages = Array.from(
+    { length: Math.min(3, totalPages) },
+    (_, index) => firstVisiblePage + index,
+  );
+  const commitPageInput = () => {
+    const requestedPage = Number(pageInput);
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= totalPages) {
+      onPageChange(requestedPage);
+    }
+    setIsEditingPage(false);
+  };
+
   return (
     <div className="w-full">
       <table className="w-full text-left">
@@ -105,6 +128,87 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
           ))}
         </tbody>
       </table>
+      {!loading && (
+        <div className="flex items-center justify-between gap-4 border-t border-[#eef1f3] px-5 py-3.5 dark:border-slate-700">
+          <p className="text-xs text-gray-500 dark:text-slate-300">
+            Showing <span className="font-semibold text-[#0f2942] dark:text-slate-100">{accounts.length}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalAccounts}</span> accounts (Page{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{currentPage}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalPages}</span>)
+          </p>
+          <nav className="flex items-center gap-1" aria-label="Account pages">
+            <button
+              type="button"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage <= 1}
+              aria-label="Previous page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            {visiblePages.map((pageNumber) => (
+              pageNumber === currentPage ? (
+                <div key={pageNumber} className="flex flex-col items-center">
+                  {isEditingPage ? (
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={pageInput}
+                      autoFocus
+                      aria-label={`Enter page number, from 1 to ${totalPages}`}
+                      onChange={(event) => setPageInput(event.target.value)}
+                      onBlur={commitPageInput}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          event.currentTarget.blur();
+                        }
+                      }}
+                      className="h-9 w-9 rounded-lg border border-[#113129] bg-white text-center text-xs font-semibold text-[#113129] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPageInput(String(currentPage));
+                        setIsEditingPage(true);
+                      }}
+                      aria-label={`Current page ${currentPage}. Click to enter a page number`}
+                      aria-current="page"
+                      className="h-9 w-9 rounded-lg border border-[#113129] bg-[#113129] text-xs font-semibold text-white dark:border-[#207D55] dark:bg-[#207D55]"
+                    >
+                      {pageNumber}
+                    </button>
+                  )}
+                  <span className="mt-1 whitespace-nowrap text-[9px] leading-none text-gray-500 dark:text-slate-400">
+                    click to enter page
+                  </span>
+                </div>
+              ) : (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => onPageChange(pageNumber)}
+                  aria-label={`Go to page ${pageNumber}`}
+                  className="h-9 w-9 rounded-lg border border-[#e2e8f0] text-xs font-medium text-[#0f2942] transition-colors hover:bg-gray-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  {pageNumber}
+                </button>
+              )
+            ))}
+            <button
+              type="button"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              aria-label="Next page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </nav>
+        </div>
+      )}
     </div>
   );
 };
