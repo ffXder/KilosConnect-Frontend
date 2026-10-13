@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import TaskStatsSection from './TaskStatsSection';
 import TaskFilterSection from './MonitorFilterSection';
@@ -14,6 +15,8 @@ interface TaskMonitorPageProps {
 
 export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
   const { logs, loading: isLoading, handleGenerate } = useTaskLogs();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { role } = useAuth();
 
   const userRole = (role ?? 'custodian') as 'admin';
@@ -26,7 +29,42 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
   const [generateMessage, setGenerateMessage] = useState<string | null>(null);
 
   // Always read the latest version of the clicked log
-  const selectedLog = logs.find(l => l._id === selectedId) ?? null;
+  const alertNavigation = location.state as {
+    taskLogId?: string;
+    alertTitle?: string;
+    alertStatus?: string;
+  } | null;
+  const alertTaskLogId = alertNavigation?.taskLogId;
+  const matchingAlertLogs = logs
+    .filter((log) => {
+      if (log.task?.title !== alertNavigation?.alertTitle) return false;
+      if (alertNavigation.alertStatus === 'maintenance completed') return log.status === 'Completed';
+      if (alertNavigation.alertStatus === 'task missed') return log.status === 'Missed';
+      if (
+        alertNavigation.alertStatus === 'maintenance scheduled' ||
+        alertNavigation.alertStatus === 'overdue for maintenance'
+      ) {
+        return log.status === 'Pending' || log.status === 'In Progress';
+      }
+      return true;
+    })
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+  const selectedLog =
+    logs.find((log) => log._id === selectedId) ?? null;
+  const highlightedTaskLogId =
+    logs.find((log) => log._id === alertTaskLogId)?._id ??
+    matchingAlertLogs[0]?._id ??
+    null;
+
+  const closeTaskDetails = () => {
+    setSelectedId(null);
+    if (alertNavigation) {
+      navigate(`${location.pathname}${location.search}${location.hash}`, {
+        replace: true,
+        state: null,
+      });
+    }
+  };
 
   const handleGenerateClick = async () => {
     const result = await handleGenerate();
@@ -41,7 +79,10 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
     const matchesFrequency = frequencyFilter === 'All' ? true : log.task?.frequency === frequencyFilter;
     const matchesArea = areaFilter === 'All Areas' ? true : log.task?.area === areaFilter;
     const matchesSearch = log.task?.title?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesFrequency && matchesArea && matchesSearch;
+    return (
+      (matchesStatus && matchesFrequency && matchesArea && matchesSearch) ||
+      log._id === highlightedTaskLogId
+    );
   });
 
   return (
@@ -87,6 +128,7 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
 
               <TaskListSection
                 tasks={filteredLogs}
+                highlightedTaskLogId={highlightedTaskLogId}
                 onViewDetails={(log) => setSelectedId(log._id)}
                 isLoading={isLoading}
               />
@@ -98,7 +140,7 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
       </main>
 
       {selectedLog && (
-        <TaskLogDetailModal log={selectedLog} onClose={() => setSelectedId(null)} />
+        <TaskLogDetailModal log={selectedLog} onClose={closeTaskDetails} />
       )}
     </div>
   );

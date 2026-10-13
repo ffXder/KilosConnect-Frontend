@@ -1,17 +1,20 @@
 import { Bell, AlertCircle, Clock, WifiOff, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export interface AlertItem {
+  id?: string;
   asset?: string;
   task?: string;
   status: string;
   severity: "critical" | "warning" | "info" | "success";
+  source?: "incident" | "task";
 }
 
 const defaultAlerts: AlertItem[] = [
-  { asset: "Barbells", status: "needs excessive repairs", severity: "critical" },
-  { asset: "Squat Rack", status: "overdue for maintenance", severity: "warning" },
-  { asset: "Cable Machines", status: "scheduled for today", severity: "info" },
-  { asset: "Dumbbells", status: "maintenance completed", severity: "success" },
+  { asset: "Barbells", status: "needs excessive repairs", severity: "critical", source: "incident" },
+  { task: "Squat Rack", status: "overdue for maintenance", severity: "warning", source: "task" },
+  { task: "Cable Machines", status: "scheduled for today", severity: "info", source: "task" },
+  { task: "Dumbbells", status: "maintenance completed", severity: "success", source: "task" },
 ];
 
 const severityConfig: Record<string, { color: string; icon: React.ReactNode; bg: string; border: string }> = {
@@ -52,6 +55,8 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
   title = "Recent Alerts",
   subtitle = "Asset maintenance notifications",
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700 dark:shadow-none">
       <div className="flex items-center gap-3 mb-1">
@@ -67,22 +72,37 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
       <div className="flex-1 mt-6 space-y-3">
         {alerts.map((alert, idx) => {
           const cfg = severityConfig[alert.severity] || severityConfig.info;
+          const source = alert.source ?? (alert.task ? "task" : "incident");
+          const destination = source === "task" ? "/task-monitor/live-monitor" : "/incident-report";
+          const alertTitle = alert.asset ?? alert.task ?? "Maintenance update";
+          const recordState = {
+            ...(alert.id && source === "task" ? { taskLogId: alert.id } : {}),
+            ...(alert.id && source === "incident" ? { incidentId: alert.id } : {}),
+            alertSource: source,
+            alertTitle,
+            alertStatus: alert.status,
+            alertSeverity: alert.severity,
+          };
+
           return (
-            <div
-              key={idx}
-              className={`flex items-center gap-4 p-4 rounded-xl ${cfg.bg} border-l-4 ${cfg.border}`}
+            <button
+              type="button"
+              key={alert.id ?? idx}
+              onClick={() => navigate(destination, { state: recordState })}
+              aria-label={`Open ${alertTitle} ${source === "task" ? "maintenance task" : "incident report"}`}
+              className={`flex w-full items-center gap-4 rounded-xl border-l-4 p-4 text-left transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C] focus-visible:ring-offset-2 ${cfg.bg} ${cfg.border}`}
             >
               <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${cfg.bg}`}>
                 {cfg.icon}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-sm text-gray-800">
-                  {alert.asset ?? alert.task ?? "Maintenance update"}
+                  {alertTitle}
                 </div>
                 <div className="text-[12px] text-gray-500 capitalize">{alert.status}</div>
               </div>
               <div className={`w-2.5 h-2.5 rounded-full ${cfg.color} shrink-0`} />
-            </div>
+            </button>
           );
         })}
         <div className="text-center pt-3">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { TaskLog } from '../../../types/task';
 import {
   Clock,
@@ -16,6 +16,7 @@ import { formatDate } from '../../../utils/formatter';
 
 interface TaskListProps {
   tasks: TaskLog[];
+  highlightedTaskLogId?: string | null;
   onViewDetails: (taskLog: TaskLog) => void;
   isLoading?: boolean;
   currentPage?: number;
@@ -25,12 +26,21 @@ interface TaskListProps {
 
 const TaskListSection: React.FC<TaskListProps> = ({
   tasks,
+  highlightedTaskLogId,
   onViewDetails,
   isLoading,
   currentPage = 1,
   totalPages = 1,
   onPageChange
 }) => {
+
+  useEffect(() => {
+    if (!highlightedTaskLogId || isLoading) return;
+    document.getElementById(`task-log-${highlightedTaskLogId}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [highlightedTaskLogId, isLoading]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -99,8 +109,13 @@ const TaskListSection: React.FC<TaskListProps> = ({
                 return (
                   <tr
                     key={log._id}
+                    id={`task-log-${log._id}`}
                     onClick={() => onViewDetails(log)}
-                    className="hover:bg-slate-50/80 transition-colors group cursor-pointer select-none dark:hover:bg-slate-800/60"
+                    className={`hover:bg-slate-50/80 transition-colors group cursor-pointer select-none dark:hover:bg-slate-800/60 ${
+                      log._id === highlightedTaskLogId
+                        ? 'bg-emerald-100 shadow-[inset_4px_0_0_#10b981] dark:bg-emerald-900/50 dark:shadow-[inset_4px_0_0_#34d399]'
+                        : ''
+                    }`}
                   >
                     {/* Task Title & Description */}
                     <td className="py-4 px-4 md:px-6 max-w-xs">

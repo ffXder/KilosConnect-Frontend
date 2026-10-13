@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TriangleAlert } from 'lucide-react';
 
 // COMPONENTS
@@ -15,6 +16,7 @@ import { DeleteConfirmModal } from '../../../components/DeleteConfirmModal'; // 
 // HOOKS AND FORMATTER
 import { useAuth } from '../../../hooks/useAuth';
 import { useIncidentReports } from '../../../hooks/useIncident';
+import { useAssets } from '../../../hooks/useAssets';
 import { useUrlFilters } from '../../../hooks/useUrlFilters';
 import type { IncidentReport, NewIncidentReport } from '../../../types/incident';
 import { getDateThreshold } from '../../../utils/dateHelper';
@@ -28,6 +30,8 @@ const COLORS = {
 };
 
 export const IncidentReportPage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { getParam, updateParam, updateParams, clearAllFilters } = useUrlFilters();
 
   // Read State directly from URL
@@ -71,7 +75,41 @@ export const IncidentReportPage: React.FC = () => {
   const setCustomEnd = (val: string) => updateParam('endDate', val, ['']);
 
   const { reports, loading, error, handleCreate, handleUpdate, handleArchive } = useIncidentReports();
+  const { assets } = useAssets();
   const incidents = reports ?? [];
+  const alertNavigation = location.state as {
+    incidentId?: string;
+    alertTitle?: string;
+    alertSeverity?: 'critical' | 'warning' | 'info' | 'success';
+  } | null;
+  const alertIncidentId = alertNavigation?.incidentId;
+  const alertIncident = alertIncidentId
+    ? incidents.find((item) => item._id === alertIncidentId) ?? null
+    : incidents
+        .filter((incident) => {
+          const matchesTitle =
+            incident.title === alertNavigation?.alertTitle ||
+            incident.area === alertNavigation?.alertTitle ||
+            incident.affectedAssets.some((assetId) =>
+              assets.some((asset) => asset._id === assetId && asset.name === alertNavigation?.alertTitle)
+            );
+          const matchesSeverity =
+            alertNavigation?.alertSeverity === 'critical'
+              ? incident.severity === 'Critical' || incident.severity === 'Urgent'
+              : alertNavigation?.alertSeverity === 'warning'
+                ? incident.severity !== 'Critical' && incident.severity !== 'Urgent'
+                : true;
+          return matchesTitle && matchesSeverity && incident.status !== 'Resolved';
+        })
+        .sort((a, b) => Date.parse(b.dateAndTime) - Date.parse(a.dateAndTime))[0] ?? null;
+
+  React.useEffect(() => {
+    if (!alertIncident || loading) return;
+    document.getElementById(`incident-${alertIncident._id}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [alertIncident, loading]);
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
     await handleCreate(newIncident);
@@ -130,7 +168,10 @@ export const IncidentReportPage: React.FC = () => {
       ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
       : true;
 
-    return matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd;
+    return (
+      (matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd) ||
+      incident._id === alertIncident?._id
+    );
   });
 
   // Analytics Computation
@@ -222,6 +263,7 @@ export const IncidentReportPage: React.FC = () => {
           {/* Incident Table */}
           <IncidentTable
             incidents={filteredIncidents}
+            highlightedIncidentId={alertIncident?._id}
             loading={loading}
             onSelectIncident={handleItemClick}
             onViewIncident={handleViewDetails}
@@ -244,7 +286,15 @@ export const IncidentReportPage: React.FC = () => {
 
           <IncidentDetailedModal
             isOpen={isDetailedModalOpen}
-            onClose={() => setIsDetailedModalOpen(false)}
+            onClose={() => {
+              setIsDetailedModalOpen(false);
+              if (alertNavigation) {
+                navigate(`${location.pathname}${location.search}${location.hash}`, {
+                  replace: true,
+                  state: null,
+                });
+              }
+            }}
             incident={selectedIncident}
           />
 

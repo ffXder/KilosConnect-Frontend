@@ -5,6 +5,7 @@ import IncidentRow from './IncidentRow';
 
 interface IncidentTableProps {
   incidents: IncidentReport[];
+  highlightedIncidentId?: string | null;
   loading: boolean;
   onSelectIncident: (incident: IncidentReport) => void;
   onViewIncident: (incident: IncidentReport) => void;
@@ -13,6 +14,7 @@ interface IncidentTableProps {
 
 const IncidentTable: React.FC<IncidentTableProps> = ({
   incidents,
+  highlightedIncidentId,
   loading,
   onSelectIncident,
   onViewIncident,
@@ -48,6 +50,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
               <IncidentRow
                 key={incident._id}
                 incident={incident}
+                isHighlighted={incident._id === highlightedIncidentId}
                 onClick={onSelectIncident}
                 onViewClick={onViewIncident}
                 onDeleteClick={onDeleteIncident}
