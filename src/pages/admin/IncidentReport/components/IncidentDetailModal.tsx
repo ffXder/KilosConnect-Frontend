@@ -148,27 +148,23 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
             </div>
           </div>
 
-          {/* New Section: Affected Assets Details */}
-          {incident.affectedAssets && incident.affectedAssets.length > 0 && (
+          {/* Affected Asset Detail */}
+          {incident.asset && (
             <div className="mt-8 pt-8 border-t border-gray-100">
               <div className="flex items-center gap-2 text-gray-400 mb-4">
                 <Package size={16} />
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Affected Assets Detail</h4>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Affected Asset</h4>
               </div>
-              <div className="grid grid-cols-1 gap-3">
-                {incident.affectedAssets.map((asset: any) => (
-                  <div key={asset._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-[#11382C]/20 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-xl bg-[#11382C]/5 flex items-center justify-center text-[#11382C]">
-                        <Package size={20} />
-                      </div>
-                      <div>
-                        <p className="font-bold text-gray-800 text-sm">{asset.name}</p>
-                        <p className="text-[10px] font-mono text-gray-400">{asset.assetId}</p>
-                      </div>
-                    </div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-[#11382C]/20 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-[#11382C]/5 flex items-center justify-center text-[#11382C]">
+                    <Package size={20} />
                   </div>
-                ))}
+                  <div>
+                    <p className="font-bold text-gray-800 text-sm">{incident.asset.name}</p>
+                    <p className="text-[10px] font-mono text-gray-400">{incident.asset.assetId}</p>
+                  </div>
+                </div>
               </div>
             </div>
           )}
