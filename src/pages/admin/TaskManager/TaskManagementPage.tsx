@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
-import TaskFilterSection from './TaskFilterSection';
+import TaskFilterSection, { type SortDirection, type TaskSortField } from './TaskFilterSection';
 import TaskManagementSection from './TaskTableSection';
 import AddTaskModal from './AddTaskModals';
 import { AreaQrModal } from './AreaQRModal';
@@ -16,6 +16,14 @@ const AREAS = [
   "Multiple Area", "Front Desk Area", "Outdoor Area", "CR", "1st Floor", "2nd Floor"
 ];
 
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+const getDaySortValue = (dayType: Task['dayType']): number => {
+  if (typeof dayType === 'number') return dayType;
+  if (dayType === null) return 32;
+  return 33 + WEEKDAYS.indexOf(dayType);
+};
+
 export const TaskManagementPage: React.FC = () => {
   const { tasks, loading, handleCreate, handleUpdate, handleArchive } = useTasks();
   const { role } = useAuth();
@@ -28,6 +36,10 @@ export const TaskManagementPage: React.FC = () => {
   const searchTerm = searchParams.get('q') ?? '';
   const selectedFrequency = searchParams.get('frequency') ?? 'All';
   const selectedArea = searchParams.get('area') ?? 'All Areas';
+  const sortByParam = searchParams.get('sortBy');
+  const sortBy: TaskSortField =
+    sortByParam === 'name' || sortByParam === 'day' ? sortByParam : 'date';
+  const sortDirection: SortDirection = searchParams.get('sortDirection') === 'desc' ? 'desc' : 'asc';
 
   const updateParam = (key: string, value: string) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -44,6 +56,18 @@ export const TaskManagementPage: React.FC = () => {
     const matchesArea = selectedArea === 'All Areas' ? true : task.area === selectedArea;
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFrequency && matchesArea && matchesSearch;
+  });
+
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    let comparison = 0;
+    if (sortBy === 'date') {
+      comparison = Date.parse(a.createdAt) - Date.parse(b.createdAt);
+    } else if (sortBy === 'name') {
+      comparison = a.title.localeCompare(b.title);
+    } else {
+      comparison = getDaySortValue(a.dayType) - getDaySortValue(b.dayType);
+    }
+    return sortDirection === 'asc' ? comparison : -comparison;
   });
 
   return (
@@ -74,6 +98,10 @@ export const TaskManagementPage: React.FC = () => {
             hideStatus={true}
             searchTerm={searchTerm}
             setSearchTerm={(val) => updateParam('q', val)}
+            sortBy={sortBy}
+            setSortBy={(val) => updateParam('sortBy', val)}
+            sortDirection={sortDirection}
+            setSortDirection={(val) => updateParam('sortDirection', val)}
             frequencyFilter={selectedFrequency}
             setFrequencyFilter={(val) => updateParam('frequency', val)}
             areaFilter={selectedArea}
@@ -83,7 +111,7 @@ export const TaskManagementPage: React.FC = () => {
           />
 
           <TaskManagementSection 
-            tasks={filteredTasks} 
+            tasks={sortedTasks} 
             onArchive={handleArchive} 
             loading={loading} 
             onEdit={(t) => { setEditingTask(t); setIsModalOpen(true); }} 

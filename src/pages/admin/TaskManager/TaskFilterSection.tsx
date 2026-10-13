@@ -1,5 +1,8 @@
 import React from 'react';
-import { Plus, Search, ChevronDown, Layers} from 'lucide-react';
+import { Plus, Search, ChevronDown, ArrowDown, ArrowUp } from 'lucide-react';
+
+export type TaskSortField = 'date' | 'name' | 'day';
+export type SortDirection = 'asc' | 'desc';
 
 interface TaskFilterProps {
   onAddTask?: () => void; // Made optional to fix the TypeScript error
@@ -14,6 +17,10 @@ interface TaskFilterProps {
   setAreaFilter: (val: string) => void;
   searchTerm: string;
   setSearchTerm: (val: string) => void;
+  sortBy: TaskSortField;
+  setSortBy: (val: TaskSortField) => void;
+  sortDirection: SortDirection;
+  setSortDirection: (val: SortDirection) => void;
   hideStatus?: boolean;
 }
 
@@ -28,6 +35,10 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   setAreaFilter, 
   searchTerm, 
   setSearchTerm,
+  sortBy,
+  setSortBy,
+  sortDirection,
+  setSortDirection,
   hideStatus = false,
 }) => {
   const statusOptions = [
@@ -151,6 +162,39 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <ChevronDown size={16} />
             </div>
           </div>
+        </div>
+
+        <div className="h-6 w-px bg-gray-200 dark:bg-slate-600" />
+
+        <div className="flex items-center gap-3">
+          <label htmlFor="task-sort-by" className="text-[11px] font-bold uppercase text-[#94a3b8] tracking-widest whitespace-nowrap">
+            Sort by:
+          </label>
+          <div className="relative">
+            <select
+              id="task-sort-by"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as TaskSortField)}
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300"
+            >
+              <option value="date">Date</option>
+              <option value="name">Name</option>
+              <option value="day">Day</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#94a3b8]">
+              <ChevronDown size={16} />
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
+            aria-label={`Change sort direction, currently ${sortDirection === 'asc' ? 'ascending' : 'descending'}`}
+            title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+            className="flex items-center gap-2 border border-[#e2e8f0] bg-white text-[#1e293b] text-[13px] font-semibold py-2.5 px-3 rounded-[12px] hover:border-[#cbd5e1] focus:outline-none focus:ring-1 focus:ring-[#113129] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300"
+          >
+            {sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
+            <span>{sortDirection === 'asc' ? 'Ascending' : 'Descending'}</span>
+          </button>
         </div>
       </div>
     </div>
