@@ -32,7 +32,7 @@ export interface DashboardAlert {
   task?: string;
   status: string;
   severity: 'critical' | 'warning' | 'info' | 'success';
-  source: 'incident' | 'task';
+  source?: 'incident' | 'task';
 }
 
 export interface DashboardReplacement {
