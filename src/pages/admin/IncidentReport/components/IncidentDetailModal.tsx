@@ -1,16 +1,17 @@
-import React from 'react';
-import { 
-  X, 
-  MapPin, 
-  User, 
-  Calendar, 
-  AlertCircle, 
-  Clock, 
-  CheckCircle2, 
-  BarChart3,
-  FileText,
-  Package, 
-  Activity 
+import React, { useEffect, useRef } from 'react';
+import {
+  X,
+  MapPin,
+  User,
+  CalendarClock,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  AlertOctagon,
+  Info,
+  Package,
+  ClipboardCheck,
 } from 'lucide-react';
 import type { IncidentReport } from '../../../../types/incident';
 import { formatDateTime } from '../../../../utils/formatter';
@@ -19,165 +20,219 @@ interface IncidentDetailedModalProps {
   isOpen: boolean;
   onClose: () => void;
   incident: IncidentReport | null;
+  onResolve?: (incident: IncidentReport) => void;
 }
 
-const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, onClose, incident }) => {
+type AffectedAsset = { _id: string; assetId: string; name: string };
+
+const Field: React.FC<{
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+}> = ({ icon, label, children }) => (
+  <div className="min-w-0">
+    <dt className="flex items-center gap-1.5 text-xs font-medium text-gray-500 mb-1.5">
+      {icon}
+      {label}
+    </dt>
+    <dd className="text-[15px] font-medium text-gray-900 break-words">{children}</dd>
+  </div>
+);
+
+const Heading: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = 'text-gray-900',
+}) => <h3 className={`text-sm font-semibold mb-3 ${className}`}>{children}</h3>;
+
+const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
+  isOpen,
+  onClose,
+  incident,
+  onResolve,
+}) => {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen || !incident) return null;
 
   const getStatusConfig = () => {
     switch (incident.status) {
-      case 'Open': 
-        return { icon: <AlertCircle size={20} />, color: 'bg-red-50 text-red-600 border-red-100', label: 'Pending' };
-      case 'In Progress': 
-        return { icon: <Clock size={20} />, color: 'bg-blue-50 text-blue-600 border-blue-100', label: 'In Progress' };
-      case 'Resolved': 
-        return { icon: <CheckCircle2 size={20} />, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', label: 'Resolved' };
+      case 'Open':
+        return { icon: <AlertCircle size={14} />, color: 'bg-red-50 text-red-700', label: 'Pending' };
+      case 'In Progress':
+        return { icon: <Clock size={14} />, color: 'bg-blue-50 text-blue-700', label: 'In progress' };
+      case 'Resolved':
+        return { icon: <CheckCircle2 size={14} />, color: 'bg-emerald-50 text-emerald-700', label: 'Resolved' };
       default:
-        return { icon: <AlertCircle size={20} />, color: 'bg-gray-50 text-gray-600 border-gray-100', label: 'Unknown' };
+        return { icon: <AlertCircle size={14} />, color: 'bg-gray-100 text-gray-600', label: 'Unknown' };
     }
   };
 
-  const getSeverityStyle = (severity: string) => {
-    if (severity.includes('Critical') || severity.includes('Urgent') || severity.includes('High')) return 'text-red-600 bg-red-50';
-    if (severity.includes('Medium')) return 'text-orange-600 bg-orange-50';
-    return 'text-blue-600 bg-blue-50';
-  };
-
-  // Helper to color-code asset condition
-  const getConditionStyle = (condition: string) => {
-    switch (condition) {
-      case 'Good Condition': return 'text-emerald-600 bg-emerald-50 border-emerald-100';
-      case 'Needs Repair': return 'text-orange-600 bg-orange-50 border-orange-100';
-      case 'Needs Replacement': return 'text-red-600 bg-red-50 border-red-100';
-      case 'Under Repair': return 'text-blue-600 bg-blue-50 border-blue-100';
-      default: return 'text-gray-600 bg-gray-50 border-gray-100';
+  const getSeverityConfig = (severity: string) => {
+    if (/Critical|Urgent|High/.test(severity)) {
+      return { icon: <AlertOctagon size={14} />, color: 'bg-red-50 text-red-700' };
     }
+    if (severity.includes('Medium')) {
+      return { icon: <AlertTriangle size={14} />, color: 'bg-orange-50 text-orange-700' };
+    }
+    return { icon: <Info size={14} />, color: 'bg-blue-50 text-blue-700' };
   };
 
   const status = getStatusConfig();
+  const severity = getSeverityConfig(incident.severity);
+  const isResolved = incident.status === 'Resolved';
+
+  const assets: AffectedAsset[] = Array.isArray(incident.asset)
+    ? incident.asset
+    : incident.asset
+    ? [incident.asset as unknown as AffectedAsset]
+    : [];
+
+  const resolutionNote = incident.resolutionNote;
+
+  const reporter = incident.reportedBy
+    ? `${incident.reportedBy.firstName} ${incident.reportedBy.lastName}`
+    : incident.reportedName || '—';
+
+  const chip = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-3xl rounded-[24px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
-        {/* Header */}
-        <div className="bg-[#11382C] p-8 text-white flex justify-between items-start shrink-0">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full w-fit">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">Incident Report</span>
-              <span className="text-[10px] text-white/40">•</span>
-              <span className="text-[10px] font-mono text-white/80">ID: {incident.incidentId}</span>
-            </div>
-            <h2 className="text-3xl font-bold leading-tight">{incident.title}</h2>
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="incident-title"
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
+      >
+        {/* Header: just the ID and the title */}
+        <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+          <div className="min-w-0">
+            <p className="text-xs text-white/60 mb-2">
+              Incident ID: <span className="font-mono">{incident.incidentId}</span>
+            </p>
+            <h2
+              id="incident-title"
+              className="text-xl sm:text-2xl font-bold leading-snug break-words"
+            >
+              {incident.title}
+            </h2>
           </div>
-          <button onClick={onClose} className="hover:bg-white/10 p-2 rounded-xl transition-colors">
-            <X size={24} />
+          <button
+            ref={closeRef}
+            onClick={onClose}
+            aria-label="Close"
+            className="shrink-0 -mr-2 -mt-2 p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            <X size={20} />
           </button>
         </div>
 
-        {/* Scrollable Body */}
-        <div className="p-8 overflow-y-auto custom-scrollbar">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-8">
-              <section>
-                <div className="flex items-center gap-2 text-gray-400 mb-3">
-                  <FileText size={16} />
-                  <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Description</h4>
-                </div>
-                <p className="text-gray-600 leading-relaxed bg-gray-50 p-5 rounded-2xl border border-gray-100 italic">
-                  {incident.description || "No description provided."}
-                </p>
-              </section>
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-8 sm:px-8 space-y-8">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+            <Field icon={<AlertCircle size={14} />} label="Status">
+              <span className={`${chip} ${status.color}`}>
+                {status.icon}
+                {status.label}
+              </span>
+            </Field>
+            <Field icon={<Info size={14} />} label="Severity">
+              <span className={`${chip} ${severity.color}`}>
+                {severity.icon}
+                {incident.severity}
+              </span>
+            </Field>
+            <Field icon={<MapPin size={14} />} label="Location">
+              {incident.area}
+            </Field>
+            <Field icon={<User size={14} />} label="Reported by">
+              {reporter}
+            </Field>
+            <Field icon={<CalendarClock size={14} />} label="Date reported">
+              {formatDateTime(incident.dateAndTime)}
+            </Field>
+          </dl>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
-                    <BarChart3 size={14} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Severity</span>
-                  </div>
-                  <span className={`px-3 py-1 rounded-lg text-xs font-bold ${getSeverityStyle(incident.severity)}`}>
-                    {incident.severity}
-                  </span>
-                </div>
+          {/* Description */}
+          <section className="pt-8 border-t border-gray-100">
+            <Heading>Description</Heading>
+            <p className="text-[15px] text-gray-600 leading-7 whitespace-pre-wrap break-words">
+              {incident.description || 'No description provided.'}
+            </p>
+          </section>
 
-                <div className="p-4 rounded-2xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
-                    {status.icon}
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Status</span>
-                  </div>
-                  <span className={`px-3 py-1 rounded-lg text-xs font-bold border ${status.color}`}>
-                    {status.label}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Metadata */}
-            <div className="space-y-6 bg-[#F8FAFC] p-6 rounded-3xl border border-gray-100">
-              <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <MapPin size={20} className="text-[#11382C]" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Location</p>
-                  <p className="font-bold text-gray-800">{incident.area}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <User size={20} className="text-[#11382C]" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reported By</p>
-                  <p className="font-bold text-gray-800">
-                    {incident.reportedBy?.firstName} {incident.reportedBy?.lastName}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <Calendar size={20} className="text-[#11382C]" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Date Reported</p>
-                  <p className="font-bold text-gray-800">{formatDateTime(incident.dateAndTime)}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Affected Asset Detail */}
-          {incident.asset && (
-            <div className="mt-8 pt-8 border-t border-gray-100">
-              <div className="flex items-center gap-2 text-gray-400 mb-4">
-                <Package size={16} />
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Affected Asset</h4>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-[#11382C]/20 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-[#11382C]/5 flex items-center justify-center text-[#11382C]">
-                    <Package size={20} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-800 text-sm">{incident.asset.name}</p>
-                    <p className="text-[10px] font-mono text-gray-400">{incident.asset.assetId}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Affected assets */}
+          {assets.length > 0 && (
+            <section className="pt-8 border-t border-gray-100">
+              <Heading>
+                {assets.length > 1 ? `Affected assets (${assets.length})` : 'Affected asset'}
+              </Heading>
+              <ul className="divide-y divide-gray-100">
+                {assets.map((a) => (
+                  <li
+                    key={a._id ?? a.assetId}
+                    className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
+                  >
+                    <Package size={18} className="shrink-0 text-gray-400" />
+                    <p className="min-w-0 flex-1 text-[15px] font-medium text-gray-900 truncate">
+                      {a.name}
+                    </p>
+                    <span className="shrink-0 text-xs font-mono text-gray-500">{a.assetId}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
 
-          {/* Footer Action */}
-          <div className="mt-10 pt-6 border-t border-gray-100 flex justify-end">
-            <button 
-              onClick={onClose}
-              className="px-8 py-3 bg-[#11382C] text-white rounded-xl font-bold shadow-lg hover:bg-[#0a2a21] transition-all active:scale-95"
+          {/* Resolution note when resolved */}
+          {isResolved && resolutionNote && (
+            <section className="bg-emerald-50/60 rounded-xl p-5">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-emerald-800 mb-2">
+                <ClipboardCheck size={16} />
+                Resolution notes
+              </h3>
+              <p className="text-[15px] text-gray-700 leading-7 whitespace-pre-wrap break-words">
+                {resolutionNote}
+              </p>
+            </section>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 bg-white flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40"
+          >
+            Close
+          </button>
+          {!isResolved && onResolve && (
+            <button
+              onClick={() => onResolve(incident)}
+              className="px-5 py-2.5 bg-[#11382C] text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-[#0a2a21] transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 focus-visible:ring-offset-2"
             >
-              Close Details
+              <CheckCircle2 size={18} />
+              Resolve incident
             </button>
-          </div>
+          )}
         </div>
       </div>
     </div>
