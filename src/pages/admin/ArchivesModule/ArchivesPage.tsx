@@ -11,6 +11,7 @@ export const ArchivesPage: React.FC = () => {
   const {
     archives,
     stats,
+    pagination,
     loading,
     fetchArchives,
     fetchStats,
@@ -19,6 +20,7 @@ export const ArchivesPage: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All Types");
+  const [page, setPage] = useState(1);
 
   const [viewItem, setViewItem] = useState<ArchiveRecord | null>(null);
   const [restoreItem, setRestoreItem] = useState<ArchiveRecord | null>(null);
@@ -34,8 +36,19 @@ export const ArchivesPage: React.FC = () => {
     fetchArchives({
       search: searchQuery || undefined,
       moduleType,
+      page,
     });
-  }, [searchQuery, selectedType, fetchArchives]);
+  }, [searchQuery, selectedType, page, fetchArchives]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setPage(1);
+  };
+
+  const handleTypeChange = (value: string) => {
+    setSelectedType(value);
+    setPage(1);
+  };
 
   // Helper to resolve title accurately based on MongoDB payload
   const getItemTitle = (item: ArchiveRecord | null) => {
@@ -57,13 +70,14 @@ export const ArchivesPage: React.FC = () => {
 
     console.log("Attempting restore for target ID:", targetId);
 
-    const success = await unarchive(targetId);
+    const moduleType = selectedType === "All Types" ? undefined : selectedType;
+    const success = await unarchive(targetId, {
+      search: searchQuery || undefined,
+      moduleType,
+      page,
+    });
     if (success) {
       setRestoreItem(null);
-      // Refresh list & stats after successful restore
-      const moduleType = selectedType === "All Types" ? undefined : selectedType;
-      fetchArchives({ search: searchQuery || undefined, moduleType });
-      fetchStats();
     } else {
       console.error("Failed to restore record. Check network tab for API path.");
     }
@@ -118,15 +132,17 @@ export const ArchivesPage: React.FC = () => {
           {/* Filters & Information */}
           <ArchivesInfoSection
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSearchQuery={handleSearchChange}
             selectedType={selectedType}
-            setSelectedType={setSelectedType}
+            setSelectedType={handleTypeChange}
           />
 
           {/* Table Container */}
           <TableSection
             items={tableData}
+            pagination={pagination}
             isLoading={loading}
+            onPageChange={setPage}
             onView={(item) => setViewItem(item)}
             onRestore={(item) => setRestoreItem(item)}
           />

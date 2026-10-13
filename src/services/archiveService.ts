@@ -1,10 +1,25 @@
 import type { ArchiveRecord, ArchiveStats } from "../types/archive";
 import { apiRequest } from "./authService";
 
+export interface ArchivePagination {
+    totalArchives: number;
+    totalPages: number;
+    currentPage: number;
+}
+
+export interface ArchiveApiResponse {
+    archives: ArchiveRecord[];
+    pagination: ArchivePagination;
+}
+
 // GET ALL
-export const getAllArchives = async (params?: { moduleType?: string; search?: string }): Promise<ArchiveRecord[]> => {
-    const query = params ? `?${new URLSearchParams(params as Record<string, string>).toString()}` : '';
-    const res = await apiRequest(`/archives`, { method: 'GET' });
+export const getAllArchives = async (params?: { moduleType?: string; search?: string; page?: number }): Promise<ArchiveApiResponse> => {
+    const queryParams = new URLSearchParams();
+    if (params?.moduleType) queryParams.set("moduleType", params.moduleType);
+    if (params?.search) queryParams.set("search", params.search);
+    if (params?.page) queryParams.set("page", String(params.page));
+    const query = queryParams.toString();
+    const res = await apiRequest(`/archives${query ? `?${query}` : ""}`, { method: 'GET' });
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Failed to fetch archives');
