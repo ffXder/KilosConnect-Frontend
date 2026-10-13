@@ -74,9 +74,7 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
   const renderCard = (stat: (typeof topStats)[number] | (typeof bottomStats)[number]) => {
     const { label, count, cardClass, iconClass, icon: Icon } = stat;
     const textClass = "textClass" in stat ? stat.textClass : undefined;
-    const labelClass = label === "Decommissioned"
-      ? "inline-block origin-left scale-x-75 whitespace-nowrap"
-      : "truncate";
+    const labelClass = "truncate";
 
     return (
       <div

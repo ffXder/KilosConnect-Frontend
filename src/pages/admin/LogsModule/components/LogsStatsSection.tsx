@@ -78,12 +78,9 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
   );
 
   return (
-    <div className="space-y-2 md:space-y-3 lg:space-y-5 w-full">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3 lg:gap-5">
-        {categories.slice(0, 3).map(renderCard)}
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 lg:gap-5">
-        {categories.slice(3).map(renderCard)}
+    <div className="w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2 md:gap-3 lg:gap-5">
+        {categories.map(renderCard)}
       </div>
     </div>
   );
