@@ -27,20 +27,20 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
   const getStatusConfig = () => {
     switch (incident.status) {
       case 'Open': 
-        return { icon: <AlertCircle size={20} />, color: 'bg-red-50 text-red-600 border-red-100', label: 'Pending' };
+        return { icon: <AlertCircle size={20} />, color: 'bg-red-50 text-red-600 border-red-100 dark:bg-red-950/50 dark:text-red-300 dark:border-red-900', label: 'Pending' };
       case 'In Progress': 
-        return { icon: <Clock size={20} />, color: 'bg-blue-50 text-blue-600 border-blue-100', label: 'In Progress' };
+        return { icon: <Clock size={20} />, color: 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-900', label: 'In Progress' };
       case 'Resolved': 
-        return { icon: <CheckCircle2 size={20} />, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', label: 'Resolved' };
+        return { icon: <CheckCircle2 size={20} />, color: 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-900', label: 'Resolved' };
       default:
-        return { icon: <AlertCircle size={20} />, color: 'bg-gray-50 text-gray-600 border-gray-100', label: 'Unknown' };
+        return { icon: <AlertCircle size={20} />, color: 'bg-gray-50 text-gray-600 border-gray-100 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700', label: 'Unknown' };
     }
   };
 
   const getSeverityStyle = (severity: string) => {
-    if (severity.includes('Critical') || severity.includes('Urgent') || severity.includes('High')) return 'text-red-600 bg-red-50';
-    if (severity.includes('Medium')) return 'text-orange-600 bg-orange-50';
-    return 'text-blue-600 bg-blue-50';
+    if (severity.includes('Critical') || severity.includes('Urgent') || severity.includes('High')) return 'text-red-600 bg-red-50 dark:text-red-300 dark:bg-red-950/50';
+    if (severity.includes('Medium')) return 'text-orange-600 bg-orange-50 dark:text-orange-300 dark:bg-orange-950/50';
+    return 'text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-950/50';
   };
 
   // Helper to color-code asset condition
@@ -57,8 +57,8 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
   const status = getStatusConfig();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-3xl rounded-[24px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-2xl animate-in fade-in zoom-in duration-200 dark:border-slate-700 dark:bg-slate-900">
         {/* Header */}
         <div className="bg-[#11382C] p-8 text-white flex justify-between items-start shrink-0">
           <div className="space-y-2">
@@ -75,23 +75,23 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
         </div>
 
         {/* Scrollable Body */}
-        <div className="p-8 overflow-y-auto custom-scrollbar">
+        <div className="overflow-y-auto p-8 custom-scrollbar">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left Column */}
             <div className="space-y-8">
               <section>
-                <div className="flex items-center gap-2 text-gray-400 mb-3">
+                <div className="mb-3 flex items-center gap-2 text-gray-400 dark:text-slate-400">
                   <FileText size={16} />
                   <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Description</h4>
                 </div>
-                <p className="text-gray-600 leading-relaxed bg-gray-50 p-5 rounded-2xl border border-gray-100 italic">
+                <p className="rounded-2xl border border-gray-100 bg-gray-50 p-5 leading-relaxed text-gray-600 italic dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                   {incident.description || "No description provided."}
                 </p>
               </section>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <div className="rounded-2xl border border-gray-100 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                  <div className="mb-2 flex items-center gap-2 text-gray-400 dark:text-slate-400">
                     <BarChart3 size={14} />
                     <span className="text-[10px] font-bold uppercase tracking-wider">Severity</span>
                   </div>
@@ -100,8 +100,8 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <div className="rounded-2xl border border-gray-100 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                  <div className="mb-2 flex items-center gap-2 text-gray-400 dark:text-slate-400">
                     {status.icon}
                     <span className="text-[10px] font-bold uppercase tracking-wider">Status</span>
                   </div>
@@ -113,36 +113,36 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
             </div>
 
             {/* Right Column: Metadata */}
-            <div className="space-y-6 bg-[#F8FAFC] p-6 rounded-3xl border border-gray-100">
+            <div className="space-y-6 rounded-3xl border border-gray-100 bg-[#F8FAFC] p-6 dark:border-slate-700 dark:bg-slate-800/70">
               <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <MapPin size={20} className="text-[#11382C]" />
+                <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm dark:border-slate-600 dark:bg-slate-900">
+                  <MapPin size={20} className="text-[#11382C] dark:text-emerald-300" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Location</p>
-                  <p className="font-bold text-gray-800">{incident.area}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-400">Location</p>
+                  <p className="font-bold text-gray-800 dark:text-slate-100">{incident.area}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <User size={20} className="text-[#11382C]" />
+                <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm dark:border-slate-600 dark:bg-slate-900">
+                  <User size={20} className="text-[#11382C] dark:text-emerald-300" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reported By</p>
-                  <p className="font-bold text-gray-800">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-400">Reported By</p>
+                  <p className="font-bold text-gray-800 dark:text-slate-100">
                     {incident.reportedBy?.firstName} {incident.reportedBy?.lastName}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                  <Calendar size={20} className="text-[#11382C]" />
+                <div className="rounded-xl border border-gray-100 bg-white p-3 shadow-sm dark:border-slate-600 dark:bg-slate-900">
+                  <Calendar size={20} className="text-[#11382C] dark:text-emerald-300" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Date Reported</p>
-                  <p className="font-bold text-gray-800">{formatDateTime(incident.dateAndTime)}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-400">Date Reported</p>
+                  <p className="font-bold text-gray-800 dark:text-slate-100">{formatDateTime(incident.dateAndTime)}</p>
                 </div>
               </div>
             </div>
@@ -150,21 +150,21 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
 
           {/* New Section: Affected Assets Details */}
           {incident.affectedAssets && incident.affectedAssets.length > 0 && (
-            <div className="mt-8 pt-8 border-t border-gray-100">
-              <div className="flex items-center gap-2 text-gray-400 mb-4">
+            <div className="mt-8 border-t border-gray-100 pt-8 dark:border-slate-700">
+              <div className="mb-4 flex items-center gap-2 text-gray-400 dark:text-slate-400">
                 <Package size={16} />
                 <h4 className="text-[11px] font-bold uppercase tracking-[0.1em]">Affected Assets Detail</h4>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {incident.affectedAssets.map((asset: any) => (
-                  <div key={asset._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-[#11382C]/20 transition-colors">
+                  <div key={asset._id} className="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-4 transition-colors hover:border-[#11382C]/20 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-emerald-800 sm:flex-row sm:items-center">
                     <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-xl bg-[#11382C]/5 flex items-center justify-center text-[#11382C]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#11382C]/5 text-[#11382C] dark:bg-emerald-950/60 dark:text-emerald-300">
                         <Package size={20} />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800 text-sm">{asset.name}</p>
-                        <p className="text-[10px] font-mono text-gray-400">{asset.assetId}</p>
+                        <p className="text-sm font-bold text-gray-800 dark:text-slate-100">{asset.name}</p>
+                        <p className="font-mono text-[10px] text-gray-400 dark:text-slate-400">{asset.assetId}</p>
                       </div>
                     </div>
                   </div>
@@ -174,10 +174,10 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({ isOpen, o
           )}
 
           {/* Footer Action */}
-          <div className="mt-10 pt-6 border-t border-gray-100 flex justify-end">
+          <div className="mt-10 flex justify-end border-t border-gray-100 pt-6 dark:border-slate-700">
             <button 
               onClick={onClose}
-              className="px-8 py-3 bg-[#11382C] text-white rounded-xl font-bold shadow-lg hover:bg-[#0a2a21] transition-all active:scale-95"
+              className="rounded-xl bg-[#11382C] px-8 py-3 font-bold text-white shadow-lg transition-all hover:bg-[#0a2a21] active:scale-95 dark:bg-emerald-700 dark:hover:bg-emerald-600"
             >
               Close Details
             </button>
