@@ -153,10 +153,10 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             transform: 'translateZ(0)',
           }}
         >
-          <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: hoveredPoint.color }}>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: hoveredPoint.color }}>
             {hoveredPoint.label}
           </div>
-          <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: hoveredPoint.color }}>
+          <div className="mt-1 text-xs font-bold uppercase tracking-[0.12em]" style={{ color: hoveredPoint.color }}>
             Reports: {hoveredPoint.value}
           </div>
         </div>
@@ -170,7 +170,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             return (
               <g key={`h-${val}`}>
                 <line x1={pad.left} y1={y} x2={svgW - pad.right} y2={y} stroke="#d1d5db" strokeWidth="1" strokeDasharray="4 4" />
-                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[10px]" fill="#9ca3af" fontWeight="600">
+                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[11px]" fill="#9ca3af" fontWeight="600">
                   {val}
                 </text>
               </g>

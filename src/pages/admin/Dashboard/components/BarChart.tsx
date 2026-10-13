@@ -44,7 +44,7 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
           {[100, 80, 60, 40, 20, 0].map((val) => (
             <span
               key={val}
-              className="absolute right-2 text-[10px] font-semibold text-gray-400 translate-y-[3px]"
+              className="absolute right-2 translate-y-[3px] text-[11px] font-semibold text-gray-400 dark:text-slate-300"
               style={{ bottom: `${val}%` }}
             >
               {val}
@@ -66,26 +66,26 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
               <div key={`${item.month}-${idx}`} className="flex flex-col items-center gap-1 h-full justify-end">
                 <div className="flex items-end gap-[3px] h-full" style={{ height: '100%' }}>
                   <div className="flex flex-col items-center justify-end h-full">
-                    <div className="text-[8px] font-semibold text-gray-400 mb-[2px]">
+                    <div className="mb-[2px] text-[11px] font-semibold text-gray-500 dark:text-slate-300">
                       {item.completed}%
                     </div>
                     <div
-                      className="w-[15px] rounded-[3px] bg-emerald-500 transition-all"
+                      className="w-[30px] rounded-none bg-emerald-500 transition-all"
                       style={{ height: `${Math.max(item.completed, 0)}%` }}
                     />
                   </div>
 
                   <div className="flex flex-col items-center justify-end h-full">
-                    <div className="text-[8px] font-semibold text-gray-400 mb-[2px]">
+                    <div className="mb-[2px] text-[11px] font-semibold text-gray-500 dark:text-slate-300">
                       {item.pending}%
                     </div>
                     <div
-                      className="w-[15px] rounded-[3px] bg-orange-400 transition-all"
+                      className="w-[30px] rounded-none bg-orange-400 transition-all"
                       style={{ height: `${Math.max(item.pending, 0)}%` }}
                     />
                   </div>
                 </div>
-                <div className={`text-[11px] font-semibold ${idx === chartData.length - 1 ? 'text-emerald-600' : 'text-gray-500'}`}>
+                <div className={`text-xs font-semibold ${idx === chartData.length - 1 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-slate-300'}`}>
                   {item.month}
                 </div>
               </div>
@@ -97,11 +97,11 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
       <div className="flex items-center gap-6 mt-6 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-emerald-500" />
-          <span className="text-[11px] font-semibold text-gray-700 dark:text-slate-200">Completed</span>
+          <span className="text-xs font-semibold text-gray-700 dark:text-slate-200">Completed</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-orange-400" />
-          <span className="text-[11px] font-semibold text-gray-700 dark:text-slate-200">Pending</span>
+          <span className="text-xs font-semibold text-gray-700 dark:text-slate-200">Pending</span>
         </div>
       </div>
     </div>

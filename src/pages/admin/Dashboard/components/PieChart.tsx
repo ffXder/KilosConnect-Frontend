@@ -39,14 +39,19 @@ const StatusTooltip = ({ active, payload }: any) => {
   const statusName = item?.name ?? 'Asset';
   const statusColor = item?.color ?? '#64748b';
   const assetCount = item?.value ?? 0;
-  const textColor = statusName === 'Needs Repair' ? '#111827' : statusColor;
+  const isNeedsRepair = statusName === 'Needs Repair';
+  const textColor = isNeedsRepair ? '#ffffff' : statusColor;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/95">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: textColor }}>
+    <div className={`rounded-xl border px-3 py-2 shadow-lg backdrop-blur-sm ${
+      isNeedsRepair
+        ? 'border-slate-700 bg-slate-900/95'
+        : 'border-slate-200 bg-white/95 dark:border-slate-700 dark:bg-slate-900/95'
+    }`}>
+      <div className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: textColor }}>
         {statusName}
       </div>
-      <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: textColor }}>
+      <div className="mt-1 text-xs font-bold uppercase tracking-[0.12em]" style={{ color: textColor }}>
         Assets: {assetCount}
       </div>
     </div>
@@ -108,7 +113,7 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
             </ResponsiveContainer>
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-slate-600">
+              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-slate-600">
                 No data
               </div>
             </div>
@@ -118,7 +123,7 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
                 <div className="text-2xl font-bold text-gray-800 dark:text-slate-50">{total}</div>
-                <div className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-slate-400">Total</div>
+                <div className="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-400">Total</div>
               </div>
             </div>
           )}
@@ -133,8 +138,8 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
               <div key={item.name} className="flex items-center gap-2 min-w-0">
                 <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: item.color }} />
                 <div className="min-w-0 flex-1">
-                  <div className="text-[11px] font-semibold text-gray-700 dark:text-slate-200 truncate">{item.name}</div>
-                  <div className="text-[10px] text-gray-400 dark:text-slate-400">{currentValue}</div>
+                  <div className="truncate text-sm font-semibold text-gray-700 dark:text-slate-200">{item.name}</div>
+                  <div className="text-sm text-gray-500 dark:text-slate-400">{currentValue}</div>
                 </div>
               </div>
             );
