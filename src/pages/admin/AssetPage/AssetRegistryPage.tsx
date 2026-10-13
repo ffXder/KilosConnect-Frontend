@@ -43,6 +43,8 @@ const assetCategory = [
 ]
 
 export const AssetRegistryPage = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const pageSize = 10;
   // URL params for filter and searching
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") ?? "";
@@ -58,6 +60,7 @@ export const AssetRegistryPage = () => {
       next.set(key, value);
     }
     setSearchParams(next);
+    setCurrentPage(1);
   };
 
   const {
@@ -89,6 +92,12 @@ export const AssetRegistryPage = () => {
     const matchesCategory = selectedCategory == "All Categories" || asset.category == selectedCategory;
     return matchesSearch && matchesZone && matchesStatus && matchesCategory;
   });
+  const totalPages = Math.max(1, Math.ceil(filteredAssets.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedAssets = filteredAssets.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
 
   // calling the hooks for assets
   const handleAddAsset = async (newItem: NewAsset) => {
@@ -211,7 +220,11 @@ export const AssetRegistryPage = () => {
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
                 <AssetRegistryList
                   isLoading={loading}
-                  filteredAssets={filteredAssets}
+                  filteredAssets={paginatedAssets}
+                  totalAssets={filteredAssets.length}
+                  currentPage={safeCurrentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
                   onAssetClick={(asset) => { setSelectedAssetForEdit(asset); setIsUpdateModalOpen(true); }}
                   onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsDeleteModalOpen(true); }}
                 />
