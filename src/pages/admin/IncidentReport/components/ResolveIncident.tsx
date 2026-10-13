@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import type { IncidentReport } from '../../../../types/incident';
 
 type AffectedAsset = { _id: string; assetId: string; name: string };
@@ -27,6 +27,20 @@ interface Props {
 
 const today = () => new Date().toISOString().slice(0, 10);
 
+const inputClass =
+  'w-full px-4 py-2.5 text-[15px] text-gray-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors focus:outline-none focus:border-[#11382C] focus:ring-2 focus:ring-[#11382C]/20';
+
+const Label: React.FC<{ htmlFor: string; required?: boolean; children: React.ReactNode }> = ({
+  htmlFor,
+  required,
+  children,
+}) => (
+  <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700 mb-2">
+    {children}
+    {required && <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>}
+  </label>
+);
+
 const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSubmit }) => {
   const [note, setNote] = useState('');
   const [withRepair, setWithRepair] = useState(false);
@@ -38,16 +52,33 @@ const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSu
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // the list endpoint already populates affectedAssets
-  const affected = (incident?.affectedAssets ?? []) as unknown as AffectedAsset[];
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+
+  const asset = (incident?.asset ?? null) as unknown as AffectedAsset | null;
 
   useEffect(() => {
     if (!isOpen) return;
     setNote(''); setWithRepair(false); setCost(''); setRepairDesc('');
     setRepairDate(today()); setRepairLogged(false); setError(null);
-    setAssetId(affected.length === 1 ? affected[0]._id : '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setAssetId(asset?.assetId ?? '');
   }, [isOpen, incident?._id]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !submitting) onClose();
+    };
+    window.addEventListener('keydown', onKey);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    noteRef.current?.focus();
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, submitting, onClose]);
 
   if (!isOpen || !incident) return null;
 
@@ -84,76 +115,147 @@ const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSu
     }
   };
 
-  const input = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#11382C] outline-none";
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        <div className="bg-[#11382C] p-6 text-white flex justify-between items-start">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="resolve-title"
+        className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
+      >
+        {/* Header */}
+        <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
-            <h2 className="text-xl font-bold">Resolve Incident</h2>
-            <p className="text-gray-300 text-sm mt-1 truncate">{incident.incidentId} · {incident.title}</p>
+            <h2 id="resolve-title" className="text-xl font-bold leading-snug">
+              Resolve incident
+            </h2>
+            <p className="text-sm text-white/60 mt-1.5 truncate">
+              <span className="font-mono">{incident.incidentId}</span>
+              <span className="mx-1.5" aria-hidden="true">–</span>
+              {incident.title}
+            </p>
           </div>
-          <button onClick={onClose} className="hover:bg-white/10 p-1 rounded-lg"><X size={22} /></button>
+          <button
+            onClick={onClose}
+            disabled={submitting}
+            aria-label="Close"
+            className="shrink-0 -mr-2 -mt-2 p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <div className="p-6 space-y-5 overflow-y-auto">
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-8 sm:px-8 space-y-6">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Resolution Note *</label>
-            <textarea value={note} onChange={e => setNote(e.target.value)} rows={3}
-              className={`${input} resize-none`} placeholder="What was done to fix this?" />
+            <Label htmlFor="resolve-note" required>Resolution note</Label>
+            <textarea
+              id="resolve-note"
+              ref={noteRef}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              rows={4}
+              className={`${inputClass} resize-none leading-relaxed`}
+              placeholder="What was done to fix this?"
+            />
           </div>
 
-          {affected.length > 0 && !repairLogged && (
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 cursor-pointer">
-              <input type="checkbox" checked={withRepair} onChange={e => setWithRepair(e.target.checked)} />
-              A repair was done on an affected asset
+          {asset && !repairLogged && (
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={withRepair}
+                onChange={(e) => setWithRepair(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#11382C] cursor-pointer"
+              />
+              <span className="text-[15px] text-gray-700 leading-snug">
+                A repair was done on the affected asset
+                <span className="block text-sm text-gray-500 mt-0.5">{asset.name}</span>
+              </span>
             </label>
           )}
 
           {withRepair && !repairLogged && (
-            <div className="space-y-4 border border-gray-100 rounded-xl p-4 bg-gray-50">
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Asset *</label>
-                <select value={assetId} onChange={e => setAssetId(e.target.value)} className={`${input} bg-white`}>
-                  <option value="">Select asset</option>
-                  {affected.map(a => (
-                    <option key={a._id} value={a._id}>{a.name} ({a.assetId})</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-5 bg-gray-50 rounded-xl p-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Cost (₱) *</label>
-                  <input type="number" min={0} value={cost} onChange={e => setCost(e.target.value)} className={input} />
+                  <Label htmlFor="repair-cost" required>Cost</Label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[15px] text-gray-400 pointer-events-none">
+                      ₱
+                    </span>
+                    <input
+                      id="repair-cost"
+                      type="number"
+                      min={0}
+                      value={cost}
+                      onChange={(e) => setCost(e.target.value)}
+                      className={`${inputClass} pl-9`}
+                      placeholder="0.00"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Repair Date *</label>
-                  <input type="date" value={repairDate} onChange={e => setRepairDate(e.target.value)} className={input} />
+                  <Label htmlFor="repair-date" required>Repair date</Label>
+                  <input
+                    id="repair-date"
+                    type="date"
+                    value={repairDate}
+                    onChange={(e) => setRepairDate(e.target.value)}
+                    className={inputClass}
+                  />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Repair Description</label>
-                <textarea value={repairDesc} onChange={e => setRepairDesc(e.target.value)} rows={2}
-                  className={`${input} resize-none`} />
+                <Label htmlFor="repair-desc">Repair description</Label>
+                <textarea
+                  id="repair-desc"
+                  value={repairDesc}
+                  onChange={(e) => setRepairDesc(e.target.value)}
+                  rows={3}
+                  className={`${inputClass} resize-none leading-relaxed`}
+                  placeholder="Optional"
+                />
               </div>
             </div>
           )}
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && (
+            <div
+              role="alert"
+              className="flex items-start gap-2.5 bg-red-50 text-red-700 rounded-xl p-4 text-sm"
+            >
+              <AlertCircle size={16} className="shrink-0 mt-0.5" />
+              <p>{error}</p>
+            </div>
+          )}
+        </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-            <button onClick={onClose} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50">
-              Cancel
-            </button>
-            <button onClick={handleSubmit} disabled={!isValid || submitting}
-              className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 ${
-                isValid && !submitting ? 'bg-[#11382C] text-white hover:bg-[#0a2a21]' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}>
-              {submitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={18} />}
-              {repairLogged ? 'Retry Resolve' : 'Resolve'}
-            </button>
-          </div>
+        {/* Footer */}
+        <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 bg-white flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+          <button
+            onClick={onClose}
+            disabled={submitting}
+            className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || submitting}
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 focus-visible:ring-offset-2 ${
+              isValid && !submitting
+                ? 'bg-[#11382C] text-white shadow-sm hover:bg-[#0a2a21] active:scale-[0.98]'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {submitting ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={18} />
+            )}
+            {repairLogged ? 'Retry resolve' : 'Resolve incident'}
+          </button>
         </div>
       </div>
     </div>
