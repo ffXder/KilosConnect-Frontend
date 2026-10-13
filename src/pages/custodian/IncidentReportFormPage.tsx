@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Plus, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import SuccessScreen from "../../components/SuccessScreen";
 import { useAuth } from "../../hooks/useAuth";
@@ -39,27 +39,14 @@ export default function IncidentReportFormPage() {
   const [severity, setSeverity] = useState<NewIncidentReport["severity"]>("Low");
   const [area, setArea] = useState("");
   const [dateAndTime, setDateAndTime] = useState(nowLocal());
-  const [affectedAssets, setAffectedAssets] = useState<string[]>([]);
-  const [selectedAssetId, setSelectedAssetId] = useState("");
+  const [asset, setAsset] = useState(""); // single asset _id
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isFormValid = title.trim() !== "" && area !== "" && dateAndTime !== "";
-
-  // hide assets that were already added
-  const availableAssets = assets.filter((a) => !affectedAssets.includes(a._id));
-
-  const handleAddAsset = () => {
-    if (selectedAssetId && !affectedAssets.includes(selectedAssetId)) {
-      setAffectedAssets([...affectedAssets, selectedAssetId]);
-      setSelectedAssetId("");
-    }
-  };
-
-  const handleRemoveAsset = (id: string) =>
-    setAffectedAssets(affectedAssets.filter((a) => a !== id));
+  const isFormValid =
+    title.trim() !== "" && area !== "" && dateAndTime !== "" && asset !== "";
 
   const reset = () => {
     setTitle("");
@@ -67,8 +54,7 @@ export default function IncidentReportFormPage() {
     setSeverity("Low");
     setArea("");
     setDateAndTime(nowLocal());
-    setAffectedAssets([]);
-    setSelectedAssetId("");
+    setAsset("");
     setError(null);
     setSubmitted(false);
   };
@@ -80,7 +66,7 @@ export default function IncidentReportFormPage() {
     setError(null);
     try {
       await createReport({
-        title, description, severity, area, dateAndTime, affectedAssets,
+        title, description, severity, area, dateAndTime, asset,
       });
       setSubmitted(true);
     } catch (err) {
@@ -110,7 +96,7 @@ export default function IncidentReportFormPage() {
             <div className="bg-[#11382C] rounded-2xl p-5 text-white">
               <h1 className="text-xl font-bold">Report New Incident</h1>
               <p className="text-gray-300 text-sm mt-0.5">
-                Fill in the details and link any affected equipment
+                Fill in the details and select the affected equipment
               </p>
             </div>
 
@@ -171,61 +157,26 @@ export default function IncidentReportFormPage() {
                 />
               </div>
 
-              {/* Affected assets */}
+              {/* Affected asset */}
               <div>
-                <label className={labelCls}>
-                  Affected Assets <span className="font-normal text-gray-400">(optional)</span>
-                </label>
-                <div className="flex gap-2 mb-3">
-                  <div className="relative flex-1 min-w-0">
-                    <select
-                      value={selectedAssetId}
-                      onChange={(e) => setSelectedAssetId(e.target.value)}
-                      disabled={assetsLoading}
-                      className={`${inputCls} appearance-none pr-10`}
-                    >
-                      <option value="">{assetsLoading ? "Loading assets..." : "Select an asset"}</option>
-                      {availableAssets.map((asset) => (
-                        <option key={asset._id} value={asset._id}>
-                          {asset.name} ({asset.assetId})
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleAddAsset}
-                    disabled={!selectedAssetId}
-                    className="px-5 bg-gray-100 text-[#11382C] rounded-xl font-bold active:bg-gray-200 disabled:opacity-50 transition-colors"
+                <label className={labelCls}>Affected Asset *</label>
+                <div className="relative">
+                  <select
+                    required
+                    value={asset}
+                    onChange={(e) => setAsset(e.target.value)}
+                    disabled={assetsLoading}
+                    className={`${inputCls} appearance-none pr-10`}
                   >
-                    Add
-                  </button>
+                    <option value="">{assetsLoading ? "Loading assets..." : "Select an asset"}</option>
+                    {assets.map((a) => (
+                      <option key={a._id} value={a._id}>
+                        {a.name} ({a.assetId})
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                 </div>
-
-                {affectedAssets.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {affectedAssets.map((id) => {
-                      const asset = assets.find((a) => a._id === id);
-                      return (
-                        <div
-                          key={id}
-                          className="flex items-center gap-2 bg-gray-100 border border-gray-200 pl-3 pr-2 py-1.5 rounded-lg text-sm font-medium"
-                        >
-                          {asset?.name ?? "Asset"}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveAsset(id)}
-                            className="p-1 text-gray-400 hover:text-red-500"
-                            aria-label={`Remove ${asset?.name ?? "asset"}`}
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
 
               {/* Description */}
