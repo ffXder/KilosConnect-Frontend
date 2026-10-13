@@ -6,17 +6,18 @@ import IncidentTable from './components/IncidentTable';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import IncidentFilterSection from './components/IncidentFilterSection';
 import IncidentAddItemModal from './components/IncidentAddItemModal';
+import IncidentResolveModal from './components/ResolveIncident'; 
 import IncidentUpdateStatusModal from './components/IncidentUpdateStatusModal';
 import IncidentDetailedModal from './components/IncidentDetailModal';
 import StatsCards from './components/StatCard';
 import AnalyticsCharts from './components/AnalyticsChartSection';
-import { DeleteConfirmModal } from '../../../components/DeleteConfirmModal'; // 1. IMPORT MODAL
+import { DeleteConfirmModal } from '../../../components/DeleteConfirmModal';
 
 // HOOKS AND FORMATTER
 import { useAuth } from '../../../hooks/useAuth';
 import { useIncidentReports } from '../../../hooks/useIncident';
 import { useUrlFilters } from '../../../hooks/useUrlFilters';
-import type { IncidentReport, NewIncidentReport } from '../../../types/incident';
+import type { IncidentReport, NewIncidentReport, ResolveIncidentPayload } from '../../../types/incident';
 import { getDateThreshold } from '../../../utils/dateHelper';
 
 const COLORS = {
@@ -44,8 +45,9 @@ export const IncidentReportPage: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = React.useState<IncidentReport | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = React.useState(false);
   const [isDetailedModalOpen, setIsDetailedModalOpen] = React.useState(false);
+  const [isResolveModalOpen, setIsResolveModalOpen] = React.useState(false);
 
-  // 2. DELETE/ARCHIVE MODAL STATES
+  // DELETE/ARCHIVE MODAL STATES
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [incidentToDelete, setIncidentToDelete] = React.useState<IncidentReport | null>(null);
 
@@ -70,11 +72,16 @@ export const IncidentReportPage: React.FC = () => {
   const setCustomStart = (val: string) => updateParam('startDate', val, ['']);
   const setCustomEnd = (val: string) => updateParam('endDate', val, ['']);
 
-  const { reports, loading, error, handleCreate, handleUpdate, handleArchive } = useIncidentReports();
+  const { reports, loading, error, handleCreate, handleUpdate, handleArchive, handleResolve } = useIncidentReports();
   const incidents = reports ?? [];
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
-    await handleCreate(newIncident);
+    try {
+      await handleCreate(newIncident);
+      setIsAddModalOpen(false); 
+    } catch (err) {
+      console.error('Failed to create incident report:', err);
+    }
   };
 
   const handleUpdateStatus = async (id: string, newStatus: IncidentReport['status']) => {
@@ -89,6 +96,27 @@ export const IncidentReportPage: React.FC = () => {
   const handleViewDetails = (incident: IncidentReport) => {
     setSelectedIncident(incident);
     setIsDetailedModalOpen(true);
+  };
+
+  const handleOpenResolve = (incident: IncidentReport) => {
+    setSelectedIncident(incident);
+    setIsDetailedModalOpen(false); // Close details modal if open
+    setIsResolveModalOpen(true);  // Open resolve modal
+  };
+
+  const handleResolveSubmit = async (
+    incident: IncidentReport, 
+    payload: ResolveIncidentPayload, 
+    skipRepair: boolean
+  ) => {
+    try {
+      await handleResolve(incident, payload);
+      setIsResolveModalOpen(false);
+      setSelectedIncident(null);
+    } catch (err: any) {
+      console.error('Failed to resolve incident:', err);
+      throw err; 
+    }
   };
 
   const handleDeleteClick = (incident: IncidentReport) => {
@@ -246,9 +274,17 @@ export const IncidentReportPage: React.FC = () => {
             isOpen={isDetailedModalOpen}
             onClose={() => setIsDetailedModalOpen(false)}
             incident={selectedIncident}
+            onResolve={handleOpenResolve} 
           />
 
-          {/* 6. DELETE CONFIRMATION MODAL */}
+          <IncidentResolveModal
+            isOpen={isResolveModalOpen}
+            onClose={() => setIsResolveModalOpen(false)}
+            incident={selectedIncident}
+            onSubmit={handleResolveSubmit}
+          />
+
+          {/* DELETE CONFIRMATION MODAL */}
           <DeleteConfirmModal
             isOpen={isDeleteModalOpen}
             onClose={() => {
