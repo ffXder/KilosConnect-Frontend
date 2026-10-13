@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Plus, ChevronDown } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { SidebarNavigationSection } from "../../components/SidebarNavigationSection";
 import SuccessScreen from "../../components/SuccessScreen";
 import { useAuth } from "../../hooks/useAuth";
@@ -22,8 +22,8 @@ const nowLocal = () => {
 };
 
 const inputCls =
-  "w-full px-4 py-3 border border-gray-200 rounded-xl text-base bg-white focus:ring-2 focus:ring-[#11382C] outline-none";
-const labelCls = "block text-sm font-bold text-gray-700 mb-2";
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#11382C] focus:ring-2 focus:ring-[#11382C]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20";
+const labelCls = "mb-2 block text-sm font-bold text-gray-700 dark:text-slate-200";
 
 export default function IncidentReportFormPage() {
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ export default function IncidentReportFormPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-['Poppins']">
+    <div className="flex min-h-screen flex-col bg-[#f8fafc] font-['Poppins'] transition-colors dark:bg-slate-950 md:flex-row">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 min-w-0 w-full max-w-xl mx-auto px-4 pt-20 pb-4 sm:px-6 sm:pt-24">
@@ -109,12 +109,12 @@ export default function IncidentReportFormPage() {
             {/* Header */}
             <div className="bg-[#11382C] rounded-2xl p-5 text-white">
               <h1 className="text-xl font-bold">Report New Incident</h1>
-              <p className="text-gray-300 text-sm mt-0.5">
+              <p className="mt-0.5 text-sm text-emerald-100/80">
                 Fill in the details and link any affected equipment
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-5">
+            <div className="space-y-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
               {/* Title */}
               <div>
                 <label className={labelCls}>Incident Title *</label>
@@ -141,7 +141,7 @@ export default function IncidentReportFormPage() {
                     <option value="" disabled>Select zone</option>
                     {locations.map((loc) => <option key={loc} value={loc}>{loc}</option>)}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" size={18} />
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ export default function IncidentReportFormPage() {
                   >
                     {severities.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" size={18} />
                 </div>
               </div>
 
@@ -191,13 +191,13 @@ export default function IncidentReportFormPage() {
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" size={18} />
                   </div>
                   <button
                     type="button"
                     onClick={handleAddAsset}
                     disabled={!selectedAssetId}
-                    className="px-5 bg-gray-100 text-[#11382C] rounded-xl font-bold active:bg-gray-200 disabled:opacity-50 transition-colors"
+                      className="rounded-xl bg-emerald-50 px-5 font-bold text-[#11382C] transition-colors hover:bg-emerald-100 active:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/70 dark:active:bg-emerald-900/70"
                   >
                     Add
                   </button>
@@ -210,13 +210,13 @@ export default function IncidentReportFormPage() {
                       return (
                         <div
                           key={id}
-                          className="flex items-center gap-2 bg-gray-100 border border-gray-200 pl-3 pr-2 py-1.5 rounded-lg text-sm font-medium"
+                          className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 py-1.5 pl-3 pr-2 text-sm font-medium dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         >
                           {asset?.name ?? "Asset"}
                           <button
                             type="button"
                             onClick={() => handleRemoveAsset(id)}
-                            className="p-1 text-gray-400 hover:text-red-500"
+                            className="p-1 text-gray-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400"
                             aria-label={`Remove ${asset?.name ?? "asset"}`}
                           >
                             <X size={14} />
@@ -241,19 +241,19 @@ export default function IncidentReportFormPage() {
               </div>
 
               {error && (
-                <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium rounded-xl p-3">
+                <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700 dark:border-rose-900 dark:bg-rose-950/50 dark:text-rose-300">
                   {error}
                 </div>
               )}
             </div>
 
             {/* Sticky submit bar */}
-            <div className="sticky bottom-0 -mx-4 sm:mx-0 px-4 sm:px-0 py-3 bg-[#f8fafc]/95 backdrop-blur border-t border-gray-100 sm:border-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="sticky bottom-0 -mx-4 border-t border-gray-100 bg-[#f8fafc]/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 sm:mx-0 sm:border-0 sm:px-0">
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="flex-1 py-3.5 border border-gray-200 bg-white rounded-xl text-sm font-bold text-gray-600 active:bg-gray-50"
+                  className="flex-1 rounded-xl border border-gray-200 bg-white py-3.5 text-sm font-bold text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800"
                 >
                   Cancel
                 </button>
@@ -262,8 +262,8 @@ export default function IncidentReportFormPage() {
                   disabled={!isFormValid || isSubmitting}
                   className={`flex-[2] py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                     isFormValid && !isSubmitting
-                      ? "bg-[#11382C] text-white hover:bg-[#0a2a21] shadow-lg"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      ? "bg-[#124d45] text-emerald-50 shadow-lg hover:bg-[#165c53] dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                      : "cursor-not-allowed bg-emerald-50 text-emerald-800/50 dark:bg-emerald-950/60 dark:text-emerald-300/50"
                   }`}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Report"}
