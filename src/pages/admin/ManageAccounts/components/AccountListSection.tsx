@@ -78,8 +78,8 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
               <td className="px-6 py-4">
                 <span className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-tight uppercase ${
                   acc.role === "admin"
-                    ? "bg-purple-100 text-purple-700" 
-                    : "bg-blue-100 text-blue-600"
+                    ? "bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300"
+                    : "bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-300"
                 }`}>
                   {acc.role}
                 </span>

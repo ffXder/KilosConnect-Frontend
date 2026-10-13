@@ -9,10 +9,18 @@ import { useUsers } from "../../../hooks/useUsers";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 import { AddUserModal } from "./components/AddUserModal";
 import { EditUserModal } from "./components/EditUserModal";
+import type {
+  AccountRoleFilter,
+  AccountSortDirection,
+  AccountSortField,
+} from "./components/AccountFilterSection";
 
 export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
-  const { users, refresh, handleToggleArchive } = useUsers();
+  const [roleFilter, setRoleFilter] = useState<AccountRoleFilter>("all");
+  const [sortBy, setSortBy] = useState<AccountSortField>("name");
+  const [sortDirection, setSortDirection] = useState<AccountSortDirection>("asc");
+  const { users, loading, refresh, handleToggleArchive } = useUsers();
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
@@ -47,12 +55,26 @@ export const ManageAccountsPage: React.FC = () => {
   const filteredAccounts = users.filter(a => {
     const query = search.toLowerCase();
     const fullName = `${a.firstName} ${a.lastName}`.toLowerCase();
-    return (
-      fullName.includes(query) || 
+    const matchesRole = roleFilter === "all" || a.role === roleFilter;
+    const matchesSearch =
+      fullName.includes(query) ||
       a.userId.toLowerCase().includes(query) ||
       a.email.toLowerCase().includes(query) ||
-      a.role.toLowerCase().includes(query)
+      a.role.toLowerCase().includes(query);
+    return (
+      matchesRole && matchesSearch
     );
+  });
+  const sortedAccounts = [...filteredAccounts].sort((a, b) => {
+    let comparison: number;
+    if (sortBy === "name") {
+      comparison = `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`);
+    } else {
+      const firstDate = Date.parse(a.createdAt ?? a.dateAdded ?? "");
+      const secondDate = Date.parse(b.createdAt ?? b.dateAdded ?? "");
+      comparison = (Number.isNaN(firstDate) ? 0 : firstDate) - (Number.isNaN(secondDate) ? 0 : secondDate);
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
   });
 
   const { role } = useAuth();
@@ -75,15 +97,22 @@ export const ManageAccountsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-            <AccountsFilterSection 
-              totalAccounts={filteredAccounts.length}
-              onSearchChange={setSearch}
-              onAddNewUser={() => setIsAddModalOpen(true)}
-            />
+          <AccountsFilterSection 
+            totalAccounts={filteredAccounts.length}
+            onSearchChange={setSearch}
+            onAddNewUser={() => setIsAddModalOpen(true)}
+            roleFilter={roleFilter}
+            onRoleFilterChange={setRoleFilter}
+            sortBy={sortBy}
+            onSortByChange={setSortBy}
+            sortDirection={sortDirection}
+            onSortDirectionChange={setSortDirection}
+          />
 
+          <div className="overflow-x-auto rounded-2xl border border-[#e8e8e8] bg-white shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
             <AccountsListSection 
-              accounts={filteredAccounts} 
+              accounts={sortedAccounts} 
+              loading={loading}
               onEditClick={(account) => setSelectedUserForEdit(account)}
               onDeleteClick={(id: string, name: string) => setDeleteConfirm({ isOpen: true, id, name })} 
             />
