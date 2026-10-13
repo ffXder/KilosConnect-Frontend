@@ -31,17 +31,17 @@ const Field: React.FC<{
   children: React.ReactNode;
 }> = ({ icon, label, children }) => (
   <div className="min-w-0">
-    <dt className="flex items-center gap-1.5 text-xs font-medium text-gray-500 mb-1.5">
+    <dt className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-slate-400 mb-1.5">
       {icon}
       {label}
     </dt>
-    <dd className="text-[15px] font-medium text-gray-900 break-words">{children}</dd>
+    <dd className="text-[15px] font-medium text-gray-900 dark:text-slate-100 break-words">{children}</dd>
   </div>
 );
 
 const Heading: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
-  className = 'text-gray-900',
+  className = 'text-gray-900 dark:text-slate-100',
 }) => <h3 className={`text-sm font-semibold mb-3 ${className}`}>{children}</h3>;
 
 const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
@@ -72,24 +72,49 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
   const getStatusConfig = () => {
     switch (incident.status) {
       case 'Open':
-        return { icon: <AlertCircle size={14} />, color: 'bg-red-50 text-red-700', label: 'Pending' };
+        return {
+          icon: <AlertCircle size={14} />,
+          color: 'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-300',
+          label: 'Pending',
+        };
       case 'In Progress':
-        return { icon: <Clock size={14} />, color: 'bg-blue-50 text-blue-700', label: 'In progress' };
+        return {
+          icon: <Clock size={14} />,
+          color: 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+          label: 'In progress',
+        };
       case 'Resolved':
-        return { icon: <CheckCircle2 size={14} />, color: 'bg-emerald-50 text-emerald-700', label: 'Resolved' };
+        return {
+          icon: <CheckCircle2 size={14} />,
+          color: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
+          label: 'Resolved',
+        };
       default:
-        return { icon: <AlertCircle size={14} />, color: 'bg-gray-100 text-gray-600', label: 'Unknown' };
+        return {
+          icon: <AlertCircle size={14} />,
+          color: 'bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-300',
+          label: 'Unknown',
+        };
     }
   };
 
   const getSeverityConfig = (severity: string) => {
     if (/Critical|Urgent|High/.test(severity)) {
-      return { icon: <AlertOctagon size={14} />, color: 'bg-red-50 text-red-700' };
+      return {
+        icon: <AlertOctagon size={14} />,
+        color: 'bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-300',
+      };
     }
     if (severity.includes('Medium')) {
-      return { icon: <AlertTriangle size={14} />, color: 'bg-orange-50 text-orange-700' };
+      return {
+        icon: <AlertTriangle size={14} />,
+        color: 'bg-orange-50 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300',
+      };
     }
-    return { icon: <Info size={14} />, color: 'bg-blue-50 text-blue-700' };
+    return {
+      icon: <Info size={14} />,
+      color: 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+    };
   };
 
   const status = getStatusConfig();
@@ -120,7 +145,7 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
         aria-modal="true"
         aria-labelledby="incident-title"
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
+        className="bg-white dark:bg-slate-900 dark:ring-1 dark:ring-white/10 dark:[color-scheme:dark] w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header: just the ID and the title */}
         <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
@@ -172,30 +197,30 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
           </dl>
 
           {/* Description */}
-          <section className="pt-8 border-t border-gray-100">
+          <section className="pt-8 border-t border-gray-100 dark:border-slate-700">
             <Heading>Description</Heading>
-            <p className="text-[15px] text-gray-600 leading-7 whitespace-pre-wrap break-words">
+            <p className="text-[15px] text-gray-600 dark:text-slate-300 leading-7 whitespace-pre-wrap break-words">
               {incident.description || 'No description provided.'}
             </p>
           </section>
 
           {/* Affected assets */}
           {assets.length > 0 && (
-            <section className="pt-8 border-t border-gray-100">
+            <section className="pt-8 border-t border-gray-100 dark:border-slate-700">
               <Heading>
                 {assets.length > 1 ? `Affected assets (${assets.length})` : 'Affected asset'}
               </Heading>
-              <ul className="divide-y divide-gray-100">
+              <ul className="divide-y divide-gray-100 dark:divide-slate-700">
                 {assets.map((a) => (
                   <li
                     key={a._id ?? a.assetId}
                     className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                   >
-                    <Package size={18} className="shrink-0 text-gray-400" />
-                    <p className="min-w-0 flex-1 text-[15px] font-medium text-gray-900 truncate">
+                    <Package size={18} className="shrink-0 text-gray-400 dark:text-slate-500" />
+                    <p className="min-w-0 flex-1 text-[15px] font-medium text-gray-900 dark:text-slate-100 truncate">
                       {a.name}
                     </p>
-                    <span className="shrink-0 text-xs font-mono text-gray-500">{a.assetId}</span>
+                    <span className="shrink-0 text-xs font-mono text-gray-500 dark:text-slate-400">{a.assetId}</span>
                   </li>
                 ))}
               </ul>
@@ -204,12 +229,12 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
 
           {/* Resolution note when resolved */}
           {isResolved && resolutionNote && (
-            <section className="bg-emerald-50/60 rounded-xl p-5">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-emerald-800 mb-2">
+            <section className="bg-emerald-50/60 dark:bg-emerald-500/10 rounded-xl p-5">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-2">
                 <ClipboardCheck size={16} />
                 Resolution notes
               </h3>
-              <p className="text-[15px] text-gray-700 leading-7 whitespace-pre-wrap break-words">
+              <p className="text-[15px] text-gray-700 dark:text-slate-200 leading-7 whitespace-pre-wrap break-words">
                 {resolutionNote}
               </p>
             </section>
@@ -217,17 +242,17 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 bg-white flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+        <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40"
+            className="px-5 py-2.5 border border-gray-200 dark:border-slate-600 rounded-xl text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/40"
           >
             Close
           </button>
           {!isResolved && onResolve && (
             <button
               onClick={() => onResolve(incident)}
-              className="px-5 py-2.5 bg-[#11382C] text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-[#0a2a21] transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 focus-visible:ring-offset-2"
+              className="px-5 py-2.5 bg-[#11382C] dark:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-[#0a2a21] dark:hover:bg-emerald-600 transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
             >
               <CheckCircle2 size={18} />
               Resolve incident
