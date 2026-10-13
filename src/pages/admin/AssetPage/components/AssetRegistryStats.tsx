@@ -71,17 +71,17 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
     },
   ];
 
-  const renderCard = (
-    stat: (typeof topStats)[number] | (typeof bottomStats)[number],
-    compact = false,
-  ) => {
+  const renderCard = (stat: (typeof topStats)[number] | (typeof bottomStats)[number]) => {
     const { label, count, cardClass, iconClass, icon: Icon } = stat;
     const textClass = "textClass" in stat ? stat.textClass : undefined;
+    const labelClass = label === "Decommissioned"
+      ? "inline-block origin-left scale-x-75 whitespace-nowrap"
+      : "truncate";
 
     return (
       <div
         key={label}
-        className={`border ${compact ? "p-1.5 sm:p-2.5 md:p-3 lg:p-4" : "p-2 sm:p-3 md:p-4 lg:p-5"} rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
+        className={`border p-2 sm:p-3 md:p-4 lg:p-5 rounded-2xl shadow-sm flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 ${cardClass} dark:shadow-none transition-colors duration-300`}
       >
         <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${iconClass}`}>
           <Icon size={16} strokeWidth={2} className="sm:size-[20px] md:size-[24px] lg:size-[28px]" />
@@ -89,7 +89,7 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
 
         <div className="min-w-0 flex-1">
           <div className={`text-sm sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight ${textClass ?? "text-gray-800 dark:text-slate-50"}`}>{count}</div>
-          <div className={`text-[10px] sm:text-xs md:text-sm font-medium truncate ${textClass ?? "text-gray-500 dark:text-slate-400"}`}>{label}</div>
+          <div className={`text-[10px] sm:text-xs md:text-sm font-medium ${labelClass} ${textClass ?? "text-gray-500 dark:text-slate-400"}`}>{label}</div>
         </div>
       </div>
     );
@@ -97,11 +97,8 @@ export const AssetRegistryStats: React.FC<Props> = ({ assets }) => {
 
   return (
     <div className="space-y-2 md:space-y-3 lg:space-y-5 w-full">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 lg:gap-5">
-        {topStats.map((stat) => renderCard(stat))}
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 lg:gap-5">
-        {bottomStats.map((stat) => renderCard(stat, true))}
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2 md:gap-3 lg:gap-5">
+        {[...topStats, ...bottomStats].map((stat) => renderCard(stat))}
       </div>
     </div>
   );
