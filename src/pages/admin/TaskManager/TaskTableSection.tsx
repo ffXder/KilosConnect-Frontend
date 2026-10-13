@@ -9,10 +9,10 @@ interface TaskManagementSectionProps {
 }
 
 const frequencyStyle: Record<string, string> = {
-  Daily: 'bg-purple-100 text-purple-600 dark:bg-purple-400 dark:text-purple-50',
-  Weekly: 'bg-blue-100 text-blue-600 dark:bg-blue-500 dark:text-blue-50',
-  Monthly: 'bg-green-100 text-green-600 dark:bg-green-500 dark:text-green-50'
-}
+  Daily: 'bg-purple-500 text-white dark:bg-purple-500 dark:text-white',
+  Weekly: 'bg-blue-500 text-white dark:bg-blue-500 dark:text-white',
+  Monthly: 'bg-green-600 text-white dark:bg-green-600 dark:text-white',
+};
 
 const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({ 
   tasks, 

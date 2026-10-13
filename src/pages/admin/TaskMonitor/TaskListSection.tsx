@@ -3,10 +3,8 @@ import type { TaskLog } from '../../../types/task';
 import {
   Clock,
   MapPin,
-  CheckCircle2,
   Loader2,
   ClipboardX,
-  AlertCircle,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -43,39 +41,38 @@ const TaskListSection: React.FC<TaskListProps> = ({
   }, [highlightedTaskLogId, isLoading]);
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'Completed':
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <CheckCircle2 size={12} /> Completed
-          </span>
-        );
-      case 'In Progress':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800 transition-colors duration-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-[pulse_2.5s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
-            In Progress
-          </span>
-        );
-      case 'Pending Review':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-900 animate-pulse" /> Pending Review
-          </span>
-        );
-      case 'Missed':
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-            <AlertCircle size={12} /> Missed
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
-            Pending
-          </span>
-        );
-    }
+    const statusStyles: Record<string, { label: string; badge: string }> = {
+      Completed: {
+        label: 'Completed',
+        badge: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
+      },
+      'In Progress': {
+        label: 'In Progress',
+        badge: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800',
+      },
+      'Pending Review': {
+        label: 'Pending Review',
+        badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+      },
+      Pending: {
+        label: 'Pending',
+        badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+      },
+      Missed: {
+        label: 'Missed',
+        badge: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
+      },
+    };
+    const style = statusStyles[status] ?? {
+      label: 'Pending',
+      badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+    };
+
+    return (
+      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border ${style.badge}`}>
+        {style.label}
+      </span>
+    );
   };
 
   return (

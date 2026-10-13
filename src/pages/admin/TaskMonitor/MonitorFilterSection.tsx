@@ -35,7 +35,9 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   const statusOptions = [
     { label: 'All Tasks', value: 'All Tasks', active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100' },
     { label: 'Pending', value: 'Pending', active: 'bg-orange-500 text-white shadow-sm', inactive: 'text-orange-600 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200' },
+    { label: 'In Progress', value: 'In Progress', active: 'bg-blue-500 text-white shadow-sm', inactive: 'text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200' },
     { label: 'Completed', value: 'Completed', active: 'bg-emerald-500 text-white shadow-sm', inactive: 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-300 dark:hover:text-emerald-200' },
+    { label: 'Missed', value: 'Missed', active: 'bg-rose-500 text-white shadow-sm', inactive: 'text-rose-600 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-200' },
   ];
   const zones = ["All Areas", "Mezzanine", "Powerlifting", "Open WOD", "CrossFit", "Weightlifting", "General Storage", "Maintenance Storage", "Multiple Area", "Front Desk Area", "Outdoor Area", "CR" , "1st Floor", "2nd Floor"];
 
@@ -50,7 +52,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
     <div className="bg-white p-4 rounded-xl border border-[#e2e8f0] shadow-sm space-y-4 dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       
       {/* Primary Action Row: Search & Add */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-0">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] dark:text-slate-400" />
           <input

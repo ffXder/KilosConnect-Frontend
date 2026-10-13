@@ -45,18 +45,18 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
     },
     { 
       label: 'Daily', 
-      active: 'bg-purple-100 text-purple-600 dark:bg-purple-400 dark:text-purple-50', 
-      inactive: 'text-slate-500 hover:bg-purple-50 dark:text-slate-400 dark:hover:bg-purple-950/40' 
+      active: 'bg-purple-500 text-white dark:bg-purple-500 dark:text-white', 
+      inactive: 'text-purple-700 hover:bg-purple-50 dark:text-purple-300 dark:hover:bg-purple-950/40' 
     },
     { 
       label: 'Weekly', 
-      active: 'bg-blue-100 text-blue-600 dark:bg-blue-500 dark:text-blue-50', 
-      inactive: 'text-slate-500 hover:bg-blue-50 dark:text-slate-400 dark:hover:bg-blue-950/40' 
+      active: 'bg-blue-500 text-white dark:bg-blue-500 dark:text-white', 
+      inactive: 'text-blue-700 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-950/40' 
     },
     { 
       label: 'Monthly', 
-      active: 'bg-green-100 text-green-600 dark:bg-green-500 dark:text-green-50', 
-      inactive: 'text-slate-500 hover:bg-green-50 dark:text-slate-400 dark:hover:bg-green-950/40' 
+      active: 'bg-green-600 text-white dark:bg-green-600 dark:text-white', 
+      inactive: 'text-green-700 hover:bg-green-50 dark:text-green-300 dark:hover:bg-green-950/40' 
     }
   ];
 
@@ -119,7 +119,8 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
               <button 
                 key={opt.label} 
                 onClick={() => setFrequencyFilter(opt.label)}
-                className={`px-4 py-2 rounded-[9px] font-semibold text-[10px] transition-all cursor-pointer ${
+                style={{ fontSize: '16px' }}
+                className={`px-4 py-2 rounded-[9px] font-semibold transition-all cursor-pointer ${
                   frequencyFilter === opt.label 
                     ? opt.active + " shadow-sm" 
                     : opt.inactive
