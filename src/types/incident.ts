@@ -3,7 +3,7 @@ export interface affectedAsset {
     assetId: string;
     name: string;
     condition: string;
-    location: string;
+    area: string;
 }
 
 
@@ -16,6 +16,7 @@ export interface IncidentReport {
     severity: "Low" | "Medium" | "High" | "Urgent" | "Critical";
     status: "Open" | "In Progress" | "Resolved";
     asset: affectedAsset | null;
+    resolutionNote?: string | null;
     reporterType?: "Staff" | "Public";
     reportedBy?: {
         _id: string;
@@ -27,20 +28,32 @@ export interface IncidentReport {
     dateAndTime: string;
 }
 
+export interface ResolveIncidentPayload {
+    resolutionNote: string;
+    repair?: {
+        assetId: string;
+        cost: number;
+        repairDate: string;
+        description?: string;
+    };
+}
+
 // for create
 export type NewIncidentReport = Omit<
     IncidentReport, 
-    "_id" | "incidentId" | "status" | "reportedBy"
+    "_id" | "incidentId" | "status" | "reportedBy" | "asset"
 > & {
+    asset: string;
     reporterType?: "Staff" | "Public";
     reportedName?: string | null;
 };
 
 //for updates
 export type UpdateIncidentReport = Partial<
-    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy">
->;
-
+    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "asset">
+> & {
+    asset?: string;
+};
 export interface Pagination {
   currentPage: number;
   totalPages: number;
