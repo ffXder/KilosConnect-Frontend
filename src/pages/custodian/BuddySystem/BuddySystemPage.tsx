@@ -128,7 +128,7 @@ export default function BuddySystemPage() {
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300'
               }`}
             >
-              Pending<span className="hidden sm:inline">&nbsp;Reviews</span>
+              <span className="hidden sm:inline">Pending Reviews</span>
               <span className={`text-[11px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-md font-bold ${
                 activeTab === 'pending' ? 'bg-amber-400 text-amber-950' : 'bg-amber-100 text-amber-800'
               }`}>
