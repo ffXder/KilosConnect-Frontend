@@ -90,8 +90,8 @@ export default function LogsFilterSection({
             <option value="All">All Types</option>
             <option value="Asset">Asset</option>
             <option value="Maintenance">Maintenance</option>
-            <option value="Incident Report">Incident</option>
-            <option value="Lost And Found">Lost & Found</option>
+            <option value="IncidentReport">Incident</option>
+            <option value="LostAndFound">Lost & Found</option>
             <option value="TaskLog">Task Log</option>
             <option value="User">User</option>
           </select>
