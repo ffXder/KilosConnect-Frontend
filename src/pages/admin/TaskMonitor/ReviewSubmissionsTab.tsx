@@ -293,9 +293,9 @@ const ZoomablePhoto: React.FC<{
     type="button"
     onClick={onOpen}
     aria-label={`View ${alt} full size`}
-    className={`group relative block aspect-video w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${frameClass}`}
+    className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${frameClass}`}
   >
-    <img src={url} alt={alt} className="h-full w-full object-cover" />
+    <img src={url} alt={alt} className="block h-auto w-full object-contain" />
     <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" />
     <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-lg bg-black/55 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
       <ZoomIn size={13} />
