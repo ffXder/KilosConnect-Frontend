@@ -4,7 +4,7 @@ import { ProfileStatsSection } from "./ProfileStatsSections";
 import ProfileActivitySection from "./RecentActivitySection";
 import { useAuth } from '../../../hooks/useAuth';
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
-import { useProfile } from '../../../hooks/useProfile';
+import { useProfile, useMyPerformance } from '../../../hooks/useProfile';
 import { formatDate } from "../../../utils/formatter";
 
 export interface ProfileData {
@@ -24,32 +24,10 @@ export interface PerformanceStats {
   activeDays: number;
 }
 
-export interface ActivityItem {
-  id: string;
-  type: "task" | "incident" | "inventory" | "log";
-  title: string;
-  description: string;
-  timeAgo: string;
-}
-
-const mockStats: PerformanceStats = {
-  tasksCompleted: 156,
-  incidentsReported: 8,
-  itemsLogged: 45,
-  activeDays: 23,
-};
-
-const mockActivity: ActivityItem[] = [
-  { id: "1", type: "task", title: "Completed task", description: "Clean Mezzanine Floor", timeAgo: "2 hours ago" },
-  { id: "2", type: "incident", title: "Reported incident", description: "Squat rack unstable", timeAgo: "3 hours ago" },
-  { id: "3", type: "inventory", title: "Updated inventory", description: "Floor Cleaner stock", timeAgo: "5 hours ago" },
-  { id: "4", type: "task", title: "Completed task", description: "Sanitize Equipment", timeAgo: "1 day ago" },
-  { id: "5", type: "log", title: "Added lost item", description: "Black Water Bottle", timeAgo: "1 day ago" },
-];
-
 export const ProfilePage: React.FC = () => {
   const { role } = useAuth();
   const { profile: rawProfile, loading, error, handleSaveProfile, handleUpdateAvatar } = useProfile();
+  const { stats, recentActivity, loading: performanceLoading } = useMyPerformance();
 
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
   const [avatarOverride, setAvatarOverride] = useState<string | null | undefined>(undefined);
@@ -165,7 +143,7 @@ export const ProfilePage: React.FC = () => {
               onUploadAvatar={handleUploadAvatar}
               onRemoveAvatar={handleRemoveAvatar}
             />
-            <ProfileStatsSection stats={mockStats} />
+            <ProfileStatsSection stats={stats} />
           </div>
 
           <div className="flex flex-col gap-5">
@@ -222,7 +200,7 @@ export const ProfilePage: React.FC = () => {
                 </div>
               )}
             </div>
-            <ProfileActivitySection activities={mockActivity} />
+            <ProfileActivitySection activities={recentActivity} />
           </div>
         </div>
       </div>
