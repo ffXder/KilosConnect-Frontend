@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Pencil, Trash2, Loader2 } from "lucide-react";
+import { User, Edit3, Trash2, Loader2 } from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
 import { formatDateTime } from "../../../../utils/formatter";
 
@@ -148,7 +148,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                         title="Edit"
                         className={`${iconButton} hover:bg-blue-50 hover:text-blue-600 focus-visible:ring-blue-400/40 dark:hover:bg-blue-500/10 dark:hover:text-blue-400`}
                       >
-                        <Pencil size={16} />
+                        <Edit3 size={16} />
                       </button>
                       <button
                         type="button"
