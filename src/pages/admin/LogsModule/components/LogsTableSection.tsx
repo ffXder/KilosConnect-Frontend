@@ -33,7 +33,7 @@ const getBadge = (type: string) => {
     case "TaskLog":
       return "bg-red-50 text-red-600 border-red-200";
 
-    case "Lost And Found":
+    case "LostAndFound":
     case "Lost & Found":
       return "bg-amber-50 text-amber-600 border-amber-200";
 
