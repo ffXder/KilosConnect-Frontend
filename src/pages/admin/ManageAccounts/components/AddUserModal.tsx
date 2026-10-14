@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { X, UserPlus, Loader2, AlertCircle, ChevronDown } from "lucide-react";
 import type { NewUserForm } from "../../../../types/manageAccount";
 
 interface AddUserModalProps {
@@ -7,32 +8,91 @@ interface AddUserModalProps {
   onSubmit: (data: Omit<NewUserForm, "password">) => Promise<void>;
 }
 
+const emptyForm = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  role: "custodian" as "admin" | "custodian",
+  phoneNumber: "",
+};
+
+const formatPHPhoneNumber = (value: string): string => {
+  const digits = value.replace(/\D/g, "");
+  const cleanNumbers = digits.startsWith("63") ? digits.slice(2) : digits;
+
+  let formatted = "+63";
+  if (cleanNumbers.length > 0) formatted += " " + cleanNumbers.substring(0, 3);
+  if (cleanNumbers.length > 3) formatted += " " + cleanNumbers.substring(3, 6);
+  if (cleanNumbers.length > 6) formatted += " " + cleanNumbers.substring(6, 10);
+
+  return formatted.trim();
+};
+
+/* Shared field styles (light + dark) */
+const inputClass =
+  "w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors " +
+  "focus:outline-none focus:border-[#d86125] focus:ring-2 focus:ring-[#d86125]/20 " +
+  "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#d86125]";
+
+/** Horizontal row: label on the left, control on the right (stacks on mobile). */
+const FormRow: React.FC<{
+  id: string;
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}> = ({ id, label, required, children }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr] sm:items-start gap-x-4 gap-y-2">
+    <label
+      htmlFor={id}
+      className="text-sm font-medium text-gray-700 dark:text-slate-200 sm:pt-2.5"
+    >
+      {label}
+      {required && (
+        <span className="text-red-500 ml-0.5" aria-hidden="true">
+          *
+        </span>
+      )}
+    </label>
+    <div className="min-w-0">{children}</div>
+  </div>
+);
+
 export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "custodian" as "admin" | "custodian",
-    phoneNumber: "",
-  });
+  const [formData, setFormData] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const firstRef = useRef<HTMLInputElement>(null);
+
+  // Start from a clean form every time the modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+    setFormData(emptyForm);
+    setError(null);
+  }, [isOpen]);
+
+  // Escape to close (not mid-submit), lock background scroll, focus first field
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !loading) onClose();
+    };
+    window.addEventListener("keydown", onKey);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    firstRef.current?.focus();
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, loading, onClose]);
 
   if (!isOpen) return null;
 
-  const formatPHPhoneNumber = (value: string): string => {
-    const digits = value.replace(/\D/g, "");
-    const cleanNumbers = digits.startsWith("63") ? digits.slice(2) : digits;
-
-    let formatted = "+63";
-    if (cleanNumbers.length > 0) formatted += " " + cleanNumbers.substring(0, 3);
-    if (cleanNumbers.length > 3) formatted += " " + cleanNumbers.substring(3, 6);
-    if (cleanNumbers.length > 6) formatted += " " + cleanNumbers.substring(6, 10);
-
-    return formatted.trim();
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    setError(null);
     if (name === "phoneNumber") {
       setFormData((prev) => ({ ...prev, [name]: formatPHPhoneNumber(value) }));
     } else {
@@ -44,65 +104,165 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
     e.preventDefault();
     try {
       setLoading(true);
+      setError(null);
       await onSubmit(formData);
       onClose();
     } catch (err: any) {
-      alert("Error adding user: " + err.message);
+      setError(err?.message ?? "Failed to add user");
     } finally {
       setLoading(false);
     }
   };
 
+  const emailInvalid = !!formData.email && !formData.email.includes("@");
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 font-sans">
-      <div className="bg-white dark:bg-slate-900 rounded-[20px] w-full max-w-[420px] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700">
-        <div className="bg-[#072821] px-7 py-5">
-          <h3 className="text-[#FDFFE0] text-xl font-bold">Add User</h3>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="add-user-title"
+        className="w-full max-w-lg flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
+      >
+        {/* Header */}
+        <div className="bg-[#0b3026] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-[#FDFFE0]">
+              <UserPlus size={20} />
+            </div>
+            <div className="min-w-0">
+              <h3 id="add-user-title" className="text-[#FDFFE0] text-lg font-bold leading-tight">
+                Add user
+              </h3>
+              <p className="text-[#FDFFE0]/60 text-sm mt-0.5">Create a new account</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            aria-label="Close"
+            className="shrink-0 -mr-2 p-2 rounded-lg text-[#FDFFE0]/70 hover:text-[#FDFFE0] hover:bg-white/10 transition-colors disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDFFE0]/60"
+          >
+            <X size={20} />
+          </button>
         </div>
-        <form className="p-7 space-y-4" onSubmit={handleSubmit}>
-          <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">First Name: <span className="text-red-500">*</span></label>
-            <input required name="firstName" value={formData.firstName} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Last Name: <span className="text-red-500">*</span></label>
-            <input required name="lastName" value={formData.lastName} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Email:</label>
-            <input 
-              name="email" 
-              type="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              className={`w-full border rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 ${formData.email && !formData.email.includes("@") ? "border-red-400" : "border-gray-300 dark:border-slate-600"}`} 
-            />
-            {formData.email && !formData.email.includes("@") && (
-              <p className="text-[10px] text-red-500 mt-1 animate-pulse">Email must contain an "@" symbol</p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          {/* Fields */}
+          <div className="flex-1 overflow-y-auto px-6 py-8 sm:px-8 space-y-5">
+            <FormRow id="add-first-name" label="First name" required>
+              <input
+                ref={firstRef}
+                id="add-first-name"
+                required
+                name="firstName"
+                autoComplete="off"
+                value={formData.firstName}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </FormRow>
+
+            <FormRow id="add-last-name" label="Last name" required>
+              <input
+                id="add-last-name"
+                required
+                name="lastName"
+                autoComplete="off"
+                value={formData.lastName}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </FormRow>
+
+            <FormRow id="add-email" label="Email">
+              <input
+                id="add-email"
+                name="email"
+                type="email"
+                autoComplete="off"
+                value={formData.email}
+                onChange={handleChange}
+                aria-invalid={emailInvalid}
+                aria-describedby={emailInvalid ? "add-email-error" : undefined}
+                placeholder="name@example.com"
+                className={`${inputClass} ${
+                  emailInvalid
+                    ? "!border-red-400 focus:!ring-red-400/20 dark:!border-red-400"
+                    : ""
+                }`}
+              />
+              {emailInvalid && (
+                <p id="add-email-error" className="text-xs text-red-500 dark:text-red-400 mt-2">
+                  Email must contain an "@" symbol
+                </p>
+              )}
+            </FormRow>
+
+            <FormRow id="add-phone" label="Phone number" required>
+              <input
+                id="add-phone"
+                required
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                autoComplete="off"
+                placeholder="+63 XXX XXX XXXX"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </FormRow>
+
+            <FormRow id="add-role" label="Role" required>
+              <div className="relative">
+                <select
+                  id="add-role"
+                  required
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className={`${inputClass} appearance-none pr-10 cursor-pointer`}
+                >
+                  <option value="custodian">Custodian</option>
+                  <option value="admin">Admin</option>
+                </select>
+                <ChevronDown
+                  size={18}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400 pointer-events-none"
+                />
+              </div>
+            </FormRow>
+
+            {error && (
+              <div
+                role="alert"
+                className="flex items-start gap-2.5 rounded-xl bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300"
+              >
+                <AlertCircle size={16} className="shrink-0 mt-0.5" />
+                <p>{error}</p>
+              </div>
             )}
           </div>
-          <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Phone Number: <span className="text-red-500">*</span></label>
-            <input 
-              required 
-              name="phoneNumber" 
-              placeholder="+63 XXX XXX XXXX"
-              value={formData.phoneNumber} 
-              onChange={handleChange} 
-              className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" 
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-[14px] font-semibold text-gray-700 dark:text-slate-200">Role: <span className="text-red-500">*</span></label>
-            <select required name="role" value={formData.role} onChange={handleChange} className="w-full border border-gray-300 dark:border-slate-600 rounded-lg p-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
-              <option value="custodian">Custodian</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div className="flex justify-center gap-3 pt-4">
-            <button type="button" onClick={onClose} className="w-full py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-200 dark:bg-slate-800">Cancel</button>
-            <button type="submit" disabled={loading} className="w-full py-2.5 bg-[#d86125] text-[#FDFFE0] rounded-lg text-sm font-bold disabled:opacity-50">
-              {loading ? "Adding..." : "Add User"}
+
+          {/* Footer */}
+          <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#FDFFE0] bg-[#d86125] shadow-sm hover:bg-[#c2551e] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+            >
+              {loading ? <Loader2 size={18} className="animate-spin" /> : <UserPlus size={18} />}
+              {loading ? "Adding..." : "Add user"}
             </button>
           </div>
         </form>

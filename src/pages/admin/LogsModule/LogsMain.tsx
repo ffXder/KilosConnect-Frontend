@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
 import { useAuditLogs } from "../../../hooks/useAuditLogs";

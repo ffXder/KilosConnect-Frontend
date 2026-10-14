@@ -3,8 +3,10 @@ import type { TaskLog } from '../../../types/task';
 import {
   Clock,
   MapPin,
+  CheckCircle2,
   Loader2,
   ClipboardX,
+  AlertCircle,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';

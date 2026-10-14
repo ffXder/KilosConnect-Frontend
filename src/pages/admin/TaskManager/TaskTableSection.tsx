@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trash2, Calendar, MapPin, Edit3, Loader2 } from 'lucide-react';
+import { formatTo12Hour } from '../../../utils/formatter';
 
 interface TaskManagementSectionProps {
   tasks: any[];
@@ -58,7 +59,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
                 </td>
                 <td className="px-4 py-6">
                   <div className="text-xs text-gray-470 flex items-center gap-1 mt-1  dark:text-slate-300">
-                    <Calendar size={12} /> {task.startTime} - {task.endTime}
+                    <Calendar size={12} /> {formatTo12Hour(task.startTime)} - {formatTo12Hour(task.endTime)}
                   </div>
                 </td>
                 <td className="px-4 py-6">

@@ -13,16 +13,18 @@ export interface CloudinaryImage {
     public_id: string;
 }
 
-export interface ChecklistItem {
+export interface ChecklistTemplateItem {
     _id?: string;
     label: string;
     isDone: boolean;
 }
 
+export type ChecklistItem = ChecklistTemplateItem;
+
 export interface Task {
   _id: string;
   title: string;
-  description?: string;
+  description?: string | null;
   area: string;        
   priority: Priority;
   frequency: Frequency;
@@ -31,8 +33,9 @@ export interface Task {
   endTime: string;      
   requiresVerification: boolean; 
   isBreak: boolean;
-  standardPhotoUrl?: CloudinaryImage;
-  checklist?: ChecklistItem[]; 
+  standardPhotoUrl?: CloudinaryImage | null;
+  relatedAsset?: string | null;
+  checklistTemplate?: ChecklistTemplateItem[];
   createdAt: string;
   updatedAt: string;
 }
@@ -56,7 +59,7 @@ export interface UserSummary {
 export interface TaskLog {
   _id: string;
   task: Pick<Task, '_id' | 'standardPhotoUrl' | 'title' | 'description' | 'area' | 'startTime' | 'endTime' | 'isBreak' | 'frequency' | 'priority' | 'requiresVerification'>;
-  checklist: ChecklistItem[];
+  checklist: ChecklistTemplateItem[];
   status: TaskLogStatus;
   startedBy?: UserSummary;
   startedAt?: string;

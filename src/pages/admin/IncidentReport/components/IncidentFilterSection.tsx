@@ -149,7 +149,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                       }}
                       className={`w-full text-left px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
                         dateRange === range
-                          ? 'bg-[#113129] text-white'
+                          ? 'bg-[#113129] text-white dark:bg-emerald-600 dark:text-white'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-[#113129] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
                       }`}
                     >
@@ -165,7 +165,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           type="date"
                           value={customStart}
                           onChange={(e) => setCustomStart(e.target.value)}
-                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129]"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
                         />
                       </div>
                       <div>
@@ -175,7 +175,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           value={customEnd}
                           min={customStart}
                           onChange={(e) => setCustomEnd(e.target.value)}
-                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129]"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
                         />
                       </div>
                       <button

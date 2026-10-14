@@ -1,3 +1,12 @@
+export interface affectedAsset {
+    _id: string;
+    assetId: string;
+    name: string;
+    condition: string;
+    area: string;
+}
+
+
 export interface IncidentReport {
     _id: string;
     incidentId: string;
@@ -6,8 +15,9 @@ export interface IncidentReport {
     area: string;
     severity: "Low" | "Medium" | "High" | "Urgent" | "Critical";
     status: "Open" | "In Progress" | "Resolved";
-    affectedAssets?: string[];
-    asset?: string | { _id?: string; name: string } | null;
+    asset?: affectedAsset | string | affectedAsset[] | null;
+    affectedAssets?: Array<affectedAsset | string>;
+    resolutionNote?: string | null;
     reporterType?: "Staff" | "Public";
     reportedBy?: {
         _id: string;
@@ -20,21 +30,34 @@ export interface IncidentReport {
     createdAt?: string;
 }
 
+export interface ResolveIncidentPayload {
+    resolutionNote: string;
+    repair?: {
+        assetId: string;
+        cost: number;
+        repairDate: string;
+        description?: string;
+    };
+}
+
 // for create
 export type NewIncidentReport = Omit<
     IncidentReport, 
-    "_id" | "incidentId" | "status" | "reportedBy" | "affectedAssets"
+    "_id" | "incidentId" | "status" | "reportedBy" | "asset" | "affectedAssets"
 > & {
-    affectedAssets: string[];
+    asset?: string;
+    affectedAssets?: string[];
     reporterType?: "Staff" | "Public";
     reportedName?: string | null;
 };
 
 //for updates
 export type UpdateIncidentReport = Partial<
-    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy">
->;
-
+    Omit<IncidentReport, "_id" | "incidentId" | "reportedBy" | "asset" | "affectedAssets">
+> & {
+    asset?: string;
+    affectedAssets?: string[];
+};
 export interface Pagination {
   currentPage: number;
   totalPages: number;

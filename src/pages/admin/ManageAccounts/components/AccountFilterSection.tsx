@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Plus, Search } from "lucide-react";
 
 export type AccountRoleFilter = "all" | "admin" | "custodian";
 export type AccountSortField = "name" | "dateAdded";
@@ -35,21 +35,31 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
         <button 
           type="button" // Explicitly button to prevent form triggers
           onClick={onAddNewUser}
-          className="bg-[#0b3026] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#08241d]"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0b3026] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#08241d] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3026]/40 focus-visible:ring-offset-2 dark:bg-emerald-700 dark:hover:bg-emerald-600 dark:focus-visible:ring-emerald-500/50 dark:focus-visible:ring-offset-slate-900"
         >
-          + Add New User
+          <Plus size={16} />
+          Add user
         </button>
       </div>
 
       <div className="px-6 py-3">
+        <div className="relative">
+          <Search
+            size={16}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500"
+          />
         <input
-          type="text"
+          type="search"
+          aria-label="Search users"
           placeholder="Search users..."
-          className="w-full h-10 bg-[#fafbfc] border border-gray-200 rounded-lg px-3 text-sm focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"
+          autoComplete="off"
+          className="w-full h-10 bg-[#fafbfc] border border-gray-200 rounded-lg pl-10 pr-3 text-sm focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"
           onChange={(e) => onSearchChange(e.target.value)}
           // Prevent 'Enter' key from triggering parent form submits
           onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}
         />
+        </div>
       </div>
       <div className="flex flex-wrap items-center gap-5 px-6 py-4">
         <div className="flex items-center gap-3">

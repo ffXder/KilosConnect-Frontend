@@ -16,6 +16,7 @@ export interface TaskItem {
   title: string;
   zone: string;
   startTime: string;
+  endTime: string;
   startedBy?: string | null;
   completedBy?: string | null;
   priority: 'Low' | 'Medium' | 'High';

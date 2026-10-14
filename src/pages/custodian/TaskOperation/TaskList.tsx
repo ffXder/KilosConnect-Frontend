@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Clock, ChevronRight, User, AlertCircle } from 'lucide-react';
 import type { TaskItem } from './TaskDetailsModal';
+import { formatTo12Hour } from '../../../utils/formatter';
 
 interface TaskListProps {
   tasks: TaskItem[];
@@ -75,7 +76,7 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
                     <User size={14} /> {task.startedBy || "Not Started Yet"}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Clock size={14} /> {task.dueDate}
+                    <Clock size={14} /> {`Start Time: ${formatTo12Hour(task.startTime)} - End Time: ${formatTo12Hour(task.endTime)}`}
                   </span>
                   <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-900">
                     {task.zone}

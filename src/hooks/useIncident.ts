@@ -3,9 +3,10 @@ import {
     getAllReports, 
     createReport, 
     updateReport, 
-    archiveReport
+    archiveReport,
+    resolveReport
 } from "../services/incidentService";
-import type { IncidentReport, NewIncidentReport, UpdateIncidentReport } from "../types/incident";
+import type { IncidentReport, NewIncidentReport, UpdateIncidentReport, ResolveIncidentPayload } from "../types/incident";
 
 export function useIncidentReports(page: number = 1, limit: number = 10) {
     const [reports, setReports] = useState<IncidentReport[]>([]);
@@ -22,7 +23,7 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         try {
             const data = await getAllReports();
 
-            // Flexible array extraction
+            // flexible array extraction
             if (Array.isArray(data)) {
                 setReports(data);
             } else if (data && typeof data === "object" && Array.isArray((data as any).incidentReports)) {
@@ -33,7 +34,7 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
                 setReports([]);
             }
 
-            // Extract pagination if present
+            // extract pagination if present
             if (data && typeof data === "object" && (data as any).pagination) {
                 setPagination((data as any).pagination);
             }
@@ -75,6 +76,15 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         }
     };
 
+    const handleResolve = async (incident: IncidentReport, payload: ResolveIncidentPayload) => {
+        try {
+            await resolveReport(incident._id, payload);
+            await fetchReports();
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
     return { 
         reports, 
         pagination, 
@@ -83,6 +93,7 @@ export function useIncidentReports(page: number = 1, limit: number = 10) {
         refresh: fetchReports, 
         handleCreate, 
         handleUpdate, 
-        handleArchive, 
+        handleArchive,
+        handleResolve,
     };
 }

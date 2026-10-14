@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Upload, ImageIcon, ClipboardList, ZoomIn, CheckCircle2, Clock, SplitSquareHorizontal, MapPin } from 'lucide-react';
+import {
+  X, Upload, ImageIcon, ZoomIn, CheckCircle2, Clock,
+  SplitSquareHorizontal, MapPin, ListChecks, Plus,
+  ChevronUp, ChevronDown, Trash2
+} from 'lucide-react';
 
 interface AddTaskModalProps {
   isOpen: boolean;
@@ -15,12 +19,34 @@ interface BasisImage {
   uploadedBy: string;
 }
 
-const AddTaskModal: React.FC<AddTaskModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onCreate, 
-  onSuccess, 
-  initialData 
+const emptyForm = {
+  title: '',
+  description: '',
+  startTime: '',
+  endTime: '',
+  area: '',
+  priority: 'Medium',
+  frequency: 'Daily',
+  dayType: null as string | number | null,
+  basisImage: null as string | null,
+  relatedAsset: '',
+  requiresVerification: false
+};
+
+const quickItems = [
+  'Wipe down equipment',
+  'Sanitize handles',
+  'Sweep floor',
+  'Restock towels',
+  'Check for damage'
+];
+
+const AddTaskModal: React.FC<AddTaskModalProps> = ({
+  isOpen,
+  onClose,
+  onCreate,
+  onSuccess,
+  initialData
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'verification'>('details');
@@ -28,23 +54,14 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    startTime: '',
-    endTime: '',
-    area: '',
-    priority: 'Medium',
-    frequency: 'Daily',
-    dayType: null as string | number | null,
-    basisImage: null as string | null,
-    relatedAsset: '',
-    requiresVerification: false
-  });
+  const [formData, setFormData] = useState(emptyForm);
+  const [checklist, setChecklist] = useState<string[]>([]);
+  const [newItem, setNewItem] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       setActiveTab('details');
+      setNewItem('');
       if (initialData) {
         setFormData({
           title: initialData.title || '',
@@ -59,6 +76,11 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
           relatedAsset: initialData.relatedAsset || '',
           requiresVerification: initialData.requiresVerification ?? false
         });
+        setChecklist(
+          (initialData.checklistTemplate ?? []).map((i: any) =>
+            typeof i === 'string' ? i : i.label
+          )
+        );
         if (initialData.basisImage) {
           setBasisImage({
             url: initialData.basisImage,
@@ -69,19 +91,8 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
           setBasisImage(null);
         }
       } else {
-        setFormData({
-          title: '',
-          description: '',
-          startTime: '',
-          endTime: '',
-          area: '',
-          priority: 'Medium',
-          frequency: 'Daily',
-          dayType: null,
-          basisImage: null,
-          relatedAsset: '',
-          requiresVerification: false
-        });
+        setFormData(emptyForm);
+        setChecklist([]);
         setBasisImage(null);
       }
     }
@@ -100,7 +111,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
       setBasisImage({
         url,
         uploadedAt: new Date().toLocaleString(),
-        uploadedBy: 'Admin',
+        uploadedBy: 'Admin'
       });
       setFormData(prev => ({ ...prev, basisImage: url }));
     };
@@ -112,12 +123,35 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
     setFormData(prev => ({ ...prev, basisImage: null }));
   };
 
+  // ---------- Checklist handlers ----------
+  const addItem = (label: string = newItem) => {
+    const v = label.trim();
+    if (!v) return;
+    setChecklist(prev => (prev.includes(v) ? prev : [...prev, v]));
+    setNewItem('');
+  };
+
+  const updateItem = (i: number, v: string) =>
+    setChecklist(prev => prev.map((x, idx) => (idx === i ? v : x)));
+
+  const removeItem = (i: number) =>
+    setChecklist(prev => prev.filter((_, idx) => idx !== i));
+
+  const moveItem = (i: number, dir: -1 | 1) =>
+    setChecklist(prev => {
+      const j = i + dir;
+      if (j < 0 || j >= prev.length) return prev;
+      const next = [...prev];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
+
   if (!isOpen) return null;
 
-  const isFormInvalid = 
-    !formData.title || 
-    !formData.area || 
-    !formData.startTime || 
+  const isFormInvalid =
+    !formData.title ||
+    !formData.area ||
+    !formData.startTime ||
     !formData.endTime ||
     (formData.frequency === 'Weekly' && !formData.dayType) ||
     (formData.frequency === 'Monthly' && !formData.dayType);
@@ -126,19 +160,27 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
     e.preventDefault();
     setSubmitting(true);
     try {
-      const payload = initialData ? { ...formData, _id: initialData._id } : formData;
+      // include a half-typed item and drop empty rows
+      const cleaned = [...checklist, newItem]
+        .map(l => l.trim())
+        .filter(Boolean)
+        .map(label => ({ label }));
+
+      const base = { ...formData, checklist: cleaned };
+      const payload = initialData ? { ...base, _id: initialData._id } : base;
+
       await onCreate(payload);
       onSuccess(payload);
       onClose();
     } catch (error) {
-      console.error("Task submission failed:", error);
+      console.error('Task submission failed:', error);
     } finally {
       setSubmitting(false);
     }
   };
 
-  const zones = ["Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Weightlifting Area", "General Storage", "Maintenance Storage", "Multiple Area", "Front Desk Area", "Outdoor Area", "CR" , "1st Floor", "2nd Floor"];
-  const priorities = ["Low", "Medium", "High", "Urgent"];
+  const zones = ["Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area", "Weightlifting Area", "General Storage", "Maintenance Storage", "Multiple Area", "Front Desk Area", "Outdoor Area", "CR", "1st Floor", "2nd Floor"];
+  const priorities = ["Low", "Medium", "High"]; // matches the schema enum
   const assetOptions = ["None", "Squat Rack", "Barbell", "Dumbbell Set", "Treadmill", "Cable Machine", "Bench Press", "Rowing Machine"];
   const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const monthDays = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -323,6 +365,93 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 </div>
               </div>
 
+              {/* Checklist */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="flex items-center gap-2 text-sm font-bold text-[#1e293b] tracking-tight">
+                    <ListChecks size={16} className="text-[#072821]" />
+                    Checklist (Optional)
+                  </label>
+                  {checklist.length > 0 && (
+                    <span className="text-xs font-semibold text-gray-400">
+                      {checklist.length} item{checklist.length > 1 && 's'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-gray-50/50 p-3 space-y-2">
+                  {checklist.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-white rounded-xl border border-gray-200 pl-3 pr-1 py-1">
+                      <span className="w-5 text-xs font-bold text-gray-300">{i + 1}</span>
+                      <input
+                        value={item}
+                        onChange={(e) => updateItem(i, e.target.value)}
+                        className="flex-1 min-w-0 py-1.5 text-sm outline-none bg-transparent"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => moveItem(i, -1)}
+                        disabled={i === 0}
+                        className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                      >
+                        <ChevronUp size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveItem(i, 1)}
+                        disabled={i === checklist.length - 1}
+                        className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(i)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  ))}
+
+                  <div className="flex gap-2">
+                    <input
+                      value={newItem}
+                      onChange={(e) => setNewItem(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault(); // stops Enter from submitting the whole form
+                          addItem();
+                        }
+                      }}
+                      placeholder="Add a step and press Enter"
+                      className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:border-[#06322e]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => addItem()}
+                      disabled={!newItem.trim()}
+                      className="px-4 rounded-xl bg-[#072821] text-white text-sm font-bold flex items-center gap-1 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      <Plus size={16} /> Add
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {quickItems.filter(q => !checklist.includes(q)).map(q => (
+                      <button
+                        key={q}
+                        type="button"
+                        onClick={() => addItem(q)}
+                        className="px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-xs font-medium text-gray-500 hover:border-[#072821] hover:text-[#072821] cursor-pointer"
+                      >
+                        + {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Related Asset Dropdown */}
               <div>
                 <label className="block text-sm font-bold text-[#1e293b] dark:text-slate-200 mb-2 tracking-tight">Related Asset?</label>
@@ -351,7 +480,6 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               </div>
             </>
           ) : (
-            /* TaskSetupTab integrated view */
             <div className="space-y-6">
               <div className="bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 rounded-xl p-4 flex items-start gap-3">
                 <SplitSquareHorizontal className="text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" size={20} />
@@ -466,7 +594,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   : "bg-[#072821] dark:bg-[#1e3a2f] hover:bg-[#042421] dark:hover:bg-[#163427] text-white"
               }`}
             >
-              {submitting ? "Saving..." : initialData ? "Save Changes" : "+ Add Task"}
+              {submitting ? 'Saving...' : initialData ? 'Save Changes' : '+ Add Task'}
             </button>
           </div>
         </form>

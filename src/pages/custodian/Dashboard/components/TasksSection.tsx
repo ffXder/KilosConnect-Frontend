@@ -1,7 +1,7 @@
 import React from "react";
 import { Check } from "lucide-react";
 import type { TaskItem } from "../../TaskOperation/TaskDetailsModal";
-import { formatTime } from "../../../../utils/formatter";
+import { formatTo12Hour } from "../../../../utils/formatter";
 
 interface TasksProps {
   tasks: TaskItem[];
@@ -78,8 +78,8 @@ export const TasksSection: React.FC<TasksProps> = ({
                   >
                     {task.title}
                   </p>
-                  <p className="text-xs text-gray-400 font-medium mt-0.5 dark:text-slate-400">
-                    {task.zone} · {task.dueDate}
+                  <p className="text-xs text-gray-400 dark:text-slate-400 font-medium mt-0.5">
+                    {task.zone} · {formatTo12Hour(task.startTime)} – {formatTo12Hour(task.dueDate)}
                   </p>
                 </div>
               </div>

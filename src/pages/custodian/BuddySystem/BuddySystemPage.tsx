@@ -93,11 +93,9 @@ export default function BuddySystemPage() {
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800'
               }`}
             >
-              Pending Reviews
-              <span className={`text-xs px-2 py-0.5 rounded-md font-bold ${
-                activeTab === 'pending'
-                  ? 'bg-amber-400 text-amber-950'
-                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200'
+              <span className="hidden sm:inline">Pending Reviews</span>
+              <span className={`text-[11px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-md font-bold ${
+                activeTab === 'pending' ? 'bg-amber-400 text-amber-950' : 'bg-amber-100 text-amber-800'
               }`}>
                 {pendingQueue.length}
               </span>

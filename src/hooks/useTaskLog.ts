@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { TaskLog, ChecklistItem } from '../types/task';
+import type { TaskLog, ChecklistTemplateItem } from '../types/task';
 import * as LogService from '../services/taskLogService';
 import { socket } from '../config/socket';
 
@@ -57,7 +57,7 @@ export function useTaskLogs(date?: string, status?: string) {
         // handles real-time checklist updates
         const handleChecklistUpdated = (payload: {
             taskLogId: string;
-            checklist: ChecklistItem[];
+            checklist: ChecklistTemplateItem[];
         }) => {
             setLogs((prev) =>
                 prev.map((log) =>

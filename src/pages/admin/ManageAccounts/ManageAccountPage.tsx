@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from '../../../hooks/useAuth';
-import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
+import { AlertCircle, X } from "lucide-react";
+import { useAuth } from "../../../hooks/useAuth";
+import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import type { UserAccount, NewUserForm } from "../../../types/manageAccount";
 import { AccountsFilterSection } from "./components/AccountFilterSection";
 import AccountsListSection from "./components/AccountListSection";
@@ -15,6 +16,8 @@ import type {
   AccountSortField,
 } from "./components/AccountFilterSection";
 
+const CLOSED_DELETE = { isOpen: false, id: "", name: "" };
+
 export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<AccountRoleFilter>("all");
@@ -26,10 +29,10 @@ export const ManageAccountsPage: React.FC = () => {
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
-
-  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string}>({
-    isOpen: false, id: "", name: ""
-  });
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string }>(
+    CLOSED_DELETE
+  );
+  const [pageError, setPageError] = useState<string | null>(null);
 
   const handleAddSubmit = async (data: Omit<NewUserForm, "password">) => {
     await createUser(data as NewUserForm);
@@ -42,15 +45,17 @@ export const ManageAccountsPage: React.FC = () => {
   };
 
   const handleResetPassword = async (userId: string) => {
+    // TODO: call the backend (e.g. send a one-time reset link) before shipping
     console.log("Resetting password for user:", userId);
   };
 
   const confirmDelete = async () => {
     try {
       await handleToggleArchive(deleteConfirm.id, false);
-      setDeleteConfirm({ isOpen: false, id: "", name: "" });
+      setDeleteConfirm(CLOSED_DELETE);
     } catch (err: any) {
-      alert("Failed to delete user.");
+      setDeleteConfirm(CLOSED_DELETE);
+      setPageError(err?.message ?? "Failed to delete user.");
     }
   };
 
@@ -105,32 +110,42 @@ export const ManageAccountsPage: React.FC = () => {
             </div>
           </div>
 
-          <AccountsFilterSection 
-            totalAccounts={filteredAccounts.length}
-            onSearchChange={(value) => {
-              setSearch(value);
-              setCurrentPage(1);
-            }}
-            onAddNewUser={() => setIsAddModalOpen(true)}
-            roleFilter={roleFilter}
-            onRoleFilterChange={(value) => {
-              setRoleFilter(value);
-              setCurrentPage(1);
-            }}
-            sortBy={sortBy}
-            onSortByChange={(value) => {
-              setSortBy(value);
-              setCurrentPage(1);
-            }}
-            sortDirection={sortDirection}
-            onSortDirectionChange={(value) => {
-              setSortDirection(value);
-              setCurrentPage(1);
-            }}
-          />
+          {pageError && (
+            <div role="alert" className="flex items-center gap-3 rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300">
+              <AlertCircle size={18} className="shrink-0" />
+              <p className="flex-1">{pageError}</p>
+              <button type="button" onClick={() => setPageError(null)} aria-label="Dismiss">
+                <X size={16} />
+              </button>
+            </div>
+          )}
 
-          <div className="overflow-x-auto rounded-2xl border border-[#e8e8e8] bg-white shadow-sm dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-            <AccountsListSection 
+          <section className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-colors duration-300">
+            <AccountsFilterSection
+              totalAccounts={sortedAccounts.length}
+              onSearchChange={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
+              onAddNewUser={() => setIsAddModalOpen(true)}
+              roleFilter={roleFilter}
+              onRoleFilterChange={(value) => {
+                setRoleFilter(value);
+                setCurrentPage(1);
+              }}
+              sortBy={sortBy}
+              onSortByChange={(value) => {
+                setSortBy(value);
+                setCurrentPage(1);
+              }}
+              sortDirection={sortDirection}
+              onSortDirectionChange={(value) => {
+                setSortDirection(value);
+                setCurrentPage(1);
+              }}
+            />
+
+            <AccountsListSection
               accounts={paginatedAccounts}
               totalAccounts={sortedAccounts.length}
               currentPage={safeCurrentPage}
@@ -138,19 +153,20 @@ export const ManageAccountsPage: React.FC = () => {
               onPageChange={setCurrentPage}
               loading={loading}
               onEditClick={(account) => setSelectedUserForEdit(account)}
-              onDeleteClick={(id: string, name: string) => setDeleteConfirm({ isOpen: true, id, name })} 
+              onDeleteClick={(id, name) =>
+                setDeleteConfirm({ isOpen: true, id, name })
+              }
             />
-          </div>
+          </section>
         </div>
 
-        {/* --- ADD USER MODAL --- */}
+        {/* Modals */}
         <AddUserModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSubmit={handleAddSubmit}
         />
 
-        {/* --- EDIT USER MODAL --- */}
         <EditUserModal
           isOpen={!!selectedUserForEdit}
           user={selectedUserForEdit}
@@ -159,10 +175,9 @@ export const ManageAccountsPage: React.FC = () => {
           onResetPassword={handleResetPassword}
         />
 
-        {/* --- DELETE CONFIRM MODAL --- */}
         <DeleteConfirmModal
           isOpen={deleteConfirm.isOpen}
-          onClose={() => setDeleteConfirm({ isOpen: false, id: "", name: "" })}
+          onClose={() => setDeleteConfirm(CLOSED_DELETE)}
           onConfirm={confirmDelete}
           itemName={deleteConfirm.name || "Selected Account"}
           itemType="User Account"

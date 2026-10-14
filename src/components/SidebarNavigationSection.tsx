@@ -42,7 +42,7 @@ const navItems: SidebarNavItem[] = [
     icon: <LayoutDashboard size={20} />,
   },
   {
-    label: "Overview",
+    label: "Dashboard",
     path: "/custodian/dashboard",
     roles: ["custodian"] as Role[],
     icon: <LayoutDashboard size={20} />,
@@ -420,6 +420,9 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
               Log Out
             </span>
           </button>
+          <p className=" [font-family:'Poppins',Helvetica] text-[#FDFFE0] text-xs leading-5 whitespace-nowrap transition-all duration-300 mt-3 text-center">
+            v1.0.0
+          </p>
         </div>
       </aside>
     </>

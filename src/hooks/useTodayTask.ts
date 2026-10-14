@@ -16,6 +16,7 @@ const toTaskItem = (log: TaskLog): TaskItem => ({
     title: log.task.title,
     zone: log.task.area,
     startTime: log.task.startTime,
+    endTime: log.task.endTime,
     startedBy: fullName(log.startedBy),
     completedBy: fullName(log.completedBy),
     priority: log.task.priority,

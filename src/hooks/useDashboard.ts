@@ -74,6 +74,7 @@ export function useDashboard() {
           const populatedAsset =
             typeof report.asset === 'object' &&
             report.asset !== null &&
+            !Array.isArray(report.asset) &&
             typeof report.asset.name === 'string'
               ? report.asset.name
               : undefined;
