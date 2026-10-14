@@ -84,7 +84,7 @@ export const ManageAccountsPage: React.FC = () => {
             </p>
           </header>
 
-          {/* Page-level error (replaces browser alert) */}
+          {/* Page-level error */}
           {pageError && (
             <div
               role="alert"
