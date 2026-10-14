@@ -54,14 +54,29 @@ export const IncidentReportPage: React.FC = () => {
   // DELETE/ARCHIVE MODAL STATES
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [incidentToDelete, setIncidentToDelete] = React.useState<IncidentReport | null>(null);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const pageSize = 10;
 
   // Setters bound to URL updating
-  const setActiveStatus = (val: string) => updateParam('status', val, ['All']);
-  const setActiveSeverity = (val: string) => updateParam('severity', val, ['Any Severity']);
-  const setActiveArea = (val: string) => updateParam('area', val, ['All Areas']);
-  const setSearchTerm = (val: string) => updateParam('search', val, ['']);
+  const setActiveStatus = (val: string) => {
+    setCurrentPage(1);
+    updateParam('status', val, ['All']);
+  };
+  const setActiveSeverity = (val: string) => {
+    setCurrentPage(1);
+    updateParam('severity', val, ['Any Severity']);
+  };
+  const setActiveArea = (val: string) => {
+    setCurrentPage(1);
+    updateParam('area', val, ['All Areas']);
+  };
+  const setSearchTerm = (val: string) => {
+    setCurrentPage(1);
+    updateParam('search', val, ['']);
+  };
 
   const setDateRange = (val: string) => {
+    setCurrentPage(1);
     if (val !== 'Custom Range') {
       updateParams({
         dateRange: { value: val, defaultValues: ['Last 30 Days'] },
@@ -73,8 +88,18 @@ export const IncidentReportPage: React.FC = () => {
     }
   };
 
-  const setCustomStart = (val: string) => updateParam('startDate', val, ['']);
-  const setCustomEnd = (val: string) => updateParam('endDate', val, ['']);
+  const setCustomStart = (val: string) => {
+    setCurrentPage(1);
+    updateParam('startDate', val, ['']);
+  };
+  const setCustomEnd = (val: string) => {
+    setCurrentPage(1);
+    updateParam('endDate', val, ['']);
+  };
+  const resetFilters = () => {
+    setCurrentPage(1);
+    clearAllFilters();
+  };
 
   const { reports, loading, error, handleCreate, handleUpdate, handleArchive, handleResolve } = useIncidentReports();
   const { assets } = useAssets();
@@ -104,14 +129,6 @@ export const IncidentReportPage: React.FC = () => {
           return matchesTitle && matchesSeverity && incident.status !== 'Resolved';
         })
         .sort((a, b) => Date.parse(b.dateAndTime) - Date.parse(a.dateAndTime))[0] ?? null;
-
-  React.useEffect(() => {
-    if (!alertIncident || loading) return;
-    document.getElementById(`incident-${alertIncident._id}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
-  }, [alertIncident, loading]);
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
     try {
@@ -176,31 +193,68 @@ export const IncidentReportPage: React.FC = () => {
   };
 
   // Filtering Logic
-  const isYesterday = dateRange === 'Yesterday';
-  const threshold = getDateThreshold(dateRange, customStart ? new Date(customStart) : null);
-  const endDate = customEnd ? new Date(customEnd) : null;
+  const filteredIncidents = useMemo(() => {
+    const isYesterday = dateRange === 'Yesterday';
+    const threshold = getDateThreshold(dateRange, customStart ? new Date(customStart) : null);
 
-  const filteredIncidents = incidents.filter((incident) => {
-    const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
-    const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
-    const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
-    const matchesSearch =
-      (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
+    return incidents.filter((incident) => {
+      const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
+      const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
+      const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
+      const matchesSearch =
+        (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const incidentDate = new Date(incident.dateAndTime);
-    const matchesStart = threshold ? incidentDate >= threshold : true;
-    const matchesEnd = isYesterday
-      ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
-      : endDate
-      ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
-      : true;
+      const incidentDate = new Date(incident.dateAndTime);
+      const matchesStart = threshold ? incidentDate >= threshold : true;
+      const matchesEnd = isYesterday
+        ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
+        : customEnd
+          ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
+          : true;
 
-    return (
-      (matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd) ||
-      incident._id === alertIncident?._id
-    );
-  });
+      return (
+        (matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd) ||
+        incident._id === alertIncident?._id
+      );
+    });
+  }, [
+    incidents,
+    activeStatus,
+    activeSeverity,
+    activeArea,
+    searchTerm,
+    dateRange,
+    customStart,
+    customEnd,
+    alertIncident,
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredIncidents.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedIncidents = filteredIncidents.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [activeStatus, activeSeverity, activeArea, searchTerm, dateRange, customStart, customEnd]);
+
+  React.useEffect(() => {
+    if (!alertIncident || loading) return;
+    const incidentIndex = filteredIncidents.findIndex((incident) => incident._id === alertIncident._id);
+    if (incidentIndex >= 0) setCurrentPage(Math.floor(incidentIndex / pageSize) + 1);
+  }, [alertIncident, filteredIncidents, loading]);
+
+  React.useEffect(() => {
+    if (!alertIncident || loading || !paginatedIncidents.some((incident) => incident._id === alertIncident._id)) {
+      return;
+    }
+    document.getElementById(`incident-${alertIncident._id}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [alertIncident, loading, paginatedIncidents]);
 
   // Analytics Computation
   const analytics = useMemo(() => {
@@ -278,7 +332,7 @@ export const IncidentReportPage: React.FC = () => {
             setCustomStart={setCustomStart}
             customEnd={customEnd}
             setCustomEnd={setCustomEnd}
-            onResetFilters={clearAllFilters}
+            onResetFilters={resetFilters}
           />
 
           {error && (
@@ -290,9 +344,13 @@ export const IncidentReportPage: React.FC = () => {
 
           {/* Incident Table */}
           <IncidentTable
-            incidents={filteredIncidents}
+            incidents={paginatedIncidents}
             highlightedIncidentId={alertIncident?._id}
             loading={loading}
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            totalIncidents={filteredIncidents.length}
+            onPageChange={setCurrentPage}
             onSelectIncident={handleItemClick}
             onViewIncident={handleViewDetails}
             onDeleteIncident={handleDeleteClick}
