@@ -25,7 +25,7 @@ export const LoginPage: React.FC = () => {
     setError("");
     setLoading(true);
 
-    const data = await login(formValues.username, formValues.password);
+    const data = await login(formValues.username.trim(), formValues.password.trim());
 
     // new accounts must change password
     if (data?.mustChangePassword) {
@@ -98,7 +98,7 @@ export const LoginPage: React.FC = () => {
                   name={field.id}
                   type={field.id === "password" && showPassword ? "text" : field.type}
                   value={formValues[field.id]}
-                  onChange={(e) => setFormValues(prev => ({ ...prev, [field.id]: e.target.value }))}
+                  onChange={(e) => setFormValues(prev => ({ ...prev, [field.id]: e.target.value.trim() }))}
                   className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#ba6300] outline-none"
                 />
                 {field.id === "password" && (
