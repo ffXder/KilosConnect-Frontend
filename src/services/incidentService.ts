@@ -50,7 +50,6 @@ export const updateReport = async (id: string, data: UpdateIncidentReport): Prom
 
 // PUT
 export const resolveReport = async (id: string, payload: ResolveIncidentPayload): Promise<IncidentReport> => {
-    console.log('Resolving incident with id:', id); //debug
     const res = await apiRequest(`/incident-reports/${id}/resolve`, {
         method: 'PUT',
         body: JSON.stringify(payload),
