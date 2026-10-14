@@ -60,11 +60,11 @@ const Photo: React.FC<{
     type="button"
     onClick={() => onOpen(url, alt)}
     aria-label={`Zoom ${alt}`}
-    className={`group relative block aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl bg-gray-100 dark:bg-slate-800 ${
+    className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl ${
       ring ?? 'ring-1 ring-black/5 dark:ring-white/10'
     } focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/50 dark:focus-visible:ring-emerald-500/60`}
   >
-    <img src={url} alt={alt} loading="lazy" className="h-full w-full object-contain" />
+    <img src={url} alt={alt} loading="lazy" className="block h-auto w-full object-contain" />
     <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
     <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-lg bg-black/55 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
       <ZoomIn size={13} />
