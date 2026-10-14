@@ -23,22 +23,28 @@ const getBadge = (type: string) => {
     case "Asset":
       return "bg-blue-50 text-blue-600 border-blue-200";
 
+    case "Archive":
+      return "bg-indigo-50 text-indigo-600 border-indigo-200";
+
     case "RepairLog":
-    case "Task":
-      return "bg-yellow-50 text-yellow-600 border-yellow-200";
+      return "bg-sky-50 text-sky-600 border-sky-200";
 
     case "IncidentReport":
-      return "bg-purple-50 text-purple-600 border-purple-200";
+      return "bg-red-50 text-red-600 border-red-200";
       
     case "TaskLog":
-      return "bg-red-50 text-red-600 border-red-200";
+      return "bg-emerald-50 text-emerald-600 border-emerald-200";
+
+    case "TaskTemplate":
+    case "Task":
+      return "bg-violet-50 text-violet-600 border-violet-200";
 
     case "LostAndFound":
     case "Lost & Found":
       return "bg-amber-50 text-amber-600 border-amber-200";
 
     case "User":
-      return "bg-purple-50 text-purple-600 border-purple-200";
+      return "bg-slate-100 text-slate-600 border-slate-200";
 
     default:
       return "bg-slate-100 text-slate-600 border-slate-200";

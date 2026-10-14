@@ -17,9 +17,13 @@ export function LogsPage() {
   // read URL params
   const search = getParam("search", "");
   const selectedType = getParam("module", "All");
-  const selectedDate = getParam("date", "All");
+  const dateParam = getParam("date", "All Dates");
+  const selectedDate = dateParam === "All" ? "All Dates" : dateParam;
   const startDate = getParam("startDate", "");
   const endDate = getParam("endDate", "");
+  const selectedAction = getParam("action", "All Actions");
+  const sortBy = getParam("sortBy", "date");
+  const sortOrder = getParam("sortOrder", "desc");
   const page = Number(getParam("page", "1"))
 
   // fetch data
@@ -29,6 +33,9 @@ export function LogsPage() {
     date: selectedDate,
     startDate,
     endDate,
+    action: selectedAction,
+    sortBy,
+    sortOrder,
     page,
   });
   
@@ -50,6 +57,9 @@ export function LogsPage() {
   const setSearch = (value: string) => handleSearchChange(value);
 
   const setSelectedType = (value: string) => handleFilterChange("module", value, ["All Types", "All", ""]);
+  const setSelectedAction = (value: string) => handleFilterChange("action", value, ["All Actions", ""]);
+  const setSortBy = (value: string) => handleFilterChange("sortBy", value, ["date"]);
+  const setSortOrder = (value: string) => handleFilterChange("sortOrder", value, ["desc"]);
 
   const setSelectedDate = (value: string) => {
     if (value !== "Custom") {
@@ -104,12 +114,18 @@ export function LogsPage() {
             setSearch={setSearch}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
+            selectedAction={selectedAction}
+            setSelectedAction={setSelectedAction}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             startDate={startDate}
             setStartDate={setStartDate} 
             endDate={endDate}
             setEndDate={setEndDate}    
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
           />
 
           {isLoading ? (

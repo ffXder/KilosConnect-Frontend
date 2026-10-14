@@ -10,8 +10,32 @@ export interface User {
 
 export interface AuditLogs {
   _id: string;
-  action: 'CREATE' | 'UPDATE' | 'ARCHIVE' | 'UNARCHIVE' | 'DELETE' | 'CLAIM' | 'UNCLAIM' | 'VIEW' | 'COMPLETE' | 'MISSED';
-  module: 'Asset' | 'Consumable' | 'Inventory' | 'LostAndFound' | 'IncidentReport' | 'Task';
+  action:
+    | 'CREATE'
+    | 'UPDATE'
+    | 'ARCHIVE'
+    | 'UNARCHIVE'
+    | 'DELETE'
+    | 'CLAIM'
+    | 'UNCLAIM'
+    | 'VIEW'
+    | 'GENERATE'
+    | 'START'
+    | 'COMPLETE'
+    | 'MISSED'
+    | 'VERIFY_PEER'
+    | 'DISPUTE_PEER'
+    | 'RESOLVE_DISPUTE'
+    | 'CANCEL';
+  module:
+    | 'User'
+    | 'Archive'
+    | 'Asset'
+    | 'RepairLog'
+    | 'LostAndFound'
+    | 'IncidentReport'
+    | 'TaskTemplate'
+    | 'TaskLog';
   targetId: string | null;
   performedBy: User;
   details: string | null;

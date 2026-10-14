@@ -13,11 +13,25 @@ export interface ArchiveApiResponse {
 }
 
 // GET ALL
-export const getAllArchives = async (params?: { moduleType?: string; search?: string; page?: number }): Promise<ArchiveApiResponse> => {
+export const getAllArchives = async (params?: {
+    moduleType?: string;
+    search?: string;
+    page?: number;
+    date?: string;
+    startDate?: string;
+    endDate?: string;
+    sortBy?: string;
+    sortOrder?: string;
+}): Promise<ArchiveApiResponse> => {
     const queryParams = new URLSearchParams();
     if (params?.moduleType) queryParams.set("moduleType", params.moduleType);
     if (params?.search) queryParams.set("search", params.search);
     if (params?.page) queryParams.set("page", String(params.page));
+    if (params?.date && params.date !== "All Dates") queryParams.set("date", params.date);
+    if (params?.startDate) queryParams.set("startDate", params.startDate);
+    if (params?.endDate) queryParams.set("endDate", params.endDate);
+    if (params?.sortBy) queryParams.set("sortBy", params.sortBy);
+    if (params?.sortOrder) queryParams.set("sortOrder", params.sortOrder);
     const query = queryParams.toString();
     const res = await apiRequest(`/archives${query ? `?${query}` : ""}`, { method: 'GET' });
     if (!res.ok) {

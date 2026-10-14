@@ -20,6 +20,11 @@ export const ArchivesPage: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All Types");
+  const [selectedDate, setSelectedDate] = useState("All Dates");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [sortBy, setSortBy] = useState("archiveDate");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [page, setPage] = useState(1);
 
   const [viewItem, setViewItem] = useState<ArchiveRecord | null>(null);
@@ -37,8 +42,13 @@ export const ArchivesPage: React.FC = () => {
       search: searchQuery || undefined,
       moduleType,
       page,
+      date: selectedDate,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      sortBy,
+      sortOrder,
     });
-  }, [searchQuery, selectedType, page, fetchArchives]);
+  }, [searchQuery, selectedType, selectedDate, startDate, endDate, sortBy, sortOrder, page, fetchArchives]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
@@ -48,6 +58,15 @@ export const ArchivesPage: React.FC = () => {
   const handleTypeChange = (value: string) => {
     setSelectedType(value);
     setPage(1);
+  };
+
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
+    setPage(1);
+    if (value !== "Custom") {
+      setStartDate("");
+      setEndDate("");
+    }
   };
 
   // Helper to resolve title accurately based on MongoDB payload
@@ -75,6 +94,11 @@ export const ArchivesPage: React.FC = () => {
       search: searchQuery || undefined,
       moduleType,
       page,
+      date: selectedDate,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      sortBy,
+      sortOrder,
     });
     if (success) {
       setRestoreItem(null);
@@ -94,7 +118,7 @@ export const ArchivesPage: React.FC = () => {
     byModule: {
       IncidentReport: stats?.byModule?.IncidentReport ?? 0,
       Asset: stats?.byModule?.Asset ?? 0,
-      Task: stats?.byModule?.Task ?? 0,
+      TaskTemplate: stats?.byModule?.TaskTemplate ?? stats?.byModule?.Task ?? 0,
       User: stats?.byModule?.User ?? 0,
       LostAndFound: stats?.byModule?.LostAndFound ?? 0,
     },
@@ -135,6 +159,28 @@ export const ArchivesPage: React.FC = () => {
             setSearchQuery={handleSearchChange}
             selectedType={selectedType}
             setSelectedType={handleTypeChange}
+            selectedDate={selectedDate}
+            setSelectedDate={handleDateChange}
+            startDate={startDate}
+            setStartDate={(value) => {
+              setStartDate(value);
+              setPage(1);
+            }}
+            endDate={endDate}
+            setEndDate={(value) => {
+              setEndDate(value);
+              setPage(1);
+            }}
+            sortBy={sortBy}
+            setSortBy={(value) => {
+              setSortBy(value);
+              setPage(1);
+            }}
+            sortOrder={sortOrder}
+            setSortOrder={(value) => {
+              setSortOrder(value);
+              setPage(1);
+            }}
           />
 
           {/* Table Container */}
@@ -217,7 +263,7 @@ export const ArchivesPage: React.FC = () => {
                       Original Date
                     </label>
                     <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
-                      {new Date(viewItem.createdAt).toLocaleDateString()}
+                      {new Date(viewItem.data?.dateAndTime || viewItem.data?.createdAt || viewItem.data?.date || viewItem.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <div>
@@ -225,7 +271,7 @@ export const ArchivesPage: React.FC = () => {
                       Archived Date
                     </label>
                     <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
-                      {new Date(viewItem.updatedAt).toLocaleDateString()}
+                      {new Date(viewItem.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>

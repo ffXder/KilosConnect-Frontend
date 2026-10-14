@@ -11,6 +11,11 @@ interface FetchArchiveFilters {
   search?: string;
   moduleType?: string;
   page?: number;
+  date?: string;
+  startDate?: string;
+  endDate?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
 
 export function useArchives() {
@@ -34,6 +39,11 @@ export function useArchives() {
         moduleType:
           filters?.moduleType === "All Types" ? undefined : filters?.moduleType,
         page: filters?.page,
+        date: filters?.date,
+        startDate: filters?.startDate,
+        endDate: filters?.endDate,
+        sortBy: filters?.sortBy,
+        sortOrder: filters?.sortOrder,
       };
 
       const data = await getAllArchives(cleanedFilters);

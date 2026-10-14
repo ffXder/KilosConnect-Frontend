@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Boxes, ClipboardCheck, PackageSearch, ShieldAlert, UserRound, Wrench } from 'lucide-react';
+import { Activity, Archive, Boxes, ClipboardCheck, PackageSearch, ShieldAlert, UserRound, Wrench } from 'lucide-react';
 
 interface LogsStatsSectionProps {
   stats?: Record<string, number>; // e.g. { Asset: 12, TaskLog: 5, IncidentReport: 3 }
@@ -14,6 +14,13 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
       cardClass: "bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-800",
       iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-200 dark:text-blue-700",
       icon: Boxes,
+    },
+    {
+      label: "Archives",
+      count: stats["Archive"] || 0,
+      cardClass: "bg-indigo-50 border-indigo-200 dark:bg-indigo-950/40 dark:border-indigo-800",
+      iconClass: "bg-indigo-100 text-indigo-600 dark:bg-indigo-200 dark:text-indigo-700",
+      icon: Archive,
     },
     {
       label: "Task Log",
@@ -45,7 +52,7 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
     },
     {
       label: "Task",
-      count: stats["Task"] || 0,
+      count: stats["Task"] || stats["TaskTemplate"] || 0,
       cardClass: "bg-violet-50 border-violet-200 dark:bg-violet-950/40 dark:border-violet-800",
       iconClass: "bg-violet-100 text-violet-600 dark:bg-violet-200 dark:text-violet-700",
       icon: ClipboardCheck,
@@ -79,7 +86,7 @@ export default function LogsStatsSection({ stats = {}, isLoading = false }: Logs
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2 md:gap-3 lg:gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2 md:gap-3 lg:gap-5">
         {categories.map(renderCard)}
       </div>
     </div>

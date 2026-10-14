@@ -13,6 +13,9 @@ export interface AuditLogFilters {
   startDate?: string;
   endDate?: string;
   page?: number;
+  action?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
 
 export const useAuditLogs = (filters: AuditLogFilters = {}) => {
@@ -65,6 +68,9 @@ export const useAuditLogs = (filters: AuditLogFilters = {}) => {
     filters.startDate,
     filters.endDate,
     filters.page,
+    filters.action,
+    filters.sortBy,
+    filters.sortOrder,
   ]);
 
   useEffect(() => {

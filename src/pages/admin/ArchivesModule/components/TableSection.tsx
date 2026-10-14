@@ -54,6 +54,9 @@ export const TableSection: React.FC<TableSectionProps> = ({
     );
   };
 
+  const getOriginalDate = (item: ArchiveRecord) =>
+    item.data?.dateAndTime || item.data?.createdAt || item.data?.date || item.createdAt;
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -168,14 +171,14 @@ export const TableSection: React.FC<TableSectionProps> = ({
                   {/* Original Date */}
                   <td className="py-4 px-4 whitespace-nowrap">
                     <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
-                      {formatDate(item.createdAt)}
+                      {formatDate(getOriginalDate(item))}
                     </span>
                   </td>
 
                   {/* Archived Date */}
                   <td className="py-4 px-4 whitespace-nowrap">
                     <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
-                      {formatDate(item.updatedAt)}
+                      {formatDate(item.createdAt)}
                     </span>
                   </td>
 
