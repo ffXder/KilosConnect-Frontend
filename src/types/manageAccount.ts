@@ -6,7 +6,8 @@ export interface UserAccount {
   firstName: string;
   lastName: string;
   email: string;
-  role: "admin" | "custodian"
+  role: "super_admin" |"admin" | "custodian";
+  permissions: string[] | null;
   phoneNumber: string;
   address?: string | null;              
   mustChangePassword?: boolean;         
