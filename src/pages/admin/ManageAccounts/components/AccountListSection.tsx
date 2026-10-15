@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Edit3, Trash2, Loader2 } from "lucide-react";
+import { User, Edit3, Trash2, Loader2, ShieldCheck } from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
 import { formatDateTime } from "../../../../utils/formatter";
 
@@ -8,6 +8,7 @@ interface AccountsListSectionProps {
   loading?: boolean;
   onEditClick: (account: UserAccount) => void;
   onDeleteClick: (id: string, name: string) => void;
+  onPermissionsClick?: (account: UserAccount) => void;
 }
 
 const COLUMNS = [
@@ -32,6 +33,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
   loading,
   onEditClick,
   onDeleteClick,
+  onPermissionsClick,
 }) => {
   return (
     <div className="w-full overflow-x-auto">
@@ -141,6 +143,17 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-1">
+                      {onPermissionsClick && (
+                        <button
+                          type="button"
+                          onClick={() => onPermissionsClick(acc)}
+                          aria-label={`Change permissions for ${fullName}`}
+                          title="Permissions"
+                          className={`${iconButton} hover:bg-amber-50 hover:text-amber-600 focus-visible:ring-amber-400/40 dark:hover:bg-amber-500/10 dark:hover:text-amber-400`}
+                        >
+                          <ShieldCheck size={16} />
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => onEditClick(acc)}
