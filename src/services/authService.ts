@@ -51,12 +51,18 @@ export function parseJwt(token: string | null) {
   }
 }
 
-export function getRole(): 'admin' | 'custodian' | null {
+export function getRole(): 'super_admin' |'admin' | 'custodian' | null {
   if (!accessToken) return null;
   const decoded = parseJwt(accessToken);
   return decoded?.role || null;
 }
- 
+
+export function getPermissions(): string[] {
+  if (!accessToken) return [];
+  const decoded = parseJwt(accessToken);
+  return decoded?.permissions || [];
+}
+
 export function getUser() { 
   if (currentUser) return currentUser;
   if (!accessToken) return null;
