@@ -31,13 +31,12 @@ const formatPHPhoneNumber = (value: string): string => {
   return formatted.trim();
 };
 
-/* Shared field styles (light + dark) */
 const inputClass =
   "w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors " +
   "focus:outline-none focus:border-[#d86125] focus:ring-2 focus:ring-[#d86125]/20 " +
   "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#d86125]";
 
-/** Horizontal row: label on the left, control on the right (stacks on mobile). */
+/* stacks on mobile */
 const FormRow: React.FC<{
   id: string;
   label: string;
@@ -101,7 +100,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     }
   }, [user]);
 
-  // Escape to close (not mid-request), lock background scroll, focus first field
+  // Escape to close
   const busy = loading || resettingPassword;
   useEffect(() => {
     if (!isOpen) return;
@@ -275,6 +274,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
                 >
                   <option value="custodian">Custodian</option>
                   <option value="admin">Admin</option>
+                  <option value="super_admin">Admin Pro Max</option>
                 </select>
                 <ChevronDown
                   size={18}
@@ -283,7 +283,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               </div>
             </FormRow>
 
-            {/* Password reset: inline confirm instead of browser confirm()/alert() */}
+            {/* inline confirm */}
             <div className="pt-6 border-t border-gray-100 dark:border-slate-700">
               <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr] sm:items-start gap-x-4 gap-y-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-slate-200 sm:pt-2.5">
