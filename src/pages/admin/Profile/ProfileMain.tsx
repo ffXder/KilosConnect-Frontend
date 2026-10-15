@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ProfileInfoSection } from "./ProfileInfoSection";
+import { ProfileInfoSection, formatRole } from "./ProfileInfoSection";
 import { ProfileStatsSection } from "./ProfileStatsSections";
 import ProfileActivitySection from "./RecentActivitySection";
 import { useAuth } from '../../../hooks/useAuth';
@@ -27,11 +27,9 @@ export interface PerformanceStats {
 export const ProfilePage: React.FC = () => {
   const { role } = useAuth();
   const { profile: rawProfile, loading, error, handleSaveProfile, handleUpdateAvatar } = useProfile();
-  const { stats, recentActivity, loading: performanceLoading } = useMyPerformance();
+  const { stats, recentActivity } = useMyPerformance();
 
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
   const [avatarOverride, setAvatarOverride] = useState<string | null | undefined>(undefined);
-
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState<ProfileData>({
     firstName: "",
@@ -49,7 +47,7 @@ export const ProfilePage: React.FC = () => {
     username: rawProfile.email,
     phone: rawProfile.phoneNumber,
     role: rawProfile.role,
-    dateJoined: rawProfile.createdAt.split("T")[0], 
+    dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "", 
     avatarUrl: avatarOverride !== undefined ? avatarOverride : rawProfile.profileImage?.url ?? "",
   } : form;
 
@@ -62,7 +60,7 @@ export const ProfilePage: React.FC = () => {
         username: rawProfile.email,
         phone: rawProfile.phoneNumber,
         role: rawProfile.role,
-        dateJoined: rawProfile.createdAt.split("T")[0],
+        dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "",
         avatarUrl: rawProfile.profileImage?.url ?? "",
       });
     }
@@ -121,12 +119,12 @@ export const ProfilePage: React.FC = () => {
     setForm((prev) => ({ ...prev, avatarUrl: "" }));
   };
 
-  if (loading) return <ProfileSkeleton userRole={userRole} />;
-  if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
+  if (loading) return <ProfileSkeleton userRole={role as any} />;
+  // if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
-      <SidebarNavigationSection userRole={userRole} />
+      <SidebarNavigationSection userRole={role as any} />
       <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300">
         <div className="mb-6">
           <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
@@ -195,8 +193,8 @@ export const ProfilePage: React.FC = () => {
                   <InfoField label="Last Name" value={profile.lastName} />
                   <InfoField label="Email Address" value={profile.username} icon="user" />
                   <InfoField label="Phone Number" value={profile.phone} icon="phone" />
-                  <InfoField label="Role" value={profile.role} icon="shield" />
-                  <InfoField label="Date Joined" value={formatDate(profile.dateJoined)} icon="calendar" />
+                  <InfoField label="Role" value={formatRole(profile.role)} icon="shield" />
+                  <InfoField label="Date Joined" value={profile.dateJoined ? formatDate(profile.dateJoined) : "N/A"} icon="calendar" />
                 </div>
               )}
             </div>
@@ -212,16 +210,13 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
   <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
     <SidebarNavigationSection userRole={userRole} />
     <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300 animate-pulse">
-      {/* Page Title & Subtitle Skeleton */}
       <div className="mb-6">
         <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
         <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
-        {/* Left Column Skeletons */}
         <div className="flex flex-col gap-5">
-          {/* Profile Card Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-slate-800 mb-4" />
             <div className="h-5 w-36 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
@@ -229,7 +224,6 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
             <div className="h-9 w-full bg-gray-200 dark:bg-slate-800 rounded-lg" />
           </div>
 
-          {/* Stats Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
             <div className="h-5 w-28 bg-gray-200 dark:bg-slate-800 rounded mb-4" />
             <div className="grid grid-cols-2 gap-4">
@@ -243,9 +237,7 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
           </div>
         </div>
 
-        {/* Right Column Skeletons */}
         <div className="flex flex-col gap-5">
-          {/* Personal Info Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
             <div className="h-5 w-44 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
             <div className="grid grid-cols-2 gap-x-8 gap-y-5">
@@ -258,7 +250,6 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
             </div>
           </div>
 
-          {/* Recent Activity Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
             <div className="h-5 w-36 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
             <div className="flex flex-col gap-4">
