@@ -28,13 +28,12 @@ const formatPHPhoneNumber = (value: string): string => {
   return formatted.trim();
 };
 
-/* Shared field styles (light + dark) */
 const inputClass =
   "w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors " +
   "focus:outline-none focus:border-[#d86125] focus:ring-2 focus:ring-[#d86125]/20 " +
   "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#d86125]";
 
-/** Horizontal row: label on the left, control on the right (stacks on mobile). */
+/* stacks on mobile */
 const FormRow: React.FC<{
   id: string;
   label: string;
@@ -63,14 +62,13 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
   const [error, setError] = useState<string | null>(null);
   const firstRef = useRef<HTMLInputElement>(null);
 
-  // Start from a clean form every time the modal opens
   useEffect(() => {
     if (!isOpen) return;
     setFormData(emptyForm);
     setError(null);
   }, [isOpen]);
 
-  // Escape to close (not mid-submit), lock background scroll, focus first field
+  // Escape to close (
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -227,6 +225,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
                 >
                   <option value="custodian">Custodian</option>
                   <option value="admin">Admin</option>
+                  <option value="super_admin">Super Admin</option>
                 </select>
                 <ChevronDown
                   size={18}
