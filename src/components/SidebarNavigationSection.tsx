@@ -17,14 +17,16 @@ import {
   UsersRound,
 } from "lucide-react";
 import { logOut } from "../services/authService";
+import { useAuth } from '../hooks/useAuth';
 import { ThemeToggle } from "./ThemeToggle"
 
-type Role = "admin" | "custodian";
+type Role = 'super_admin' | "admin" | "custodian";
 
 interface SidebarNavItem {
   label: string;
   path: string;
   sectionPath?: string;
+  requiredPermission?: string;
   roles: Role[];
   icon: React.ReactNode;
   children?: Array<{
@@ -38,7 +40,7 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Overview",
     path: "/dashboard",
-    roles: ["admin"] as Role[],
+    roles: [ "super_admin", "admin"] as Role[],
     icon: <LayoutDashboard size={20} />,
   },
   {
@@ -68,7 +70,8 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Assets",
     path: "/asset-registry",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "asset:read",
     icon: <Boxes size={20} />,
     children: [
       {
@@ -86,7 +89,8 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Live Task Monitor",
     path: "/task-monitor/live-monitor",
-    roles: ["admin"] as Role[],
+    roles: [ "super_admin", "admin"] as Role[],
+    requiredPermission: "facility:read",
     icon: <Activity size={20} />,
     sectionPath: "/task-monitor",
     children: [
@@ -105,37 +109,42 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Manage Tasks",
     path: "/manage-task",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "facility:read",
     icon: <ListChecks size={20} />,
   },
   {
     label: "Incident Report",
     path: "/incident-report",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "incident:read",
     icon: <TriangleAlert size={20} />,
   },
   {
     label: "Logs",
     path: "/audit-logs",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "audit:read", 
     icon: <ScrollText size={20} />,
   },
   {
     label: "Profile",
     path: "/profile",
-    roles: ["admin", "custodian"] as Role[],
+    roles: ["super_admin", "admin", "custodian"] as Role[],
     icon: <UserRound size={20} />,
   },
   {
     label: "Manage Accounts",
     path: "/manage-accounts",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", 'admin'] as Role[],
+    requiredPermission: "users:read",
     icon: <UserRoundCog size={20} />,
   },
   {
     label: "Archives",
     path: "/archives",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "user:read",
     icon: <Archive size={20} />,
   },
 ];
@@ -143,13 +152,14 @@ const navItems: SidebarNavItem[] = [
 export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRole }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { role, permissions } = useAuth();
 
   // Desktop sidebar expansion state
   const [isExpanded, setIsExpanded] = useState<boolean>(() => {
     const saved = localStorage.getItem("sidebar_expanded");
     return saved !== null ? JSON.parse(saved) : false;
   });
-
+  
   // Mobile drawer state
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -157,6 +167,19 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
+
+  const currentRole = (role ?? userRole ?? null) as Role | null;;
+
+  // if no role hides all sidebar items
+  if (!currentRole) return null;
+
+  // filters based on role and permissions
+  const visibleItems = navItems.filter((item) => {
+    if (!item.roles.includes(currentRole)) return false;
+    if (currentRole === "super_admin") return true;
+    if (item.requiredPermission) return permissions.includes(item.requiredPermission);
+    return true;
+  });
 
   const toggleSidebar = () => {
     setIsExpanded((prev) => {
@@ -170,8 +193,6 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
     logOut();
     navigate("/login");
   };
-
-  const visibleItems = userRole ? navItems.filter((item) => item.roles.includes(userRole)) : navItems;
 
   return (
     <>
