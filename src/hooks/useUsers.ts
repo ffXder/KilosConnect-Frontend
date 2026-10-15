@@ -7,7 +7,6 @@ export function useUsers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // We wrap this in useCallback so we can call it again after an update
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
@@ -21,16 +20,14 @@ export function useUsers() {
     }
   }, []);
 
-  // Run once when the component starts
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
 
-  // A helper to handle the archive action and then refresh the UI
   const handleToggleArchive = async (id: string, currentStatus: boolean) => {
     try {
       await archiveUser(id);
-      await fetchUsers(); // Refresh the list automatically!
+      await fetchUsers();
     } catch (err: any) {
       alert(err.message);
     }
