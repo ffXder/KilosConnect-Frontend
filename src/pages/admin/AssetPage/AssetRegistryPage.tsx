@@ -43,8 +43,10 @@ const assetCategory = [
 ]
 
 export const AssetRegistryPage = () => {
-  // URL params for filter and searching
+  // hooks
   const [searchParams, setSearchParams] = useSearchParams();
+  const { role } = useAuth();
+  // URL params for filter and searching
   const searchQuery = searchParams.get("q") ?? "";
   const selectedZone = searchParams.get("area") ?? "All Areas";
   const selectedStatus = searchParams.get("condition") ?? "Any";
@@ -76,7 +78,7 @@ export const AssetRegistryPage = () => {
   const [selectedAssetForEdit, setSelectedAssetForEdit] = React.useState<Asset | null>(null);
   const [assetToArchive, setAssetToArchive] = React.useState<Asset | null>(null);
 
-  const { role } = useAuth();
+  if (!role) return null;
   const userRole = (role ?? 'admin') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
 
   // area, conditon filter using URL params
@@ -118,7 +120,7 @@ export const AssetRegistryPage = () => {
 
   return (
     <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-color duration-300">
-      <SidebarNavigationSection userRole={userRole} />
+      <SidebarNavigationSection userRole={role} />
       <main className="flex-1 w-full overflow-hidden pt-20 md:pt-0">
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
