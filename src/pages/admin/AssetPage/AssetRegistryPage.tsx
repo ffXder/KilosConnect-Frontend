@@ -43,6 +43,8 @@ const assetCategory = [
 ]
 
 export const AssetRegistryPage = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const pageSize = 10;
   // hooks
   const [searchParams, setSearchParams] = useSearchParams();
   const { role } = useAuth();
@@ -60,6 +62,7 @@ export const AssetRegistryPage = () => {
       next.set(key, value);
     }
     setSearchParams(next);
+    setCurrentPage(1);
   };
 
   const {
@@ -91,6 +94,12 @@ export const AssetRegistryPage = () => {
     const matchesCategory = selectedCategory == "All Categories" || asset.category == selectedCategory;
     return matchesSearch && matchesZone && matchesStatus && matchesCategory;
   });
+  const totalPages = Math.max(1, Math.ceil(filteredAssets.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedAssets = filteredAssets.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
 
   // calling the hooks for assets
   const handleAddAsset = async (newItem: NewAsset) => {
@@ -202,7 +211,7 @@ export const AssetRegistryPage = () => {
                     </div>
 
                     <div className="ml-auto flex items-center gap-3">
-                      <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-sm font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition-colors dark:bg-[#207D55] dark:hover:bg-[#07201b]">
+                      <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0B3F57] hover:bg-[#062F41] text-white text-sm font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition-colors dark:bg-[#126F91] dark:hover:bg-[#062F41]">
                         <Plus size={16} /> Add Asset
                       </button>
                     </div>
@@ -213,7 +222,11 @@ export const AssetRegistryPage = () => {
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden w-full dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-color duration-300">
                 <AssetRegistryList
                   isLoading={loading}
-                  filteredAssets={filteredAssets}
+                  filteredAssets={paginatedAssets}
+                  totalAssets={filteredAssets.length}
+                  currentPage={safeCurrentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
                   onAssetClick={(asset) => { setSelectedAssetForEdit(asset); setIsUpdateModalOpen(true); }}
                   onDeleteAsset={(asset) => { setAssetToArchive(asset); setIsDeleteModalOpen(true); }}
                 />

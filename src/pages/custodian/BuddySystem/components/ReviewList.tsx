@@ -60,7 +60,7 @@ export default function ReviewList({ reviews, onViewDetails }: ReviewListProps) 
               className="w-full p-4 flex items-center justify-between gap-3 text-left active:bg-gray-50 transition-colors dark:active:bg-slate-700"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="bg-emerald-50 p-2.5 rounded-xl text-[#0a2e27] shrink-0 dark:bg-emerald-900 dark:text-emerald-200">
+                <div className="bg-sky-50 p-2.5 rounded-xl text-[#0B3F57] shrink-0 dark:bg-sky-900 dark:text-sky-200">
                   <MapPin size={20} />
                 </div>
                 <div className="min-w-0">
@@ -110,7 +110,7 @@ export default function ReviewList({ reviews, onViewDetails }: ReviewListProps) 
                             {item.completedBy ? `${item.completedBy.firstName} ${item.completedBy.lastName}` : 'Unknown'} · {formatTime(item.completedAt)}
                           </p>
                         </div>
-                        <span className="bg-emerald-50 text-[#0a2e27] text-xs font-bold px-2.5 py-1 rounded-lg border border-emerald-100 shrink-0 dark:bg-emerald-900 dark:text-emerald-200 dark:border-emerald-600">
+                        <span className="bg-sky-50 text-[#0B3F57] text-xs font-bold px-2.5 py-1 rounded-lg border border-sky-100 shrink-0 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-600">
                           {done}/{total}
                         </span>
                       </div>

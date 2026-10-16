@@ -28,7 +28,7 @@ interface Props {
 const today = () => new Date().toISOString().slice(0, 10);
 
 const inputClass =
-  'w-full px-4 py-2.5 text-[15px] text-gray-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors focus:outline-none focus:border-[#11382C] focus:ring-2 focus:ring-[#11382C]/20';
+  'w-full px-4 py-2.5 text-[15px] text-gray-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors focus:outline-none focus:border-[#0E4961] focus:ring-2 focus:ring-[#0E4961]/20';
 
 const Label: React.FC<{ htmlFor: string; required?: boolean; children: React.ReactNode }> = ({
   htmlFor,
@@ -124,7 +124,7 @@ const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSu
         className="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+        <div className="bg-[#0E4961] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <h2 id="resolve-title" className="text-xl font-bold leading-snug">
               Resolve incident
@@ -166,7 +166,7 @@ const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSu
                 type="checkbox"
                 checked={withRepair}
                 onChange={(e) => setWithRepair(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#11382C] cursor-pointer"
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#0E4961] cursor-pointer"
               />
               <span className="text-[15px] text-gray-700 leading-snug">
                 A repair was done on the affected asset
@@ -236,16 +236,16 @@ const IncidentResolveModal: React.FC<Props> = ({ isOpen, onClose, incident, onSu
           <button
             onClick={onClose}
             disabled={submitting}
-            className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40"
+            className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!isValid || submitting}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 focus-visible:ring-offset-2 ${
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40 focus-visible:ring-offset-2 ${
               isValid && !submitting
-                ? 'bg-[#11382C] text-white shadow-sm hover:bg-[#0a2a21] active:scale-[0.98]'
+                ? 'bg-[#0E4961] text-white shadow-sm hover:bg-[#062F41] active:scale-[0.98]'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >

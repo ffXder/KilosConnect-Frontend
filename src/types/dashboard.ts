@@ -27,9 +27,12 @@ export interface ZoneActivityEntry {
 }
 
 export interface DashboardAlert {
-  asset: string;
+  id?: string;
+  asset?: string;
+  task?: string;
   status: string;
   severity: 'critical' | 'warning' | 'info' | 'success';
+  source?: 'incident' | 'task';
 }
 
 export interface DashboardReplacement {

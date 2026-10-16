@@ -4,7 +4,7 @@ import { QrCode } from 'lucide-react';
 
 // COMPONENTS
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
-import TaskFilterSection from './TaskFilterSection';
+import TaskFilterSection, { type SortDirection, type TaskSortField } from './TaskFilterSection';
 import TaskManagementSection from './TaskTableSection';
 import AddTaskModal from './AddTaskModals';
 import { AreaQrModal } from './AreaQRModal';
@@ -24,6 +24,14 @@ const AREAS = [
   "Multiple Area", "Front Desk Area", "Outdoor Area", "CR", "1st Floor", "2nd Floor"
 ];
 
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+const getDaySortValue = (dayType: Task['dayType']): number => {
+  if (typeof dayType === 'number') return dayType;
+  if (dayType === null) return 32;
+  return 33 + WEEKDAYS.indexOf(dayType);
+};
+
 export const TaskManagementPage: React.FC = () => {
   const { tasks, loading, handleCreate, handleUpdate, handleArchive } = useTasks();
   const { role } = useAuth();
@@ -37,6 +45,10 @@ export const TaskManagementPage: React.FC = () => {
   const searchTerm = searchParams.get('q') ?? '';
   const selectedFrequency = searchParams.get('frequency') ?? 'All';
   const selectedArea = searchParams.get('area') ?? 'All Areas';
+  const sortByParam = searchParams.get('sortBy');
+  const sortBy: TaskSortField =
+    sortByParam === 'name' || sortByParam === 'day' ? sortByParam : 'date';
+  const sortDirection: SortDirection = searchParams.get('sortDirection') === 'desc' ? 'desc' : 'asc';
 
   if (!hasPermission(P.TASK_READ)) {
     return <Navigate to="/unauthorized" replace />
@@ -60,6 +72,18 @@ export const TaskManagementPage: React.FC = () => {
     return matchesFrequency && matchesArea && matchesSearch;
   });
 
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    let comparison = 0;
+    if (sortBy === 'date') {
+      comparison = Date.parse(a.createdAt) - Date.parse(b.createdAt);
+    } else if (sortBy === 'name') {
+      comparison = a.title.localeCompare(b.title);
+    } else {
+      comparison = getDaySortValue(a.dayType) - getDaySortValue(b.dayType);
+    }
+    return sortDirection === 'asc' ? comparison : -comparison;
+  });
+
   return (
     <div className="flex min-h-screen bg-[#f8fafc] dark:bg-slate-950 transition-color duration-300">
       <SidebarNavigationSection userRole={(role ?? 'custodian') as 'admin' | 'custodian'} />
@@ -76,7 +100,7 @@ export const TaskManagementPage: React.FC = () => {
                 onClick={() => setIsQrModalOpen(true)}
                 className="bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 px-5 py-3 rounded-[16px] text-[14px] font-bold flex items-center gap-2.5 transition-all shadow-sm active:scale-95 cursor-pointer dark:bg-slate-900 dark:shadow-none transition-color duration-300 dark:border-slate-700"
               >
-                <QrCode size={18} className="text-[#113129] dark:text-slate-50" />
+                <QrCode size={18} className="text-[#0B4058] dark:text-slate-50" />
                 <span className="dark:text-slate-50">Area QR Codes</span>
               </button>
             )}
@@ -88,6 +112,10 @@ export const TaskManagementPage: React.FC = () => {
             hideStatus={true}
             searchTerm={searchTerm}
             setSearchTerm={(val) => updateParam('q', val)}
+            sortBy={sortBy}
+            setSortBy={(val) => updateParam('sortBy', val)}
+            sortDirection={sortDirection}
+            setSortDirection={(val) => updateParam('sortDirection', val)}
             frequencyFilter={selectedFrequency}
             setFrequencyFilter={(val) => updateParam('frequency', val)}
             areaFilter={selectedArea}
@@ -97,7 +125,7 @@ export const TaskManagementPage: React.FC = () => {
           />
 
           <TaskManagementSection 
-            tasks={filteredTasks} 
+            tasks={sortedTasks} 
             onArchive={handleArchive} 
             loading={loading} 
             onEdit={(t) => { setEditingTask(t); setIsModalOpen(true); }} 

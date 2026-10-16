@@ -63,7 +63,7 @@ export default function ZoneTaskPage() {
   if (pageState === 'loading' || pageState === 'verified') {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6 font-['Poppins']">
-        <div className="w-full max-w-sm bg-[#0a2e27] rounded-2xl flex flex-col items-center justify-center text-white p-10 shadow-md aspect-square">
+        <div className="w-full max-w-sm bg-[#0B3F57] rounded-2xl flex flex-col items-center justify-center text-white p-10 shadow-md aspect-square">
           {pageState === 'loading' ? (
             <>
               <Loader2 size={56} className="animate-spin text-emerald-400 mb-4" />
@@ -100,7 +100,7 @@ export default function ZoneTaskPage() {
           </button>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
-            <div className="bg-emerald-50 text-[#0a2e27] p-3 rounded-xl shrink-0">
+            <div className="bg-sky-50 text-[#0B3F57] p-3 rounded-xl shrink-0">
               <MapPin size={22} />
             </div>
             <div className="min-w-0">
@@ -130,8 +130,8 @@ export default function ZoneTaskPage() {
                     onClick={() => toggleComplete(task.id)}
                     className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-colors cursor-pointer ${
                       isDone
-                        ? 'bg-[#0a2e27] border-[#0a2e27]'
-                        : 'border-gray-300 hover:border-[#0a2e27]'
+                        ? 'bg-[#0B3F57] border-[#0B3F57]'
+                        : 'border-gray-300 hover:border-[#0B3F57]'
                     }`}
                     title={isDone ? 'Mark as incomplete' : 'Mark as complete'}
                   >

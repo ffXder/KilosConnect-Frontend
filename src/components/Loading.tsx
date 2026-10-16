@@ -10,7 +10,7 @@ export const LoadingPage: React.FC = () => {
       {/* Left panel: 100% width on mobile, 35% on desktop */}
       <section
         className="w-full md:w-[35%] h-full flex items-center justify-center 
-                   bg-[linear-gradient(180deg,#072821_21%,#111B30_100%)]"
+                   bg-[linear-gradient(180deg,#002B38_21%,#111B30_100%)]"
       >
         <img
           /* Scaled down slightly for mobile (w-[180px]) vs desktop (md:w-[238px]) */

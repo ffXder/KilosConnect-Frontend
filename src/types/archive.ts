@@ -4,7 +4,13 @@ import type { LostAndFound } from './lostAndFound';
 import type { Task } from './task';
 import type { UserAccount } from './manageAccount';
 
-export type ModuleType = 'IncidentReport' | 'Asset' | 'User' | 'Task' | 'LostAndFound';
+export type ModuleType =
+  | 'IncidentReport'
+  | 'Asset'
+  | 'User'
+  | 'Task'
+  | 'TaskTemplate'
+  | 'LostAndFound';
 
 export interface ArchiveRecord<T = Record<string, any>> {
   _id: string;
@@ -27,7 +33,7 @@ export type ArchiveUserRecord= ArchiveRecord<UserAccount>
 
 export interface ArchiveStats {
   total: number;
-  byModule: Record<ModuleType, number>;
+  byModule: Partial<Record<ModuleType, number>>;
 }
 
 export interface ArchiveQueryParams {
@@ -36,4 +42,3 @@ export interface ArchiveQueryParams {
   page?: number;
   limit?: number;
 }
-

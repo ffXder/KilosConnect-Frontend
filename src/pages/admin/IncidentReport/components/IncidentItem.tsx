@@ -45,7 +45,7 @@ const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onClick, onViewCl
         </div>
 
         {/* Title */}
-        <h3 className="text-[15px] font-semibold text-gray-900 mb-1 group-hover:text-[#0F6E56] transition-colors dark:text-slate-100 dark:group-hover:text-emerald-300">
+        <h3 className="text-[15px] font-semibold text-gray-900 mb-1 group-hover:text-[#0B6687] transition-colors dark:text-slate-100 dark:group-hover:text-sky-300">
           {incident.title}
         </h3>
 
@@ -67,7 +67,7 @@ const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onClick, onViewCl
           e.stopPropagation();
           onViewClick(incident);
         }}
-        className="mr-6 w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-[#E1F5EE] hover:text-[#0F6E56] hover:border-[#9FE1CB] transition-all flex-shrink-0 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-emerald-300"
+        className="mr-6 w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-[#E6F1F6] hover:text-[#0B6687] hover:border-[#A8DCEB] transition-all flex-shrink-0 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-sky-300"
         title="View Details"
       >
         <Eye size={17} />

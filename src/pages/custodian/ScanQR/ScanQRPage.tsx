@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import { useAuth } from "../../../hooks/useAuth";
@@ -41,20 +41,6 @@ export default function ScanQRPage() {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [scanResetKey, setScanResetKey] = useState(0);
   const navigate = useNavigate();
-
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-  );
-
-  useEffect(() => {
-    const syncSidebar = () => {
-      setSidebarExpanded(
-        JSON.parse(localStorage.getItem("sidebar_expanded") || "false")
-      );
-    };
-    const interval = setInterval(syncSidebar, 100);
-    return () => clearInterval(interval);
-  }, []);
 
   const { role } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
@@ -136,12 +122,8 @@ export default function ScanQRPage() {
     <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <div
-        className={`transition-all duration-300 p-4 pt-20 sm:p-6 sm:pt-24 md:p-8 flex-1 min-w-0 ${
-          sidebarExpanded ? "md:ml-[15px]" : "md:ml-[15px]"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+        <div className="space-y-6">
 
           {/* Header */}
           <div>
@@ -152,7 +134,7 @@ export default function ScanQRPage() {
           </div>
 
           {/* Scanner Card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-6 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col items-center text-center dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
 
             {/* Mode Switcher Tabs */}
             {scanStatus !== 'success' && (
@@ -162,8 +144,8 @@ export default function ScanQRPage() {
                   onClick={() => setScanMode('camera')}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
                     scanMode === 'camera'
-                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-100 dark:shadow-none dark:border-slate-600'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-100 dark:border-slate-600'
+                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-50 dark:border-slate-600'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   <Camera size={15} className="text-gray-500 dark:text-slate-300" />
@@ -174,8 +156,8 @@ export default function ScanQRPage() {
                   onClick={() => setScanMode('upload')}
                   className={`flex-1 py-2.5 px-4 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 ${
                     scanMode === 'upload'
-                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-100 dark:shadow-none dark:border-slate-600'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-100 dark:border-slate-600'
+                      ? 'bg-white text-gray-900 shadow-sm border border-[#e2e8f0] dark:bg-slate-700 dark:text-slate-50 dark:border-slate-600'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
                   <Image size={15} className="text-gray-500 dark:text-slate-300" />
@@ -186,7 +168,7 @@ export default function ScanQRPage() {
 
             {/* Main Interactive View */}
             {scanStatus === 'success' && scanResult ? (
-              <div className="w-full max-w-sm aspect-square bg-[#0a2e27] rounded-2xl flex flex-col items-center justify-center text-white mb-6 p-6 shadow-md">
+              <div className="w-full max-w-sm aspect-square bg-[#0B3F57] rounded-2xl flex flex-col items-center justify-center text-white mb-6 p-6 shadow-md">
                 <ResultIcon size={64} className="text-emerald-400 mb-3 animate-bounce" />
                 <h3 className="text-xl font-bold">{scanResult.title}</h3>
                 <p className="text-xs text-emerald-100/80 mt-1">{scanResult.message}</p>
@@ -202,7 +184,7 @@ export default function ScanQRPage() {
             {scanStatus === 'success' && (
               <button
                 onClick={handleReset}
-                className="w-full max-w-sm bg-[#f8fafc] border border-[#e2e8f0] text-gray-700 font-bold text-sm py-3.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
+                className="w-full max-w-sm bg-[#f8fafc] border border-[#e2e8f0] text-gray-700 font-bold text-sm py-3.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 Scan Another QR Code
               </button>
@@ -210,7 +192,7 @@ export default function ScanQRPage() {
 
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

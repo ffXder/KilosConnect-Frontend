@@ -10,10 +10,10 @@ interface TaskManagementSectionProps {
 }
 
 const frequencyStyle: Record<string, string> = {
-  Daily: 'bg-purple-100 text-purple-600 dark:bg-purple-400 dark:text-purple-50',
-  Weekly: 'bg-blue-100 text-blue-600 dark:bg-blue-500 dark:text-blue-50',
-  Monthly: 'bg-green-100 text-green-600 dark:bg-green-500 dark:text-green-50'
-}
+  Daily: 'bg-purple-500 text-white dark:bg-purple-500 dark:text-white',
+  Weekly: 'bg-blue-500 text-white dark:bg-blue-500 dark:text-white',
+  Monthly: 'bg-green-600 text-white dark:bg-green-600 dark:text-white',
+};
 
 const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({ 
   tasks, 
@@ -25,7 +25,7 @@ const TaskManagementSection: React.FC<TaskManagementSectionProps> = ({
   if (loading) {
     return (
       <div className="bg-white border border-gray-200 rounded-[32px] py-20 flex flex-col items-center justify-center dark:bg-slate-900 dark:border-slate-700 transition-color duration-300">
-        <Loader2 className="w-8 h-8 text-[#113129] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#0B4058] animate-spin" />
         <p className="text-gray-400 mt-4 font-medium">Loading master tasks...</p>
       </div>
     );

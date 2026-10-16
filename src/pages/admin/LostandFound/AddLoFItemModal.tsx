@@ -1,12 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, ImagePlus, PackagePlus, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
 
+
 interface ModalProps {
   onClose: () => void;
   onSubmit: (data: any, imageFile: File) => void | Promise<void>;
 }
 
 const Areas = [
+  "Mezzanine",
+  "Powerlifting Area",
+  "Open WOD Area",
+  "CrossFit Area",
+  "Weightlifting Area",
+  "General Storage",
   "Mezzanine",
   "Powerlifting Area",
   "Open WOD Area",
@@ -25,8 +32,8 @@ const formatSize = (bytes: number) =>
 /* Shared field styles (light + dark) */
 const inputClass =
   'w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors ' +
-  'focus:outline-none focus:border-[#d86125] focus:ring-2 focus:ring-[#d86125]/20 ' +
-  'dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#d86125]';
+  'focus:outline-none focus:border-[#116D8C] focus:ring-2 focus:ring-[#116D8C]/20 ' +
+  'dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#116D8C]';
 
 /** Horizontal row: label on the left, control on the right (stacks on mobile). */
 const FormRow: React.FC<{
@@ -149,7 +156,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
         className="w-full max-w-xl flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#0b3026] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
+        <div className="bg-[#002B38] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-[#FDFFE0]">
               <PackagePlus size={20} />
@@ -251,7 +258,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                 onDrop={handleDrop}
                 className={`w-full rounded-xl border-2 border-dashed p-4 transition-colors ${
                   isDragging
-                    ? 'border-[#d86125] bg-[#d86125]/5'
+                    ? 'border-[#116D8C] bg-[#116D8C]/5'
                     : 'border-gray-200 bg-gray-50/60 dark:border-slate-600 dark:bg-slate-800/50'
                 }`}
               >
@@ -274,7 +281,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
                       >
                         Replace
                       </button>
@@ -282,7 +289,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                         type="button"
                         onClick={removeImage}
                         aria-label="Remove photo"
-                        className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+                        className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
                       >
                         <X size={16} />
                       </button>
@@ -292,7 +299,7 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex w-full flex-col items-center rounded-lg py-2 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+                    className="flex w-full flex-col items-center rounded-lg py-2 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
                   >
                     <ImagePlus size={24} className="mb-2 text-gray-400 dark:text-slate-500" />
                     <span className="text-sm font-medium text-gray-700 dark:text-slate-200">
@@ -327,16 +334,16 @@ export const AddLoFItemModal: React.FC<ModalProps> = ({ onClose, onSubmit }) => 
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+                className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!isFormValid || isSubmitting}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${
                   isFormValid && !isSubmitting
-                    ? 'bg-[#d86125] text-[#FDFFE0] shadow-sm hover:bg-[#c2551e] active:scale-[0.98]'
+                    ? 'bg-[#116D8C] text-[#FDFFE0] shadow-sm hover:bg-[#0D5873] active:scale-[0.98]'
                     : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-slate-800 dark:text-slate-500'
                 }`}
               >

@@ -47,7 +47,7 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 border border-slate-200 dark:border-slate-700">
-        <div className="bg-[#11382C] p-6 text-white flex justify-between items-center">
+        <div className="bg-[#0E4961] p-6 text-white flex justify-between items-center">
           <h2 className="text-xl font-bold">Update Status</h2>
           <button onClick={onClose} className="hover:bg-white/10 p-1 rounded-lg transition-colors">
             <X size={20} />
@@ -86,7 +86,7 @@ const IncidentUpdateStatusModal: React.FC<IncidentUpdateStatusModalProps> = ({
               <button onClick={onClose} className="flex-1 py-3 border border-gray-200 dark:border-slate-600 rounded-xl font-bold text-gray-600 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800">
                 Cancel
               </button>
-              <button onClick={handleSave} className="flex-1 py-3 bg-[#11382C] dark:bg-emerald-700 text-white rounded-xl font-bold shadow-lg hover:bg-[#0a2a21] dark:hover:bg-emerald-600">
+              <button onClick={handleSave} className="flex-1 py-3 bg-[#0E4961] dark:bg-sky-700 text-white rounded-xl font-bold shadow-lg hover:bg-[#062F41] dark:hover:bg-sky-600">
                 Save Changes
               </button>
             </div>

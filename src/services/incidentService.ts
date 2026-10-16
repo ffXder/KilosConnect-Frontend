@@ -2,9 +2,9 @@ import type { IncidentReport, NewIncidentReport, UpdateIncidentReport, ResolveIn
 import { apiRequest } from "./authService";
 
 // GET ALL
-export const getAllReports = async (): Promise<IncidentReport[]> => {
+export const getAllReports = async (): Promise<PaginatedIncidentResponse> => {
     const res = await apiRequest('/incident-reports', { method: 'GET' });
-    
+
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || 'Could not load incident reports');

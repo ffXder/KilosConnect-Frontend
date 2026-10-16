@@ -21,6 +21,7 @@ export const ArchivesPage: React.FC = () => {
   const {
     archives,
     stats,
+    pagination,
     loading,
     fetchArchives,
     fetchStats,
@@ -30,6 +31,12 @@ export const ArchivesPage: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All Types");
+  const [selectedDate, setSelectedDate] = useState("All Dates");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [sortBy, setSortBy] = useState("archiveDate");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [page, setPage] = useState(1);
 
   const [viewItem, setViewItem] = useState<ArchiveRecord | null>(null);
   const [restoreItem, setRestoreItem] = useState<ArchiveRecord | null>(null);
@@ -49,8 +56,33 @@ export const ArchivesPage: React.FC = () => {
     fetchArchives({
       search: searchQuery || undefined,
       moduleType,
+      page,
+      date: selectedDate,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      sortBy,
+      sortOrder,
     });
-  }, [searchQuery, selectedType, fetchArchives]);
+  }, [searchQuery, selectedType, selectedDate, startDate, endDate, sortBy, sortOrder, page, fetchArchives]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setPage(1);
+  };
+
+  const handleTypeChange = (value: string) => {
+    setSelectedType(value);
+    setPage(1);
+  };
+
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
+    setPage(1);
+    if (value !== "Custom") {
+      setStartDate("");
+      setEndDate("");
+    }
+  };
 
   // Helper to resolve title accurately based on MongoDB payload
   const getItemTitle = (item: ArchiveRecord | null) => {
@@ -72,13 +104,19 @@ export const ArchivesPage: React.FC = () => {
 
     console.log("Attempting restore for target ID:", targetId);
 
-    const success = await unarchive(targetId);
+    const moduleType = selectedType === "All Types" ? undefined : selectedType;
+    const success = await unarchive(targetId, {
+      search: searchQuery || undefined,
+      moduleType,
+      page,
+      date: selectedDate,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      sortBy,
+      sortOrder,
+    });
     if (success) {
       setRestoreItem(null);
-      // Refresh list & stats after successful restore
-      const moduleType = selectedType === "All Types" ? undefined : selectedType;
-      fetchArchives({ search: searchQuery || undefined, moduleType });
-      fetchStats();
     } else {
       console.error("Failed to restore record. Check network tab for API path.");
     }
@@ -95,7 +133,7 @@ export const ArchivesPage: React.FC = () => {
     byModule: {
       IncidentReport: stats?.byModule?.IncidentReport ?? 0,
       Asset: stats?.byModule?.Asset ?? 0,
-      Task: stats?.byModule?.Task ?? 0,
+      TaskTemplate: stats?.byModule?.TaskTemplate ?? stats?.byModule?.Task ?? 0,
       User: stats?.byModule?.User ?? 0,
       LostAndFound: stats?.byModule?.LostAndFound ?? 0,
     },
@@ -133,15 +171,39 @@ export const ArchivesPage: React.FC = () => {
           {/* Filters & Information */}
           <ArchivesInfoSection
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSearchQuery={handleSearchChange}
             selectedType={selectedType}
-            setSelectedType={setSelectedType}
+            setSelectedType={handleTypeChange}
+            selectedDate={selectedDate}
+            setSelectedDate={handleDateChange}
+            startDate={startDate}
+            setStartDate={(value) => {
+              setStartDate(value);
+              setPage(1);
+            }}
+            endDate={endDate}
+            setEndDate={(value) => {
+              setEndDate(value);
+              setPage(1);
+            }}
+            sortBy={sortBy}
+            setSortBy={(value) => {
+              setSortBy(value);
+              setPage(1);
+            }}
+            sortOrder={sortOrder}
+            setSortOrder={(value) => {
+              setSortOrder(value);
+              setPage(1);
+            }}
           />
 
           {/* Table Container */}
           <TableSection
             items={tableData}
+            pagination={pagination}
             isLoading={loading}
+            onPageChange={setPage}
             onView={(item) => setViewItem(item)}
             onRestore={(item) => setRestoreItem(item)}
           />
@@ -151,7 +213,7 @@ export const ArchivesPage: React.FC = () => {
         {viewItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white dark:bg-slate-900 w-full max-w-[540px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-700">
-              <div className="bg-[#113e33] p-6 text-white flex justify-between items-center">
+              <div className="bg-[#0B4963] p-6 text-white flex justify-between items-center">
                 <div>
                   <h3 className="text-[17px] font-bold tracking-tight">
                     {getItemTitle(viewItem)}
@@ -216,7 +278,7 @@ export const ArchivesPage: React.FC = () => {
                       Original Date
                     </label>
                     <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
-                      {new Date(viewItem.createdAt).toLocaleDateString()}
+                      {new Date(viewItem.data?.dateAndTime || viewItem.data?.createdAt || viewItem.data?.date || viewItem.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <div>
@@ -224,7 +286,7 @@ export const ArchivesPage: React.FC = () => {
                       Archived Date
                     </label>
                     <span className="text-sm font-semibold text-[#1e293b] dark:text-slate-100 mt-0.5 block">
-                      {new Date(viewItem.updatedAt).toLocaleDateString()}
+                      {new Date(viewItem.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
@@ -233,7 +295,7 @@ export const ArchivesPage: React.FC = () => {
               <div className="px-6 pb-6 pt-2 flex justify-end">
                 <button
                   onClick={() => setViewItem(null)}
-                  className="px-5 py-2.5 bg-[#113e33] hover:bg-[#14493c] text-white rounded-xl text-xs font-bold transition-all duration-150 active:scale-[0.98] shadow-sm shadow-slate-900/10 cursor-pointer"
+                  className="px-5 py-2.5 bg-[#0B4963] hover:bg-[#0C5673] text-white rounded-xl text-xs font-bold transition-all duration-150 active:scale-[0.98] shadow-sm shadow-slate-900/10 cursor-pointer"
                 >
                   Close View
                 </button>

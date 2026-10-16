@@ -5,6 +5,7 @@ import { formatDateTime } from '../../../../utils/formatter';
 
 interface IncidentRowProps {
   incident: IncidentReport;
+  isHighlighted?: boolean;
   onClick: (incident: IncidentReport) => void;
   onViewClick: (incident: IncidentReport) => void;
   onDeleteClick: (incident: IncidentReport) => void;
@@ -24,11 +25,16 @@ const severityBadge: Record<string, string> = {
   'Low':      'bg-[#E6F1FB] text-[#185FA5] border border-[#B5D4F4] dark:bg-[#112a46] dark:text-[#93c5fd] dark:border-[#1d4ed8]',
 };
 
-const IncidentRow: React.FC<IncidentRowProps> = ({ incident, onClick, onViewClick, onDeleteClick }) => {
+const IncidentRow: React.FC<IncidentRowProps> = ({ incident, isHighlighted = false, onClick, onViewClick, onDeleteClick }) => {
   return (
     <tr
+      id={`incident-${incident._id}`}
       onClick={() => onViewClick(incident)}
-      className="border-b border-[#f1f5f9] hover:bg-[#f8fafc] cursor-pointer transition-colors group text-[13px] last:border-b-0 dark:border-slate-700 dark:hover:bg-slate-800/80"
+      className={`border-b border-[#f1f5f9] hover:bg-[#f8fafc] cursor-pointer transition-colors group text-[13px] last:border-b-0 dark:border-slate-700 dark:hover:bg-slate-800/80 ${
+        isHighlighted
+          ? 'bg-emerald-100 shadow-[inset_4px_0_0_#10b981] dark:bg-emerald-900/50 dark:shadow-[inset_4px_0_0_#34d399]'
+          : ''
+      }`}
     >
       {/* ID */}
       <td className="py-4 px-6">
@@ -53,7 +59,7 @@ const IncidentRow: React.FC<IncidentRowProps> = ({ incident, onClick, onViewClic
 
       {/* Title & Description */}
       <td className="py-4 px-6">
-        <div className="font-semibold text-gray-900 group-hover:text-[#0F6E56] transition-colors truncate dark:text-slate-100 dark:group-hover:text-emerald-300">
+        <div className="font-semibold text-gray-900 group-hover:text-[#0B6687] transition-colors truncate dark:text-slate-100 dark:group-hover:text-sky-300">
           {incident.title}
         </div>
         <div className="text-gray-400 text-[12px] truncate dark:text-slate-400">

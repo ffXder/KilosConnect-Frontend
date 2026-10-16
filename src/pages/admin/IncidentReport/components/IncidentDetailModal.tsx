@@ -23,7 +23,7 @@ interface IncidentDetailedModalProps {
   onResolve?: (incident: IncidentReport) => void;
 }
 
-type AffectedAsset = { _id: string; assetId: string; name: string };
+type AffectedAsset = { _id?: string; assetId?: string; name: string };
 
 const Field: React.FC<{
   icon: React.ReactNode;
@@ -148,7 +148,7 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
         className="bg-white dark:bg-slate-900 dark:ring-1 dark:ring-white/10 dark:[color-scheme:dark] w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header: just the ID and the title */}
-        <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+        <div className="bg-[#0E4961] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <p className="text-xs text-white/60 mb-2">
               Incident ID: <span className="font-mono">{incident.incidentId}</span>

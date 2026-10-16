@@ -15,8 +15,8 @@ const today = () => new Date().toISOString().split("T")[0];
 const MAX_MB = 5;
 
 const inputCls =
-  "w-full px-4 py-3 border border-[#e8e8e8] rounded-[10px] text-base font-normal bg-white focus:ring-2 focus:ring-[#1e4d46]/10 focus:border-[#1e4d46] outline-none";
-const labelCls = "block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider";
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0E4961] focus:ring-2 focus:ring-[#0E4961]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-sky-400 dark:focus:ring-sky-400/20";
+const labelCls = "mb-2 block text-sm font-bold text-gray-700 dark:text-slate-200";
 
 export default function LostAndFoundFormPage() {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ export default function LostAndFoundFormPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-['Poppins']">
+    <div className="flex min-h-screen flex-col bg-[#f8fafc] font-['Poppins'] transition-colors dark:bg-slate-950 md:flex-row">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 min-w-0 w-full max-w-xl mx-auto px-4 pt-20 pb-4 sm:px-6 sm:pt-24">
@@ -100,13 +100,13 @@ export default function LostAndFoundFormPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Header */}
-            <div className="bg-[#1C2D24] rounded-2xl p-5 text-[#FDFFE0]">
+            <div className="rounded-2xl bg-[#0E4961] p-5 text-white">
               <h1 className="text-xl font-semibold tracking-tight">Add Found Item</h1>
-              <p className="text-white/70 text-sm mt-0.5">Record an item found in the facility</p>
+              <p className="mt-0.5 text-sm text-emerald-100/80">Record an item found in the facility</p>
             </div>
 
             {/* Fields */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-5">
+            <div className="space-y-5 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
               <div>
                 <label className={labelCls}>Item Name <span className="text-red-500">*</span></label>
                 <input
@@ -150,7 +150,7 @@ export default function LostAndFoundFormPage() {
                   className="hidden"
                 />
                 {imagePreview ? (
-                  <div className="relative rounded-xl overflow-hidden h-52 bg-gray-900">
+                  <div className="relative h-52 overflow-hidden rounded-xl bg-gray-900">
                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                     <button
                       type="button"
@@ -165,11 +165,11 @@ export default function LostAndFoundFormPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full border-2 border-dashed border-[#e8e8e8] rounded-[12px] h-40 flex flex-col items-center justify-center bg-[#fcfcfc] active:bg-gray-50 transition-colors"
+                    className="flex h-40 w-full flex-col items-center justify-center rounded-[12px] border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-[#0D5873]/50 hover:bg-emerald-50 active:bg-emerald-50 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-sky-700 dark:hover:bg-emerald-950/40 dark:active:bg-emerald-950/40"
                   >
-                    <ImagePlus size={28} className="text-[#94a3b8] mb-2" />
-                    <span className="text-[13px] font-medium text-gray-700">Tap to take or choose a photo</span>
-                    <span className="text-[11px] text-gray-400 mt-0.5">Maximum file size: {MAX_MB}MB</span>
+                  <ImagePlus size={28} className="mb-2 text-[#0D5873] dark:text-emerald-400" />
+                  <span className="text-[13px] font-medium text-gray-700 dark:text-slate-200">Tap to take or choose a photo</span>
+                  <span className="mt-0.5 text-[11px] text-gray-400 dark:text-slate-500">Maximum file size: {MAX_MB}MB</span>
                   </button>
                 )}
               </div>
@@ -186,29 +186,29 @@ export default function LostAndFoundFormPage() {
               </div>
 
               {error && (
-                <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium rounded-xl p-3">
+                <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700 dark:border-rose-900 dark:bg-rose-950/50 dark:text-rose-300">
                   {error}
                 </div>
               )}
             </div>
 
             {/* Sticky submit bar (always reachable on a phone) */}
-            <div className="sticky bottom-0 -mx-4 sm:mx-0 px-4 sm:px-0 py-3 bg-[#f8fafc]/95 backdrop-blur border-t border-gray-100 sm:border-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="sticky bottom-0 -mx-4 border-t border-gray-100 bg-[#f8fafc]/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 sm:mx-0 sm:border-0 sm:px-0">
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="flex-1 py-3.5 border border-[#e8e8e8] bg-white rounded-xl text-sm font-medium text-gray-600 active:bg-gray-50"
+                  className="flex-1 rounded-xl border border-gray-200 bg-white py-3.5 text-sm font-bold text-gray-600 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!isFormValid || isSubmitting}
-                  className={`flex-[2] py-3.5 rounded-xl text-sm font-semibold transition-all ${
+                  className={`flex-[2] py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                     isFormValid && !isSubmitting
-                      ? "bg-[#d86125] text-[#FDFFE0] hover:bg-[#ba6300] shadow-md"
-                      : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed"
+                      ? "bg-[#0D5873] text-emerald-50 shadow-lg hover:bg-[#0E6B89] dark:bg-sky-700 dark:hover:bg-sky-600"
+                      : "cursor-not-allowed bg-emerald-50 text-emerald-800/50 dark:bg-emerald-950/60 dark:text-emerald-300/50"
                   }`}
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}

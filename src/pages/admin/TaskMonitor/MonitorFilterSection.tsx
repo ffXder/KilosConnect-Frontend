@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, ChevronDown, Layers} from 'lucide-react';
+import { Search, ChevronDown, Plus } from 'lucide-react';
 import { usePermissions } from '../../../hooks/usePermissons';
 
 interface TaskFilterProps {
@@ -68,9 +68,9 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
         {showGenerateButton && canInitializeTask && (
           <button
             onClick={onGenerate}
-            className="bg-[#d86125] text-[#FDFFE0] h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer"
+            className="bg-[#0B4058] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#062F41] transition-all shadow-sm active:scale-95 whitespace-nowrap"
           >
-            <Layers size={16} strokeWidth={2.5} />
+            <Plus size={16} strokeWidth={2.5} />
             <span>Initialize Today</span>
           </button>
         )}

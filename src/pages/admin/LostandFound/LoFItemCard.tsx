@@ -20,7 +20,7 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim, onView 
       </span>
 
       <div className="w-10 h-10 bg-[#e6fffa] rounded-[8px] flex items-center justify-center mb-5 dark:bg-emerald-900/40">
-        <Package size={18} className="text-[#1e4d46] dark:text-emerald-300" />
+        <Package size={18} className="text-[#1A5268] dark:text-emerald-300" />
       </div>
 
       <h3 className="font-bold text-[#1a1a1a] text-[18px] mb-2 dark:text-slate-50">{item.item}</h3>
@@ -57,7 +57,7 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim, onView 
           e.stopPropagation();
           onClaim(item.lostId); 
         }}
-        className="mt-auto w-full py-3 bg-[#1e4d46] text-white text-[14px] font-bold rounded-[8px] transition-colors hover:bg-[#163a35]"
+        className="mt-auto w-full py-3 bg-[#1A5268] text-white text-[14px] font-bold rounded-[8px] transition-colors hover:bg-[#0F4155]"
       >
         Mark as Claimed
       </button>

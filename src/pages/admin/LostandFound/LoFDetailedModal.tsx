@@ -47,20 +47,210 @@ const Field: React.FC<{
   </div>
 );
 
-/** Photo with a consistent 4:3 frame; opens full size in a new tab. */
-const Photo: React.FC<{ url: string; alt: string; ring?: string }> = ({ url, alt, ring }) => (
-  <a
-    href={url}
-    target="_blank"
-    rel="noreferrer"
-    title="Open full size"
-    className={`block aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-slate-800 ${
+const Photo: React.FC<{
+  url: string;
+  alt: string;
+  ring?: string;
+  onOpen: (url: string, alt: string) => void;
+}> = ({ url, alt, ring, onOpen }) => (
+  <button
+    type="button"
+    onClick={() => onOpen(url, alt)}
+    aria-label={`Zoom ${alt}`}
+    className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl ${
       ring ?? 'ring-1 ring-black/5 dark:ring-white/10'
-    } focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/50 dark:focus-visible:ring-emerald-500/60`}
+    } focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/50 dark:focus-visible:ring-sky-500/60`}
   >
-    <img src={url} alt={alt} loading="lazy" className="h-full w-full object-cover" />
-  </a>
+    <img src={url} alt={alt} loading="lazy" className="block h-auto w-full object-contain" />
+    <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+    <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-lg bg-black/55 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+      <ZoomIn size={13} />
+      Zoom
+    </span>
+  </button>
 );
+
+const ImageZoomViewer: React.FC<{
+  url: string;
+  alt: string;
+  onClose: () => void;
+}> = ({ url, alt, onClose }) => {
+  const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const dragRef = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
+
+  const clampOffset = (x: number, y: number, nextScale: number) => {
+    const stage = stageRef.current;
+    if (!stage || nextScale <= 1) return { x: 0, y: 0 };
+    const maxX = (stage.clientWidth * (nextScale - 1)) / 2;
+    const maxY = (stage.clientHeight * (nextScale - 1)) / 2;
+    return {
+      x: Math.max(-maxX, Math.min(maxX, x)),
+      y: Math.max(-maxY, Math.min(maxY, y)),
+    };
+  };
+
+  const applyScale = (nextScale: number) => {
+    const boundedScale = Math.min(5, Math.max(1, nextScale));
+    setScale(boundedScale);
+    setOffset((current) => clampOffset(current.x, current.y, boundedScale));
+  };
+
+  const reset = () => {
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        onClose();
+      } else if (event.key === '+' || event.key === '=') {
+        applyScale(scale * 1.25);
+      } else if (event.key === '-') {
+        applyScale(scale / 1.25);
+      } else if (event.key === '0') {
+        reset();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [onClose, scale]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (scale <= 1) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = { x: event.clientX, y: event.clientY, ox: offset.x, oy: offset.y };
+    setDragging(true);
+  };
+
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    setOffset(
+      clampOffset(
+        drag.ox + (event.clientX - drag.x),
+        drag.oy + (event.clientY - drag.y),
+        scale,
+      ),
+    );
+  };
+
+  const endDrag = () => {
+    dragRef.current = null;
+    setDragging(false);
+  };
+
+  const toolButton =
+    'inline-flex h-9 w-9 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15 disabled:opacity-30 disabled:hover:bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${alt} image viewer`}
+      className="fixed inset-0 z-[70] bg-black/90"
+      onClick={(event) => event.stopPropagation()}
+    >
+      <div
+        ref={stageRef}
+        className={`absolute inset-0 flex touch-none select-none items-center justify-center overflow-hidden ${
+          scale > 1 ? (dragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-zoom-in'
+        }`}
+        onWheel={(event) => applyScale(scale * (event.deltaY < 0 ? 1.15 : 1 / 1.15))}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onDoubleClick={() => (scale > 1 ? reset() : applyScale(2.5))}
+        onClick={(event) => {
+          if (event.target === event.currentTarget && scale === 1) onClose();
+        }}
+      >
+        <img
+          src={url}
+          alt={alt}
+          draggable={false}
+          className="max-h-full max-w-full object-contain p-4 sm:p-12"
+          style={{
+            transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+            transition: dragging ? 'none' : 'transform .15s ease-out',
+          }}
+        />
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between bg-gradient-to-b from-black/60 to-transparent p-4 sm:p-6">
+        <span className="rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white">
+          {alt}
+        </span>
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Close image viewer"
+          className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 bg-gradient-to-t from-black/60 to-transparent p-4 pb-6">
+        <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/10 p-1 backdrop-blur">
+          <button
+            type="button"
+            onClick={() => applyScale(scale / 1.25)}
+            disabled={scale <= 1}
+            aria-label="Zoom out"
+            title="Zoom out (-)"
+            className={toolButton}
+          >
+            <ZoomOut size={18} />
+          </button>
+          <span className="w-14 text-center text-xs font-semibold tabular-nums text-white">
+            {Math.round(scale * 100)}%
+          </span>
+          <button
+            type="button"
+            onClick={() => applyScale(scale * 1.25)}
+            disabled={scale >= 5}
+            aria-label="Zoom in"
+            title="Zoom in (+)"
+            className={toolButton}
+          >
+            <ZoomIn size={18} />
+          </button>
+          <span className="mx-1 h-5 w-px bg-white/20" aria-hidden="true" />
+          <button
+            type="button"
+            onClick={reset}
+            disabled={scale === 1}
+            aria-label="Reset zoom"
+            title="Reset (0)"
+            className={toolButton}
+          >
+            <RotateCcw size={16} />
+          </button>
+        </div>
+        <p className="hidden text-xs text-white/50 sm:block">
+          Scroll to zoom · Drag to pan · Double-click to toggle
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const Placeholder: React.FC<{
   icon: React.ReactNode;
@@ -81,6 +271,7 @@ const Placeholder: React.FC<{
 
 export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
 
   // Escape to close, lock background scroll, focus the close button
   useEffect(() => {
@@ -113,7 +304,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
         className="w-full max-w-3xl flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#11382C] px-6 py-5 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+        <div className="bg-[#0E4961] px-6 py-5 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <p className="text-xs text-white/60 mb-1.5">Lost and found</p>
             <h2 id="lof-detail-title" className="text-xl font-bold leading-snug">
@@ -141,7 +332,11 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                   Item photo (found)
                 </h3>
                 {item.itemImage?.url ? (
-                  <Photo url={item.itemImage.url} alt={item.item} />
+                  <Photo
+                    url={item.itemImage.url}
+                    alt={item.item}
+                    onOpen={(url, alt) => setZoomedImage({ url, alt })}
+                  />
                 ) : (
                   <Placeholder
                     icon={<ImageIcon size={28} strokeWidth={1.5} />}
@@ -160,6 +355,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                       url={item.claimedImage.url}
                       alt="Claimant proof"
                       ring="ring-2 ring-emerald-200 dark:ring-emerald-500/40"
+                      onOpen={(url, alt) => setZoomedImage({ url, alt })}
                     />
                   ) : (
                     <Placeholder
@@ -215,6 +411,13 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
                 </dl>
               )}
             </div>
+            {zoomedImage && (
+              <ImageZoomViewer
+                url={zoomedImage.url}
+                alt={zoomedImage.alt}
+                onClose={() => setZoomedImage(null)}
+              />
+            )}
           </div>
         </div>
 
@@ -223,7 +426,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/40"
+            className="w-full sm:w-auto px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40 dark:focus-visible:ring-sky-500/40"
           >
             Close
           </button>

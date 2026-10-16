@@ -11,15 +11,15 @@ interface StatCardProps {
 }
 
 export const StatCard: React.FC<StatCardProps> = ({ label, count, color, iconBg, cardBg, icon: Icon }) => (
-<div className={`flex items-center gap-6 p-7 border rounded-2xl flex-1 shadow-sm transition-all hover:shadow-md dark:shadow-none ${cardBg}`}>
-    <div className={`w-14 h-14 flex items-center justify-center rounded-[18px] ${iconBg} shrink-0`}>
-      <Icon size={24} className={color} />
+<div className={`flex min-w-0 items-center gap-2 rounded-2xl border p-2 shadow-sm transition-colors duration-300 dark:shadow-none sm:gap-3 sm:p-3 md:gap-4 md:p-4 lg:p-5 ${cardBg}`}>
+    <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg sm:h-8 sm:w-8 sm:rounded-xl md:h-10 md:w-10 lg:h-12 lg:w-12 ${iconBg}`}>
+      <Icon size={16} strokeWidth={2} className={`sm:size-[20px] md:size-[24px] lg:size-[28px] ${color}`} />
     </div>
-    <div className="flex flex-col">
-      <div className="text-[30px] font-bold text-[#1a1a1a] leading-none tracking-tight dark:text-slate-50">
+    <div className="min-w-0 flex-1">
+      <div className="text-sm font-bold leading-tight text-[#1a1a1a] dark:text-slate-50 sm:text-lg md:text-xl lg:text-2xl">
         {count}
       </div>
-      <div className="text-[14px] text-[#64748b] font-semibold mt-1 dark:text-slate-300">
+      <div className="truncate text-[10px] font-medium text-[#64748b] dark:text-slate-300 sm:text-xs md:text-sm">
         {label}
       </div>
     </div>

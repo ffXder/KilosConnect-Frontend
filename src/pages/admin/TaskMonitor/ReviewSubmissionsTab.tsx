@@ -16,6 +16,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { useTaskModeration } from '../../../hooks/useTaskModeration';
+import { useTasks } from '../../../hooks/useTask';
 import type { TaskLog } from '../../../types/task';
 
 /* Keyframes live here so no Tailwind config changes are needed */
@@ -35,9 +36,23 @@ const AnimationStyles = () => (
   `}</style>
 );
 
-const getReferenceUrl = (log: TaskLog): string | null => {
-  const s = (log.task as any)?.standardPhotoUrl;
-  return typeof s === 'string' ? s : s?.url || null;
+const getReferenceUrl = (
+  log: TaskLog,
+  tasks: ReturnType<typeof useTasks>['tasks'],
+): string | null => {
+  const standardPhotoUrl: unknown =
+    log.task?.standardPhotoUrl ??
+    tasks.find((task) => task._id === log.task?._id)?.standardPhotoUrl;
+  if (typeof standardPhotoUrl === 'string') return standardPhotoUrl;
+  if (
+    standardPhotoUrl &&
+    typeof standardPhotoUrl === 'object' &&
+    'url' in standardPhotoUrl &&
+    typeof standardPhotoUrl.url === 'string'
+  ) {
+    return standardPhotoUrl.url;
+  }
+  return null;
 };
 
 const PhotoFallback = ({ className = '' }: { className?: string }) => (
@@ -281,9 +296,9 @@ const ZoomablePhoto: React.FC<{
     type="button"
     onClick={onOpen}
     aria-label={`View ${alt} full size`}
-    className={`group relative block aspect-video w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${frameClass}`}
+    className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${frameClass}`}
   >
-    <img src={url} alt={alt} className="h-full w-full object-cover" />
+    <img src={url} alt={alt} className="block h-auto w-full object-contain" />
     <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" />
     <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-lg bg-black/55 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
       <ZoomIn size={13} />
@@ -294,6 +309,7 @@ const ZoomablePhoto: React.FC<{
 
 export const ReviewSubmissionsTab: React.FC = () => {
   const { disputedQueue, loading, error, refresh, resolve } = useTaskModeration();
+  const { tasks } = useTasks();
 
   const [selectedSub, setSelectedSub] = useState<TaskLog | null>(null);
   const [lightboxKey, setLightboxKey] = useState<string | null>(null);
@@ -381,7 +397,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
     };
   }, [anyModalOpen, isResolveModalOpen, isActionLoading]);
 
-  const referenceUrl = selectedSub ? getReferenceUrl(selectedSub) : null;
+  const referenceUrl = selectedSub ? getReferenceUrl(selectedSub, tasks) : null;
   const proofUrl = selectedSub?.submittedPhoto || null;
 
   const lightboxImages: LightboxImage[] = [
@@ -737,7 +753,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
                   }
                   className={`w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-[15px] leading-relaxed text-slate-900 placeholder:text-gray-400 outline-none resize-none transition-colors focus:ring-2 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-500 ${
                     isApprove
-                      ? 'focus:border-emerald-500 focus:ring-emerald-500/20'
+                      ? 'focus:border-sky-500 focus:ring-sky-500/20'
                       : 'focus:border-rose-500 focus:ring-rose-500/20'
                   }`}
                 />

@@ -7,6 +7,15 @@ export interface affectedAsset {
 }
 
 
+export interface affectedAsset {
+    _id: string;
+    assetId: string;
+    name: string;
+    condition: string;
+    area: string;
+}
+
+
 export interface IncidentReport {
     _id: string;
     incidentId: string;
@@ -26,6 +35,7 @@ export interface IncidentReport {
     } | null;
     reportedName?: string | null;
     dateAndTime: string;
+    createdAt?: string;
 }
 
 export interface ResolveIncidentPayload {

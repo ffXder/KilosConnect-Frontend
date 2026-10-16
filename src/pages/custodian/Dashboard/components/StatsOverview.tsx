@@ -35,57 +35,58 @@ export const StatsOverview: React.FC<StatsProps> = ({
   return (
     <>
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
-        {/* Active tasks */}
-        <div onClick={() => { setModalType("pending"); onTabChange("pending"); }} className={card}>
-          <div className="p-2 sm:p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-xl shrink-0">
-            <ListTodo className="w-[18px] h-[18px] sm:w-[22px] sm:h-[22px]" />
+
+        {/* Pending Tasks */}
+        <div
+          onClick={() => { setModalType("pending"); onTabChange("pending"); }}
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+        >
+          <div className="p-2 sm:p-3 bg-[#E6F1F6] text-[#0B3F57] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+            <ListTodo size={18} className="sm:hidden" />
+            <ListTodo size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold leading-none text-gray-900 dark:text-slate-100">{pendingCount}</p>
-            <p className="text-[11px] sm:text-xs font-medium text-gray-500 mt-1 sm:mt-0.5 dark:text-slate-300">
-              <span className="sm:hidden">Active</span>
-              <span className="hidden sm:inline">Tasks Today</span>
-            </p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{pendingCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Active</p>
           </div>
         </div>
 
-        {/* Completed */}
-        <div onClick={() => { setModalType("completed"); onTabChange("completed"); }} className={card}>
-          <div className="p-2 sm:p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
-            <CheckCircle className="w-[18px] h-[18px] sm:w-[22px] sm:h-[22px]" />
+        {/* Completed Count */}
+        <div
+          onClick={() => { setModalType("completed"); onTabChange("completed"); }}
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+        >
+          <div className="p-2 sm:p-3 bg-emerald-50 text-emerald-600 rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+            <CheckCircle size={18} className="sm:hidden" />
+            <CheckCircle size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold leading-none text-gray-900 dark:text-slate-100">{completedCount}</p>
-            <p className="text-[11px] sm:text-xs font-medium text-gray-500 mt-1 sm:mt-0.5 dark:text-slate-300">
-              <span className="sm:hidden">Done</span>
-              <span className="hidden sm:inline">Completed</span>
-            </p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{completedCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">Done</p>
           </div>
         </div>
 
-        {/* To review (real count) */}
-        <div onClick={() => navigate("/custodian/buddy-system")} className={card}>
-          <div className="p-2 sm:p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0">
-            <Users className="w-[18px] h-[18px] sm:w-[22px] sm:h-[22px]" />
+        {/* To Review */}
+        <div
+          onClick={() => navigate("/custodian/buddy-system")}
+          className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
+        >
+          <div className="p-2 sm:p-3 bg-amber-50 text-amber-600 rounded-lg sm:rounded-xl shrink-0 dark:bg-amber-950 dark:text-amber-300">
+            <Users size={18} className="sm:hidden" />
+            <Users size={22} className="hidden sm:block" />
           </div>
-          <div>
-            <p className="text-xl font-bold leading-none text-gray-900 dark:text-slate-100">{reviewCount}</p>
-            <p className="text-[11px] sm:text-xs font-medium text-gray-500 mt-1 sm:mt-0.5 dark:text-slate-300">To Review</p>
+          <div className="min-w-0">
+            <p className="text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-slate-50">{reviewCount}</p>
+            <p className="text-[10px] sm:text-xs font-medium leading-tight text-gray-500 mt-0.5 dark:text-slate-300">To Review</p>
           </div>
         </div>
       </div>
 
       {/* Task list popup: bottom sheet on phones, centered card on larger screens */}
       {modalType && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/50 flex items-end sm:items-center justify-center sm:p-4 animate-in fade-in duration-200"
-          onClick={() => setModalType(null)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-[32px] sm:max-w-lg w-full shadow-xl overflow-hidden flex flex-col max-h-[85dvh] animate-in slide-in-from-bottom-8 sm:zoom-in-95 duration-200"
-          >
-            <div className="bg-[#0a2e27] px-5 py-4 sm:p-6 flex items-center justify-between shrink-0">
+        <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-[32px] max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200 dark:bg-slate-900 dark:border dark:border-slate-700">
+            <div className="bg-[#0B3F57] p-6 flex items-center justify-between shrink-0">
               <div>
                 <h3 className="font-extrabold text-base sm:text-lg text-white flex items-center gap-2">
                   {modalType === "pending" ? (
@@ -118,12 +119,12 @@ export const StatsOverview: React.FC<StatsProps> = ({
                 <div
                   key={task.id}
                   onClick={() => { setModalType(null); onViewDetails(task); }}
-                  className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer active:bg-gray-50 dark:active:bg-slate-700 transition-colors"
+                  className="bg-white border border-gray-100 shadow-sm rounded-2xl p-3.5 flex items-start gap-3 cursor-pointer active:bg-gray-50 dark:bg-slate-800 dark:border-slate-700 dark:shadow-none dark:active:bg-slate-700 transition-colors"
                 >
                   <div className={`p-2.5 rounded-xl shrink-0 ${
                     modalType === "pending"
-                      ? "bg-[#E6F4EA] text-[#0a2e27]"
-                      : "bg-emerald-50 text-emerald-600"
+                      ? "bg-[#E6F1F6] text-[#0B3F57] dark:bg-emerald-950 dark:text-emerald-300"
+                      : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300"
                   }`}>
                     {modalType === "pending" ? <ListTodo size={18} /> : <CheckCircle size={18} />}
                   </div>
@@ -136,8 +137,8 @@ export const StatsOverview: React.FC<StatsProps> = ({
                     </div>
                     <span className={`inline-block mt-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                       task.status === "Completed"
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-amber-100 text-amber-800"
+                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
+                        : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200"
                     }`}>
                       {task.status}
                     </span>

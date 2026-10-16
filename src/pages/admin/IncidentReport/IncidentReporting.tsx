@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TriangleAlert } from 'lucide-react';
 
 // COMPONENTS
@@ -16,6 +17,7 @@ import { DeleteConfirmModal } from '../../../components/DeleteConfirmModal';
 // HOOKS AND FORMATTER
 import { useAuth } from '../../../hooks/useAuth';
 import { useIncidentReports } from '../../../hooks/useIncident';
+import { useAssets } from '../../../hooks/useAssets';
 import { useUrlFilters } from '../../../hooks/useUrlFilters';
 import type { IncidentReport, NewIncidentReport, ResolveIncidentPayload } from '../../../types/incident';
 import { getDateThreshold } from '../../../utils/dateHelper';
@@ -29,6 +31,8 @@ const COLORS = {
 };
 
 export const IncidentReportPage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { getParam, updateParam, updateParams, clearAllFilters } = useUrlFilters();
 
   // Read State directly from URL
@@ -50,14 +54,29 @@ export const IncidentReportPage: React.FC = () => {
   // DELETE/ARCHIVE MODAL STATES
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [incidentToDelete, setIncidentToDelete] = React.useState<IncidentReport | null>(null);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const pageSize = 10;
 
   // Setters bound to URL updating
-  const setActiveStatus = (val: string) => updateParam('status', val, ['All']);
-  const setActiveSeverity = (val: string) => updateParam('severity', val, ['Any Severity']);
-  const setActiveArea = (val: string) => updateParam('area', val, ['All Areas']);
-  const setSearchTerm = (val: string) => updateParam('search', val, ['']);
+  const setActiveStatus = (val: string) => {
+    setCurrentPage(1);
+    updateParam('status', val, ['All']);
+  };
+  const setActiveSeverity = (val: string) => {
+    setCurrentPage(1);
+    updateParam('severity', val, ['Any Severity']);
+  };
+  const setActiveArea = (val: string) => {
+    setCurrentPage(1);
+    updateParam('area', val, ['All Areas']);
+  };
+  const setSearchTerm = (val: string) => {
+    setCurrentPage(1);
+    updateParam('search', val, ['']);
+  };
 
   const setDateRange = (val: string) => {
+    setCurrentPage(1);
     if (val !== 'Custom Range') {
       updateParams({
         dateRange: { value: val, defaultValues: ['Last 30 Days'] },
@@ -69,16 +88,52 @@ export const IncidentReportPage: React.FC = () => {
     }
   };
 
-  const setCustomStart = (val: string) => updateParam('startDate', val, ['']);
-  const setCustomEnd = (val: string) => updateParam('endDate', val, ['']);
+  const setCustomStart = (val: string) => {
+    setCurrentPage(1);
+    updateParam('startDate', val, ['']);
+  };
+  const setCustomEnd = (val: string) => {
+    setCurrentPage(1);
+    updateParam('endDate', val, ['']);
+  };
+  const resetFilters = () => {
+    setCurrentPage(1);
+    clearAllFilters();
+  };
 
   const { reports, loading, error, handleCreate, handleUpdate, handleArchive, handleResolve } = useIncidentReports();
+  const { assets } = useAssets();
   const incidents = reports ?? [];
+  const alertNavigation = location.state as {
+    incidentId?: string;
+    alertTitle?: string;
+    alertSeverity?: 'critical' | 'warning' | 'info' | 'success';
+  } | null;
+  const alertIncidentId = alertNavigation?.incidentId;
+  const alertIncident = alertIncidentId
+    ? incidents.find((item) => item._id === alertIncidentId) ?? null
+    : incidents
+        .filter((incident) => {
+          const matchesTitle =
+            incident.title === alertNavigation?.alertTitle ||
+            incident.area === alertNavigation?.alertTitle ||
+            (Array.isArray(incident.affectedAssets) && incident.affectedAssets.some((assetId) =>
+              assets.some((asset) => asset._id === assetId && asset.name === alertNavigation?.alertTitle)
+            ));
+          const matchesSeverity =
+            alertNavigation?.alertSeverity === 'critical'
+              ? incident.severity === 'Critical' || incident.severity === 'Urgent'
+              : alertNavigation?.alertSeverity === 'warning'
+                ? incident.severity !== 'Critical' && incident.severity !== 'Urgent'
+                : true;
+          return matchesTitle && matchesSeverity && incident.status !== 'Resolved';
+        })
+        .sort((a, b) => Date.parse(b.dateAndTime) - Date.parse(a.dateAndTime))[0] ?? null;
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
     try {
       await handleCreate(newIncident);
-      setIsAddModalOpen(false); 
+      setIsAddModalOpen(false);
     } catch (err) {
       console.error('Failed to create incident report:', err);
     }
@@ -105,8 +160,8 @@ export const IncidentReportPage: React.FC = () => {
   };
 
   const handleResolveSubmit = async (
-    incident: IncidentReport, 
-    payload: ResolveIncidentPayload, 
+    incident: IncidentReport,
+    payload: ResolveIncidentPayload,
     skipRepair: boolean
   ) => {
     try {
@@ -115,7 +170,7 @@ export const IncidentReportPage: React.FC = () => {
       setSelectedIncident(null);
     } catch (err: any) {
       console.error('Failed to resolve incident:', err);
-      throw err; 
+      throw err;
     }
   };
 
@@ -138,28 +193,68 @@ export const IncidentReportPage: React.FC = () => {
   };
 
   // Filtering Logic
-  const isYesterday = dateRange === 'Yesterday';
-  const threshold = getDateThreshold(dateRange, customStart ? new Date(customStart) : null);
-  const endDate = customEnd ? new Date(customEnd) : null;
+  const filteredIncidents = useMemo(() => {
+    const isYesterday = dateRange === 'Yesterday';
+    const threshold = getDateThreshold(dateRange, customStart ? new Date(customStart) : null);
 
-  const filteredIncidents = incidents.filter((incident) => {
-    const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
-    const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
-    const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
-    const matchesSearch =
-      (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
+    return incidents.filter((incident) => {
+      const matchesStatus = activeStatus === 'All' || incident.status === activeStatus;
+      const matchesSeverity = activeSeverity === 'Any Severity' || incident.severity === activeSeverity;
+      const matchesArea = activeArea === 'All Areas' || incident.area === activeArea;
+      const matchesSearch =
+        (incident.title ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (incident.description ?? '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const incidentDate = new Date(incident.dateAndTime);
-    const matchesStart = threshold ? incidentDate >= threshold : true;
-    const matchesEnd = isYesterday
-      ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
-      : endDate
-      ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
-      : true;
+      const incidentDate = new Date(incident.dateAndTime);
+      const matchesStart = threshold ? incidentDate >= threshold : true;
+      const matchesEnd = isYesterday
+        ? incidentDate < new Date(new Date().setHours(0, 0, 0, 0))
+        : customEnd
+          ? incidentDate <= new Date(new Date(customEnd).setHours(23, 59, 59, 999))
+          : true;
 
-    return matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd;
-  });
+      return (
+        (matchesStatus && matchesSeverity && matchesArea && matchesSearch && matchesStart && matchesEnd) ||
+        incident._id === alertIncident?._id
+      );
+    });
+  }, [
+    incidents,
+    activeStatus,
+    activeSeverity,
+    activeArea,
+    searchTerm,
+    dateRange,
+    customStart,
+    customEnd,
+    alertIncident,
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredIncidents.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedIncidents = filteredIncidents.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [activeStatus, activeSeverity, activeArea, searchTerm, dateRange, customStart, customEnd]);
+
+  React.useEffect(() => {
+    if (!alertIncident || loading) return;
+    const incidentIndex = filteredIncidents.findIndex((incident) => incident._id === alertIncident._id);
+    if (incidentIndex >= 0) setCurrentPage(Math.floor(incidentIndex / pageSize) + 1);
+  }, [alertIncident, filteredIncidents, loading]);
+
+  React.useEffect(() => {
+    if (!alertIncident || loading || !paginatedIncidents.some((incident) => incident._id === alertIncident._id)) {
+      return;
+    }
+    document.getElementById(`incident-${alertIncident._id}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [alertIncident, loading, paginatedIncidents]);
 
   // Analytics Computation
   const analytics = useMemo(() => {
@@ -194,11 +289,11 @@ export const IncidentReportPage: React.FC = () => {
   const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>['userRole'];
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
+    <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 w-full p-4 md:p-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
-        <div className="max-w-[1400px] mx-auto space-y-6">
+      <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">Incident Reporting</h1>
             <p className="text-gray-500 text-sm mt-1 dark:text-slate-300">Track and manage equipment issues and safety hazards</p>
@@ -237,7 +332,7 @@ export const IncidentReportPage: React.FC = () => {
             setCustomStart={setCustomStart}
             customEnd={customEnd}
             setCustomEnd={setCustomEnd}
-            onResetFilters={clearAllFilters}
+            onResetFilters={resetFilters}
           />
 
           {error && (
@@ -249,8 +344,13 @@ export const IncidentReportPage: React.FC = () => {
 
           {/* Incident Table */}
           <IncidentTable
-            incidents={filteredIncidents}
+            incidents={paginatedIncidents}
+            highlightedIncidentId={alertIncident?._id}
             loading={loading}
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            totalIncidents={filteredIncidents.length}
+            onPageChange={setCurrentPage}
             onSelectIncident={handleItemClick}
             onViewIncident={handleViewDetails}
             onDeleteIncident={handleDeleteClick}
@@ -272,9 +372,17 @@ export const IncidentReportPage: React.FC = () => {
 
           <IncidentDetailedModal
             isOpen={isDetailedModalOpen}
-            onClose={() => setIsDetailedModalOpen(false)}
+            onClose={() => {
+              setIsDetailedModalOpen(false);
+              if (alertNavigation) {
+                navigate(`${location.pathname}${location.search}${location.hash}`, {
+                  replace: true,
+                  state: null,
+                });
+              }
+            }}
             incident={selectedIncident}
-            onResolve={handleOpenResolve} 
+            onResolve={handleOpenResolve}
           />
 
           <IncidentResolveModal

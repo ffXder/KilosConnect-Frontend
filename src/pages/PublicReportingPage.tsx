@@ -46,7 +46,7 @@ export const PublicReportingPage: React.FC = () => {
                         <div className="pt-2">
                             <Link
                                 to="/scan-qr"
-                                className="inline-block bg-[#124d45] hover:bg-[#165c53] text-emerald-100 text-xs sm:text-sm font-medium px-4 py-2.5 rounded-lg transition-colors shadow-sm"
+                                className="inline-block bg-[#0D5873] hover:bg-[#0E6B89] text-emerald-100 text-xs sm:text-sm font-medium px-4 py-2.5 rounded-lg transition-colors shadow-sm"
                             >
                                 Start Asset Report
                             </Link>
@@ -70,7 +70,7 @@ export const PublicReportingPage: React.FC = () => {
                         <div className="pt-2">
                             <Link
                                 to="/report-hazard"
-                                className="inline-block bg-[#124d45] hover:bg-[#165c53] text-emerald-100 text-xs sm:text-sm font-medium px-4 py-2.5 rounded-lg transition-colors shadow-sm"
+                                className="inline-block bg-[#0D5873] hover:bg-[#0E6B89] text-emerald-100 text-xs sm:text-sm font-medium px-4 py-2.5 rounded-lg transition-colors shadow-sm"
                             >
                                 Report Hazard
                             </Link>

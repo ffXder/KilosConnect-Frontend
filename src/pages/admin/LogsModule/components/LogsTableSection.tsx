@@ -23,22 +23,28 @@ const getBadge = (type: string) => {
     case "Asset":
       return "bg-blue-50 text-blue-600 border-blue-200";
 
+    case "Archive":
+      return "bg-indigo-50 text-indigo-600 border-indigo-200";
+
     case "RepairLog":
-    case "Task":
-      return "bg-yellow-50 text-yellow-600 border-yellow-200";
+      return "bg-sky-50 text-sky-600 border-sky-200";
 
     case "IncidentReport":
-      return "bg-purple-50 text-purple-600 border-purple-200";
+      return "bg-red-50 text-red-600 border-red-200";
       
     case "TaskLog":
-      return "bg-red-50 text-red-600 border-red-200";
+      return "bg-emerald-50 text-emerald-600 border-emerald-200";
+
+    case "TaskTemplate":
+    case "Task":
+      return "bg-violet-50 text-violet-600 border-violet-200";
 
     case "LostAndFound":
     case "Lost & Found":
       return "bg-amber-50 text-amber-600 border-amber-200";
 
     case "User":
-      return "bg-purple-50 text-purple-600 border-purple-200";
+      return "bg-slate-100 text-slate-600 border-slate-200";
 
     default:
       return "bg-slate-100 text-slate-600 border-slate-200";
@@ -247,7 +253,7 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
                           event.currentTarget.blur();
                         }
                       }}
-                      className="w-9 h-9 text-center text-xs font-semibold border border-blue-500 rounded-lg bg-white text-blue-700 outline-none dark:bg-slate-800 dark:text-blue-300 dark:border-blue-400"
+                      className="w-9 h-9 text-center text-xs font-semibold border border-[#0B4058] rounded-lg bg-white text-[#0B4058] outline-none dark:bg-slate-800 dark:text-emerald-300 dark:border-emerald-500"
                     />
                   ) : (
                     <button
@@ -258,7 +264,7 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
                       }}
                       aria-label={`Current page ${currentPage}. Click to enter a page number`}
                       aria-current="page"
-                      className="w-9 h-9 text-xs font-semibold border border-blue-600 rounded-lg bg-blue-600 text-white dark:bg-blue-500 dark:border-blue-500"
+                      className="w-9 h-9 text-xs font-semibold border border-[#0B4058] rounded-lg bg-[#0B4058] text-white dark:bg-[#126F91] dark:border-[#126F91]"
                     >
                       {pageNumber}
                     </button>

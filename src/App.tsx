@@ -48,6 +48,7 @@ import LostAndFoundPageForm from './pages/custodian/LostAndFoundFormPage'
 function DashboardRedirect() {
   const { isLoggedIn, role } = useAuth();
 
+
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
@@ -60,6 +61,7 @@ function DashboardRedirect() {
     return <Navigate to="/unauthorized" replace />;
   }
 }
+
 
 function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, role } = useAuth();
@@ -198,5 +200,5 @@ function App() {
   );
 }
 
+
 export default App
- 

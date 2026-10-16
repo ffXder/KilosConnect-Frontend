@@ -68,7 +68,7 @@ export default function MySubmissions() {
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="bg-emerald-50 p-2.5 rounded-xl text-[#0a2e27] shrink-0 dark:bg-emerald-900 dark:text-emerald-200">
+                  <div className="bg-sky-50 p-2.5 rounded-xl text-[#0B3F57] shrink-0 dark:bg-sky-900 dark:text-sky-200">
                     <MapPin size={20} />
                   </div>
                   <div className="min-w-0">
@@ -88,7 +88,7 @@ export default function MySubmissions() {
                   <ChevronDown
                     size={20}
                     className={`transition-all duration-200 ${
-                      isAreaOpen ? 'rotate-180 text-[#0a2e27] dark:text-emerald-300' : 'text-gray-400'
+                      isAreaOpen ? 'rotate-180 text-[#0B3F57] dark:text-emerald-300' : 'text-gray-400'
                     }`}
                   />
                 </div>

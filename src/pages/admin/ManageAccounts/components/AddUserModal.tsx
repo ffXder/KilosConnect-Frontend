@@ -19,7 +19,6 @@ const emptyForm = {
 const formatPHPhoneNumber = (value: string): string => {
   const digits = value.replace(/\D/g, "");
   const cleanNumbers = digits.startsWith("63") ? digits.slice(2) : digits;
-
   let formatted = "+63";
   if (cleanNumbers.length > 0) formatted += " " + cleanNumbers.substring(0, 3);
   if (cleanNumbers.length > 3) formatted += " " + cleanNumbers.substring(3, 6);
@@ -90,6 +89,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    setError(null);
     setError(null);
     if (name === "phoneNumber") {
       setFormData((prev) => ({ ...prev, [name]: formatPHPhoneNumber(value) }));
@@ -268,4 +268,5 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
       </div>
     </div>
   );
-};
+}
+

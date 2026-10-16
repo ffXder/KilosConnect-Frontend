@@ -63,7 +63,7 @@ export default function ReviewDetailView({
     }
   };
 
-  const headerBg = isFlagging ? 'bg-rose-700' : 'bg-[#0a2e27]';
+  const headerBg = isFlagging ? 'bg-rose-700' : 'bg-[#0B3F57]';
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end font-['Poppins']" role="dialog" aria-modal="true">
@@ -145,7 +145,7 @@ export default function ReviewDetailView({
               {/* Meta */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="bg-emerald-50 dark:bg-emerald-900 text-[#0a2e27] dark:text-emerald-200 p-2 rounded-lg shrink-0">
+                  <div className="bg-sky-50 dark:bg-sky-900 text-[#0B3F57] dark:text-sky-200 p-2 rounded-lg shrink-0">
                     <MapPin size={20} />
                   </div>
                   <div className="min-w-0">
@@ -254,7 +254,7 @@ export default function ReviewDetailView({
               <button
                 onClick={handleApprove}
                 disabled={submitting}
-                className="flex-1 bg-[#0a2e27] hover:bg-[#08241f] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition flex justify-center items-center gap-2"
+                className="flex-1 bg-[#0B3F57] hover:bg-[#062F41] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition flex justify-center items-center gap-2"
               >
                 <CheckCircle2 size={20} />
                 {submitting ? 'Saving...' : 'Looks Good'}

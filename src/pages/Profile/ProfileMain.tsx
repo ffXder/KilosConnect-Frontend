@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { ProfileInfoSection, formatRole } from "./ProfileInfoSection";
 import { ProfileStatsSection } from "./ProfileStatsSections";
 import ProfileActivitySection from "./RecentActivitySection";
-import { useAuth } from '../../hooks/useAuth';
-import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
-import { useProfile, useMyPerformance } from '../../hooks/useProfile';
-import { formatDate } from "../../utils/formatter";
+import { useAuth } from '../../../hooks/useAuth';
+import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
+import { useProfile, useMyPerformance } from '../../../hooks/useProfile';
+import { formatDate } from "../../../utils/formatter";
 
 export interface ProfileData {
   firstName: string;
@@ -26,6 +26,9 @@ export interface PerformanceStats {
 
 export const ProfilePage: React.FC = () => {
   const { role } = useAuth();
+  const userRole = (role ?? "custodian") as React.ComponentProps<
+    typeof SidebarNavigationSection
+  >["userRole"];
   const { profile: rawProfile, loading, error, handleSaveProfile, handleUpdateAvatar } = useProfile();
   const { stats, recentActivity } = useMyPerformance();
 
@@ -47,7 +50,7 @@ export const ProfilePage: React.FC = () => {
     username: rawProfile.email,
     phone: rawProfile.phoneNumber,
     role: rawProfile.role,
-    dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "", 
+    dateJoined: rawProfile.createdAt ? rawProfile.createdAt.split("T")[0] : "",
     avatarUrl: avatarOverride !== undefined ? avatarOverride : rawProfile.profileImage?.url ?? "",
   } : form;
 
@@ -119,20 +122,30 @@ export const ProfilePage: React.FC = () => {
     setForm((prev) => ({ ...prev, avatarUrl: "" }));
   };
 
-  if (loading) return <ProfileSkeleton userRole={role as any} />;
-  // if (error) return <div className="min-h-screen flex items-center justify-center text-sm text-red-500">{error}</div>;
+  if (loading) return <ProfileSkeleton userRole={userRole} />;
+  if (error) {
+    return (
+      <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
+        <SidebarNavigationSection userRole={userRole} />
+        <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950">
+          <div className="mx-auto w-full min-w-0 max-w-[1600px] text-sm text-red-500">{error}</div>
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
-      <SidebarNavigationSection userRole={role as any} />
-      <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300">
-        <div className="mb-6">
-          <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
-          <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
-        </div>
+    <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
+      <SidebarNavigationSection userRole={userRole} />
+      <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
+          <div>
+            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
+            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
-          <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
+          <div className="flex flex-col gap-6">
             <ProfileInfoSection
               profile={profile}
               isEditing={isEditing}
@@ -144,13 +157,13 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsSection stats={stats} />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-semibold text-[#0d1f1a] dark:text-slate-100">Personal Information</h2>
+                <h2 className="text-base font-semibold text-[#0B2D3D] dark:text-slate-100">Personal Information</h2>
                 {isEditing && (
                   <div className="flex gap-2">
-                    <button onClick={handleSubmit} className="bg-[#183a30] hover:bg-[#336658] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
+                    <button onClick={handleSubmit} className="bg-[#143E50] hover:bg-[#1A708F] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
                     <button onClick={handleCancel} className="border border-[#d1d5db] hover:bg-[#f9fafb] text-[#374151] text-sm font-medium px-4 py-1.5 rounded-lg transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Cancel</button>
                   </div>
                 )}
@@ -172,7 +185,7 @@ export const ProfilePage: React.FC = () => {
                         value={form[name as keyof ProfileData] || ""}
                         onChange={handleChange}
                         placeholder={name === "phone" ? "+63 000 000 0000" : ""}
-                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 ${
+                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#143E50] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 ${
                           name === "username" && !form.username.includes("@") && form.username.length > 0
                             ? "border-red-400 ring-red-100"
                             : "border-[#d1d5db]"
@@ -201,22 +214,27 @@ export const ProfilePage: React.FC = () => {
             <ProfileActivitySection activities={recentActivity} />
           </div>
         </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
 
 const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarNavigationSection>["userRole"] }> = ({ userRole }) => (
-  <div className="min-h-screen bg-[#f4f5f6] flex dark:bg-slate-950 transition-colors duration-300">
+  <div className="flex min-h-screen w-full flex-col md:flex-row bg-[#f4f5f6] dark:bg-slate-950 transition-colors duration-300">
     <SidebarNavigationSection userRole={userRole} />
-    <div className="flex-1 min-w-0 lg:pl-[100px] p-8 dark:bg-slate-950 transition-colors duration-300 animate-pulse">
-      <div className="mb-6">
-        <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
-        <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
-      </div>
+    <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300 animate-pulse">
+      <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
+        {/* Page Title & Subtitle Skeleton */}
+        <div>
+          <div className="h-8 w-32 bg-gray-200 dark:bg-slate-800 rounded-md mb-2" />
+          <div className="h-4 w-72 bg-gray-200 dark:bg-slate-800 rounded-md" />
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-5">
-        <div className="flex flex-col gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
+        {/* Left Column Skeletons */}
+        <div className="flex flex-col gap-6">
+          {/* Profile Card Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-slate-800 mb-4" />
             <div className="h-5 w-36 bg-gray-200 dark:bg-slate-800 rounded mb-2" />
@@ -237,7 +255,9 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
+        {/* Right Column Skeletons */}
+        <div className="flex flex-col gap-6">
+          {/* Personal Info Skeleton */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700">
             <div className="h-5 w-44 bg-gray-200 dark:bg-slate-800 rounded mb-6" />
             <div className="grid grid-cols-2 gap-x-8 gap-y-5">
@@ -267,6 +287,7 @@ const ProfileSkeleton: React.FC<{ userRole: React.ComponentProps<typeof SidebarN
         </div>
       </div>
     </div>
+    </main>
   </div>
 );
 

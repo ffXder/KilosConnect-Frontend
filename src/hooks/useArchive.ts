@@ -5,15 +5,27 @@ import {
   unarchiveRecord,
 } from "../services/archiveService"; // Adjust path to match your service location
 import type { ArchiveRecord, ArchiveStats } from "../types/archive";
+import type { ArchivePagination } from "../services/archiveService";
 
 interface FetchArchiveFilters {
   search?: string;
   moduleType?: string;
+  page?: number;
+  date?: string;
+  startDate?: string;
+  endDate?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
 
 export function useArchives() {
   const [archives, setArchives] = useState<ArchiveRecord[]>([]);
   const [stats, setStats] = useState<ArchiveStats | null>(null);
+  const [pagination, setPagination] = useState<ArchivePagination>({
+    totalArchives: 0,
+    totalPages: 1,
+    currentPage: 1,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,20 +38,22 @@ export function useArchives() {
         search: filters?.search || undefined,
         moduleType:
           filters?.moduleType === "All Types" ? undefined : filters?.moduleType,
+        page: filters?.page,
+        date: filters?.date,
+        startDate: filters?.startDate,
+        endDate: filters?.endDate,
+        sortBy: filters?.sortBy,
+        sortOrder: filters?.sortOrder,
       };
 
       const data = await getAllArchives(cleanedFilters);
 
-      // Safe payload parsing matching Postman response structure
-      if (Array.isArray(data)) {
-        setArchives(data);
-      } else if (data && typeof data === "object" && Array.isArray((data as any).archives)) {
-        setArchives((data as any).archives);
-      } else if (data && typeof data === "object" && Array.isArray((data as any).data)) {
-        setArchives((data as any).data);
-      } else {
-        setArchives([]);
-      }
+      setArchives(Array.isArray(data.archives) ? data.archives : []);
+      setPagination({
+        totalArchives: data.pagination?.totalArchives ?? 0,
+        totalPages: data.pagination?.totalPages ?? 1,
+        currentPage: data.pagination?.currentPage ?? cleanedFilters.page ?? 1,
+      });
 
       setError(null);
     } catch (err: any) {
@@ -68,10 +82,10 @@ export function useArchives() {
   }, [fetchArchives, fetchStats]);
 
   // 3. Restore Action
-  const unarchive = async (id: string): Promise<boolean> => {
+  const unarchive = async (id: string, filters?: FetchArchiveFilters): Promise<boolean> => {
     try {
       await unarchiveRecord(id);
-      await fetchArchives();
+      await fetchArchives(filters);
       await fetchStats();
       return true;
     } catch (err: any) {
@@ -83,6 +97,7 @@ export function useArchives() {
   return {
     archives,
     stats,
+    pagination,
     loading,
     error,
     fetchArchives,

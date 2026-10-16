@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { TaskLog } from '../../../types/task';
 import {
   Clock,
@@ -16,6 +16,7 @@ import { formatDate } from '../../../utils/formatter';
 
 interface TaskListProps {
   tasks: TaskLog[];
+  highlightedTaskLogId?: string | null;
   onViewDetails: (taskLog: TaskLog) => void;
   isLoading?: boolean;
   currentPage?: number;
@@ -25,6 +26,7 @@ interface TaskListProps {
 
 const TaskListSection: React.FC<TaskListProps> = ({
   tasks,
+  highlightedTaskLogId,
   onViewDetails,
   isLoading,
   currentPage = 1,
@@ -32,47 +34,54 @@ const TaskListSection: React.FC<TaskListProps> = ({
   onPageChange
 }) => {
 
+  useEffect(() => {
+    if (!highlightedTaskLogId || isLoading) return;
+    document.getElementById(`task-log-${highlightedTaskLogId}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }, [highlightedTaskLogId, isLoading]);
+
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'Completed':
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <CheckCircle2 size={12} /> Completed
-          </span>
-        );
-      case 'In Progress':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800 transition-colors duration-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-[pulse_2.5s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
-            In Progress
-          </span>
-        );
-      case 'Pending Review':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-900 animate-pulse" /> Pending Review
-          </span>
-        );
-      case 'Missed':
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-            <AlertCircle size={12} /> Missed
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
-            Pending
-          </span>
-        );
-    }
+    const statusStyles: Record<string, { label: string; badge: string }> = {
+      Completed: {
+        label: 'Completed',
+        badge: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
+      },
+      'In Progress': {
+        label: 'In Progress',
+        badge: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800',
+      },
+      'Pending Review': {
+        label: 'Pending Review',
+        badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+      },
+      Pending: {
+        label: 'Pending',
+        badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+      },
+      Missed: {
+        label: 'Missed',
+        badge: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
+      },
+    };
+    const style = statusStyles[status] ?? {
+      label: 'Pending',
+      badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+    };
+
+    return (
+      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border ${style.badge}`}>
+        {style.label}
+      </span>
+    );
   };
 
   return (
     <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-2xl md:rounded-[24px] overflow-hidden shadow-xs min-h-[350px] flex flex-col justify-between dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-10 h-10 text-[#113129] animate-spin" />
+          <Loader2 className="w-10 h-10 text-[#0B4058] animate-spin" />
           <p className="text-slate-400 mt-4 font-medium text-sm dark:text-slate-300">Loading live monitor...</p>
         </div>
       ) : tasks.length === 0 ? (
@@ -99,13 +108,18 @@ const TaskListSection: React.FC<TaskListProps> = ({
                 return (
                   <tr
                     key={log._id}
+                    id={`task-log-${log._id}`}
                     onClick={() => onViewDetails(log)}
-                    className="hover:bg-slate-50/80 transition-colors group cursor-pointer select-none dark:hover:bg-slate-800/60"
+                    className={`hover:bg-slate-50/80 transition-colors group cursor-pointer select-none dark:hover:bg-slate-800/60 ${
+                      log._id === highlightedTaskLogId
+                        ? 'bg-emerald-100 shadow-[inset_4px_0_0_#10b981] dark:bg-emerald-900/50 dark:shadow-[inset_4px_0_0_#34d399]'
+                        : ''
+                    }`}
                   >
                     {/* Task Title & Description */}
                     <td className="py-4 px-4 md:px-6 max-w-xs">
                       <div className="flex flex-col">
-                        <span className={`font-bold text-sm ${isCompleted ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-900 group-hover:text-[#113129] transition-colors dark:text-slate-100 dark:group-hover:text-emerald-300'}`}>
+                        <span className={`font-bold text-sm ${isCompleted ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-900 group-hover:text-[#0B4058] transition-colors dark:text-slate-100 dark:group-hover:text-sky-300'}`}>
                           {log.task?.title || 'Untitled Task'}
                         </span>
                         {log.task?.description && (

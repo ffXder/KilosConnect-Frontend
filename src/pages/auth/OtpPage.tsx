@@ -123,7 +123,7 @@ export const OtpPage: React.FC = () => {
       <section
         aria-labelledby={`${formId}-title`}
         className="w-full md:w-[40%] lg:w-[35%] min-h-screen flex flex-col items-center justify-center p-6 md:p-12 
-                   bg-[linear-gradient(180deg,#072821_21%,#111B30_100%)]"
+                   bg-[linear-gradient(180deg,#002B38_21%,#111B30_100%)]"
       >
         {/* Logo */}
         <img
@@ -168,7 +168,7 @@ export const OtpPage: React.FC = () => {
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onPaste={handlePaste}
-                  className="w-12 h-14 md:w-13 md:h-16 text-center text-2xl font-bold font-poppins bg-white text-black rounded-md outline-none focus:ring-2 focus:ring-[#ba6300] transition-all"
+                  className="w-12 h-14 md:w-13 md:h-16 text-center text-2xl font-bold font-poppins bg-white text-black rounded-md outline-none focus:ring-2 focus:ring-[#0C5673] transition-all"
                 />
               ))}
             </div>
@@ -197,7 +197,7 @@ export const OtpPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[50px] mt-2 bg-[#ba6300] hover:bg-[#a35600] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
+            className="w-full h-[50px] mt-2 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
           >
             {loading ? "Verifying..." : "Verify Code"}
           </button>

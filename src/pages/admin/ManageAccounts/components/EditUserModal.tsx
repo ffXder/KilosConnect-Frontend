@@ -140,6 +140,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       onClose();
     } catch (err: any) {
       setError(err?.message ?? "Failed to update user");
+      setError(err?.message ?? "Failed to update user");
     } finally {
       setLoading(false);
     }
@@ -376,7 +377,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               disabled={busy}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
             >
-              Cancel
+              {resettingPassword ? "Sending Reset..." : "Trigger Password Reset"}
             </button>
             <button
               type="submit"
