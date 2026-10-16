@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { X, ShieldCheck, Loader2, Save, AlertCircle } from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
-import { PERMISSION_GROUPS } from "../../../../constants/permission";
+import {
+  PERMISSION_GROUPS,
+  type PermissionGroup,
+} from "../../../../constants/permission";
 
 interface PermissionsModalProps {
   isOpen: boolean;
@@ -9,6 +12,45 @@ interface PermissionsModalProps {
   onClose: () => void;
   onSubmit: (userId: string, permissions: string[]) => Promise<void>;
 }
+
+// view permission of a group
+const getReadValue = (group: PermissionGroup) =>
+  group.options.find((o) => o.value.endsWith(":read"))?.value;
+
+// drops any permission whose group's view permission isn't granted.
+const normalize = (perms: string[]) => {
+  const set = new Set(perms);
+  PERMISSION_GROUPS.forEach((g) => {
+    const read = getReadValue(g);
+    if (read && !set.has(read)) g.options.forEach((o) => set.delete(o.value));
+  });
+  return [...set];
+};
+
+interface ToggleProps {
+  checked: boolean;
+  onChange: () => void;
+  disabled?: boolean;
+}
+
+const Toggle: React.FC<ToggleProps> = ({ checked, onChange, disabled }) => (
+  <button
+    type="button"
+    role="switch"
+    aria-checked={checked}
+    disabled={disabled}
+    onClick={onChange}
+    className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-[background-color,opacity] duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+      checked ? "bg-[#d86125]" : "bg-gray-300 dark:bg-slate-600"
+    }`}
+  >
+    <span
+      className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out ${
+        checked ? "translate-x-[22px]" : "translate-x-0.5"
+      }`}
+    />
+  </button>
+);
 
 export const PermissionsModal: React.FC<PermissionsModalProps> = ({
   isOpen,
@@ -22,7 +64,7 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
 
   useEffect(() => {
     if (!user) return;
-    setSelected(user.permissions ?? []);
+    setSelected(normalize(user.permissions ?? []));
     setError(null);
   }, [user]);
 
@@ -46,11 +88,24 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
   const changed =
     selected.length !== original.length || selected.some((p) => !original.includes(p));
 
-  const toggle = (value: string) => {
+  const toggle = (value: string, group: PermissionGroup) => {
     setError(null);
-    setSelected((prev) =>
-      prev.includes(value) ? prev.filter((p) => p !== value) : [...prev, value]
-    );
+    const read = getReadValue(group);
+    const groupValues = group.options.map((o) => o.value);
+
+    setSelected((prev) => {
+      const isOn = prev.includes(value);
+
+      // Turning view off clears every permission in that group
+      if (value === read && isOn) {
+        return prev.filter((p) => !groupValues.includes(p));
+      }
+      // Other permissions can't be turned on without view
+      if (read && value !== read && !prev.includes(read)) {
+        return prev;
+      }
+      return isOn ? prev.filter((p) => p !== value) : [...prev, value];
+    });
   };
 
   const toggleGroup = (values: string[]) => {
@@ -116,6 +171,8 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
             {PERMISSION_GROUPS.map((group) => {
               const values = group.options.map((o) => o.value);
               const allOn = values.every((v) => selected.includes(v));
+              const readValue = getReadValue(group);
+              const readOn = !readValue || selected.includes(readValue);
 
               return (
                 <fieldset
@@ -138,28 +195,44 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2">
+                  <div className="flex flex-col gap-1 p-2">
                     {group.options.map((opt) => {
                       const checked = selected.includes(opt.value);
+                      const dependsOnRead = !!readValue && opt.value !== readValue;
+                      const disabled = loading || (dependsOnRead && !readOn);
+
                       return (
                         <label
                           key={opt.value}
-                          className={`flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-colors ${
+                          title={
+                            dependsOnRead && !readOn
+                              ? "Enable view access first"
+                              : undefined
+                          }
+                          className={`flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 transition-colors ${
+                            disabled ? "cursor-not-allowed" : "cursor-pointer"
+                          } ${
                             checked
                               ? "bg-[#d86125]/5 dark:bg-[#d86125]/10"
+                              : disabled
+                              ? ""
                               : "hover:bg-gray-50 dark:hover:bg-slate-800"
                           }`}
                         >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => toggle(opt.value)}
-                            disabled={loading}
-                            className="h-4 w-4 shrink-0 accent-[#d86125] cursor-pointer"
-                          />
-                          <span className="text-sm text-gray-800 dark:text-slate-200">
+                          <span
+                            className={`text-sm transition-colors duration-200 ${
+                              disabled && !loading
+                                ? "text-gray-400 dark:text-slate-500"
+                                : "text-gray-800 dark:text-slate-200"
+                            }`}
+                          >
                             {opt.label}
                           </span>
+                          <Toggle
+                            checked={checked}
+                            disabled={disabled}
+                            onChange={() => toggle(opt.value, group)}
+                          />
                         </label>
                       );
                     })}
