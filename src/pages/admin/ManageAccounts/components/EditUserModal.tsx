@@ -275,6 +275,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
                 >
                   <option value="custodian">Custodian</option>
                   <option value="admin">Admin</option>
+                  <option value="super_admin">Admin Pro Max</option>
                 </select>
                 <ChevronDown
                   size={18}

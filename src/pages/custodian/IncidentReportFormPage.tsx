@@ -39,27 +39,25 @@ export default function IncidentReportFormPage() {
   const [severity, setSeverity] = useState<NewIncidentReport["severity"]>("Low");
   const [area, setArea] = useState("");
   const [dateAndTime, setDateAndTime] = useState(nowLocal());
-  const [affectedAssets, setAffectedAssets] = useState<string[]>([]);
   const [selectedAssetId, setSelectedAssetId] = useState("");
+  const [affectedAssets, setAffectedAssets] = useState<string[]>([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const isFormValid = title.trim() !== "" && area !== "" && dateAndTime !== "";
-
-  // hide assets that were already added
-  const availableAssets = assets.filter((a) => !affectedAssets.includes(a._id));
+  const availableAssets = assets.filter((item) => !affectedAssets.includes(item._id));
 
   const handleAddAsset = () => {
-    if (selectedAssetId && !affectedAssets.includes(selectedAssetId)) {
-      setAffectedAssets([...affectedAssets, selectedAssetId]);
-      setSelectedAssetId("");
-    }
+    if (!selectedAssetId || affectedAssets.includes(selectedAssetId)) return;
+    setAffectedAssets((current) => [...current, selectedAssetId]);
+    setSelectedAssetId("");
   };
 
-  const handleRemoveAsset = (id: string) =>
-    setAffectedAssets(affectedAssets.filter((a) => a !== id));
+  const handleRemoveAsset = (id: string) => {
+    setAffectedAssets((current) => current.filter((item) => item !== id));
+  };
 
   const reset = () => {
     setTitle("");
@@ -67,8 +65,8 @@ export default function IncidentReportFormPage() {
     setSeverity("Low");
     setArea("");
     setDateAndTime(nowLocal());
-    setAffectedAssets([]);
     setSelectedAssetId("");
+    setAffectedAssets([]);
     setError(null);
     setSubmitted(false);
   };
@@ -79,9 +77,7 @@ export default function IncidentReportFormPage() {
     setIsSubmitting(true);
     setError(null);
     try {
-      await createReport({
-        title, description, severity, area, dateAndTime, affectedAssets,
-      });
+      await createReport({ title, description, severity, area, dateAndTime, affectedAssets });
       setSubmitted(true);
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Please try again.");
@@ -176,18 +172,18 @@ export default function IncidentReportFormPage() {
                 <label className={labelCls}>
                   Affected Assets <span className="font-normal text-gray-400">(optional)</span>
                 </label>
-                <div className="flex gap-2 mb-3">
-                  <div className="relative flex-1 min-w-0">
+                <div className="mb-3 flex gap-2">
+                  <div className="relative min-w-0 flex-1">
                     <select
                       value={selectedAssetId}
-                      onChange={(e) => setSelectedAssetId(e.target.value)}
+                      onChange={(event) => setSelectedAssetId(event.target.value)}
                       disabled={assetsLoading}
                       className={`${inputCls} appearance-none pr-10`}
                     >
                       <option value="">{assetsLoading ? "Loading assets..." : "Select an asset"}</option>
-                      {availableAssets.map((asset) => (
-                        <option key={asset._id} value={asset._id}>
-                          {asset.name} ({asset.assetId})
+                      {availableAssets.map((item) => (
+                        <option key={item._id} value={item._id}>
+                          {item.name} ({item.assetId})
                         </option>
                       ))}
                     </select>
@@ -197,27 +193,26 @@ export default function IncidentReportFormPage() {
                     type="button"
                     onClick={handleAddAsset}
                     disabled={!selectedAssetId}
-                      className="rounded-xl bg-emerald-50 px-5 font-bold text-[#11382C] transition-colors hover:bg-emerald-100 active:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/70 dark:active:bg-emerald-900/70"
+                    className="rounded-xl bg-emerald-50 px-5 font-bold text-[#11382C] transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/70"
                   >
                     Add
                   </button>
                 </div>
-
                 {affectedAssets.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {affectedAssets.map((id) => {
-                      const asset = assets.find((a) => a._id === id);
+                      const item = assets.find((candidate) => candidate._id === id);
                       return (
                         <div
                           key={id}
                           className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 py-1.5 pl-3 pr-2 text-sm font-medium dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         >
-                          {asset?.name ?? "Asset"}
+                          {item?.name ?? "Asset"}
                           <button
                             type="button"
                             onClick={() => handleRemoveAsset(id)}
                             className="p-1 text-gray-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400"
-                            aria-label={`Remove ${asset?.name ?? "asset"}`}
+                            aria-label={`Remove ${item?.name ?? "asset"}`}
                           >
                             <X size={14} />
                           </button>

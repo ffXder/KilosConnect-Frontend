@@ -1,5 +1,5 @@
 import type { UserAccount, NewUserForm, UpdateUserForm } from "../types/manageAccount";
-import { apiRequest } from "./authService";
+import { apiRequest, getUser, refreshAccessToken } from "./authService";
 
 // GET all users
 export const getAllUsers = async (): Promise<UserAccount[]> => {
@@ -49,13 +49,38 @@ export const archiveUser = async (id: string): Promise<void> => {
 };
 
 // POST Trigger password reset for a user
-export const resetUserPassword = async (userId: string): Promise<void> => {
-  const res = await apiRequest(`/users/${userId}/reset-password`, {
-    method: 'POST',
+export const resetUserPassword = async (
+  userId: string
+): Promise<{ message: string; tempPassword?: string }> => {
+  const res = await apiRequest(`/users/${userId}/reset-password`, { method: 'POST' });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || 'Failed to reset password');
+  return data;
+};
+
+// PATCH change user permissions
+export const updateUserPermissions = async (
+  id: string,
+  permissions: string[]
+): Promise<void> => {
+  const res = await apiRequest(`/users/${id}/permissions`, {
+    method: 'PATCH',
+    body: JSON.stringify({ permissions }),
   });
 
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || 'Failed to reset password');
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || 'Failed to update permissions');
+  }
+
+  // refresh token when changing permissions
+  const currentUser = getUser();
+  if (currentUser && (currentUser._id === id)) {
+    try {
+      await refreshAccessToken()
+    } catch (refreshErr) {
+      console.error("Failed to refresh token after permission update")
+    }
   }
 };

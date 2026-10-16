@@ -1,5 +1,5 @@
 import { apiRequest } from "./authService";
-import type { TaskLog, ChecklistItem, VerificationStatus, TaskLogStatus } from "../types/task";
+import type { TaskLog, ChecklistTemplateItem, VerificationStatus, TaskLogStatus } from "../types/task";
 
 // GET task logs filtered by date and/or status
 export const getTaskLogs = async (date?: string, status?: string): Promise<TaskLog[]> => {
@@ -52,7 +52,7 @@ export const startTaskLog = async (logId: string): Promise<TaskLog> => {
 };
 
 // PATCH update checklist items
-export const updateChecklist = async (logId: string, checklist: ChecklistItem[]): Promise<TaskLog> => {
+export const updateChecklist = async (logId: string, checklist: ChecklistTemplateItem[]): Promise<TaskLog> => {
     const res = await apiRequest(`/task-logs/${logId}/checklist`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

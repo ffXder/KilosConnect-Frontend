@@ -30,6 +30,9 @@ const AnimationStyles = () => (
     .rs-pop-in { animation: rs-pop-in .25s cubic-bezier(.16,1,.3,1) both }
     .rs-row-in { animation: rs-row-in .35s ease-out both }
     .rs-float { animation: rs-float 2.5s ease-in-out infinite }
+    @media (prefers-reduced-motion: reduce) {
+      .rs-fade-in, .rs-pop-in, .rs-row-in, .rs-float { animation: none }
+    }
   `}</style>
 );
 
@@ -443,6 +446,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
             <span>{shownError}</span>
           </div>
         )}
+
         {/* Content */}
         {loading && disputedQueue.length === 0 ? (
           <div className="divide-y divide-gray-100 dark:divide-slate-700">

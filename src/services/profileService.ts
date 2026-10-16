@@ -1,4 +1,5 @@
 import type { UserAccount } from "../types/manageAccount";
+import type { MyPerformance } from "../types/profile";
 import { apiRequest } from "./authService";
 
 // userId comes from useAuth() 
@@ -47,3 +48,14 @@ export const updateProfileImage = async (
   const data = await res.json();
   return data.profileImage;
 };
+
+// for profile performance
+export const getMyPerformance = async (): Promise<MyPerformance> => {
+  const res = await apiRequest('/profile/performance');
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Failed to load performance');
+  }
+  return res.json();
+}

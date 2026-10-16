@@ -227,6 +227,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
                 >
                   <option value="custodian">Custodian</option>
                   <option value="admin">Admin</option>
+                  <option value="super_admin">Super Admin</option>
                 </select>
                 <ChevronDown
                   size={18}

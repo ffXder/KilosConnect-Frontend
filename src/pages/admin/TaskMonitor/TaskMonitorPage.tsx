@@ -19,7 +19,9 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
   const navigate = useNavigate();
   const { role } = useAuth();
 
-  const userRole = (role ?? 'custodian') as 'admin';
+  const userRole = (role ?? 'custodian') as React.ComponentProps<
+    typeof SidebarNavigationSection
+  >["userRole"];
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('All Tasks');
@@ -115,7 +117,7 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
 
               <TaskFilterSection
                 onGenerate={handleGenerateClick}
-                showGenerateButton={userRole === 'admin'}
+                showGenerateButton={role === 'admin' || role === 'super_admin'}
                 statusFilter={statusFilter}
                 setStatusFilter={setStatusFilter}
                 frequencyFilter={frequencyFilter}

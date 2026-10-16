@@ -17,14 +17,16 @@ import {
   UsersRound,
 } from "lucide-react";
 import { logOut } from "../services/authService";
+import { useAuth } from '../hooks/useAuth';
 import { ThemeToggle } from "./ThemeToggle"
 
-type Role = "admin" | "custodian";
+type Role = 'super_admin' | "admin" | "custodian";
 
 interface SidebarNavItem {
   label: string;
   path: string;
   sectionPath?: string;
+  requiredPermission?: string;
   roles: Role[];
   icon: React.ReactNode;
   children?: Array<{
@@ -38,7 +40,7 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Overview",
     path: "/dashboard",
-    roles: ["admin"] as Role[],
+    roles: [ "super_admin", "admin"] as Role[],
     icon: <LayoutDashboard size={20} />,
   },
   {
@@ -68,7 +70,8 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Assets",
     path: "/asset-registry",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "asset:read",
     icon: <Boxes size={20} />,
     children: [
       {
@@ -86,7 +89,8 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Live Task Monitor",
     path: "/task-monitor/live-monitor",
-    roles: ["admin"] as Role[],
+    roles: [ "super_admin", "admin"] as Role[],
+    requiredPermission: "facility:read",
     icon: <Activity size={20} />,
     sectionPath: "/task-monitor",
     children: [
@@ -105,37 +109,42 @@ const navItems: SidebarNavItem[] = [
   {
     label: "Manage Tasks",
     path: "/manage-task",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "facility:read",
     icon: <ListChecks size={20} />,
   },
   {
     label: "Incident Report",
     path: "/incident-report",
-    roles: ["admin"] as Role[],
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "incident:read",
     icon: <TriangleAlert size={20} />,
   },
   {
     label: "Logs",
     path: "/audit-logs",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "audit:read",
     icon: <ScrollText size={20} />,
   },
   {
     label: "Profile",
     path: "/profile",
-    roles: ["admin", "custodian"] as Role[],
+    roles: ["super_admin", "admin", "custodian"] as Role[],
     icon: <UserRound size={20} />,
   },
   {
     label: "Manage Accounts",
     path: "/manage-accounts",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", 'admin'] as Role[],
+    requiredPermission: "users:read",
     icon: <UserRoundCog size={20} />,
   },
   {
     label: "Archives",
     path: "/archives",
-    roles: ["admin"] as Role[], 
+    roles: ["super_admin", "admin"] as Role[],
+    requiredPermission: "users:read",
     icon: <Archive size={20} />,
   },
 ];
@@ -143,6 +152,7 @@ const navItems: SidebarNavItem[] = [
 export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRole }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { role, permissions } = useAuth();
 
   // Desktop sidebar expansion state
   const [isExpanded, setIsExpanded] = useState<boolean>(() => {
@@ -175,6 +185,15 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
     };
   }, [isMobileOpen]);
 
+  const currentRole = (role ?? userRole ?? null) as Role | null;
+  if (!currentRole) return null;
+
+  const visibleItems = navItems.filter((item) => {
+    if (!item.roles.includes(currentRole)) return false;
+    if (currentRole === "super_admin") return true;
+    return !item.requiredPermission || permissions.includes(item.requiredPermission);
+  });
+
   const toggleSidebar = () => {
     setIsExpanded((prev) => {
       const nextState = !prev;
@@ -187,8 +206,6 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
     logOut();
     navigate("/login");
   };
-
-  const visibleItems = userRole ? navItems.filter((item) => item.roles.includes(userRole)) : navItems;
 
   return (
     <>
@@ -205,13 +222,13 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
       {/* --- MOBILE TOP HEADER --- */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#072821] flex items-center justify-between px-4 z-40 border-b border-white/10 shadow-md">
         <div className="w-[100px]">
-          <img 
-            className="w-full object-contain" 
-            alt="Kilos logo" 
-            src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png" 
+          <img
+            className="w-full object-contain"
+            alt="Kilos logo"
+            src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png"
           />
         </div>
-        
+
         <button
           type="button"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -246,8 +263,8 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
       )}
 
       {/* --- DESKTOP SPACER --- */}
-      <div 
-        className="hidden md:block h-screen flex-shrink-0 relative transition-all duration-300 ease-in-out" 
+      <div
+        className="hidden md:block h-screen flex-shrink-0 relative transition-all duration-300 ease-in-out"
         style={{ width: isExpanded ? "240px" : "78px" }}
       />
 
@@ -268,10 +285,10 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
           <div className={`transition-all duration-300 overflow-hidden ${
             isExpanded || isMobileOpen ? "w-[120px] opacity-100" : "w-0 opacity-0"
           }`}>
-            <img 
-              className="w-full object-contain" 
-              alt="Kilos logo" 
-              src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png" 
+            <img
+              className="w-full object-contain"
+              alt="Kilos logo"
+              src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png"
             />
           </div>
 
@@ -327,7 +344,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                       <span className={isSectionActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
                         {item.icon}
                       </span>
-                    
+
                       <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
                         isExpanded || isMobileOpen ? "flex-1 min-w-0 truncate opacity-100 scale-100" : "opacity-0 scale-90 w-0 pointer-events-none"
                       }`}>

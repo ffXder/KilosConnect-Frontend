@@ -1,15 +1,22 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AlertCircle, X } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import type { UserAccount, NewUserForm } from "../../../types/manageAccount";
 import { AccountsFilterSection } from "./components/AccountFilterSection";
 import AccountsListSection from "./components/AccountListSection";
-import { createUser, updateUser } from "../../../services/manageAccountService";
 import { useUsers } from "../../../hooks/useUsers";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 import { AddUserModal } from "./components/AddUserModal";
 import { EditUserModal } from "./components/EditUserModal";
+import { PermissionsModal } from "./components/PermissionModal";
+import {
+  createUser,
+  resetUserPassword,
+  updateUser,
+  updateUserPermissions,
+} from "../../../services/manageAccountService";
 import type {
   AccountRoleFilter,
   AccountSortDirection,
@@ -19,6 +26,12 @@ import type {
 const CLOSED_DELETE = { isOpen: false, id: "", name: "" };
 
 export const ManageAccountsPage: React.FC = () => {
+  const { role, userId: currentUserId } = useAuth();
+  const navigate = useNavigate();
+  const userRole = (role ?? "custodian") as React.ComponentProps<
+    typeof SidebarNavigationSection
+  >["userRole"];
+  const canManagePermissions = role === "super_admin";
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<AccountRoleFilter>("all");
   const [sortBy, setSortBy] = useState<AccountSortField>("name");
@@ -29,10 +42,17 @@ export const ManageAccountsPage: React.FC = () => {
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
+  const [selectedUserForPermissions, setSelectedUserForPermissions] =
+    useState<UserAccount | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string }>(
     CLOSED_DELETE
   );
   const [pageError, setPageError] = useState<string | null>(null);
+  // NEW: shown only when the reset email failed and the admin has to relay the temp password
+  const [tempPasswordNotice, setTempPasswordNotice] = useState<{
+    name: string;
+    password: string;
+  } | null>(null);
 
   const handleAddSubmit = async (data: Omit<NewUserForm, "password">) => {
     await createUser(data as NewUserForm);
@@ -45,8 +65,20 @@ export const ManageAccountsPage: React.FC = () => {
   };
 
   const handleResetPassword = async (userId: string) => {
-    // TODO: call the backend (e.g. send a one-time reset link) before shipping
-    console.log("Resetting password for user:", userId);
+    const result = await resetUserPassword(userId);
+    if (result.tempPassword) {
+      const target = users.find((user) => user._id === userId);
+      setTempPasswordNotice({
+        name: target ? `${target.firstName} ${target.lastName}` : userId,
+        password: result.tempPassword,
+      });
+    }
+  };
+
+  const handlePermissionsSubmit = async (id: string, permissions: string[]) => {
+    await updateUserPermissions(id, permissions);
+    await refresh();
+    if (currentUserId === id) navigate("/dashboard", { replace: true });
   };
 
   const confirmDelete = async () => {
@@ -90,9 +122,6 @@ export const ManageAccountsPage: React.FC = () => {
     safeCurrentPage * pageSize,
   );
 
-  const { role } = useAuth();
-  const userRole = (role ?? 'custodian') as React.ComponentProps<typeof SidebarNavigationSection>["userRole"];
-
   return (
     <div className="flex min-h-screen w-full bg-[#f4f5f6] text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
@@ -115,6 +144,30 @@ export const ManageAccountsPage: React.FC = () => {
               <AlertCircle size={18} className="shrink-0" />
               <p className="flex-1">{pageError}</p>
               <button type="button" onClick={() => setPageError(null)} aria-label="Dismiss">
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
+          {tempPasswordNotice && (
+            <div
+              role="alert"
+              className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200"
+            >
+              <AlertCircle size={18} className="shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p>
+                  The reset email for <span className="font-semibold">{tempPasswordNotice.name}</span> failed to send.
+                  Relay this temporary password securely:
+                </p>
+                <p className="mt-2 font-mono text-base font-semibold select-all">{tempPasswordNotice.password}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTempPasswordNotice(null)}
+                aria-label="Dismiss"
+                className="shrink-0 -m-1 p-1 rounded-md hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors"
+              >
                 <X size={16} />
               </button>
             </div>
@@ -156,6 +209,11 @@ export const ManageAccountsPage: React.FC = () => {
               onDeleteClick={(id, name) =>
                 setDeleteConfirm({ isOpen: true, id, name })
               }
+              onPermissionsClick={
+                canManagePermissions
+                  ? (account) => setSelectedUserForPermissions(account)
+                  : undefined
+              }
             />
           </section>
         </div>
@@ -173,6 +231,13 @@ export const ManageAccountsPage: React.FC = () => {
           onClose={() => setSelectedUserForEdit(null)}
           onSubmit={handleEditSubmit}
           onResetPassword={handleResetPassword}
+        />
+
+        <PermissionsModal
+          isOpen={!!selectedUserForPermissions}
+          user={selectedUserForPermissions}
+          onClose={() => setSelectedUserForPermissions(null)}
+          onSubmit={handlePermissionsSubmit}
         />
 
         <DeleteConfirmModal

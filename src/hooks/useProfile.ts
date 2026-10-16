@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { getMyProfile, updateMyProfile, updateProfileImage } from "../services/profileService";
+import { getMyProfile, updateMyProfile, updateProfileImage, getMyPerformance } from "../services/profileService";
 import { useAuth } from "./useAuth";
 import type { UserAccount } from "../types/manageAccount";
+import type { MyPerformance } from "../types/profile";
+
+const EMPTY: MyPerformance = {
+  stats: { tasksCompleted: 0, incidentsReported: 0, itemsLogged: 0, activeDays: 0 },
+  recentActivity: [],
+};
 
 export function useProfile() {
   const { user } = useAuth(); // get logged-in user's ID from auth context
@@ -67,4 +73,26 @@ export function useProfile() {
     handleSaveProfile,
     handleUpdateAvatar,
   };
+}
+
+// for fetching recent activities and performance
+export function useMyPerformance() {
+  const [data, setData] = useState<MyPerformance>(EMPTY);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setData(await getMyPerformance());
+      setError(null);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  return { ...data, loading, error, reload: load };
 }

@@ -1,5 +1,5 @@
 import { apiRequest } from "./authService";
-import type { TaskLog, ChecklistItem, TaskSummary } from "../types/task";
+import type { TaskLog, ChecklistTemplateItem, TaskSummary } from "../types/task";
 
 // GET all task logs for today (custodians)
 export const getTodayTasks = async (): Promise<{ summary: TaskSummary; taskLogs: TaskLog[] }> => {
@@ -33,7 +33,7 @@ export const startTaskLog = async (logId: string): Promise<TaskLog> => {
 };
 
 // PATCH toggle one checklist item (must be In Progress)
-export const toggleChecklistItem = async (logId: string, itemId: string): Promise<ChecklistItem[]> => {
+export const toggleChecklistItem = async (logId: string, itemId: string): Promise<ChecklistTemplateItem[]> => {
     const res = await apiRequest(`/task-operations/${logId}/checklist/${itemId}`, { method: 'PATCH' });
     if (!res.ok) {
         const err = await res.json();

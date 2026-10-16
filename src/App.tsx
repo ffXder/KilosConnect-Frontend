@@ -46,12 +46,12 @@ import LostAndFoundFormPage from './pages/custodian/LostAndFoundFormPage'
 // redirect user who logged in
 function DashboardRedirect() {
   const { isLoggedIn, role } = useAuth();
-  
+
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
-  if (role === 'admin') {
+  if (role === 'admin' || role === 'super_admin') {
     return <Navigate to="/dashboard" replace />;
   } else if (role === 'custodian') {
     return <Navigate to="/custodian/dashboard" replace />;
@@ -64,7 +64,7 @@ function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, role } = useAuth();
   
   if (isLoggedIn) {
-    if (role === 'admin') return <Navigate to="/dashboard" replace />;
+    if (role === 'admin' || role === 'super_admin') return <Navigate to="/dashboard" replace />;
     if (role === 'custodian') return <Navigate to="/custodian/dashboard" replace />;
     return <Navigate to="/unauthorized" replace />;
   }
@@ -131,25 +131,48 @@ function App() {
           <Route path='/setup/new-password' element={<NewAccountPasswordSetupPage />} />
           <Route path='/report-an-issue' element={<PublicReportingPage />} />
 
-          {/* SHARED PROTECTED ROUTES */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'custodian']} />}>
-            <Route path="/asset-registry" element={<AssetRegistryPage />} />
-            <Route path="/asset-registry/lost-and-found" element={<LostAndFoundPage />} />
-            <Route path="/lost-and-found" element={<Navigate to="/asset-registry/lost-and-found" replace />} />
+          {/* Shared profile routes */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'custodian']} />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/scan-qr" element={<ScanQRPage />} />
           </Route>
 
-          {/* ADMIN ONLY ROUTES */}
-          <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          {/* Asset registry remains available to custodians; admin access uses permissions. */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'custodian']} requiredPermission="asset:read" />}>
+            <Route path="/asset-registry" element={<AssetRegistryPage />} />
+            <Route path="/asset-registry/lost-and-found" element={<LostAndFoundPage />} />
+            <Route path="/lost-and-found" element={<Navigate to="/asset-registry/lost-and-found" replace />} />
+          </Route>
+
+          {/* ADMIN ONLY ROUTES WITH PERMS */}
+          {/* Dashboard Page */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="incident:read" />}>
             <Route path="/incident-report" element={<IncidentReportPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="facility:read" />}>
             <Route path="/task-monitor" element={<Navigate to="/task-monitor/live-monitor" replace />} />
             <Route path="/task-monitor/live-monitor" element={<TaskMonitorPage view="monitor" />} />
             <Route path="/task-monitor/review-submissions" element={<TaskMonitorPage view="submissions" />} />
             <Route path="/manage-task" element={<TaskManagementPage />} />
+          </Route>
+
+          {/* Audit Logs Page */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="audit:read" />}>
             <Route path="/audit-logs" element={<LogsPage />} />
+          </Route>
+
+          {/* Manage Accounts Page */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="users:read" />}>
             <Route path="/manage-accounts" element={<ManageAccountsPage />} />
+          </Route>
+
+          {/* Archives Page */}
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="users:read" />}>
             <Route path="/archives" element={<ArchivesPage />} />
           </Route>
 
