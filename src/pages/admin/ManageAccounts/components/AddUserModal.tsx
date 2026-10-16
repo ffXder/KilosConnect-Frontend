@@ -123,7 +123,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
         className="w-full max-w-lg flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#0b3026] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
+        <div className="bg-[#002B38] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-[#FDFFE0]">
               <UserPlus size={20} />
@@ -269,4 +269,3 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onS
     </div>
   );
 }
-
