@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
+
+// COMPONENTS
 import ArchivesInfoSection from "./components/ArchivesInfoSection";
 import ArchivesStatsSection from "./components/StatsSection";
 import TableSection from "./components/TableSection";
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
+
+// HOOKS
 import { useAuth } from "../../../hooks/useAuth";
+import { usePermissions } from "../../../hooks/usePermissons";
 import { useArchives } from "../../../hooks/useArchive"; 
+
 import type { ArchiveRecord } from "../../../types/archive";
+
+//CONSTANTS
+import { PERMISSIONS as P } from "../../../constants/permission"
 
 export const ArchivesPage: React.FC = () => {
   const {
@@ -16,12 +26,17 @@ export const ArchivesPage: React.FC = () => {
     fetchStats,
     unarchive,
   } = useArchives();
+  const { hasPermission } = usePermissions();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All Types");
 
   const [viewItem, setViewItem] = useState<ArchiveRecord | null>(null);
   const [restoreItem, setRestoreItem] = useState<ArchiveRecord | null>(null);
+
+  if (!hasPermission(P.ARCHIVE_READ)) {
+    return <Navigate to="/unauthorized" replace />
+  }
 
   // Initial stats load on mount
   useEffect(() => {
