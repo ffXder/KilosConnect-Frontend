@@ -132,18 +132,18 @@ export const OtpPage: React.FC = () => {
           src={KILOSWhiteLogo1}
         />
 
-        <h1 id={`${formId}-title`} className="font-poppins font-semibold text-[#fdffe0] text-3xl md:text-4xl mb-3 text-center">
+        <h1 id={`${formId}-title`} className="font-semibold text-[#fdffe0] text-3xl md:text-4xl mb-3 text-center">
           VERIFICATION
         </h1>
 
-        <p className="font-poppins text-[#fdffe0]/70 text-sm md:text-base mb-8 text-center max-w-[320px]">
+        <p className="text-[#fdffe0]/70 text-sm md:text-base mb-8 text-center max-w-[320px]">
           Enter the 6-digit security code sent to your registered email.
         </p>
 
         {/* Error message */}
         {error && (
           <div className="w-full max-w-[400px] mb-4 bg-red-500/20 border border-red-400 rounded-md p-3">
-            <p className="font-poppins text-red-300 text-sm text-center">{error}</p>
+            <p className="text-red-300 text-sm text-center">{error}</p>
           </div>
         )}
 
@@ -151,7 +151,7 @@ export const OtpPage: React.FC = () => {
           
           {/* 6-Digit Code Inputs */}
           <div className="flex flex-col gap-2">
-            <label className="font-poppins text-[#fdffe0] text-lg md:text-xl text-center">
+            <label className="text-[#fdffe0] text-lg md:text-xl text-center">
               Security Code
             </label>
             <div className="flex justify-between gap-2 my-2">
@@ -168,7 +168,7 @@ export const OtpPage: React.FC = () => {
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onPaste={handlePaste}
-                  className="w-12 h-14 md:w-13 md:h-16 text-center text-2xl font-bold font-poppins bg-white text-black rounded-md outline-none focus:ring-2 focus:ring-[#0C5673] transition-all"
+                  className="w-12 h-14 md:w-13 md:h-16 text-center text-2xl font-bold bg-white text-black rounded-md outline-none focus:ring-2 focus:ring-[#0C5673] transition-all"
                 />
               ))}
             </div>
@@ -180,16 +180,16 @@ export const OtpPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleResend}
-                className="font-poppins text-[#fdffe0] hover:text-white text-sm underline transition-all bg-transparent border-none cursor-pointer"
+                className="text-[#fdffe0] hover:text-white text-sm underline transition-all bg-transparent border-none cursor-pointer"
               >
                 Resend authentication code
               </button>
             ) : (
-              <p className="font-poppins text-[#fdffe0]/50 text-xs">
+              <p className="text-[#fdffe0]/50 text-xs">
                 Resend code in <span className="font-semibold text-[#fdffe0]">{resendTimer}s</span>
               </p>
             )}
-            <p className="font-poppins text-[#fdffe0]/50 text-xs mt-1">
+            <p className="text-[#fdffe0]/50 text-xs mt-1">
               For security compliance & verification
             </p>
           </div>
@@ -197,7 +197,7 @@ export const OtpPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[50px] mt-2 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
+            className="w-full h-[50px] mt-2 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-medium text-xl transition-all disabled:opacity-50"
           >
             {loading ? "Verifying..." : "Verify Code"}
           </button>
@@ -206,7 +206,7 @@ export const OtpPage: React.FC = () => {
             <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="group inline-flex items-center justify-center gap-2 font-poppins text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline bg-transparent border-none cursor-pointer transition-colors duration-200 ease-in-out"
+                className="group inline-flex items-center justify-center gap-2 text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline bg-transparent border-none cursor-pointer transition-colors duration-200 ease-in-out"
             >
                 <ArrowLeft 
                 size={16} 

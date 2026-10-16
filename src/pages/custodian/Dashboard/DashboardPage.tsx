@@ -66,7 +66,7 @@ export default function CustodianDashboardPage() {
     "text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-100";
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950 transition-colors duration-300">
+    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       {/* Toast: full width at the bottom on phones, corner card on larger screens */}

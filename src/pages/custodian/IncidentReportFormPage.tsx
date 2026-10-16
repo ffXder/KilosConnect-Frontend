@@ -77,7 +77,7 @@ export default function IncidentReportFormPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-['Poppins']">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 min-w-0 w-full max-w-xl mx-auto px-4 pt-20 pb-4 sm:px-6 sm:pt-24">

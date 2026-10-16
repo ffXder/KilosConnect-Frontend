@@ -97,33 +97,33 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
 
         <h1
           id={`${formId}-title`}
-          className="font-poppins font-semibold text-[#fdffe0] text-2xl md:text-3xl mb-2 text-center"
+          className="font-semibold text-[#fdffe0] text-2xl md:text-3xl mb-2 text-center"
         >
           WELCOME TO KILOS
         </h1>
 
-        <p className="font-poppins text-[#fdffe0]/70 text-sm text-center mb-8 max-w-[400px]">
+        <p className="text-[#fdffe0]/70 text-sm text-center mb-8 max-w-[400px]">
           Your account requires a password update. Please choose a new permanent password to complete setup.
         </p>
 
         {/* Error message */}
         {error && (
           <div className="w-full max-w-[400px] mb-4 bg-red-500/20 border border-red-400 rounded-md p-3">
-            <p className="font-poppins text-red-300 text-sm text-center">{error}</p>
+            <p className="text-red-300 text-sm text-center">{error}</p>
           </div>
         )}
 
         {/* Success message */}
         {success && (
           <div className="w-full max-w-[400px] mb-4 bg-green-500/20 border border-green-400 rounded-md p-3">
-            <p className="font-poppins text-green-300 text-sm text-center">{success}</p>
+            <p className="text-green-300 text-sm text-center">{success}</p>
           </div>
         )}
 
         <form className="w-full max-w-[400px] flex flex-col gap-6" onSubmit={handleSubmit}>
           {passwordFields.map((field) => (
             <div key={field.id} className="flex flex-col gap-2">
-              <label htmlFor={`${formId}-${field.id}`} className="font-poppins text-[#fdffe0] text-lg md:text-xl">
+              <label htmlFor={`${formId}-${field.id}`} className="text-[#fdffe0] text-lg md:text-xl">
                 {field.label}
               </label>
               <div className="relative w-full">
@@ -135,7 +135,7 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
                   onChange={(e) =>
                     setFormValues((prev) => ({ ...prev, [field.id]: e.target.value }))
                   }
-                  className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#0C5673] outline-none"
+                  className="w-full h-[45px] bg-white rounded-md px-4 text-black focus:ring-2 focus:ring-[#0C5673] outline-none"
                   required
                 />
                 <button
@@ -152,7 +152,7 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[50px] mt-4 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
+            className="w-full h-[50px] mt-4 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-medium text-xl transition-all disabled:opacity-50"
           >
             {loading ? "Setting Password..." : "Set Password & Continue"}
           </button>
@@ -161,7 +161,7 @@ export const NewAccountPasswordSetupPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="font-poppins text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline transition-all"
+              className="text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline transition-all"
             >
               Back to Login
             </button>

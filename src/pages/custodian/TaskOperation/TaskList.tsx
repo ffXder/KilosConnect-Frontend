@@ -11,7 +11,7 @@ interface TaskListProps {
 export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center font-['Poppins'] dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
         <AlertCircle className="mx-auto text-gray-400 mb-2 dark:text-slate-400" size={32} />
         <p className="text-sm font-medium text-gray-500 dark:text-slate-300">No tasks found matching this filter.</p>
       </div>
@@ -44,7 +44,7 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
   };
 
   return (
-    <div className="space-y-4 font-['Poppins']">
+    <div className="space-y-4">
       {tasks.map((task) => {
         const completedCount = task.checklist.filter(c => c.completed).length;
 

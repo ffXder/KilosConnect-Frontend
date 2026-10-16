@@ -40,7 +40,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isExpanded = false, is
       </span>
 
       {/* Text Label */}
-      <span className={`[font-family:'Poppins',Helvetica] font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+      <span className={`font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
         isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
       }`}>
         {theme === 'dark' ? "Light Mode" : "Dark Mode"}

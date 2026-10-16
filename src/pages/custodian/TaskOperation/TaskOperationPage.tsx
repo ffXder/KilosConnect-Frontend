@@ -35,7 +35,7 @@ export default function TaskMain() {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row font-['Poppins'] dark:bg-slate-950 transition-colors duration-300">
+    <div className="flex min-h-screen bg-[#F8FAFC] flex-col md:flex-row dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">

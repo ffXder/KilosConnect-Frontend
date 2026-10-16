@@ -66,7 +66,7 @@ export default function ReviewDetailView({
   const headerBg = isFlagging ? 'bg-rose-700' : 'bg-[#0B3F57]';
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end font-['Poppins']" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true">
       <style>{`
         @keyframes rdv-in   { from { transform: translateX(100%); } to { transform: none; } }
         @keyframes rdv-fade { from { opacity: 0; } to { opacity: 1; } }

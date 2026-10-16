@@ -91,7 +91,7 @@ export const TaskManagementPage: React.FC = () => {
         <div className="p-8 max-w-[1600px] mx-auto space-y-8">
           
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight dark:text-slate-50">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight dark:text-slate-50">
               Manage Tasks
             </h1>
             

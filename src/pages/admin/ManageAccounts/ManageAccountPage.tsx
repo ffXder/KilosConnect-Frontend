@@ -129,7 +129,7 @@ export const ManageAccountsPage: React.FC = () => {
         <div className="max-w-[1400px] mx-auto space-y-6">
           {/* Page header */}
           <header>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
               Manage accounts
             </h1>
             <p className="text-sm text-gray-500 dark:text-slate-400 mt-1.5">

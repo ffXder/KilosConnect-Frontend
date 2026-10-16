@@ -84,7 +84,7 @@ export default function LostAndFoundFormPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f8fafc] font-['Poppins'] transition-colors dark:bg-slate-950 md:flex-row">
+    <div className="flex min-h-screen flex-col bg-[#f8fafc] transition-colors dark:bg-slate-950 md:flex-row">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 min-w-0 w-full max-w-xl mx-auto px-4 pt-20 pb-4 sm:px-6 sm:pt-24">

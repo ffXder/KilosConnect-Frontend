@@ -11,7 +11,7 @@ export default function SuccessScreen({
   title, message, primaryLabel, onPrimary, secondaryLabel, onSecondary,
 }: SuccessScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-16 px-4 font-['Poppins']">
+    <div className="flex flex-col items-center justify-center text-center py-16 px-4">
       <style>{`
         @keyframes ss-pop  { 0% {transform:scale(0);opacity:0} 60% {transform:scale(1.15);opacity:1} 100% {transform:scale(1)} }
         @keyframes ss-ring { 0% {transform:scale(.8);opacity:.6} 100% {transform:scale(1.8);opacity:0} }

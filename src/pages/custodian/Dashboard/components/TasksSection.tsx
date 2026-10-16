@@ -29,7 +29,7 @@ export const TasksSection: React.FC<TasksProps> = ({
   pendingCount,
 }) => {
   return (
-    <div className="font-['Poppins']">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-extrabold text-gray-900 dark:text-slate-50">
           Today's Tasks

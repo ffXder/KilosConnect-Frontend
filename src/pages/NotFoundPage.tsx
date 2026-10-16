@@ -20,7 +20,7 @@ const NotFoundPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#f8fafc] dark:bg-slate-950 flex items-center justify-center p-4 font-['Poppins',sans-serif] transition-colors duration-300">
+    <div className="relative min-h-screen bg-[#f8fafc] dark:bg-slate-950 flex items-center justify-center p-4 transition-colors duration-300">
       <button
         type="button"
         onClick={toggleTheme}

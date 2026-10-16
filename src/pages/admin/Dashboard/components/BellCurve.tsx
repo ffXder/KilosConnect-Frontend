@@ -163,7 +163,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       )}
 
       <div className="mt-6 w-full">
-        <svg className="w-full" viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="xMidYMid meet" style={{ fontFamily: 'Poppins, Helvetica, sans-serif' }}>
+        <svg className="w-full" viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="xMidYMid meet">
           {/* Horizontal grid lines with labels */}
           {yLabels.map((val) => {
             const y = toY(val);

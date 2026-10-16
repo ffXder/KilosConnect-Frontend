@@ -140,8 +140,8 @@ export const ProfilePage: React.FC = () => {
       <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
         <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">Profile</h1>
+            <p className="text-gray-500 text-sm mt-0.5 dark:text-slate-300">Manage your account information and view your activity</p>
           </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">

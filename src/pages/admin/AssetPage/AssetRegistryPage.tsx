@@ -133,7 +133,7 @@ export const AssetRegistryPage = () => {
       <main className="flex-1 w-full overflow-hidden pt-20 md:pt-0">
         <div className="p-8 max-w-[1600px] mx-auto">
           <div className="mb-8">
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50 font-bold">Smart Facility Asset Registry</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50 font-bold">Smart Facility Asset Registry</h1>
             <p className="text-gray-500 text-sm mt-1 dark:text-slate-300 ">Equipment lifecycle monitoring and predictive analytics</p>
           </div>
 

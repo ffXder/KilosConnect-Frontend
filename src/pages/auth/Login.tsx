@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { login, getRole } from "../../services/authService";
 import KilosGymImg from "../../assets/images/image-5.png";
-import KILOSWhiteLogo1 from "../../assets/images/KILOS-white-logo-1.png";
+import KILOSLogo from "../../assets/images/kilos-mark.png";
 
 const formFields = [
   { id: "username", label: "Username", type: "text", autoComplete: "username" },
@@ -70,26 +70,26 @@ export const LoginPage: React.FC = () => {
       >
         {/* Logo */}
         <img
-          className="w-[180px] md:w-[238px] mb-8 object-contain"
+          className="w-[180px] md:w-[248px] mb-8 object-contain"
           alt="KILOS"
-          src={KILOSWhiteLogo1}
+          src={KILOSLogo}
         />
 
-        <h1 id={`${formId}-title`} className="font-poppins font-semibold text-[#fdffe0] text-3xl md:text-4xl mb-8">
-          LOG IN
+        <h1 id={`${formId}-title`} className="font-semibold text-[#fdffe0] text-2xl md:text-4xl mb-8">
+          LOGIN
         </h1>
 
         {/* Error message */}
         {error && (
           <div className="w-full max-w-[400px] mb-4 bg-red-500/20 border border-red-400 rounded-md p-3">
-            <p className="font-poppins text-red-300 text-sm text-center">{error}</p>
+            <p className="text-red-300 text-sm text-center">{error}</p>
           </div>
         )}
 
         <form className="w-full max-w-[400px] flex flex-col gap-6" onSubmit={handleSubmit}>
           {formFields.map((field) => (
             <div key={field.id} className="flex flex-col gap-2">
-              <label htmlFor={`${formId}-${field.id}`} className="font-poppins text-[#fdffe0] text-lg md:text-xl">
+              <label htmlFor={`${formId}-${field.id}`} className="text-[#fdffe0] text-lg md:text-xl">
                 {field.label}
               </label>
               <div className="relative w-full">
@@ -99,7 +99,7 @@ export const LoginPage: React.FC = () => {
                   type={field.id === "password" && showPassword ? "text" : field.type}
                   value={formValues[field.id]}
                   onChange={(e) => setFormValues(prev => ({ ...prev, [field.id]: e.target.value.trim() }))}
-                  className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#0C5673] outline-none"
+                  className="w-full h-[45px] bg-white rounded-md px-4 text-black focus:ring-2 focus:ring-[#0C5673] outline-none"
                 />
                 {field.id === "password" && (
                   <button
@@ -114,25 +114,16 @@ export const LoginPage: React.FC = () => {
             </div>
           ))}
 
-          <div className="text-center">
-  
-           <a href="/forgot-password"
-            className="font-poppins text-[#fdffe0]/70 hover:text-[#fdffe0] text-sm underline transition-all"
-            >
-            Forgot Password?
-          </a>
-          <p className="font-poppins text-[#fdffe0]/50 text-xs mt-1">
-            For admin accounts only
-          </p>
-          </div>
-
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[50px] mt-4 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
+            className="w-full h-[50px] mt-4 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-medium text-xl transition-all disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Log in"}
           </button>
+          <p className="text-[#fdffe0]/60 text-sm text-center mt-2">
+            Having trouble signing in? Contact your administrator.
+          </p>
         </form>
       </section>
 

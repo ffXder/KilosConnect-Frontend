@@ -62,7 +62,7 @@ export default function ZoneTaskPage() {
   // --- Loading / Verifying state ---
   if (pageState === 'loading' || pageState === 'verified') {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6 font-['Poppins']">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6">
         <div className="w-full max-w-sm bg-[#0B3F57] rounded-2xl flex flex-col items-center justify-center text-white p-10 shadow-md aspect-square">
           {pageState === 'loading' ? (
             <>
@@ -86,7 +86,7 @@ export default function ZoneTaskPage() {
   const allComplete = completedIds.length === MOCK_TASKS.length;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-['Poppins']">
+    <div className="min-h-screen bg-[#F8FAFC]">
       <div className="max-w-2xl mx-auto p-4 sm:p-6 space-y-5">
 
         {/* Back + Zone header */}

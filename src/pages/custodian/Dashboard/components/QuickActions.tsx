@@ -17,7 +17,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ reviewCount }) => {
   const sub = "text-[11px] sm:text-xs text-gray-400 font-medium mt-0.5 block dark:text-slate-300";
 
   return (
-    <div className="font-['Poppins']">
+    <div>
       <h3 className="text-lg font-extrabold text-gray-900 mb-4 dark:text-slate-50">
         Quick Actions
       </h3>

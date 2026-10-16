@@ -94,7 +94,7 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
   };
 
   return (
-    <div className="w-full max-w-sm flex flex-col items-center font-['Poppins']">
+    <div className="w-full max-w-sm flex flex-col items-center">
 
       {/* Hidden mount point required by Html5Qrcode's scanFile */}
       <div id="qr-file-reader" className="hidden" />

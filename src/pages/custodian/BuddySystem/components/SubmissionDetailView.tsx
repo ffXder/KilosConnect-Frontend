@@ -44,7 +44,7 @@ export default function SubmissionDetailView({ submission, onClose }: Submission
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-end font-['Poppins']"
+      className="fixed inset-0 z-50 flex justify-end"
       role="dialog"
       aria-modal="true"
     >

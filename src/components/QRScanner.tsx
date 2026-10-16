@@ -58,7 +58,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScanSuccess }) => {
     }, []);
 
     return (
-        <div className="w-full max-w-sm flex flex-col items-center font-['Poppins']">
+        <div className="w-full max-w-sm flex flex-col items-center">
             <div className="w-full aspect-square bg-[#0F172A] rounded-2xl overflow-hidden shadow-sm border-2 border-gray-800 mb-6 relative">
                 <div
                     id="qr-reader"

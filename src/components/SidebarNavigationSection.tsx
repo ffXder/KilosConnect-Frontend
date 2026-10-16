@@ -332,7 +332,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                         {item.icon}
                       </span>
 
-                      <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+                      <span className={`font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
                         isExpanded || isMobileOpen ? "flex-1 min-w-0 truncate opacity-100 scale-100" : "opacity-0 scale-90 w-0 pointer-events-none"
                       }`}>
                         {item.label}
@@ -359,7 +359,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                         <span className={isActive ? "text-[#6DC9E7]" : "text-[#FDFFE0]"}>
                           {item.icon}
                         </span>
-                        <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+                        <span className={`font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
                           isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
                         }`}>
                           {item.label}
@@ -387,7 +387,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                       <span className={isActive ? "text-[#6DC9E7]" : "text-[#c8d8d5]"}>
                         {child.icon}
                       </span>
-                      <span className={`[font-family:'Poppins',Helvetica] font-medium text-xs leading-5 whitespace-nowrap transition-all duration-300 ${
+                      <span className={`font-medium text-xs leading-5 whitespace-nowrap transition-all duration-300 ${
                         isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
                       }`}>
                         {child.label}
@@ -418,13 +418,13 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
               <polyline points="16 17 21 12 16 7" />
               <line x1="21" y1="12" x2="9" y2="12" />
             </svg>
-            <span className={`[font-family:'Poppins',Helvetica] font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
+            <span className={`font-medium text-[#FDFFE0] text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
               isExpanded || isMobileOpen ? "opacity-100 scale-100 w-auto" : "opacity-0 scale-90 w-0 pointer-events-none"
             }`}>
               Log Out
             </span>
           </button>
-          <p className=" [font-family:'Poppins',Helvetica] text-[#FDFFE0] text-xs leading-5 whitespace-nowrap transition-all duration-300 mt-3 text-center">
+          <p className="text-[#FDFFE0] text-xs leading-5 whitespace-nowrap transition-all duration-300 mt-3 text-center">
             v1.0.0
           </p>
         </div>

@@ -16,10 +16,10 @@ export const ScannerPage = () => {
         {/* Sticky Header */}
         <header className="sticky top-0 z-20 flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-8 pt-6 sm:pt-8 pb-4 bg-[#f8fafc]/80 backdrop-blur-md">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
               QR Code Scanner 
             </h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-xs sm:text-sm mt-0.5">
+            <p className="text-gray-500 text-xs sm:text-sm mt-0.5">
               Scan QR codes to access asset information!
             </p>
           </div>

@@ -20,10 +20,10 @@ export const DashboardPage: React.FC = () => {
       <main className="flex-1 w-full p-4 lg:p-8 transition-all duration-300 overflow-x-hidden">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
               Analytical Dashboard
             </h1>
-            <p className="[font-family:'Poppins',Helvetica] text-gray-500 text-sm mt-0.5 dark:text-slate-300">
+            <p className="text-gray-500 text-sm mt-0.5 dark:text-slate-300">
               Real-time facility oversight and predictive analytics
             </p>
           </div>
