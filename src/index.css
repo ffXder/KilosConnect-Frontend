@@ -1,29 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant kilos (&:where(.kilos, .kilos *));
 
-body {
-    font-family: "Lexend Deca", sans-serif;
-}
 :root {
-  --text: #FDFFE0;
+  --text: #08060d;
   --text-h: #08060d;
-  --bg: #fff;
   --border: #e5e4e7;
   --primary-color: #002B38;
-  --secondary-color: #111B30;
+  --secondary-color: #BE531C;
   --tertiary-color: #116D8C;
-  --button-color: #0C5673;
-  --background-color: #0D2635;
+  --color-primary-bg: #002A3A;
+  --color-secondary: #FCFAF1;
+  --color-secondary-bg: #BE5302;
+  --color-btn-primary: #FCFAF1;
+  --color-btn-primary-bg: #BE531C;
+  --color-btn-secondary: #FCFAF1;
+  --bg-color: #0D2635;
+  --bg-app: #f8fafc;
+  --border: #F3F4F6;
+  --bg-card: #ffff;
+  --font-lexend: "Lexend Deca", sans-serif;
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 }
+
+@theme {
+  --background-color: #0b1317;
+  --color-primary: var(--primary-color);
+  --color-secondary: var(--secondary-color);
+  --color-tertiary: var(--tertiary-color);
+  --color-button: var(--button-color);
+  --color-custom-bg: var(--background-color);
+  --font-poppins: "Poppins", sans-serif;
+  --color-border: var(--border);
+  --color-card: var(--bg-card);
+}
+
+.dark {
+  --text: #FCFAF1;
+  --bg-app: #020617;
+  --bg-card: #121c31;
+  --border: #374151;
+}
+
+.kilos {
+  --text: #FCFAF1;
+  --bg-app: #0D2635;
+  --bg-card: #0D2635;
+  --border: #116D8C;
+}
+body {
+  font-family: var(--font-lexend);
+  background-color: var(--bg-app);
+  color: var(--text);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+
 
 /* to remove borders from QR */
 #qr-shaded-region {
