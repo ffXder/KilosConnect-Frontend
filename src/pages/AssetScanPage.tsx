@@ -59,7 +59,7 @@ export const AssetScanPage: React.FC = () => {
             description: description || null,
             area: asset.area,
             severity: severity,
-            affectedAssets: [asset._id || asset.assetId],
+            asset: asset._id || asset.assetId,
             reporterType: 'Public',
             reportedName: reportedName || 'Anonymous',
             dateAndTime: new Date().toISOString(), 
