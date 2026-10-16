@@ -60,7 +60,7 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
 }) => {
   return (
     <div className="border-b border-[#eef1f3] dark:border-slate-700">
-      <div className="flex items-center gap-3 px-5 py-3 sm:px-6">
+      <div className="flex items-center gap-3 p-4">
         <div className="relative min-w-0 flex-1">
           <Search
             size={16}
@@ -72,7 +72,7 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
             aria-label="Search users"
             placeholder="Search users..."
             autoComplete="off"
-            className="h-10 w-full rounded-lg border border-gray-200 bg-[#fafbfc] pl-9 pr-3 text-sm text-slate-900 placeholder:text-gray-400 transition-colors focus:border-[#116D8C] focus:outline-none focus:ring-2 focus:ring-[#116D8C]/15 dark:border-slate-600 dark:bg-[#0D2635] dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-sky-500 dark:focus:ring-sky-500/20"
+            className="h-10 w-full rounded-lg border border-[#e2e8f0] bg-white pl-9 pr-3 text-sm text-[#0f172a] placeholder-gray-400 outline-none transition-all focus:ring-2 focus:ring-[#0B4963]/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400"
             onChange={(event) => onSearchChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") event.preventDefault();
