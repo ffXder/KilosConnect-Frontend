@@ -1,6 +1,6 @@
 import React from "react";
-import type { RecentActivity, ActivityType } from "../../../types/profile";
-import { getDetailedTimeAgo } from "../../../utils/formatter"
+import type { RecentActivity, ActivityType } from "../../types/profile";
+import { getDetailedTimeAgo } from "../../utils/formatter"
 
 const activityDotColor: Record<ActivityType, string> = {
   task: "bg-[#169E6E]",
