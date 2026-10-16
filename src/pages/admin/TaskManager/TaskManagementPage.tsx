@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
+import { useSearchParams, Navigate } from 'react-router-dom';
+import { QrCode } from 'lucide-react';
+
+// COMPONENTS
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import TaskFilterSection from './TaskFilterSection';
 import TaskManagementSection from './TaskTableSection';
 import AddTaskModal from './AddTaskModals';
 import { AreaQrModal } from './AreaQRModal';
+
+// HOOKS AND TYPES
 import { useAuth } from '../../../hooks/useAuth';
+import { usePermissions } from '../../../hooks/usePermissons';
 import { useTasks } from '../../../hooks/useTask';
 import type { Task } from '../../../types/task';
-import { useSearchParams } from 'react-router-dom';
-import { QrCode } from 'lucide-react';
+
+// CONSTANTS
+import { PERMISSIONS as P } from '../../../constants/permission';
 
 const AREAS = [
   "Mezzanine", "Powerlifting Area", "Open WOD Area", "CrossFit Area",
@@ -19,6 +27,7 @@ const AREAS = [
 export const TaskManagementPage: React.FC = () => {
   const { tasks, loading, handleCreate, handleUpdate, handleArchive } = useTasks();
   const { role } = useAuth();
+  const { hasPermission } = usePermissions()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -29,6 +38,10 @@ export const TaskManagementPage: React.FC = () => {
   const selectedFrequency = searchParams.get('frequency') ?? 'All';
   const selectedArea = searchParams.get('area') ?? 'All Areas';
 
+  if (!hasPermission(P.TASK_READ)) {
+    return <Navigate to="/unauthorized" replace />
+  }
+
   const updateParam = (key: string, value: string) => {
     const nextParams = new URLSearchParams(searchParams);
     if (!value || value === 'All' || value === 'All Areas') {
@@ -38,6 +51,7 @@ export const TaskManagementPage: React.FC = () => {
     }
     setSearchParams(nextParams);
   };
+
 
   const filteredTasks = tasks.filter(task => {
     const matchesFrequency = selectedFrequency === 'All' ? true : task.frequency === selectedFrequency;
