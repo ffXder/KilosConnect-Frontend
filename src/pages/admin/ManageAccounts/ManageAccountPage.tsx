@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { AlertCircle, X } from "lucide-react";
+
+// HOOKS
 import { useAuth } from "../../../hooks/useAuth";
+import { usePermissions } from "../../../hooks/usePermissons";
 
 //COMPONENTS
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
@@ -22,11 +25,19 @@ import {
   updateUserPermissions,
 } from "../../../services/manageAccountService";
 
+// CONSTANTS
+import { PERMISSIONS as P } from '../../../constants/permission'
+
 const CLOSED_DELETE = { isOpen: false, id: "", name: "" };
 
 export const ManageAccountsPage: React.FC = () => {
   const { role, userId: currentUserId } = useAuth();
+  const { hasPermission } = usePermissions();
   const navigate = useNavigate();
+
+  if (!hasPermission(P.USERS_READ)) {
+    return <Navigate to="/unauthorize" replace />;
+  }
 
   const userRole = (role ?? "custodian") as React.ComponentProps<
     typeof SidebarNavigationSection
@@ -39,14 +50,12 @@ export const ManageAccountsPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
-  // NEW: user whose permissions are being edited
   const [selectedUserForPermissions, setSelectedUserForPermissions] =
     useState<UserAccount | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; name: string }>(
     CLOSED_DELETE
   );
   const [pageError, setPageError] = useState<string | null>(null);
-  // NEW: shown only when the reset email failed and the admin has to relay the temp password
   const [tempPasswordNotice, setTempPasswordNotice] = useState<{
     name: string;
     password: string;
