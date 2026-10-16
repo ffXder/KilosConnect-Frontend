@@ -5,12 +5,6 @@ interface AccountsFilterSectionProps {
   totalAccounts: number;
   onSearchChange: (value: string) => void;
   onAddNewUser: () => void;
-  roleFilter: AccountRoleFilter;
-  onRoleFilterChange: (role: AccountRoleFilter) => void;
-  sortBy: AccountSortField;
-  onSortByChange: (sortBy: AccountSortField) => void;
-  sortDirection: AccountSortDirection;
-  onSortDirectionChange: (direction: AccountSortDirection) => void;
 }
 
 export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
@@ -56,8 +50,6 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
           onClick={onAddNewUser}
           className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0b3026] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#08241d] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3026]/40 focus-visible:ring-offset-2 dark:bg-emerald-700 dark:hover:bg-emerald-600 dark:focus-visible:ring-emerald-500/50 dark:focus-visible:ring-offset-slate-900"
         >
-          <Plus size={16} />
-          Add user
           <Plus size={16} />
           Add user
         </button>

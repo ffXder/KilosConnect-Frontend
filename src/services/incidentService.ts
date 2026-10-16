@@ -1,4 +1,4 @@
-import type { IncidentReport, NewIncidentReport, UpdateIncidentReport, ResolveIncidentPayload } from "../types/incident";
+import type { IncidentReport, NewIncidentReport, UpdateIncidentReport, ResolveIncidentPayload, PaginatedIncidentResponse } from "../types/incident";
 import { apiRequest } from "./authService";
 
 // GET ALL

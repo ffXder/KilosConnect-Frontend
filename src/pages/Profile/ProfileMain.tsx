@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { ProfileInfoSection, formatRole } from "./ProfileInfoSection";
 import { ProfileStatsSection } from "./ProfileStatsSections";
 import ProfileActivitySection from "./RecentActivitySection";
-import { useAuth } from '../../../hooks/useAuth';
-import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
-import { useProfile, useMyPerformance } from '../../../hooks/useProfile';
-import { formatDate } from "../../../utils/formatter";
+import { useAuth } from '../../hooks/useAuth';
+import { SidebarNavigationSection } from '../../components/SidebarNavigationSection';
+import { useProfile, useMyPerformance } from '../../hooks/useProfile';
+import { formatDate } from "../../utils/formatter";
 
 export interface ProfileData {
   firstName: string;

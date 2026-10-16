@@ -14,13 +14,10 @@ export interface CloudinaryImage {
 }
 
 export interface ChecklistTemplateItem {
-export interface ChecklistTemplateItem {
     _id?: string;
     label: string;
     isDone: boolean;
 }
-
-export type ChecklistItem = ChecklistTemplateItem;
 
 export interface Task {
   _id: string;
@@ -72,7 +69,6 @@ export interface TaskLog {
   verifiedBy?: UserSummary | null;
   verificationStatus: VerificationStatus;
   verificationNote?: string | null;
-  date?: string;
   createdAt: string;
   updatedAt: string;
 }   

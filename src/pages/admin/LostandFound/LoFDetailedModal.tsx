@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   X,
   MapPin,
@@ -8,6 +8,9 @@ import {
   UserCheck,
   Image as ImageIcon,
   Camera,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
 } from 'lucide-react';
 import type { LostAndFound } from '../../../types/lostAndFound';
 import { formatDate, formatDateTime } from '../../../utils/formatter';
