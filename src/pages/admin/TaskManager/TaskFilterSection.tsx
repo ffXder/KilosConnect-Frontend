@@ -4,7 +4,6 @@ import { usePermissions } from '../../../hooks/usePermissons';
 
 interface TaskFilterProps {
   onAddTask?: () => void; 
-  onGenerate?: () => void;
   showAddButton?: boolean;
   showGenerateButton?: boolean;
   statusFilter: string;
@@ -20,7 +19,6 @@ interface TaskFilterProps {
 
 const TaskFilterSection: React.FC<TaskFilterProps> = ({ 
   onAddTask, 
-  onGenerate,
   statusFilter, 
   setStatusFilter, 
   frequencyFilter, 
