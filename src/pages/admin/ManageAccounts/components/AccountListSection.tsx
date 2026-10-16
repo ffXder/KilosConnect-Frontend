@@ -1,10 +1,16 @@
 import React from "react";
-import { User, Edit3, Trash2, Loader2, ShieldCheck } from "lucide-react";
+import { ChevronLeft, ChevronRight, User, Edit3, Trash2, Loader2, ShieldCheck } from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
 import { formatDateTime } from "../../../../utils/formatter";
 
+export const ACCOUNTS_PAGE_SIZE = 10;
+
 interface AccountsListSectionProps {
   accounts: UserAccount[];
+  totalAccounts: number;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
   loading?: boolean;
   onEditClick: (account: UserAccount) => void;
   onDeleteClick: (id: string, name: string) => void;
@@ -35,13 +41,33 @@ const iconButton =
 
 const AccountsListSection: React.FC<AccountsListSectionProps> = ({
   accounts,
+  totalAccounts,
+  currentPage,
+  totalPages,
+  onPageChange,
   loading,
   onEditClick,
   onDeleteClick,
   onPermissionsClick,
 }) => {
+  const [isEditingPage, setIsEditingPage] = React.useState(false);
+  const [pageInput, setPageInput] = React.useState("");
+  const firstVisiblePage = Math.max(1, Math.min(currentPage - 1, totalPages - 2));
+  const visiblePages = Array.from(
+    { length: Math.min(3, totalPages) },
+    (_, index) => firstVisiblePage + index,
+  );
+  const commitPageInput = () => {
+    const requestedPage = Number(pageInput);
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= totalPages) {
+      onPageChange(requestedPage);
+    }
+    setIsEditingPage(false);
+  };
+
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full">
+      <div className="w-full overflow-x-auto">
       <table className="w-full min-w-[860px] text-left text-sm">
         <thead className="bg-gray-50/80 border-b border-[#eef1f3] dark:bg-slate-800/50 dark:border-slate-700 transition-colors duration-300">
           <tr>
@@ -72,7 +98,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                   role="status"
                   className="flex flex-col items-center justify-center gap-3 text-gray-400 dark:text-slate-400"
                 >
-                  <Loader2 size={28} className="animate-spin text-[#0b3026] dark:text-emerald-500" />
+                  <Loader2 size={28} className="animate-spin text-[#002B38] dark:text-[#116D8C]" />
                   <p className="text-sm font-medium">Loading account data...</p>
                 </div>
               </td>
@@ -185,6 +211,88 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
             })}
         </tbody>
       </table>
+      </div>
+      {!loading && (
+        <div className="flex items-center justify-between gap-4 border-t border-[#e2e8f0] px-5 py-3.5 dark:border-slate-700">
+          <p className="text-xs text-gray-500 dark:text-slate-300">
+            Showing <span className="font-semibold text-[#0f2942] dark:text-slate-100">{accounts.length}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalAccounts}</span> accounts (Page{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{currentPage}</span> of{" "}
+            <span className="font-semibold text-[#0f2942] dark:text-slate-100">{totalPages}</span>)
+          </p>
+          <nav className="flex items-center gap-1" aria-label="Account pages">
+            <button
+              type="button"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage <= 1}
+              aria-label="Previous page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            {visiblePages.map((pageNumber) =>
+              pageNumber === currentPage ? (
+                <div key={pageNumber} className="flex flex-col items-center">
+                  {isEditingPage ? (
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={pageInput}
+                      autoFocus
+                      aria-label={`Enter page number, from 1 to ${totalPages}`}
+                      onChange={(event) => setPageInput(event.target.value)}
+                      onBlur={commitPageInput}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          event.currentTarget.blur();
+                        }
+                      }}
+                      className="h-9 w-9 rounded-lg border border-[#116D8C] bg-white text-center text-xs font-semibold text-[#116D8C] outline-none dark:border-[#116D8C] dark:bg-[#0D2635] dark:text-[#FCFAF1]"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPageInput(String(currentPage));
+                        setIsEditingPage(true);
+                      }}
+                      aria-label={`Current page ${currentPage}. Click to enter a page number`}
+                      aria-current="page"
+                      className="h-9 w-9 rounded-lg border border-[#116D8C] bg-[#116D8C] text-xs font-semibold text-white dark:border-[#116D8C] dark:bg-[#116D8C]"
+                    >
+                      {pageNumber}
+                    </button>
+                  )}
+                  <span className="mt-1 whitespace-nowrap text-[9px] leading-none text-gray-500 dark:text-slate-400">
+                    click to enter page
+                  </span>
+                </div>
+              ) : (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => onPageChange(pageNumber)}
+                  aria-label={`Go to page ${pageNumber}`}
+                  className="h-9 w-9 rounded-lg border border-[#e2e8f0] text-xs font-medium text-[#0f2942] transition-colors hover:bg-gray-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  {pageNumber}
+                </button>
+              ),
+            )}
+            <button
+              type="button"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              aria-label="Next page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e2e8f0] text-[#0f2942] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </nav>
+        </div>
+      )}
     </div>
   );
 };

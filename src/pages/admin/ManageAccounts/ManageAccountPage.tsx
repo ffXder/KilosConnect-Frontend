@@ -9,8 +9,14 @@ import { usePermissions } from "../../../hooks/usePermissons";
 //COMPONENTS
 import { SidebarNavigationSection } from "../../../components/SidebarNavigationSection";
 import type { UserAccount, NewUserForm } from "../../../types/manageAccount";
-import { AccountsFilterSection } from "./components/AccountFilterSection";
-import AccountsListSection from "./components/AccountListSection";
+import {
+  AccountsFilterSection,
+  type AccountRoleFilter,
+  type AccountSortDirection,
+  type AccountSortField,
+} from "./components/AccountFilterSection";
+import AccountsListSection, { ACCOUNTS_PAGE_SIZE } from "./components/AccountListSection";
+import { AccountStatsSection } from "./components/AccountStatsSection";
 import { useUsers } from "../../../hooks/useUsers";
 import { DeleteConfirmModal } from "../../../components/DeleteConfirmModal";
 import { AddUserModal } from "./components/AddUserModal";
@@ -48,6 +54,10 @@ export const ManageAccountsPage: React.FC = () => {
   const { users, refresh, handleToggleArchive } = useUsers();
 
   const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState<AccountRoleFilter>("all");
+  const [sortBy, setSortBy] = useState<AccountSortField>("name");
+  const [sortDirection, setSortDirection] = useState<AccountSortDirection>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<UserAccount | null>(null);
   const [selectedUserForPermissions, setSelectedUserForPermissions] =
@@ -109,17 +119,41 @@ export const ManageAccountsPage: React.FC = () => {
 
   const filteredAccounts = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return users;
     return users.filter((a) => {
       const fullName = `${a.firstName} ${a.lastName}`.toLowerCase();
-      return (
+      const matchesSearch =
+        !query ||
         fullName.includes(query) ||
         a.userId.toLowerCase().includes(query) ||
         a.email.toLowerCase().includes(query) ||
-        a.role.toLowerCase().includes(query)
-      );
+        a.role.toLowerCase().includes(query) ||
+        (a.role === "super_admin" && "super admin".includes(query));
+      return matchesSearch && (roleFilter === "all" || a.role === roleFilter);
     });
-  }, [users, search]);
+  }, [users, search, roleFilter]);
+  const sortedAccounts = useMemo(() => {
+    return [...filteredAccounts].sort((first, second) => {
+      let comparison: number;
+      if (sortBy === "name") {
+        comparison = `${first.firstName} ${first.lastName}`.localeCompare(
+          `${second.firstName} ${second.lastName}`,
+        );
+      } else {
+        const firstDate = Date.parse(first.createdAt ?? first.dateAdded ?? "");
+        const secondDate = Date.parse(second.createdAt ?? second.dateAdded ?? "");
+        comparison =
+          (Number.isNaN(firstDate) ? 0 : firstDate) -
+          (Number.isNaN(secondDate) ? 0 : secondDate);
+      }
+      return sortDirection === "asc" ? comparison : -comparison;
+    });
+  }, [filteredAccounts, sortBy, sortDirection]);
+  const totalPages = Math.max(1, Math.ceil(sortedAccounts.length / ACCOUNTS_PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedAccounts = sortedAccounts.slice(
+    (safeCurrentPage - 1) * ACCOUNTS_PAGE_SIZE,
+    safeCurrentPage * ACCOUNTS_PAGE_SIZE,
+  );
 
   return (
     <div className="flex min-h-screen w-full bg-[#f4f5f6] text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
@@ -183,16 +217,39 @@ export const ManageAccountsPage: React.FC = () => {
             </div>
           )}
 
+          <AccountStatsSection accounts={users} />
+
           {/* Accounts card */}
           <section className="bg-white rounded-2xl border border-[#e8e8e8] shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none transition-colors duration-300">
             <AccountsFilterSection
-              totalAccounts={filteredAccounts.length}
-              onSearchChange={setSearch}
+              onSearchChange={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
               onAddNewUser={() => setIsAddModalOpen(true)}
+              roleFilter={roleFilter}
+              onRoleFilterChange={(value) => {
+                setRoleFilter(value);
+                setCurrentPage(1);
+              }}
+              sortBy={sortBy}
+              onSortByChange={(value) => {
+                setSortBy(value);
+                setCurrentPage(1);
+              }}
+              sortDirection={sortDirection}
+              onSortDirectionChange={(value) => {
+                setSortDirection(value);
+                setCurrentPage(1);
+              }}
             />
 
             <AccountsListSection
-              accounts={filteredAccounts}
+              accounts={paginatedAccounts}
+              totalAccounts={sortedAccounts.length}
+              currentPage={safeCurrentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
               onEditClick={(account) => setSelectedUserForEdit(account)}
               onPermissionsClick={
                 canManagePermissions
