@@ -20,7 +20,7 @@ import UnauthorizedPage from './pages/UnauthorizedPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { ScannerPage } from './pages/ScannerPage'
 import { AssetScanPage } from './pages/AssetScanPage'
-import { ProfilePage } from './pages/admin/Profile/ProfileMain'
+import { ProfilePage } from './pages/Profile/ProfileMain'
 import { PublicReportingPage } from './pages/PublicReportingPage'
 
 // admin pages
@@ -127,7 +127,6 @@ function App() {
           <Route path='/not-found' element={<NotFoundPage />} />
           <Route path='/forgot-password' element={<ForgotPasswordPage />} />
           <Route path='/reset-password' element={<ResetPasswordPage />} />
-          <Route path='/qr-scanner' element={<ScannerPage />} />
           <Route path='/asset/scan/:assetId' element={<AssetScanPage />} />
           <Route path='/setup/new-password' element={<NewAccountPasswordSetupPage />} />
           <Route path='/report-an-issue' element={<PublicReportingPage />} />
@@ -146,19 +145,19 @@ function App() {
           </Route>
 
           {/* Asset Registry Page */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="asset:read" />}>
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} />}>
             <Route path="/asset-registry" element={<AssetRegistryPage />} />
             <Route path="/asset-registry/lost-and-found" element={<LostAndFoundPage />} />
             <Route path="/lost-and-found" element={<Navigate to="/asset-registry/lost-and-found" replace />} />
           </Route>
           
           {/* Incident Report Page */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="incident:read" />}>
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} />}>
             <Route path="/incident-report" element={<IncidentReportPage />} />
           </Route>
         
           {/* Task Monitor & Management Page */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="facility:read" />}>
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="task:read" />}>
             <Route path="/task-monitor" element={<Navigate to="/task-monitor/live-monitor" replace />} />
             <Route path="/task-monitor/live-monitor" element={<TaskMonitorPage view="monitor" />} />
             <Route path="/task-monitor/review-submissions" element={<TaskMonitorPage view="submissions" />} />
@@ -176,7 +175,7 @@ function App() {
           </Route>
 
           {/* Archives Page */}
-          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="users:read" />}>
+          <Route element={<ProtectedRoute allowedRoles={['admin', 'super_admin']} requiredPermission="archive:read" />}>
             <Route path="/archives" element={<ArchivesPage />} />
           </Route>
 
