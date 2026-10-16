@@ -1,8 +1,8 @@
 import React from 'react';
-import { Plus, Search, ChevronDown, Layers} from 'lucide-react';
+import { Search, ChevronDown, Layers} from 'lucide-react';
+import { usePermissions } from '../../../hooks/usePermissons';
 
 interface TaskFilterProps {
-  onAddTask?: () => void; // Made optional to fix the TypeScript error
   onGenerate?: () => void;
   showAddButton?: boolean;
   showGenerateButton?: boolean;
@@ -18,7 +18,6 @@ interface TaskFilterProps {
 }
 
 const TaskFilterSection: React.FC<TaskFilterProps> = ({ 
-  onAddTask, 
   onGenerate,
   statusFilter, 
   setStatusFilter, 
@@ -29,9 +28,12 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
   searchTerm, 
   setSearchTerm,
   hideStatus = false,
-  showAddButton = false,
   showGenerateButton = false
 }) => {
+  const { hasPermission } = usePermissions();
+
+  const canInitializeTask = hasPermission('task:initialize'); //permision to initialize task depends if lead custodian can access this page or this button
+
   const statusOptions = [
     { label: 'All Tasks', value: 'All Tasks', active: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-50', inactive: 'text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100' },
     { label: 'Pending', value: 'Pending', active: 'bg-orange-500 text-white shadow-sm', inactive: 'text-orange-600 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200' },
@@ -61,19 +63,9 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
-        {showAddButton && onAddTask && (
-          <button
-            onClick={onAddTask}
-            className="bg-[#113129] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-sm active:scale-95 whitespace-nowrap"
-          >
-            <Plus size={16} strokeWidth={2.5} />
-            <span>New Task</span>
-          </button>
-        )}
 
-        {/* Corrected: Label restored to "Initialize Today" */}
-        {showGenerateButton && onGenerate && (
+        {/* Initalize Task */}
+        {showGenerateButton && canInitializeTask && (
           <button
             onClick={onGenerate}
             className="bg-[#d86125] text-[#FDFFE0] h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer"
