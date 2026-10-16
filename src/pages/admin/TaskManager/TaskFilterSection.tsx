@@ -1,8 +1,9 @@
 import React from 'react';
-import { Plus, Search, ChevronDown, Layers} from 'lucide-react';
+import { Plus, Search, ChevronDown } from 'lucide-react';
+import { usePermissions } from '../../../hooks/usePermissons';
 
 interface TaskFilterProps {
-  onAddTask?: () => void; // Made optional to fix the TypeScript error
+  onAddTask?: () => void; 
   onGenerate?: () => void;
   showAddButton?: boolean;
   showGenerateButton?: boolean;
