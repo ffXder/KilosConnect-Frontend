@@ -20,34 +20,11 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
     ],
   },
   {
-    key: "asset",
-    label: "Asset Registry",
+    key: "archive",
+    label: "Archive",
     options: [
-      { value: "asset:read", label: "View assets" },
-      { value: "asset:create", label: "Add assets" },
-      { value: "asset:update", label: "Edit assets" },
-      { value: "asset:delete", label: "Archive assets" },
-    ],
-  },
-  {
-    key: "lost_found",
-    label: "Lost And Found",
-    options: [
-      { value: "lost_found:read", label: "View items" },
-      { value: "lost_found:create", label: "Log items" },
-      { value: "lost_found:update", label: "Edit items" },
-      { value: "lost_found:delete", label: "Archive items" },
-    ],
-  },
-  {
-    key: "incident",
-    label: "Incident Reports",
-    options: [
-      { value: "incident:read", label: "View incidents" },
-      { value: "incident:create", label: "Report incidents" },
-      { value: "incident:update", label: "Edit incidents" },
-      { value: "incident:resolve", label: "Resolve incidents" },
-      { value: "incident:delete", label: "Archive incidents" },
+      { value: "archive:read", label: "View archives" },
+      { value: "archive:restore", label: "Restore archive" },
     ],
   },
   {
@@ -56,11 +33,19 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
     options: [{ value: "audit:read", label: "View audit logs" }],
   },
   {
-    key: "facility",
-    label: "Facility",
+    key: "task",
+    label: "Manage Task",
     options: [
-      { value: "facility:read", label: "View facility (read only)" },
-      { value: "facility:manage", label: "Manage facility (system-wide)" },
+      { value: "task:read", label: "View tasks" },
+      { value: "task:initialize", label: "Initialize Task" },
     ],
   },
 ];
+
+export const PERMISSIONS = {
+  USERS_READ: 'users:read',
+  ARCHIVE_READ: 'archive:read',
+  AUDIT_READ: 'audit:read',
+  TASK_READ: 'task:read',
+  TASK_INITIALIZE: 'task:initialize'
+} as const
