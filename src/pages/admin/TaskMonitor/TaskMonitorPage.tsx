@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+
+// COMPONENTS
 import { SidebarNavigationSection } from '../../../components/SidebarNavigationSection';
 import TaskStatsSection from './TaskStatsSection';
 import TaskFilterSection from './MonitorFilterSection';
 import TaskListSection from './TaskListSection';
 import ReviewSubmissionsTab from './ReviewSubmissionsTab';
 import { TaskLogDetailModal } from './DetailsModal';
+
+// HOOKS
 import { useAuth } from '../../../hooks/useAuth';
+import { usePermissions } from '../../../hooks/usePermissons';
 import { useTaskLogs } from '../../../hooks/useTaskLog';
+
+// CONSTANTS
+import { PERMISSIONS as P } from '../../../constants/permission';
 
 interface TaskMonitorPageProps {
   view: 'monitor' | 'submissions';
 }
 
 export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
-  const { logs, loading: isLoading, handleComplete, handleGenerate } = useTaskLogs();
+  const { logs, loading: isLoading, handleGenerate } = useTaskLogs();
   const { role } = useAuth();
+  const { hasPermission } = usePermissions();
 
   const userRole = (role ?? 'custodian') as 'admin';
 
@@ -24,6 +34,12 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
   const [areaFilter, setAreaFilter] = useState('All Areas');
   const [searchTerm, setSearchTerm] = useState('');
   const [generateMessage, setGenerateMessage] = useState<string | null>(null);
+
+  const isAdminOrSuperAdmin = userRole === 'admin' || userRole === 'super_admin';
+
+  if (!hasPermission(P.TASK_READ)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
   // Always read the latest version of the clicked log
   const selectedLog = logs.find(l => l._id === selectedId) ?? null;
@@ -74,7 +90,7 @@ export const TaskMonitorPage: React.FC<TaskMonitorPageProps> = ({ view }) => {
 
               <TaskFilterSection
                 onGenerate={handleGenerateClick}
-                showGenerateButton={userRole === 'admin'}
+                showGenerateButton={isAdminOrSuperAdmin}
                 statusFilter={statusFilter}
                 setStatusFilter={setStatusFilter}
                 frequencyFilter={frequencyFilter}
