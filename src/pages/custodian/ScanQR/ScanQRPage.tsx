@@ -168,7 +168,7 @@ export default function ScanQRPage() {
 
             {/* Main Interactive View */}
             {scanStatus === 'success' && scanResult ? (
-              <div className="w-full max-w-sm aspect-square bg-[#0a2e27] rounded-2xl flex flex-col items-center justify-center text-white mb-6 p-6 shadow-md">
+              <div className="w-full max-w-sm aspect-square bg-[#0B3F57] rounded-2xl flex flex-col items-center justify-center text-white mb-6 p-6 shadow-md">
                 <ResultIcon size={64} className="text-emerald-400 mb-3 animate-bounce" />
                 <h3 className="text-xl font-bold">{scanResult.title}</h3>
                 <p className="text-xs text-emerald-100/80 mt-1">{scanResult.message}</p>

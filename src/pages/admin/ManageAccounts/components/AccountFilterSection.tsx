@@ -35,7 +35,7 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
         <button 
           type="button" // Explicitly button to prevent form triggers
           onClick={onAddNewUser}
-          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0b3026] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#08241d] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3026]/40 focus-visible:ring-offset-2 dark:bg-emerald-700 dark:hover:bg-emerald-600 dark:focus-visible:ring-emerald-500/50 dark:focus-visible:ring-offset-slate-900"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#002B38] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#062F41] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#002B38]/40 focus-visible:ring-offset-2 dark:bg-sky-700 dark:hover:bg-sky-600 dark:focus-visible:ring-sky-500/50 dark:focus-visible:ring-offset-slate-900"
         >
           <Plus size={16} />
           Add user
@@ -95,9 +95,10 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
           <div className="relative">
             <select
               id="account-sort-by"
+              aria-label="Sort accounts by"
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as AccountSortField)}
-              className="appearance-none rounded-[12px] border border-[#e2e8f0] bg-white py-2.5 pl-4 pr-10 text-[13px] text-[#1e293b] transition-all hover:border-[#cbd5e1] focus:border-[#113129] focus:outline-none focus:ring-1 focus:ring-[#113129] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              className="appearance-none rounded-[12px] border border-[#e2e8f0] bg-white py-2.5 pl-4 pr-10 text-[13px] text-[#1e293b] transition-all hover:border-[#cbd5e1] focus:border-[#0B4058] focus:outline-none focus:ring-1 focus:ring-[#0B4058] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
             >
               <option value="name">Name</option>
               <option value="dateAdded">Date Added</option>
@@ -109,12 +110,11 @@ export const AccountsFilterSection: React.FC<AccountsFilterSectionProps> = ({
           <button
             type="button"
             onClick={() => onSortDirectionChange(sortDirection === "asc" ? "desc" : "asc")}
-            aria-label={`Change sort direction, currently ${sortDirection === "asc" ? "ascending" : "descending"}`}
-            title={sortDirection === "asc" ? "Ascending" : "Descending"}
-            className="flex items-center gap-2 rounded-[12px] border border-[#e2e8f0] bg-white px-3 py-2.5 text-[13px] font-semibold text-[#1e293b] hover:border-[#cbd5e1] focus:outline-none focus:ring-1 focus:ring-[#113129] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+            aria-label={`Sort ${sortDirection === "asc" ? "descending" : "ascending"} (currently ${sortDirection === "asc" ? "ascending" : "descending"})`}
+            title={`Currently ${sortDirection === "asc" ? "ascending" : "descending"}; click to sort ${sortDirection === "asc" ? "descending" : "ascending"}`}
+            className="flex items-center justify-center rounded-[12px] border border-[#e2e8f0] bg-white p-2.5 text-[#1e293b] hover:border-[#cbd5e1] focus:outline-none focus:ring-1 focus:ring-[#0B4058] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
           >
             {sortDirection === "asc" ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-            <span>{sortDirection === "asc" ? "Ascending" : "Descending"}</span>
           </button>
         </div>
       </div>

@@ -68,7 +68,7 @@ export default function SubmissionDetailView({ submission, onClose }: Submission
       <div className="sdv-panel relative flex flex-col w-full h-full md:max-w-xl lg:max-w-2xl bg-[#f8fafc] dark:bg-slate-950 md:shadow-2xl">
 
         {/* Header */}
-        <div className="bg-[#0a2e27] text-white px-4 md:px-8 pb-4 md:pb-6 pt-[max(1rem,env(safe-area-inset-top))] md:pt-6 shrink-0">
+        <div className="bg-[#0B3F57] text-white px-4 md:px-8 pb-4 md:pb-6 pt-[max(1rem,env(safe-area-inset-top))] md:pt-6 shrink-0">
           <div className="flex items-center justify-between">
             <button
               onClick={onClose}
@@ -99,7 +99,7 @@ export default function SubmissionDetailView({ submission, onClose }: Submission
           {/* Meta (side by side from md up) */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 grid gap-3 md:grid-cols-2">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-50 dark:bg-emerald-900 text-[#0a2e27] dark:text-emerald-200 p-2 rounded-lg shrink-0">
+              <div className="bg-sky-50 dark:bg-sky-900 text-[#0B3F57] dark:text-sky-200 p-2 rounded-lg shrink-0">
                 <MapPin size={18} />
               </div>
               <div className="min-w-0">
@@ -108,7 +108,7 @@ export default function SubmissionDetailView({ submission, onClose }: Submission
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-50 dark:bg-emerald-900 text-[#0a2e27] dark:text-emerald-200 p-2 rounded-lg shrink-0">
+              <div className="bg-sky-50 dark:bg-sky-900 text-[#0B3F57] dark:text-sky-200 p-2 rounded-lg shrink-0">
                 <Clock size={18} />
               </div>
               <div className="min-w-0">

@@ -42,11 +42,11 @@ const MaintenanceAnimation = () => (
     <rect x="70" y="134" width="14" height="6" rx="3" className="fill-slate-900 dark:fill-slate-100" />
 
     {/* person: body (brand green) */}
-    <rect x="57" y="60" width="28" height="48" rx="9" fill="#113129" className="dark:fill-emerald-700" />
+    <rect x="57" y="60" width="28" height="48" rx="9" fill="#0B4058" className="dark:fill-emerald-700" />
 
     {/* person: head + cap */}
     <circle cx="71" cy="46" r="11" fill="#f2c9a0" />
-    <path d="M60 44 a11 11 0 0 1 22 0 z" fill="#113129" className="dark:fill-emerald-700" />
+    <path d="M60 44 a11 11 0 0 1 22 0 z" fill="#0B4058" className="dark:fill-emerald-700" />
 
     {/* wiping arm */}
     <line x1="80" y1="70" x2="112" y2="116" stroke="#f2c9a0" strokeWidth="7" strokeLinecap="round">

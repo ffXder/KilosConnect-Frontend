@@ -43,8 +43,8 @@ const emptyForm = () => ({
 /* Shared field styles (light + dark) */
 const inputClass =
   "w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-[#e2e8f0] rounded-xl transition-colors " +
-  "focus:outline-none focus:border-[#0a2e27] focus:ring-2 focus:ring-[#0a2e27]/20 " +
-  "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20";
+  "focus:outline-none focus:border-[#0B3F57] focus:ring-2 focus:ring-[#0B3F57]/20 " +
+  "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-sky-500 dark:focus:ring-sky-500/20";
 
 /** Horizontal row: label on the left, control on the right (stacks on mobile). */
 const FormRow: React.FC<{
@@ -133,7 +133,7 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
         className="w-full max-w-xl flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#0a2e27] px-6 py-5 sm:px-8 text-white flex items-center justify-between gap-4 shrink-0">
+        <div className="bg-[#0B3F57] px-6 py-5 sm:px-8 text-white flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center">
               <Package size={20} />
@@ -265,16 +265,16 @@ export const AddAssetModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0a2e27]/40 dark:focus-visible:ring-emerald-500/40"
+                className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3F57]/40 dark:focus-visible:ring-sky-500/40"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!isValid}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0a2e27]/40 focus-visible:ring-offset-2 dark:focus-visible:ring-emerald-500/50 dark:focus-visible:ring-offset-slate-900 ${
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3F57]/40 focus-visible:ring-offset-2 dark:focus-visible:ring-sky-500/50 dark:focus-visible:ring-offset-slate-900 ${
                   isValid
-                    ? "bg-[#0a2e27] text-white shadow-sm hover:bg-[#08241f] active:scale-[0.98] dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                    ? "bg-[#0B3F57] text-white shadow-sm hover:bg-[#062F41] active:scale-[0.98] dark:bg-sky-700 dark:hover:bg-sky-600"
                     : "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-slate-800 dark:text-slate-500"
                 }`}
               >

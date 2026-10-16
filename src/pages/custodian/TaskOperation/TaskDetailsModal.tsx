@@ -100,7 +100,7 @@ function CameraView({ onCapture, onCancel, accentColor = 'amber' }: CameraViewPr
   const ringColor = accentColor === 'rose' ? 'ring-rose-500' : 'ring-amber-500';
   const btnColor = accentColor === 'rose'
     ? 'bg-rose-600 hover:bg-rose-700'
-    : 'bg-[#0a2e27] hover:bg-[#08241f]';
+    : 'bg-[#0B3F57] hover:bg-[#062F41]';
 
   return (
     <div className="bg-white rounded-[32px] w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -243,18 +243,18 @@ export default function TaskDetailsModal({
               .success-text { animation: fadeIn 0.4s ease-out 0.8s both; }
             `}</style>
 
-            <svg className="success-icon text-[#0a2e27] dark:text-emerald-400" width="110" height="110" viewBox="0 0 52 52">
+            <svg className="success-icon text-[#0B3F57] dark:text-emerald-400" width="110" height="110" viewBox="0 0 52 52">
               <circle className="success-circle" cx="26" cy="26" r="24" fill="none" stroke="currentColor" strokeWidth="3" />
               <path className="success-check" d="M15 27l7 7 15-16" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
 
-            <p className="success-text text-xl font-bold text-[#0a2e27] dark:text-emerald-400">Task Completed!</p>
+            <p className="success-text text-xl font-bold text-[#0B3F57] dark:text-emerald-400">Task Completed!</p>
             <p className="success-text text-sm font-medium text-gray-500 dark:text-slate-400">{task.title}</p>
           </div>
         )}
 
         {/* Header */}
-        <div className="bg-[#0a2e27] p-6 flex justify-between items-start shrink-0">
+        <div className="bg-[#0B3F57] p-6 flex justify-between items-start shrink-0">
           <div>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/70">
               {task.priority} Priority · {task.zone}
@@ -318,7 +318,7 @@ export default function TaskDetailsModal({
                   }`}
                 >
                   <div className={`w-6 h-6 rounded-md flex items-center justify-center border shrink-0 ${
-                    item.completed ? 'bg-[#0a2e27] border-[#0a2e27] text-white' : 'border-[#e2e8f0] dark:border-slate-600'
+                    item.completed ? 'bg-[#0B3F57] border-[#0B3F57] text-white' : 'border-[#e2e8f0] dark:border-slate-600'
                   }`}>
                     {item.completed && <CheckCircle2 size={16} />}
                   </div>
@@ -379,7 +379,7 @@ export default function TaskDetailsModal({
             <button
               onClick={handleStart}
               disabled={submitting}
-              className="w-full bg-[#0a2e27] hover:bg-[#08241f] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-sm"
+              className="w-full bg-[#0B3F57] hover:bg-[#062F41] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors text-sm shadow-sm"
             >
               {submitting ? 'Starting...' : 'Start Task'}
             </button>
@@ -390,7 +390,7 @@ export default function TaskDetailsModal({
               <button
                 onClick={handleComplete}
                 disabled={!canComplete}
-                className="w-full bg-[#0a2e27] hover:bg-[#08241f] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors flex justify-center items-center gap-2 shadow-sm text-sm"
+                className="w-full bg-[#0B3F57] hover:bg-[#062F41] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors flex justify-center items-center gap-2 shadow-sm text-sm"
               >
                 <CheckCircle2 size={18} />
                 {submitting ? 'Submitting...' : 'Complete Task'}

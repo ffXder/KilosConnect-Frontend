@@ -61,7 +61,7 @@ export default function CustodianDashboardPage() {
 
   const tabBase =
     "flex-1 sm:flex-none whitespace-nowrap py-2.5 px-2 sm:px-4 rounded-xl text-xs font-bold transition-colors";
-  const tabOn = "bg-[#0a2e27] text-white dark:bg-[#207D55]";
+  const tabOn = "bg-[#0B3F57] text-white dark:bg-[#126F91]";
   const tabOff =
     "text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-100";
 
@@ -71,7 +71,7 @@ export default function CustodianDashboardPage() {
 
       {/* Toast: full width at the bottom on phones, corner card on larger screens */}
       {toastMessage && (
-        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#0a2e27] text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl shadow-xl border border-emerald-700/50 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4">
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#0B3F57] text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl shadow-xl border border-emerald-700/50 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4">
           <CheckCircle size={20} className="text-emerald-400 shrink-0" />
           <span className="text-sm font-bold">{toastMessage}</span>
         </div>
@@ -110,7 +110,7 @@ export default function CustodianDashboardPage() {
                   onClick={() => setActiveTab('all')}
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors ${
                     activeTab === 'all'
-                      ? 'bg-[#0a2e27] text-white'
+                      ? 'bg-[#0B3F57] text-white'
                       : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
@@ -121,7 +121,7 @@ export default function CustodianDashboardPage() {
                   onClick={() => setActiveTab('pending')}
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
                     activeTab === 'pending'
-                      ? 'bg-[#0a2e27] text-white'
+                      ? 'bg-[#0B3F57] text-white'
                       : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
@@ -135,7 +135,7 @@ export default function CustodianDashboardPage() {
                   onClick={() => setActiveTab('completed')}
                   className={`whitespace-nowrap py-2.5 px-3 sm:px-4 rounded-xl text-xs font-bold transition-colors ${
                     activeTab === 'completed'
-                      ? 'bg-[#0a2e27] text-white'
+                      ? 'bg-[#0B3F57] text-white'
                       : 'text-gray-500 hover:text-gray-900 dark:text-slate-300 dark:hover:text-slate-50'
                   }`}
                 >
@@ -152,7 +152,7 @@ export default function CustodianDashboardPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by zone or task..."
-                  className="w-full bg-[#f8fafc] border border-[#e2e8f0] rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none focus:border-[#0a2e27] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-emerald-500"
+                  className="w-full bg-[#f8fafc] border border-[#e2e8f0] rounded-xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none focus:border-[#0B3F57] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-sky-500"
                 />
               </div>
             </div>

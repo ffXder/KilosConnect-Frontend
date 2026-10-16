@@ -25,7 +25,7 @@ export const AreaQrCard: React.FC<AreaQrCardProps> = ({ area, qrImageUrl, onDown
 
       <button
         onClick={() => onDownload(area)}
-        className="w-full mt-auto py-2.5 px-4 bg-slate-100 hover:bg-[#113129] hover:text-white text-gray-700 text-xs font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer dark:bg-slate-800 dark:text-slate-50 "
+        className="w-full mt-auto py-2.5 px-4 bg-slate-100 hover:bg-[#0B4058] hover:text-white text-gray-700 text-xs font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer dark:bg-slate-800 dark:text-slate-50 "
       >
         <Download size={14} />
         <span>Download QR</span>

@@ -753,7 +753,7 @@ export const ReviewSubmissionsTab: React.FC = () => {
                   }
                   className={`w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-[15px] leading-relaxed text-slate-900 placeholder:text-gray-400 outline-none resize-none transition-colors focus:ring-2 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-500 ${
                     isApprove
-                      ? 'focus:border-emerald-500 focus:ring-emerald-500/20'
+                      ? 'focus:border-sky-500 focus:ring-sky-500/20'
                       : 'focus:border-rose-500 focus:ring-rose-500/20'
                   }`}
                 />

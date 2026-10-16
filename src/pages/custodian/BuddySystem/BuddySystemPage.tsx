@@ -56,7 +56,7 @@ export default function BuddySystemPage() {
             </div>
 
             <div className="min-w-0 bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-6 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-5 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="bg-emerald-50 p-2 sm:p-3.5 rounded-lg sm:rounded-xl text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="bg-sky-50 p-2 sm:p-3.5 rounded-lg sm:rounded-xl text-[#0B3F57] dark:bg-sky-950 dark:text-sky-300">
                 <CheckCircle2 size={18} className="sm:hidden" />
                 <CheckCircle2 size={28} className="hidden sm:block" />
               </div>
@@ -89,7 +89,7 @@ export default function BuddySystemPage() {
               onClick={() => setActiveTab('pending')}
               className={`flex-1 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                 activeTab === 'pending'
-                  ? 'bg-[#0a2e27] text-white shadow-sm'
+                  ? 'bg-[#0B3F57] text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800'
               }`}
             >
@@ -105,7 +105,7 @@ export default function BuddySystemPage() {
               onClick={() => setActiveTab('submissions')}
               className={`flex-1 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'submissions'
-                  ? 'bg-[#0a2e27] text-white shadow-sm'
+                  ? 'bg-[#0B3F57] text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-300 dark:hover:text-slate-50 dark:hover:bg-slate-800'
               }`}
             >

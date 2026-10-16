@@ -198,7 +198,7 @@ export const ArchivesPage: React.FC = () => {
         {viewItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white dark:bg-slate-900 w-full max-w-[540px] rounded-[20px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-700">
-              <div className="bg-[#113e33] p-6 text-white flex justify-between items-center">
+              <div className="bg-[#0B4963] p-6 text-white flex justify-between items-center">
                 <div>
                   <h3 className="text-[17px] font-bold tracking-tight">
                     {getItemTitle(viewItem)}
@@ -280,7 +280,7 @@ export const ArchivesPage: React.FC = () => {
               <div className="px-6 pb-6 pt-2 flex justify-end">
                 <button
                   onClick={() => setViewItem(null)}
-                  className="px-5 py-2.5 bg-[#113e33] hover:bg-[#14493c] text-white rounded-xl text-xs font-bold transition-all duration-150 active:scale-[0.98] shadow-sm shadow-slate-900/10 cursor-pointer"
+                  className="px-5 py-2.5 bg-[#0B4963] hover:bg-[#0C5673] text-white rounded-xl text-xs font-bold transition-all duration-150 active:scale-[0.98] shadow-sm shadow-slate-900/10 cursor-pointer"
                 >
                   Close View
                 </button>

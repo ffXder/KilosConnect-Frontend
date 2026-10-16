@@ -100,7 +100,7 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
       <div id="qr-file-reader" className="hidden" />
 
       {/* Upload Zone / Image Preview */}
-      <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden relative border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] flex flex-col items-center justify-center transition-colors hover:border-[#0a2e27] dark:border-slate-600 dark:bg-slate-800 dark:hover:border-emerald-500">
+      <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden relative border-2 border-dashed border-[#e2e8f0] bg-[#f8fafc] flex flex-col items-center justify-center transition-colors hover:border-[#0B3F57] dark:border-slate-600 dark:bg-slate-800 dark:hover:border-emerald-500">
         {selectedImage ? (
           <div className="relative w-full h-full bg-black">
             <img
@@ -118,7 +118,7 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
           </div>
         ) : (
           <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer p-6 text-center">
-            <div className="bg-emerald-50 text-[#0a2e27] p-4 rounded-xl mb-3 dark:bg-emerald-950 dark:text-emerald-300">
+            <div className="bg-sky-50 text-[#0B3F57] p-4 rounded-xl mb-3 dark:bg-sky-950 dark:text-sky-300">
               <Upload size={26} />
             </div>
             <span className="text-sm font-bold text-gray-800 dark:text-slate-100">Upload saved QR photo</span>
@@ -145,7 +145,7 @@ export default function QRImageUpload({ onScanSuccess }: ImageUploadProps) {
       <button
         onClick={handleVerify}
         disabled={!selectedImage || isProcessing}
-        className="w-full bg-[#0a2e27] text-white font-bold text-sm py-3.5 rounded-xl hover:bg-[#08241f] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+        className="w-full bg-[#0B3F57] text-white font-bold text-sm py-3.5 rounded-xl hover:bg-[#062F41] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
       >
         {isProcessing ? (
           <>

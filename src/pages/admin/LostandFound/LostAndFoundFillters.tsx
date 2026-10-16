@@ -32,14 +32,14 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
           <input
             type="text"
             placeholder="Search items by name, description, or found by..."
-            className="w-full h-10 pl-9 pr-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:placeholder-slate-400 dark:focus:border-slate-400"
+            className="w-full h-10 pl-9 pr-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B4058]/5 focus:border-[#0B4058] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:placeholder-slate-400 dark:focus:border-slate-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <button
           onClick={onAddItem}
-          className="bg-[#113129] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-[0_4px_12px_rgba(17,49,41,0.15)] active:scale-95"
+          className="bg-[#0B4058] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#062F41] transition-all shadow-[0_4px_12px_rgba(17,49,41,0.15)] active:scale-95"
         >
           <Plus size={16} strokeWidth={2.5} />
           <span>New Item</span>
@@ -83,7 +83,7 @@ export const LostAndFoundFilters: React.FC<FilterProps> = ({
             <select
               value={zoneFilter}
               onChange={(e) => setZoneFilter(e.target.value)}
-              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:hover:border-slate-500"
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#0B4058] focus:ring-1 focus:ring-[#0B4058] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 dark:hover:border-slate-500"
             >
               {zones.map((zone) => (
                 <option key={zone} value={zone}>

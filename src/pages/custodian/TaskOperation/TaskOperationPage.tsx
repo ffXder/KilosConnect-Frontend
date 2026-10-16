@@ -59,7 +59,7 @@ export default function TaskMain() {
               onClick={() => setActiveTab("all")}
               className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "all"
-                  ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
+                  ? "border-[#0B3F57] text-[#0B3F57] dark:text-emerald-400"
                   : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300 dark:hover:text-slate-100"
               }`}
             >
@@ -70,7 +70,7 @@ export default function TaskMain() {
               onClick={() => setActiveTab("pending")}
               className={`flex-1 sm:flex-none justify-center py-3 sm:py-3.5 px-2 sm:px-1 -mb-px border-b-2 transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap text-sm sm:text-base font-bold ${
                 activeTab === "pending"
-                  ? "border-[#0a2e27] text-[#0a2e27] dark:text-emerald-400"
+                  ? "border-[#0B3F57] text-[#0B3F57] dark:text-emerald-400"
                   : "border-transparent text-gray-400 hover:text-gray-600 dark:text-slate-300 dark:hover:text-slate-100"
               }`}
             >
@@ -78,8 +78,8 @@ export default function TaskMain() {
               <span
                 className={`text-[11px] sm:text-xs min-w-[22px] text-center px-2 py-0.5 rounded-full font-bold ${
                   activeTab === "pending"
-                    ? "bg-[#0a2e27] text-white dark:text-emerald-400"
-                    : "bg-[#e6f0ef] text-[#0a2e27] dark:bg-slate-800 dark:text-slate-200"
+                    ? "bg-[#0B3F57] text-white dark:text-emerald-400"
+                    : "bg-[#e6f0ef] text-[#0B3F57] dark:bg-slate-800 dark:text-slate-200"
                 }`}
               >
                 {summary.activePending}
@@ -90,7 +90,7 @@ export default function TaskMain() {
           {/* Stats Cards (numbers come from the backend summary) */}
           <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <div className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="p-2 sm:p-3 bg-emerald-50 text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="p-2 sm:p-3 bg-sky-50 text-[#0B3F57] rounded-lg sm:rounded-xl shrink-0 dark:bg-sky-950 dark:text-sky-300">
                 <Clock size={18} className="sm:hidden" />
                 <Clock size={22} className="hidden sm:block" />
               </div>
@@ -112,7 +112,7 @@ export default function TaskMain() {
             </div>
 
             <div className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-              <div className="p-2 sm:p-3 bg-emerald-50 text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="p-2 sm:p-3 bg-sky-50 text-[#0B3F57] rounded-lg sm:rounded-xl shrink-0 dark:bg-sky-950 dark:text-sky-300">
                 <CheckCircle2 size={18} className="sm:hidden" />
                 <CheckCircle2 size={22} className="hidden sm:block" />
               </div>
@@ -132,7 +132,7 @@ export default function TaskMain() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by zone or task name..."
-                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#0a2e27] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-emerald-500"
+                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B3F57] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-sky-500"
               />
             </div>
           </div>

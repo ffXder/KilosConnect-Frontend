@@ -108,7 +108,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
           <input
             type="text"
             placeholder="Search incident title or description..."
-            className="w-full h-10 pl-9 pr-3 bg-gray-50 border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:border-[#113129] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-slate-500 dark:focus:bg-slate-800"
+            className="w-full h-10 pl-9 pr-3 bg-gray-50 border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:border-[#0B4058] focus:bg-white placeholder:text-gray-400 transition-all dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-slate-500 dark:focus:bg-slate-800"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
           />
@@ -121,11 +121,11 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
             className={`flex items-center gap-2 h-10 px-3 rounded-lg border text-sm font-medium transition-all ${
               isDatePickerOpen
-                ? 'border-[#113129] bg-white shadow-md dark:border-slate-500 dark:bg-slate-800'
+                ? 'border-[#0B4058] bg-white shadow-md dark:border-slate-500 dark:bg-slate-800'
                 : 'border-[#e2e8f0] bg-gray-50 hover:bg-gray-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700'
             }`}
           >
-            <Calendar size={15} className={isDatePickerOpen ? 'text-[#113129]' : 'text-gray-400 dark:text-slate-300'} />
+            <Calendar size={15} className={isDatePickerOpen ? 'text-[#0B4058]' : 'text-gray-400 dark:text-slate-300'} />
             <span className="text-gray-700 whitespace-nowrap dark:text-slate-200">
               {dateRange === 'Custom Range' && customStart && customEnd
                 ? `${customStart} → ${customEnd}`
@@ -149,8 +149,8 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                       }}
                       className={`w-full text-left px-4 py-2 text-[13px] font-semibold rounded-lg transition-colors ${
                         dateRange === range
-                          ? 'bg-[#113129] text-white dark:bg-emerald-600 dark:text-white'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#113129] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
+                          ? 'bg-[#0B4058] text-white dark:bg-sky-600 dark:text-white'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#0B4058] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
                       }`}
                     >
                       {range}
@@ -165,7 +165,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           type="date"
                           value={customStart}
                           onChange={(e) => setCustomStart(e.target.value)}
-                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#0B4058] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
                         />
                       </div>
                       <div>
@@ -175,14 +175,14 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
                           value={customEnd}
                           min={customStart}
                           onChange={(e) => setCustomEnd(e.target.value)}
-                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#113129] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-gray-200 outline-none focus:border-[#0B4058] dark:bg-slate-800 dark:border-slate-600 dark:placeholder:text-slate-50"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => setIsDatePickerOpen(false)}
                         disabled={!customStart || !customEnd}
-                        className="w-full py-2 rounded-lg bg-[#113129] text-white text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+                        className="w-full py-2 rounded-lg bg-[#0B4058] text-white text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed mt-1"
                       >
                         Apply Filter
                       </button>
@@ -198,7 +198,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
         <button
           type="button"
           onClick={onAddClick}
-          className="flex items-center gap-2 h-10 px-4 bg-[#113129] text-white rounded-lg text-sm font-medium hover:bg-[#0a211b] transition-all whitespace-nowrap"
+          className="flex items-center gap-2 h-10 px-4 bg-[#0B4058] text-white rounded-lg text-sm font-medium hover:bg-[#062F41] transition-all whitespace-nowrap"
         >
           <Plus size={15} strokeWidth={2.5} />
           Report incident
@@ -259,7 +259,7 @@ const IncidentFilterSection: React.FC<IncidentFilterSectionProps> = ({
             <select
               value={activeArea}
               onChange={(e) => onAreaChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#113129] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
+              className="appearance-none bg-gray-50 border border-[#e2e8f0] text-[12px] font-medium text-gray-700 py-2 pl-3 pr-8 rounded-[8px] focus:outline-none focus:border-[#0B4058] cursor-pointer hover:bg-gray-100 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
             >
               {areaOptions.map((a) => (
                 <option key={a} value={a}>{a}</option>

@@ -211,7 +211,7 @@ export const AssetRegistryPage = () => {
                     </div>
 
                     <div className="ml-auto flex items-center gap-3">
-                      <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0a2e27] hover:bg-[#07201b] text-white text-sm font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition-colors dark:bg-[#207D55] dark:hover:bg-[#07201b]">
+                      <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0B3F57] hover:bg-[#062F41] text-white text-sm font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition-colors dark:bg-[#126F91] dark:hover:bg-[#062F41]">
                         <Plus size={16} /> Add Asset
                       </button>
                     </div>

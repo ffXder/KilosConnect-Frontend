@@ -22,7 +22,7 @@ const nowLocal = () => {
 };
 
 const inputCls =
-  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#11382C] focus:ring-2 focus:ring-[#11382C]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20";
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0E4961] focus:ring-2 focus:ring-[#0E4961]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-sky-400 dark:focus:ring-sky-400/20";
 const labelCls = "mb-2 block text-sm font-bold text-gray-700 dark:text-slate-200";
 
 export default function IncidentReportFormPage() {
@@ -103,7 +103,7 @@ export default function IncidentReportFormPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Header */}
-            <div className="bg-[#11382C] rounded-2xl p-5 text-white">
+            <div className="bg-[#0E4961] rounded-2xl p-5 text-white">
               <h1 className="text-xl font-bold">Report New Incident</h1>
               <p className="mt-0.5 text-sm text-emerald-100/80">
                 Fill in the details and link any affected equipment
@@ -193,7 +193,7 @@ export default function IncidentReportFormPage() {
                     type="button"
                     onClick={handleAddAsset}
                     disabled={!selectedAssetId}
-                    className="rounded-xl bg-emerald-50 px-5 font-bold text-[#11382C] transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/70"
+                    className="rounded-xl bg-emerald-50 px-5 font-bold text-[#0E4961] transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/70"
                   >
                     Add
                   </button>
@@ -257,7 +257,7 @@ export default function IncidentReportFormPage() {
                   disabled={!isFormValid || isSubmitting}
                   className={`flex-[2] py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                     isFormValid && !isSubmitting
-                      ? "bg-[#124d45] text-emerald-50 shadow-lg hover:bg-[#165c53] dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                      ? "bg-[#0D5873] text-emerald-50 shadow-lg hover:bg-[#0E6B89] dark:bg-sky-700 dark:hover:bg-sky-600"
                       : "cursor-not-allowed bg-emerald-50 text-emerald-800/50 dark:bg-emerald-950/60 dark:text-emerald-300/50"
                   }`}
                 >

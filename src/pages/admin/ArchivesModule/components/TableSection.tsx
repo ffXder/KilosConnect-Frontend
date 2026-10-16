@@ -306,7 +306,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                         event.currentTarget.blur();
                       }
                     }}
-                    className="h-9 w-9 rounded-lg border border-[#113129] bg-white text-center text-xs font-semibold text-[#113129] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
+                    className="h-9 w-9 rounded-lg border border-[#0B4058] bg-white text-center text-xs font-semibold text-[#0B4058] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
                   />
                 ) : (
                   <button
@@ -317,7 +317,7 @@ export const TableSection: React.FC<TableSectionProps> = ({
                     }}
                     aria-label={`Current page ${currentPage}. Click to enter a page number`}
                     aria-current="page"
-                    className="h-9 w-9 rounded-lg border border-[#113129] bg-[#113129] text-xs font-semibold text-white dark:border-[#207D55] dark:bg-[#207D55]"
+                    className="h-9 w-9 rounded-lg border border-[#0B4058] bg-[#0B4058] text-xs font-semibold text-white dark:border-[#126F91] dark:bg-[#126F91]"
                   >
                     {pageNumber}
                   </button>

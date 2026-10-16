@@ -81,7 +81,7 @@ const TaskListSection: React.FC<TaskListProps> = ({
     <div className="bg-[#fcfcfc] border border-[#e2e8f0] rounded-2xl md:rounded-[24px] overflow-hidden shadow-xs min-h-[350px] flex flex-col justify-between dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700">
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-10 h-10 text-[#113129] animate-spin" />
+          <Loader2 className="w-10 h-10 text-[#0B4058] animate-spin" />
           <p className="text-slate-400 mt-4 font-medium text-sm dark:text-slate-300">Loading live monitor...</p>
         </div>
       ) : tasks.length === 0 ? (
@@ -119,7 +119,7 @@ const TaskListSection: React.FC<TaskListProps> = ({
                     {/* Task Title & Description */}
                     <td className="py-4 px-4 md:px-6 max-w-xs">
                       <div className="flex flex-col">
-                        <span className={`font-bold text-sm ${isCompleted ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-900 group-hover:text-[#113129] transition-colors dark:text-slate-100 dark:group-hover:text-emerald-300'}`}>
+                        <span className={`font-bold text-sm ${isCompleted ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-900 group-hover:text-[#0B4058] transition-colors dark:text-slate-100 dark:group-hover:text-sky-300'}`}>
                           {log.task?.title || 'Untitled Task'}
                         </span>
                         {log.task?.description && (

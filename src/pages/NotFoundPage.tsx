@@ -52,7 +52,7 @@ const NotFoundPage: React.FC = () => {
         <div className="space-y-3">
           <button
             onClick={() => navigate(-1)}
-            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#072821] text-[#fdffe0] rounded-xl font-bold hover:bg-[#042421] transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#002B38] text-[#fdffe0] rounded-xl font-bold hover:bg-[#001F29] transition-all active:scale-[0.98]"
           >
             <ArrowLeft size={18} />
             Go Back

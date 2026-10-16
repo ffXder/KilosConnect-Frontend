@@ -55,7 +55,7 @@ export const AreaQrModal: React.FC<AreaQrModalProps> = ({ isOpen, onClose, areas
         <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950 dark:border-b border-slate-600">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2.5 dark:text-slate-50">
-              <QrCode className="text-[#113129] dark:text-[#207D55]" size={26} />
+              <QrCode className="text-[#0B4058] dark:text-[#126F91]" size={26} />
               Facility Area QR Codes
             </h2>
             <p className="text-sm text-gray-500 mt-1 dark:text-slate-300">
@@ -67,7 +67,7 @@ export const AreaQrModal: React.FC<AreaQrModalProps> = ({ isOpen, onClose, areas
             <button
               onClick={handleDownloadAll}
               disabled={downloadingAll}
-              className="bg-[#113129] text-white px-5 py-2.5 rounded-[14px] text-sm font-semibold flex items-center gap-2 hover:bg-[#0a211b] transition-all disabled:opacity-50 cursor-pointer dark:bg-[#207D55] dark:hover:bg-[#07201b]"
+              className="bg-[#0B4058] text-white px-5 py-2.5 rounded-[14px] text-sm font-semibold flex items-center gap-2 hover:bg-[#062F41] transition-all disabled:opacity-50 cursor-pointer dark:bg-[#126F91] dark:hover:bg-[#062F41]"
             >
               <Download size={16} />
               <span>{downloadingAll ? 'Downloading...' : 'Download All'}</span>

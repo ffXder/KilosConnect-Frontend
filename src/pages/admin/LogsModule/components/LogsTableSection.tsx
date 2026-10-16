@@ -253,7 +253,7 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
                           event.currentTarget.blur();
                         }
                       }}
-                      className="w-9 h-9 text-center text-xs font-semibold border border-[#113129] rounded-lg bg-white text-[#113129] outline-none dark:bg-slate-800 dark:text-emerald-300 dark:border-emerald-500"
+                      className="w-9 h-9 text-center text-xs font-semibold border border-[#0B4058] rounded-lg bg-white text-[#0B4058] outline-none dark:bg-slate-800 dark:text-emerald-300 dark:border-emerald-500"
                     />
                   ) : (
                     <button
@@ -264,7 +264,7 @@ export default function LogsTableSection({ logs, pagination, onPageChange }: Pro
                       }}
                       aria-label={`Current page ${currentPage}. Click to enter a page number`}
                       aria-current="page"
-                      className="w-9 h-9 text-xs font-semibold border border-[#113129] rounded-lg bg-[#113129] text-white dark:bg-[#207D55] dark:border-[#207D55]"
+                      className="w-9 h-9 text-xs font-semibold border border-[#0B4058] rounded-lg bg-[#0B4058] text-white dark:bg-[#126F91] dark:border-[#126F91]"
                     >
                       {pageNumber}
                     </button>

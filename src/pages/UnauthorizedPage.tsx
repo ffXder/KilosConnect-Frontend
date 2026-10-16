@@ -1,13 +1,14 @@
 import React from 'react';
 import { ShieldAlert, ArrowLeft, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const UnauthorizedPage: React.FC = () => {
   const navigate = useNavigate();
+  const { role } = useAuth();
 
   const handleReturnToDashboard = () => {
-    const role = localStorage.getItem('role');
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'super_admin') {
       navigate('/dashboard');
     } else if (role === 'custodian') {
       navigate('/custodian/dashboard');
@@ -39,7 +40,7 @@ const UnauthorizedPage: React.FC = () => {
         <div className="space-y-3">
           <button
             onClick={() => navigate(-1)}
-            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#072821] text-[#fdffe0] dark:bg-emerald-700 dark:text-slate-50 rounded-xl font-bold hover:bg-[#042421] dark:hover:bg-emerald-800 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#002B38] text-[#fdffe0] dark:bg-sky-700 dark:text-slate-50 rounded-xl font-bold hover:bg-[#001F29] dark:hover:bg-sky-800 transition-all active:scale-[0.98]"
           >
             <ArrowLeft size={18} />
             Go Back

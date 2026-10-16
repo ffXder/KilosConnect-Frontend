@@ -63,8 +63,8 @@ export const TasksSection: React.FC<TasksProps> = ({
                 <div
                   className={`w-6 h-6 rounded-lg border flex items-center justify-center shrink-0 ${
                     isCompleted
-                      ? "bg-[#0a2e27] border-[#0a2e27] text-white"
-                      : "border-gray-300 hover:border-[#0a2e27] dark:border-slate-600 dark:hover:border-emerald-500"
+                      ? "bg-[#0B3F57] border-[#0B3F57] text-white"
+                      : "border-gray-300 hover:border-[#0B3F57] dark:border-slate-600 dark:hover:border-emerald-500"
                   }`}
                 >
                   {isCompleted && <Check size={14} />}

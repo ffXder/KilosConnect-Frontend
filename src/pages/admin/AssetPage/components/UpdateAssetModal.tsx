@@ -34,7 +34,7 @@ export const UpdateAssetModal: React.FC<Props> = ({ isOpen, onClose, asset, onUp
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-900 w-full max-w-[500px] rounded-[32px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
-        <div className="bg-[#0a2e27] p-6 flex justify-between items-start text-white">
+        <div className="bg-[#0B3F57] p-6 flex justify-between items-start text-white">
           <div>
             <h2 className="text-xl font-bold">Update Asset Status</h2>
             <p className="text-white/70 text-xs mt-0.5">Editing: {asset.name} ({asset.assetId})</p>
@@ -51,7 +51,7 @@ export const UpdateAssetModal: React.FC<Props> = ({ isOpen, onClose, asset, onUp
               <select 
                 value={condition}
                 onChange={(e) => setCondition(e.target.value)}
-                className="w-full px-5 py-3.5 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-2xl text-[#1f1f1f] dark:text-slate-100 appearance-none focus:outline-none focus:border-[#0a2e27] dark:focus:border-emerald-500 cursor-pointer font-bold"
+                className="w-full px-5 py-3.5 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-2xl text-[#1f1f1f] dark:text-slate-100 appearance-none focus:outline-none focus:border-[#0B3F57] dark:focus:border-sky-500 cursor-pointer font-bold"
               >
                 {conditions.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -67,7 +67,7 @@ export const UpdateAssetModal: React.FC<Props> = ({ isOpen, onClose, asset, onUp
               value={updateNote}
               onChange={(e) => setUpdateNote(e.target.value)}
               rows={4}
-              className="w-full px-5 py-3.5 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-2xl text-[#1f1f1f] dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#0a2e27] dark:focus:border-emerald-500 resize-none" 
+              className="w-full px-5 py-3.5 bg-[#f8fafc] dark:bg-slate-800 border border-[#e2e8f0] dark:border-slate-600 rounded-2xl text-[#1f1f1f] dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#0B3F57] dark:focus:border-sky-500 resize-none"
               placeholder="Describe repairs, checks or physical conditions..." 
             />
           </div>
@@ -81,7 +81,7 @@ export const UpdateAssetModal: React.FC<Props> = ({ isOpen, onClose, asset, onUp
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose} className="flex-1 py-3.5 border-2 border-[#e2e8f0] dark:border-slate-600 rounded-2xl font-bold text-[#4a5568] dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800">Cancel</button>
-            <button type="button" onClick={handleSave} className="flex-1 py-3.5 bg-[#0a2e27] dark:bg-emerald-700 text-white rounded-2xl font-bold shadow-lg hover:bg-[#08241f] dark:hover:bg-emerald-600">Save Changes</button>
+            <button type="button" onClick={handleSave} className="flex-1 py-3.5 bg-[#0B3F57] dark:bg-sky-700 text-white rounded-2xl font-bold shadow-lg hover:bg-[#062F41] dark:hover:bg-sky-600">Save Changes</button>
           </div>
         </div>
       </div>

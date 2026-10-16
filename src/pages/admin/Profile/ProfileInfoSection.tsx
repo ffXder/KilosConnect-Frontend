@@ -41,7 +41,7 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
   return (
     <>
       <div className="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-        <div className="h-[100px] bg-gradient-to-br from-[#1a3a30] to-[#2d6a4f]" />
+        <div className="h-[100px] bg-gradient-to-br from-[#143E50] to-[#126F91]" />
         <div className="flex flex-col items-center px-6 pb-6 -mt-10">
           {/* Clickable Profile Icon */}
           <div 
@@ -59,7 +59,7 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
             )}
           </div>
           
-          <h2 className="mt-3 text-[17px] font-bold text-[#0d1f1a] dark:text-slate-100">{fullName}</h2>
+          <h2 className="mt-3 text-[17px] font-bold text-[#0B2D3D] dark:text-slate-100">{fullName}</h2>
           <p className="text-xs text-[#6b7280] mt-0.5 dark:text-slate-300">{formatRole(profile.role)}</p>
           <div className="flex items-center gap-1.5 mt-1.5">
             <svg className="w-3 h-3 text-[#9ca3af] dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -70,7 +70,7 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
           <button
             onClick={onEditToggle}
             className={`mt-5 w-full flex items-center justify-center gap-2 text-sm font-medium py-2.5 rounded-xl transition-colors duration-150 ${
-              isEditing ? "bg-gray-300 text-[#374151] dark:bg-slate-700 dark:text-slate-100" : "bg-[#072821] text-white"
+              isEditing ? "bg-gray-300 text-[#374151] dark:bg-slate-700 dark:text-slate-100" : "bg-[#002B38] text-white"
             }`}
           >
             {isEditing ? "Cancel Edit" : "Edit Profile"}
@@ -96,7 +96,7 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
           <div className="bg-white w-full max-w-[420px] rounded-[28px] overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200 dark:bg-slate-900">
             {/* Header with the branding color from image_1c5161.png */}
-            <div className="bg-[#05211a] px-8 py-6">
+            <div className="bg-[#002B38] px-8 py-6">
               <h3 className="text-white text-xl font-bold tracking-tight">Profile Photo</h3>
             </div>
             
@@ -108,7 +108,7 @@ export const ProfileInfoSection: React.FC<ProfileInfoSectionProps> = ({
               <div className="flex flex-col gap-3">
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-3.5 px-4 bg-[#05211a] text-white rounded-2xl font-bold text-sm hover:bg-[#0a362b] transition-all active:scale-[0.98]"
+                  className="w-full py-3.5 px-4 bg-[#002B38] text-white rounded-2xl font-bold text-sm hover:bg-[#064760] transition-all active:scale-[0.98]"
                 >
                   Upload New Photo
                 </button>

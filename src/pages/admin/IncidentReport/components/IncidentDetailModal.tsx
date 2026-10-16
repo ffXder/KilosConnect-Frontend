@@ -158,7 +158,7 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
         className="bg-white dark:bg-slate-900 dark:ring-1 dark:ring-white/10 dark:[color-scheme:dark] w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header: just the ID and the title */}
-        <div className="bg-[#11382C] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+        <div className="bg-[#0E4961] px-6 py-6 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <p className="text-xs text-white/60 mb-2">
               Incident ID: <span className="font-mono">{incident.incidentId}</span>
@@ -255,14 +255,14 @@ const IncidentDetailedModal: React.FC<IncidentDetailedModalProps> = ({
         <div className="shrink-0 px-6 py-5 sm:px-8 border-t border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border border-gray-200 dark:border-slate-600 rounded-xl text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/40"
+            className="px-5 py-2.5 border border-gray-200 dark:border-slate-600 rounded-xl text-sm font-semibold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40 dark:focus-visible:ring-sky-500/40"
           >
             Close
           </button>
           {!isResolved && onResolve && (
             <button
               onClick={() => onResolve(incident)}
-              className="px-5 py-2.5 bg-[#11382C] dark:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-[#0a2a21] dark:hover:bg-emerald-600 transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+              className="px-5 py-2.5 bg-[#0E4961] dark:bg-sky-700 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-[#062F41] dark:hover:bg-sky-600 transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40 dark:focus-visible:ring-sky-500/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
             >
               <CheckCircle2 size={18} />
               Resolve incident

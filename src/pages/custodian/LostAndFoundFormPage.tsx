@@ -15,7 +15,7 @@ const today = () => new Date().toISOString().split("T")[0];
 const MAX_MB = 5;
 
 const inputCls =
-  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#11382C] focus:ring-2 focus:ring-[#11382C]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20";
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0E4961] focus:ring-2 focus:ring-[#0E4961]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-sky-400 dark:focus:ring-sky-400/20";
 const labelCls = "mb-2 block text-sm font-bold text-gray-700 dark:text-slate-200";
 
 export default function LostAndFoundFormPage() {
@@ -100,7 +100,7 @@ export default function LostAndFoundFormPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Header */}
-            <div className="rounded-2xl bg-[#11382C] p-5 text-white">
+            <div className="rounded-2xl bg-[#0E4961] p-5 text-white">
               <h1 className="text-xl font-semibold tracking-tight">Add Found Item</h1>
               <p className="mt-0.5 text-sm text-emerald-100/80">Record an item found in the facility</p>
             </div>
@@ -165,9 +165,9 @@ export default function LostAndFoundFormPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex h-40 w-full flex-col items-center justify-center rounded-[12px] border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-[#124d45]/50 hover:bg-emerald-50 active:bg-emerald-50 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-emerald-700 dark:hover:bg-emerald-950/40 dark:active:bg-emerald-950/40"
+                    className="flex h-40 w-full flex-col items-center justify-center rounded-[12px] border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-[#0D5873]/50 hover:bg-emerald-50 active:bg-emerald-50 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-sky-700 dark:hover:bg-emerald-950/40 dark:active:bg-emerald-950/40"
                   >
-                  <ImagePlus size={28} className="mb-2 text-[#124d45] dark:text-emerald-400" />
+                  <ImagePlus size={28} className="mb-2 text-[#0D5873] dark:text-emerald-400" />
                   <span className="text-[13px] font-medium text-gray-700 dark:text-slate-200">Tap to take or choose a photo</span>
                   <span className="mt-0.5 text-[11px] text-gray-400 dark:text-slate-500">Maximum file size: {MAX_MB}MB</span>
                   </button>
@@ -207,7 +207,7 @@ export default function LostAndFoundFormPage() {
                   disabled={!isFormValid || isSubmitting}
                   className={`flex-[2] py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                     isFormValid && !isSubmitting
-                      ? "bg-[#124d45] text-emerald-50 shadow-lg hover:bg-[#165c53] dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                      ? "bg-[#0D5873] text-emerald-50 shadow-lg hover:bg-[#0E6B89] dark:bg-sky-700 dark:hover:bg-sky-600"
                       : "cursor-not-allowed bg-emerald-50 text-emerald-800/50 dark:bg-emerald-950/60 dark:text-emerald-300/50"
                   }`}
                 >

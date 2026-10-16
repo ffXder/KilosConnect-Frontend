@@ -171,7 +171,7 @@ export const AssetScanPage: React.FC = () => {
                 <button
                     type="button"
                     onClick={() => setIsReportOpen(true)}
-                    className="w-full bg-[#124d45] hover:bg-[#165c53] text-emerald-100 text-sm font-medium py-3 rounded-xl transition-colors shadow-sm"
+                    className="w-full bg-[#0D5873] hover:bg-[#0E6B89] text-emerald-100 text-sm font-medium py-3 rounded-xl transition-colors shadow-sm"
                 >
                     Report an Issue with this Asset
                 </button>
@@ -214,7 +214,7 @@ export const AssetScanPage: React.FC = () => {
                                 <select
                                     value={issueCategory}
                                     onChange={(e) => setIssueCategory(e.target.value)}
-                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
                                 >
                                     <option value="Physical Damage">Physical Damage</option>
                                     <option value="Malfunctioning">Malfunctioning / Broken</option>
@@ -228,7 +228,7 @@ export const AssetScanPage: React.FC = () => {
                                 <select
                                     value={severity}
                                     onChange={(e) => setSeverity(e.target.value as any)}
-                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
                                 >
                                     <option value="Low">Low</option>
                                     <option value="Medium">Medium</option>
@@ -245,7 +245,7 @@ export const AssetScanPage: React.FC = () => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Describe the condition or issue in detail..."
-                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 placeholder-slate-500"
                                 />
                             </div>
 
@@ -256,7 +256,7 @@ export const AssetScanPage: React.FC = () => {
                                     value={reportedName}
                                     onChange={(e) => setReportedName(e.target.value)}
                                     placeholder="John Doe"
-                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-500"
+                                    className="w-full border border-slate-700/60 rounded-xl p-3 text-slate-200 bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 placeholder-slate-500"
                                 />
                             </div>
 
@@ -271,7 +271,7 @@ export const AssetScanPage: React.FC = () => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-1/2 py-3 bg-[#124d45] hover:bg-[#165c53] disabled:opacity-50 text-emerald-100 rounded-xl font-medium transition-colors"
+                                    className="w-1/2 py-3 bg-[#0D5873] hover:bg-[#0E6B89] disabled:opacity-50 text-emerald-100 rounded-xl font-medium transition-colors"
                                 >
                                     {isSubmitting ? 'Submitting...' : 'Submit Report'}
                                 </button>

@@ -86,7 +86,7 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
         className="w-full max-w-lg flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#0b3026] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
+        <div className="bg-[#002B38] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-[#FDFFE0]">
               <ShieldCheck size={20} />
@@ -131,7 +131,7 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
                         type="button"
                         onClick={() => toggleGroup(values)}
                         disabled={loading}
-                        className="text-xs font-semibold text-[#d86125] hover:underline disabled:opacity-50"
+                        className="text-xs font-semibold text-[#116D8C] hover:underline disabled:opacity-50"
                       >
                         {allOn ? "Clear all" : "Select all"}
                       </button>
@@ -146,7 +146,7 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
                           key={opt.value}
                           className={`flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-colors ${
                             checked
-                              ? "bg-[#d86125]/5 dark:bg-[#d86125]/10"
+                              ? "bg-[#116D8C]/5 dark:bg-[#116D8C]/10"
                               : "hover:bg-gray-50 dark:hover:bg-slate-800"
                           }`}
                         >
@@ -155,7 +155,7 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
                             checked={checked}
                             onChange={() => toggle(opt.value)}
                             disabled={loading}
-                            className="h-4 w-4 shrink-0 accent-[#d86125] cursor-pointer"
+                            className="h-4 w-4 shrink-0 accent-[#116D8C] cursor-pointer"
                           />
                           <span className="text-sm text-gray-800 dark:text-slate-200">
                             {opt.label}
@@ -185,14 +185,14 @@ export const PermissionsModal: React.FC<PermissionsModalProps> = ({
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !changed}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#FDFFE0] bg-[#d86125] shadow-sm hover:bg-[#c2551e] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#FDFFE0] bg-[#116D8C] shadow-sm hover:bg-[#0D5873] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
               {loading ? "Saving..." : "Save permissions"}

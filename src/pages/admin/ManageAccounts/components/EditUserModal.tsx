@@ -34,8 +34,8 @@ const formatPHPhoneNumber = (value: string): string => {
 /* Shared field styles (light + dark) */
 const inputClass =
   "w-full px-3.5 py-2.5 text-[15px] text-slate-900 placeholder:text-gray-400 bg-white border border-gray-200 rounded-xl transition-colors " +
-  "focus:outline-none focus:border-[#d86125] focus:ring-2 focus:ring-[#d86125]/20 " +
-  "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#d86125]";
+  "focus:outline-none focus:border-[#116D8C] focus:ring-2 focus:ring-[#116D8C]/20 " +
+  "dark:text-slate-50 dark:placeholder:text-slate-500 dark:bg-slate-800 dark:border-slate-600 dark:focus:border-[#116D8C]";
 
 /** Horizontal row: label on the left, control on the right (stacks on mobile). */
 const FormRow: React.FC<{
@@ -171,7 +171,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         className="w-full max-w-lg flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 dark:[color-scheme:dark] animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#0b3026] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
+        <div className="bg-[#002B38] px-6 py-5 sm:px-8 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-[#FDFFE0]">
               <UserCog size={20} />
@@ -375,14 +375,14 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               type="button"
               onClick={onClose}
               disabled={busy}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/40"
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/40"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={busy}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#FDFFE0] bg-[#d86125] shadow-sm hover:bg-[#c2551e] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d86125]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#FDFFE0] bg-[#116D8C] shadow-sm hover:bg-[#0D5873] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 inline-flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#116D8C]/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
               {loading ? "Saving..." : "Save changes"}

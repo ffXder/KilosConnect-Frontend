@@ -14,7 +14,7 @@ export const ProfileActivitySection: React.FC<{ activities: RecentActivity[] }> 
   activities,
 }) => (
   <div className="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-6 dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
-    <h2 className="text-base font-semibold text-[#0d1f1a] mb-4 dark:text-slate-100">
+    <h2 className="text-base font-semibold text-[#0B2D3D] mb-4 dark:text-slate-100">
       Recent Activity
     </h2>
     <div className="flex flex-col gap-0">

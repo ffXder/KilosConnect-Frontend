@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronLeft, ChevronRight, User, Edit3, Trash2, Loader2, ShieldCheck} from "lucide-react";
+import { ChevronLeft, ChevronRight, User, Edit3, Trash2, Loader2, ShieldCheck } from "lucide-react";
 import type { UserAccount } from "../../../../types/manageAccount";
 import { formatDateTime } from "../../../../utils/formatter";
 
@@ -9,7 +9,7 @@ const roleBadge = (isAdmin: boolean) =>
     ? "bg-purple-50 text-purple-700 dark:bg-purple-500/15 dark:text-purple-300"
     : "bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300";
 const iconButton =
-  "inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors focus:outline-none focus-visible:ring-2 dark:text-slate-400";
+  "inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors focus:outline-none focus-visible:ring-2";
 
 interface AccountsListSectionProps {
   accounts: UserAccount[];
@@ -81,7 +81,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                   role="status"
                   className="flex flex-col items-center justify-center gap-3 text-gray-400 dark:text-slate-400"
                 >
-                  <Loader2 size={28} className="animate-spin text-[#0b3026] dark:text-emerald-500" />
+                  <Loader2 size={28} className="animate-spin text-[#002B38] dark:text-emerald-500" />
                   <p className="text-sm font-medium">Loading account data...</p>
                 </div>
               </td>
@@ -121,7 +121,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0b3026] text-xs font-bold text-white">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#002B38] text-xs font-bold text-white">
                         {initials}
                       </div>
                       <div className="min-w-0">
@@ -163,18 +163,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                           onClick={() => onPermissionsClick(acc)}
                           aria-label={`Change permissions for ${fullName}`}
                           title="Permissions"
-                          className={`${iconButton} hover:bg-amber-50 hover:text-amber-600 focus-visible:ring-amber-400/40 dark:hover:bg-amber-500/10 dark:hover:text-amber-400`}
-                        >
-                          <ShieldCheck size={16} />
-                        </button>
-                      )}
-                      {onPermissionsClick && (
-                        <button
-                          type="button"
-                          onClick={() => onPermissionsClick(acc)}
-                          aria-label={`Change permissions for ${fullName}`}
-                          title="Permissions"
-                          className={`${iconButton} hover:bg-amber-50 hover:text-amber-600 focus-visible:ring-amber-400/40 dark:hover:bg-amber-500/10 dark:hover:text-amber-400`}
+                          className={`${iconButton} text-amber-600 hover:bg-amber-50 hover:text-amber-700 focus-visible:ring-amber-400/40 dark:text-amber-400 dark:hover:bg-amber-500/10 dark:hover:text-amber-300`}
                         >
                           <ShieldCheck size={16} />
                         </button>
@@ -184,7 +173,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                         onClick={() => onEditClick(acc)}
                         aria-label={`Edit ${fullName}`}
                         title="Edit"
-                        className={`${iconButton} hover:bg-blue-50 hover:text-blue-600 focus-visible:ring-blue-400/40 dark:hover:bg-blue-500/10 dark:hover:text-blue-400`}
+                        className={`${iconButton} text-blue-600 hover:bg-blue-50 hover:text-blue-700 focus-visible:ring-blue-400/40 dark:text-blue-400 dark:hover:bg-blue-500/10 dark:hover:text-blue-300`}
                       >
                         <Edit3 size={16} />
                       </button>
@@ -193,7 +182,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                         onClick={() => onDeleteClick(acc._id, fullName)}
                         aria-label={`Delete ${fullName}`}
                         title="Delete"
-                        className={`${iconButton} hover:bg-red-50 hover:text-red-600 focus-visible:ring-red-400/40 dark:hover:bg-red-500/10 dark:hover:text-red-400`}
+                        className={`${iconButton} text-red-600 hover:bg-red-50 hover:text-red-700 focus-visible:ring-red-400/40 dark:text-red-400 dark:hover:bg-red-500/10 dark:hover:text-red-300`}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -241,7 +230,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                           event.currentTarget.blur();
                         }
                       }}
-                      className="h-9 w-9 rounded-lg border border-[#113129] bg-white text-center text-xs font-semibold text-[#113129] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
+                      className="h-9 w-9 rounded-lg border border-[#0B4058] bg-white text-center text-xs font-semibold text-[#0B4058] outline-none dark:border-emerald-500 dark:bg-slate-800 dark:text-emerald-300"
                     />
                   ) : (
                     <button
@@ -252,7 +241,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
                       }}
                       aria-label={`Current page ${currentPage}. Click to enter a page number`}
                       aria-current="page"
-                      className="h-9 w-9 rounded-lg border border-[#113129] bg-[#113129] text-xs font-semibold text-white dark:border-[#207D55] dark:bg-[#207D55]"
+                      className="h-9 w-9 rounded-lg border border-[#0B4058] bg-[#0B4058] text-xs font-semibold text-white dark:border-[#126F91] dark:bg-[#126F91]"
                     >
                       {pageNumber}
                     </button>

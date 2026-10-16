@@ -41,7 +41,7 @@ export const StatsOverview: React.FC<StatsProps> = ({
           onClick={() => { setModalType("pending"); onTabChange("pending"); }}
           className="min-w-0 bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-1 sm:gap-4 text-center sm:text-left cursor-pointer hover:shadow-md hover:border-gray-200 transition-all dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
         >
-          <div className="p-2 sm:p-3 bg-[#E6F4EA] text-[#0a2e27] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
+          <div className="p-2 sm:p-3 bg-[#E6F1F6] text-[#0B3F57] rounded-lg sm:rounded-xl shrink-0 dark:bg-emerald-950 dark:text-emerald-300">
             <ListTodo size={18} className="sm:hidden" />
             <ListTodo size={22} className="hidden sm:block" />
           </div>
@@ -86,7 +86,7 @@ export const StatsOverview: React.FC<StatsProps> = ({
       {modalType && (
         <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-[32px] max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200 dark:bg-slate-900 dark:border dark:border-slate-700">
-            <div className="bg-[#0a2e27] p-6 flex items-center justify-between shrink-0">
+            <div className="bg-[#0B3F57] p-6 flex items-center justify-between shrink-0">
               <div>
                 <h3 className="font-extrabold text-base sm:text-lg text-white flex items-center gap-2">
                   {modalType === "pending" ? (
@@ -123,7 +123,7 @@ export const StatsOverview: React.FC<StatsProps> = ({
                 >
                   <div className={`p-2.5 rounded-xl shrink-0 ${
                     modalType === "pending"
-                      ? "bg-[#E6F4EA] text-[#0a2e27] dark:bg-emerald-950 dark:text-emerald-300"
+                      ? "bg-[#E6F1F6] text-[#0B3F57] dark:bg-emerald-950 dark:text-emerald-300"
                       : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300"
                   }`}>
                     {modalType === "pending" ? <ListTodo size={18} /> : <CheckCircle size={18} />}

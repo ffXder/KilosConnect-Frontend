@@ -190,7 +190,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
       <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-slate-200 dark:border-slate-700">
         
         {/* Modal Header */}
-        <div className="bg-[#072821] p-6 text-white relative flex-shrink-0">
+        <div className="bg-[#002B38] p-6 text-white relative flex-shrink-0">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">
               {initialData ? 'Edit Master Task & Verification' : 'Add New Task'}
@@ -201,12 +201,12 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
           </div>
 
           {/* Tab Navigation enabled for both Add and Edit modes */}
-          <div className="flex gap-2 mt-4 bg-[#042421] dark:bg-slate-900 p-1 rounded-xl w-fit">
+          <div className="flex gap-2 mt-4 bg-[#001F29] dark:bg-slate-900 p-1 rounded-xl w-fit">
             <button
               type="button"
               onClick={() => setActiveTab('details')}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'details' ? 'bg-[#ba6300] text-[#FDFFE0]' : 'text-white/70 hover:text-white'
+                activeTab === 'details' ? 'bg-[#0C5673] text-[#FDFFE0]' : 'text-white/70 hover:text-white'
               }`}
             >
               Task Details
@@ -215,7 +215,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               type="button"
               onClick={() => setActiveTab('verification')}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'verification' ? 'bg-[#ba6300] text-[#FDFFE0]' : 'text-white/70 hover:text-white'
+                activeTab === 'verification' ? 'bg-[#0C5673] text-[#FDFFE0]' : 'text-white/70 hover:text-white'
               }`}
             >
               Visual Verification Setup
@@ -234,7 +234,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   type="text"
                   required
                   placeholder="e.g., Deep Clean Racks"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#06322e] dark:focus:border-emerald-500 transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500 transition-all"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 />
@@ -246,7 +246,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 <textarea
                   placeholder="Add specific instructions..."
                   rows={2}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#06322e] dark:focus:border-emerald-500 resize-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500 resize-none transition-all"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
@@ -257,7 +257,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 <label className="block text-sm font-bold text-[#1e293b] dark:text-slate-200 mb-2 tracking-tight">Area*</label>
                 <select
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                   value={formData.area}
                   onChange={(e) => setFormData({ ...formData, area: e.target.value })}
                 >
@@ -270,7 +270,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               <div>
                 <label className="block text-sm font-bold text-[#1e293b] dark:text-slate-200 mb-2 tracking-tight">Priority*</label>
                 <select
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 >
@@ -289,7 +289,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                       onClick={() => handleFrequencyChange(type)}
                       className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                         formData.frequency === type 
-                          ? "bg-[#ba6300] text-[#FDFFE0] shadow-md" 
+                          ? "bg-[#0C5673] text-[#FDFFE0] shadow-md"
                           : "text-gray-400 dark:text-slate-300 hover:text-gray-600 dark:hover:text-slate-100"
                       }`}
                     >
@@ -311,7 +311,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                         onClick={() => setFormData({ ...formData, dayType: day })}
                         className={`px-3 py-2 rounded-xl text-sm font-bold transition-all border cursor-pointer ${
                           formData.dayType === day
-                            ? 'bg-[#ba6300] text-[#FDFFE0] border-[#ba6300]'
+                            ? 'bg-[#0C5673] text-[#FDFFE0] border-[#0C5673]'
                             : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-slate-200 border-gray-200 dark:border-slate-600 hover:border-purple-400 dark:hover:border-slate-400'
                         }`}
                       >
@@ -327,7 +327,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 <div>
                   <label className="block text-sm font-bold text-[#1e293b] dark:text-slate-200 mb-2 tracking-tight">Day Type (Day of Month) *</label>
                   <select
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                     value={formData.dayType ?? ''}
                     onChange={(e) => setFormData({ ...formData, dayType: Number(e.target.value) })}
                   >
@@ -348,7 +348,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   <input
                     type="time"
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                     value={formData.startTime}
                     onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                   />
@@ -358,7 +358,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   <input
                     type="time"
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                     value={formData.endTime}
                     onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                   />
@@ -369,7 +369,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-[#1e293b] tracking-tight">
-                    <ListChecks size={16} className="text-[#072821]" />
+                    <ListChecks size={16} className="text-[#002B38]" />
                     Checklist (Optional)
                   </label>
                   {checklist.length > 0 && (
@@ -425,13 +425,13 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                         }
                       }}
                       placeholder="Add a step and press Enter"
-                      className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:border-[#06322e]"
+                      className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:border-[#0B3D52]"
                     />
                     <button
                       type="button"
                       onClick={() => addItem()}
                       disabled={!newItem.trim()}
-                      className="px-4 rounded-xl bg-[#072821] text-white text-sm font-bold flex items-center gap-1 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                      className="px-4 rounded-xl bg-[#002B38] text-white text-sm font-bold flex items-center gap-1 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                     >
                       <Plus size={16} /> Add
                     </button>
@@ -443,7 +443,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                         key={q}
                         type="button"
                         onClick={() => addItem(q)}
-                        className="px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-xs font-medium text-gray-500 hover:border-[#072821] hover:text-[#072821] cursor-pointer"
+                        className="px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-xs font-medium text-gray-500 hover:border-[#002B38] hover:text-[#002B38] cursor-pointer"
                       >
                         + {q}
                       </button>
@@ -456,7 +456,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               <div>
                 <label className="block text-sm font-bold text-[#1e293b] dark:text-slate-200 mb-2 tracking-tight">Related Asset?</label>
                 <select
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#06322e] dark:focus:border-emerald-500"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none focus:border-[#0B3D52] dark:focus:border-sky-500"
                   value={formData.relatedAsset}
                   onChange={(e) => setFormData({ ...formData, relatedAsset: e.target.value })}
                 >
@@ -470,7 +470,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 <input
                   type="checkbox"
                   id="requiresVerification"
-                  className="w-5 h-5 rounded border-gray-300 dark:border-slate-600 text-[#072821] focus:ring-[#06322e] cursor-pointer"
+                  className="w-5 h-5 rounded border-gray-300 dark:border-slate-600 text-[#002B38] focus:ring-[#0B3D52] cursor-pointer"
                   checked={formData.requiresVerification}
                   onChange={(e) => setFormData({ ...formData, requiresVerification: e.target.checked })}
                 />
@@ -591,7 +591,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
               className={`flex-1 py-3 px-4 rounded-2xl font-bold transition-all shadow-sm cursor-pointer ${
                 isFormInvalid || submitting 
                   ? "bg-gray-100 dark:bg-slate-800 text-gray-300 dark:text-slate-500 cursor-not-allowed" 
-                  : "bg-[#072821] dark:bg-[#1e3a2f] hover:bg-[#042421] dark:hover:bg-[#163427] text-white"
+                  : "bg-[#002B38] dark:bg-[#1A5268] hover:bg-[#001F29] dark:hover:bg-[#0F4155] text-white"
               }`}
             >
               {submitting ? 'Saving...' : initialData ? 'Save Changes' : '+ Add Task'}

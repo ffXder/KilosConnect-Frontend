@@ -100,7 +100,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
               key={alert.id ?? idx}
               onClick={() => navigate(destination, { state: recordState })}
               aria-label={`Open ${alertTitle} ${source === "task" ? "maintenance task" : "incident report"}`}
-              className={`group flex w-full items-center gap-4 rounded-xl border-l-4 p-3 text-left transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-md active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C] focus-visible:ring-offset-2 ${cfg.bg} ${cfg.border}`}
+              className={`group flex w-full items-center gap-4 rounded-xl border-l-4 p-3 text-left transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-md active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961] focus-visible:ring-offset-2 ${cfg.bg} ${cfg.border}`}
             >
               <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${cfg.bg} ${cfg.iconColor}`}>
                 {cfg.icon}
@@ -116,7 +116,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
           );
         })}
         <div className="text-center pt-2">
-          <button className="text-[12px] font-semibold text-[#113129] hover:underline cursor-pointer dark:text-slate-100">
+          <button className="text-[12px] font-semibold text-[#0B4058] hover:underline cursor-pointer dark:text-slate-100">
             View All Alerts →
           </button>
         </div>

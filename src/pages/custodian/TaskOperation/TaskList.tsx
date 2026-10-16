@@ -55,7 +55,7 @@ export default function TaskList({ tasks, onViewDetails }: TaskListProps) {
             className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:border-[#e2e8f0] transition cursor-pointer p-4 sm:p-5 flex items-center justify-between gap-4 dark:bg-slate-900 dark:border-slate-700 dark:hover:border-slate-600 dark:shadow-none"
           >
             <div className="flex items-start gap-4">
-              <div className="bg-emerald-50 p-3 rounded-xl text-[#0a2e27] shrink-0 mt-1 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="bg-sky-50 p-3 rounded-xl text-[#0B3F57] shrink-0 mt-1 dark:bg-sky-950 dark:text-sky-300">
                 <MapPin size={22} />
               </div>
 

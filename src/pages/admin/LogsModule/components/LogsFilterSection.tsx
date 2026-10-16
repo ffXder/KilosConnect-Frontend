@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { ArrowDown, ArrowUp, Search } from "lucide-react";
 
 interface Props {
   search: string;
@@ -124,18 +124,20 @@ export default function LogsFilterSection({
         </label>
         <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-slate-300">
           Sort by
-          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} className={selectClass}>
+          <select aria-label="Sort logs by" value={sortBy} onChange={(event) => setSortBy(event.target.value)} className={selectClass}>
             <option value="name">Name</option>
             <option value="date">Date</option>
           </select>
         </label>
-        <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-slate-300">
-          Order
-          <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} className={selectClass}>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </label>
+        <button
+          type="button"
+          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          aria-label={`Sort ${sortOrder === "asc" ? "descending" : "ascending"} (currently ${sortOrder === "asc" ? "ascending" : "descending"})`}
+          title={`Currently ${sortOrder === "asc" ? "ascending" : "descending"}; click to sort ${sortOrder === "asc" ? "descending" : "ascending"}`}
+          className={`${selectClass} inline-flex items-center justify-center px-3`}
+        >
+          {sortOrder === "asc" ? <ArrowUp size={16} aria-hidden="true" /> : <ArrowDown size={16} aria-hidden="true" />}
+        </button>
       </div>
 
       {selectedDate === "Custom" && setStartDate && setEndDate && (

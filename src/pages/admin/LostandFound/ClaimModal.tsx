@@ -33,7 +33,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-[16px] shadow-xl w-full max-w-[500px] overflow-hidden dark:bg-slate-900 transition-colors duration-300">
-        <div className="bg-[#11382C] p-6 text-white flex justify-between items-center dark:bg-[#1D6650] ">
+        <div className="bg-[#0E4961] p-6 text-white flex justify-between items-center dark:bg-[#0B526E] ">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">Mark as Claimed</h2>
             <p className="text-white/70 text-sm font-normal opacity-90">Recording claim details for: {itemName}</p>
@@ -51,7 +51,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
             <input 
               required 
               autoFocus
-              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1e4d46]/10 outline-none dark:text-slate-300" 
+              className="w-full px-4 py-2.5 border border-[#e8e8e8] rounded-[8px] text-sm font-normal focus:ring-2 focus:ring-[#1A5268]/10 outline-none dark:text-slate-300"
               placeholder="e.g. Robert Fox" 
               value={claimedBy}
               onChange={e => setClaimedBy(e.target.value)} 
@@ -101,7 +101,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ itemName, onClose, onCon
               disabled={!isFormValid}
               className={`flex-1 py-3 rounded-[8px] text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                 isFormValid 
-                  ? "bg-[#1e4d46] text-white hover:bg-[#163a35] cursor-pointer shadow-md" 
+                  ? "bg-[#1A5268] text-white hover:bg-[#0F4155] cursor-pointer shadow-md"
                   : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed"
               }`}
             >

@@ -58,7 +58,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
           <input
             type="text"
             placeholder="Search tasks..."
-            className="w-full h-10 pl-9 pr-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#113129]/5 focus:border-[#113129] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-slate-500"
+            className="w-full h-10 pl-9 pr-3 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B4058]/5 focus:border-[#0B4058] transition-all placeholder:text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-slate-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -67,7 +67,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
         {showAddButton && onAddTask && (
           <button
             onClick={onAddTask}
-            className="bg-[#113129] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#0a211b] transition-all shadow-sm active:scale-95 whitespace-nowrap"
+            className="bg-[#0B4058] text-white h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-[#062F41] transition-all shadow-sm active:scale-95 whitespace-nowrap"
           >
             <Plus size={16} strokeWidth={2.5} />
             <span>New Task</span>
@@ -78,7 +78,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
         {showGenerateButton && onGenerate && (
           <button
             onClick={onGenerate}
-            className="bg-[#d86125] text-[#FDFFE0] h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer"
+            className="bg-[#116D8C] text-[#FDFFE0] h-10 px-4 rounded-lg text-sm font-bold flex items-center gap-2 hover:transition-all shadow-sm active:scale-95 whitespace-nowrap cursor-pointer"
           >
             <Layers size={16} strokeWidth={2.5} />
             <span>Initialize Today</span>
@@ -140,7 +140,7 @@ const TaskFilterSection: React.FC<TaskFilterProps> = ({
             <select
               value={areaFilter}
               onChange={(e) => setAreaFilter(e.target.value)}
-              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#113129] focus:ring-1 focus:ring-[#113129] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:border-slate-500"
+              className="appearance-none bg-white border border-[#e2e8f0] text-[#1e293b] text-[13px] font-bold py-2.5 pl-4 pr-10 rounded-[12px] focus:outline-none focus:border-[#0B4058] focus:ring-1 focus:ring-[#0B4058] transition-all cursor-pointer hover:border-[#cbd5e1] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:border-slate-500"
             >
               {zones.map((z) => (
                 <option key={z} value={z}>

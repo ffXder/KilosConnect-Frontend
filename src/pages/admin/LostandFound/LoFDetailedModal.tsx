@@ -62,7 +62,7 @@ const Photo: React.FC<{
     aria-label={`Zoom ${alt}`}
     className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl ${
       ring ?? 'ring-1 ring-black/5 dark:ring-white/10'
-    } focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/50 dark:focus-visible:ring-emerald-500/60`}
+    } focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/50 dark:focus-visible:ring-sky-500/60`}
   >
     <img src={url} alt={alt} loading="lazy" className="block h-auto w-full object-contain" />
     <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
@@ -307,7 +307,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
         className="w-full max-w-3xl flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-slate-900 dark:ring-white/10 animate-in fade-in zoom-in-95 duration-200 motion-reduce:animate-none"
       >
         {/* Header */}
-        <div className="bg-[#11382C] px-6 py-5 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
+        <div className="bg-[#0E4961] px-6 py-5 sm:px-8 text-white flex justify-between items-start gap-4 shrink-0">
           <div className="min-w-0">
             <p className="text-xs text-white/60 mb-1.5">Lost and found</p>
             <h2 id="lof-detail-title" className="text-xl font-bold leading-snug">
@@ -429,7 +429,7 @@ export const LoFDetailedModal: React.FC<DetailedModalProps> = ({ item, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11382C]/40 dark:focus-visible:ring-emerald-500/40"
+            className="w-full sm:w-auto px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E4961]/40 dark:focus-visible:ring-sky-500/40"
           >
             Close
           </button>

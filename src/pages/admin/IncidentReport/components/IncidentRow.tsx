@@ -59,7 +59,7 @@ const IncidentRow: React.FC<IncidentRowProps> = ({ incident, isHighlighted = fal
 
       {/* Title & Description */}
       <td className="py-4 px-6">
-        <div className="font-semibold text-gray-900 group-hover:text-[#0F6E56] transition-colors truncate dark:text-slate-100 dark:group-hover:text-emerald-300">
+        <div className="font-semibold text-gray-900 group-hover:text-[#0B6687] transition-colors truncate dark:text-slate-100 dark:group-hover:text-sky-300">
           {incident.title}
         </div>
         <div className="text-gray-400 text-[12px] truncate dark:text-slate-400">

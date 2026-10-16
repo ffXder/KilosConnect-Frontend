@@ -29,7 +29,7 @@ export default function SuccessScreen({
           style={{ animation: "ss-ring 1.2s ease-out .3s 2" }}
         />
         <div
-          className="ss-anim relative w-28 h-28 rounded-full bg-[#0a2e27] flex items-center justify-center shadow-lg"
+          className="ss-anim relative w-28 h-28 rounded-full bg-[#0B3F57] flex items-center justify-center shadow-lg"
           style={{ animation: "ss-pop .5s cubic-bezier(.2,.9,.3,1.2) both" }}
         >
           <svg viewBox="0 0 52 52" className="w-14 h-14" fill="none" stroke="#FDFFE0"
@@ -55,7 +55,7 @@ export default function SuccessScreen({
       <div className="ss-anim w-full max-w-xs mt-8 space-y-3"
         style={{ animation: "ss-up .5s ease-out 1s both" }}>
         <button onClick={onPrimary}
-          className="w-full py-3.5 rounded-xl bg-[#d86125] hover:bg-[#ba6300] text-[#FDFFE0] text-sm font-bold shadow-md transition-colors">
+          className="w-full py-3.5 rounded-xl bg-[#116D8C] hover:bg-[#0C5673] text-[#FDFFE0] text-sm font-bold shadow-md transition-colors">
           {primaryLabel}
         </button>
         {secondaryLabel && onSecondary && (

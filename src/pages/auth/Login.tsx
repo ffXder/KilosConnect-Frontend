@@ -45,7 +45,7 @@ export const LoginPage: React.FC = () => {
     
     // direct login only if 2FA is disabled
     const role = data?.user?.role || getRole();
-    if (role === "admin") {
+    if (role === "admin" || role === "super_admin") {
       navigate("/dashboard", { replace: true });
     } else if (role === "custodian") {
       navigate("/custodian/dashboard", { replace: true });
@@ -66,7 +66,7 @@ export const LoginPage: React.FC = () => {
       <section
         aria-labelledby={`${formId}-title`}
         className="w-full md:w-[40%] lg:w-[35%] min-h-screen flex flex-col items-center justify-center p-6 md:p-12 
-                   bg-[linear-gradient(180deg,#072821_21%,#111B30_100%)]"
+                   bg-[linear-gradient(180deg,#002B38_21%,#111B30_100%)]"
       >
         {/* Logo */}
         <img
@@ -99,7 +99,7 @@ export const LoginPage: React.FC = () => {
                   type={field.id === "password" && showPassword ? "text" : field.type}
                   value={formValues[field.id]}
                   onChange={(e) => setFormValues(prev => ({ ...prev, [field.id]: e.target.value.trim() }))}
-                  className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#ba6300] outline-none"
+                  className="w-full h-[45px] bg-white rounded-md px-4 text-black font-poppins focus:ring-2 focus:ring-[#0C5673] outline-none"
                 />
                 {field.id === "password" && (
                   <button
@@ -129,7 +129,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-[50px] mt-4 bg-[#ba6300] hover:bg-[#a35600] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
+            className="w-full h-[50px] mt-4 bg-[#0C5673] hover:bg-[#094860] text-[#fdffe0] rounded-md font-poppins font-medium text-xl transition-all disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Log in"}
           </button>

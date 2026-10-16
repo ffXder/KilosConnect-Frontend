@@ -160,10 +160,10 @@ export const ProfilePage: React.FC = () => {
           <div className="flex flex-col gap-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] dark:bg-slate-900 dark:border-slate-700 dark:shadow-none">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-semibold text-[#0d1f1a] dark:text-slate-100">Personal Information</h2>
+                <h2 className="text-base font-semibold text-[#0B2D3D] dark:text-slate-100">Personal Information</h2>
                 {isEditing && (
                   <div className="flex gap-2">
-                    <button onClick={handleSubmit} className="bg-[#183a30] hover:bg-[#336658] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
+                    <button onClick={handleSubmit} className="bg-[#143E50] hover:bg-[#1A708F] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors">Save</button>
                     <button onClick={handleCancel} className="border border-[#d1d5db] hover:bg-[#f9fafb] text-[#374151] text-sm font-medium px-4 py-1.5 rounded-lg transition-colors dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">Cancel</button>
                   </div>
                 )}
@@ -185,7 +185,7 @@ export const ProfilePage: React.FC = () => {
                         value={form[name as keyof ProfileData] || ""}
                         onChange={handleChange}
                         placeholder={name === "phone" ? "+63 000 000 0000" : ""}
-                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#1a3a30] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 ${
+                        className={`w-full border rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#143E50] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 ${
                           name === "username" && !form.username.includes("@") && form.username.length > 0
                             ? "border-red-400 ring-red-100"
                             : "border-[#d1d5db]"

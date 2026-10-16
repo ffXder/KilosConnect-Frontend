@@ -19,6 +19,7 @@ import {
 import { logOut } from "../services/authService";
 import { useAuth } from '../hooks/useAuth';
 import { ThemeToggle } from "./ThemeToggle"
+import KilosMark from "../assets/images/kilos-mark.png";
 
 type Role = 'super_admin' | "admin" | "custodian";
 
@@ -220,12 +221,12 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
       `}</style>
 
       {/* --- MOBILE TOP HEADER --- */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#072821] flex items-center justify-between px-4 z-40 border-b border-white/10 shadow-md">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#002B38] flex items-center justify-between px-4 z-40 border-b border-white/10 shadow-md">
         <div className="w-[100px]">
           <img
             className="w-full object-contain"
             alt="Kilos logo"
-            src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png"
+            src={KilosMark}
           />
         </div>
 
@@ -271,12 +272,12 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
       {/* --- COMBINED NAVIGATION SIDEBAR / DRAWER --- */}
       <aside
         id="app-navigation"
-        className={`fixed top-0 left-0 h-screen h-[100dvh] bg-[#072821] flex flex-col z-50 transition-transform duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]
+        className={`fixed top-0 left-0 h-screen h-[100dvh] bg-[#002B38] flex flex-col z-50 transition-transform duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.25)]
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
         style={{
           width: isMobileOpen ? "min(82vw, 280px)" : isExpanded ? "240px" : "78px",
-          borderRight: "4px solid #072821",
+          borderRight: "4px solid #002B38",
         }}
         aria-label="Sidebar navigation"
       >
@@ -288,7 +289,7 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
             <img
               className="w-full object-contain"
               alt="Kilos logo"
-              src="https://c.animaapp.com/C3N4JJvt/img/kilos-white-logo-1.png"
+              src={KilosMark}
             />
           </div>
 
@@ -336,12 +337,12 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                     }}
                     className={`flex w-full items-center text-left rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
                       isSectionActive
-                        ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                        ? "bg-white/10 text-[#6DC9E7] border-[#6DC9E7]"
                         : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
                     } ${!isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4"}`}
                   >
                     <>
-                      <span className={isSectionActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
+                      <span className={isSectionActive ? "text-[#6DC9E7]" : "text-[#FDFFE0]"}>
                         {item.icon}
                       </span>
 
@@ -362,14 +363,14 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                     className={({ isActive }) =>
                       `flex items-center rounded-[10px] transition-all cursor-pointer border-l-4 py-3 ${
                         isActive
-                          ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                          ? "bg-white/10 text-[#6DC9E7] border-[#6DC9E7]"
                           : "text-[#FDFFE0] hover:bg-white/5 border-transparent"
                       } ${!isExpanded && !isMobileOpen ? "justify-center px-0" : "gap-3 px-4"}`
                     }
                   >
                     {({ isActive }) => (
                       <>
-                        <span className={isActive ? "text-[#f5a623]" : "text-[#FDFFE0]"}>
+                        <span className={isActive ? "text-[#6DC9E7]" : "text-[#FDFFE0]"}>
                           {item.icon}
                         </span>
                         <span className={`[font-family:'Poppins',Helvetica] font-medium text-sm leading-5 whitespace-nowrap transition-all duration-300 ${
@@ -390,14 +391,14 @@ export const SidebarNavigationSection: React.FC<{ userRole?: Role }> = ({ userRo
                   className={({ isActive }) =>
                     `flex w-full items-center text-left rounded-[10px] transition-all cursor-pointer border-l-4 py-2.5 ${
                       isActive
-                        ? "bg-white/10 text-[#f5a623] border-[#f5a623]"
+                        ? "bg-white/10 text-[#6DC9E7] border-[#6DC9E7]"
                         : "text-[#c8d8d5] hover:bg-white/5 border-transparent"
                     } ${isExpanded || isMobileOpen ? "ml-5 gap-3 px-4" : "justify-center px-0"}`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <span className={isActive ? "text-[#f5a623]" : "text-[#c8d8d5]"}>
+                      <span className={isActive ? "text-[#6DC9E7]" : "text-[#c8d8d5]"}>
                         {child.icon}
                       </span>
                       <span className={`[font-family:'Poppins',Helvetica] font-medium text-xs leading-5 whitespace-nowrap transition-all duration-300 ${
