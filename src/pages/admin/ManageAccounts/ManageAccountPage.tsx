@@ -125,14 +125,14 @@ export const ManageAccountsPage: React.FC = () => {
     <div className="flex min-h-screen w-full bg-[#f4f5f6] text-[#1a1a1a] dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
-      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-x-hidden transition-colors duration-300">
-        <div className="max-w-[1400px] mx-auto space-y-6">
+      <main className="flex-1 min-w-0 p-4 md:p-8 space-y-6 overflow-x-hidden transition-colors duration-300">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] space-y-6">
           {/* Page header */}
           <header>
-            <h1 className="[font-family:'Poppins',Helvetica] text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight dark:text-slate-50">
-              Manage accounts
+            <h1 className="text-3xl font-bold tracking-tight text-[#0f2942] dark:text-slate-50">
+              Manage Accounts
             </h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1.5">
+            <p className="text-sm text-gray-500 dark:text-slate-300 mt-1">
               Add, edit, and manage user accounts
             </p>
           </header>
