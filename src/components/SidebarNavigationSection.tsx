@@ -17,8 +17,9 @@ import {
   UsersRound,
 } from "lucide-react";
 import { logOut } from "../services/authService";
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 import { ThemeToggle } from "./ThemeToggle"
+import { PERMISSIONS } from "../constants/permission";
 
 type Role = 'super_admin' | "admin" | "custodian";
 
@@ -71,7 +72,6 @@ const navItems: SidebarNavItem[] = [
     label: "Assets",
     path: "/asset-registry",
     roles: ["super_admin", "admin"] as Role[],
-    requiredPermission: "asset:read",
     icon: <Boxes size={20} />,
     children: [
       {
@@ -90,7 +90,7 @@ const navItems: SidebarNavItem[] = [
     label: "Live Task Monitor",
     path: "/task-monitor/live-monitor",
     roles: [ "super_admin", "admin"] as Role[],
-    requiredPermission: "facility:read",
+    requiredPermission: PERMISSIONS.TASK_READ,
     icon: <Activity size={20} />,
     sectionPath: "/task-monitor",
     children: [
@@ -110,21 +110,20 @@ const navItems: SidebarNavItem[] = [
     label: "Manage Tasks",
     path: "/manage-task",
     roles: ["super_admin", "admin"] as Role[],
-    requiredPermission: "facility:read",
+    requiredPermission: PERMISSIONS.TASK_READ,
     icon: <ListChecks size={20} />,
   },
   {
     label: "Incident Report",
     path: "/incident-report",
     roles: ["super_admin", "admin"] as Role[],
-    requiredPermission: "incident:read",
     icon: <TriangleAlert size={20} />,
   },
   {
     label: "Logs",
     path: "/audit-logs",
     roles: ["super_admin", "admin"] as Role[],
-    requiredPermission: "audit:read", 
+    requiredPermission: PERMISSIONS.AUDIT_READ, 
     icon: <ScrollText size={20} />,
   },
   {
@@ -137,14 +136,14 @@ const navItems: SidebarNavItem[] = [
     label: "Manage Accounts",
     path: "/manage-accounts",
     roles: ["super_admin", 'admin'] as Role[],
-    requiredPermission: "users:read",
+    requiredPermission: PERMISSIONS.USERS_READ,
     icon: <UserRoundCog size={20} />,
   },
   {
     label: "Archives",
     path: "/archives",
     roles: ["super_admin", "admin"] as Role[],
-    requiredPermission: "user:read",
+    requiredPermission: PERMISSIONS.ARCHIVE_READ,
     icon: <Archive size={20} />,
   },
 ];
