@@ -68,14 +68,14 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700 dark:shadow-none">
+    <div className="bg-[var(--bg-card)] rounded-2xl shadow-sm border border-border p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700 dark:shadow-none">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-100 text-amber-600">
           <Bell size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50 font-bold">{title}</h3>
-          <p className="text-xs text-gray-400 dark:text-slate-300 for subtitle">{subtitle}</p>
+          <h3 className="text-lg font-bold text-[var(--text)]">{title}</h3>
+          <p className="text-xs text-[var(--text)]">{subtitle}</p>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
           );
         })}
         <div className="text-center pt-2">
-          <button className="text-[12px] font-semibold text-[#0B4058] hover:underline cursor-pointer dark:text-slate-100">
+          <button className="text-[12px] font-semibold text-[var(--text)] hover:underline cursor-pointer dark:text-slate-100">
             View All Alerts →
           </button>
         </div>

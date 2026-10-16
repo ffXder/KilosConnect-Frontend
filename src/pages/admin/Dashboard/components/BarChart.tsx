@@ -28,14 +28,14 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
   const chartData = data.length > 0 ? data : [{ month: 'No Data', completed: 0, pending: 0 }];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
+    <div className="bg-[var(--bg-card)] border border-border rounded-2xl shadow-sm p-4 sm:p-6">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-100 text-green-600">
           <TrendingUp size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50">{title}</h3>
-          <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
+          <h3 className="text-lg font-bold text-[var(--text)]">{title}</h3>
+          <p className="text-xs text-[--var(--text)]">{subtitle}</p>
         </div>
       </div>
 
@@ -66,7 +66,7 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
               <div key={`${item.month}-${idx}`} className="flex flex-col items-center gap-1 h-full justify-end">
                 <div className="flex items-end gap-[3px] h-full" style={{ height: '100%' }}>
                   <div className="flex flex-col items-center justify-end h-full">
-                    <div className="mb-[2px] text-[11px] font-semibold text-gray-500 dark:text-slate-300">
+                    <div className="mb-[2px] text-[11px] font-semibold text-[--var(--text)]">
                       {item.completed}%
                     </div>
                     <div
@@ -76,7 +76,7 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
                   </div>
 
                   <div className="flex flex-col items-center justify-end h-full">
-                    <div className="mb-[2px] text-[11px] font-semibold text-gray-500 dark:text-slate-300">
+                    <div className="mb-[2px] text-[11px] font-semibold  text-[--var(--text)]">
                       {item.pending}%
                     </div>
                     <div
@@ -85,7 +85,7 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
                     />
                   </div>
                 </div>
-                <div className={`text-xs font-semibold ${idx === chartData.length - 1 ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-slate-300'}`}>
+                <div className={`text-xs font-semibold ${idx === chartData.length - 1 ? ' text-[--var(--text)]' : 'text-[--var(--text)]'}`}>
                   {item.month}
                 </div>
               </div>
@@ -97,11 +97,11 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
       <div className="flex items-center gap-6 mt-6 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-emerald-500" />
-          <span className="text-xs font-semibold text-gray-700 dark:text-slate-200">Completed</span>
+          <span className="text-xs font-semibold text-[--var(--text)]">Completed</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-orange-400" />
-          <span className="text-xs font-semibold text-gray-700 dark:text-slate-200">Pending</span>
+          <span className="text-xs font-semibold text-[--var(--text)]">Pending</span>
         </div>
       </div>
     </div>

@@ -74,14 +74,14 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
   const chartData = data.length > 0 ? data : [];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 flex flex-col dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
+    <div className="bg-[var(--bg-card)] border border-border rounded-2xl shadow-sm p-4 sm:p-6 flex flex-col">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-600">
           <PieChartIcon size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50">{title}</h3>
-          <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
+          <h3 className="text-lg font-bold text-[--var(--text)]">{title}</h3>
+          <p className="text-xs text-[--var(--text)]">{subtitle}</p>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
             </ResponsiveContainer>
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-slate-600">
+              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-[--var(--text)] dark:text-slate-600">
                 No data
               </div>
             </div>
@@ -122,7 +122,7 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
           {chartData.length > 0 && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-800 dark:text-slate-50">{total}</div>
+                <div className="text-2xl font-bold text-[--var(--text)]">{total}</div>
                 <div className="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-400">Total</div>
               </div>
             </div>
@@ -138,8 +138,8 @@ const DashboardPieChart: React.FC<DashboardPieChartProps> = ({
               <div key={item.name} className="flex items-center gap-2 min-w-0">
                 <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: item.color }} />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold text-gray-700 dark:text-slate-200">{item.name}</div>
-                  <div className="text-sm text-gray-500 dark:text-slate-400">{currentValue}</div>
+                  <div className="truncate text-sm font-semibold text-[--var(--text)]">{item.name}</div>
+                  <div className="text-sm text-[--var(--text)]">{currentValue}</div>
                 </div>
               </div>
             );

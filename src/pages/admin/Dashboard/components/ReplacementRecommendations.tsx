@@ -58,15 +58,15 @@ const DashboardReplacementRecommendations: React.FC<DashboardReplacementRecommen
   subtitle = "Assets flagged for potential replacement based on repair costs",
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mt-6 dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700 dark:shadow-none">
+    <div className="bg-[var(--bg-card)] rounded-2xl shadow-sm border border-border p-4 sm:p-6 mt-6 dark:bg-slate-900 transition-colors duration-300 dark:border-slate-700 dark:shadow-none">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-100 text-rose-600">
           <AlertTriangle size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50 font-bold">{title}</h3>
-          <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
+          <h3 className="text-lg font-bold text-[var(--text)]">{title}</h3>
+          <p className="text-xs text-[var(--text)]">{subtitle}</p>
         </div>
       </div>
 

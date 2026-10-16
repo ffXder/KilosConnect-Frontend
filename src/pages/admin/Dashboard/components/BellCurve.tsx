@@ -133,14 +133,14 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="relative bg-white rounded-2xl shadow-sm p-4 sm:p-6 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
+    <div ref={containerRef} className="relative bg-[var(--bg-card)] border border-border rounded-2xl shadow-sm p-4 sm:p-6 dark:bg-slate-900 transition-colors duration-300 dark:shadow-none dark:border dark:border-slate-700">
       <div className="flex items-center gap-3 mb-1">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-100 text-purple-600">
           <Activity size={22} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-800 dark:text-slate-50 font-bold">{title}</h3>
-          <p className="text-xs text-gray-400 dark:text-slate-300">{subtitle}</p>
+          <h3 className="text-lg font-bold text-[--var(--text)]">{title}</h3>
+          <p className="text-xs text-[--var(--text)]">{subtitle}</p>
         </div>
       </div>
 
@@ -240,7 +240,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
               y={svgH - pad.bottom + 15}
               textAnchor="middle"
               className="text-[10px]"
-              fill="#6b7280"
+              fill="var(--text)"
               fontWeight="600"
             >
               {wrappedZoneLabels[i].map((line, lineIndex) => (
@@ -257,11 +257,11 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-orange-500" />
-          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Open</span>
+          <span className="text-xs text-[--var(--text)] font-medium">Open</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-green-500" />
-          <span className="text-xs text-gray-500 font-medium dark:text-slate-300">Resolved</span>
+          <span className="text-xs text-[--var(--text)] font-medium">Resolved</span>
         </div>
       </div>
     </div>
