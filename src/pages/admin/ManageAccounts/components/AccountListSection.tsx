@@ -68,7 +68,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
   return (
     <div className="w-full">
       <div className="w-full overflow-x-auto">
-      <table className="w-full min-w-[860px] text-left text-sm">
+      <table className="w-full min-w-[860px] bg-white text-left text-sm dark:bg-slate-900">
         <thead className="bg-gray-50/80 border-b border-[#eef1f3] dark:bg-slate-800/50 dark:border-slate-700 transition-colors duration-300">
           <tr>
             {COLUMNS.map((col) => (
@@ -89,7 +89,7 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
           </tr>
         </thead>
 
-        <tbody className="divide-y divide-[#eef1f3] dark:divide-slate-700">
+        <tbody className="divide-y divide-[#eef1f3] bg-white dark:divide-slate-700 dark:bg-slate-900">
           {/* Loading */}
           {loading && (
             <tr>
@@ -136,12 +136,12 @@ const AccountsListSection: React.FC<AccountsListSectionProps> = ({
 
               return (
                 <tr
-                  key={acc.userId}
-                  className="transition-colors hover:bg-gray-50/70 dark:hover:bg-slate-800/60"
+                  key={acc._id}
+                  className="hover:bg-gray-50/70 dark:hover:bg-slate-800/60"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0b3026] text-xs font-bold text-white">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0B4058] text-xs font-bold text-white">
                         {initials}
                       </div>
                       <div className="min-w-0">
