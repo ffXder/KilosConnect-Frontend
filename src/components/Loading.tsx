@@ -1,6 +1,6 @@
 import React from "react";
 import KilosGymImg from "../assets/images/image-5.png";
-import KILOSWhiteLogo1 from "../assets/images/KILOS-white-logo-1.png";
+import KILOSLogo from "../assets/images/kilos-mark.png";
 
 export const LoadingPage: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ export const LoadingPage: React.FC = () => {
           /* Scaled down slightly for mobile (w-[180px]) vs desktop (md:w-[238px]) */
           className="w-[180px] md:w-[238px] h-auto object-contain animate-pulse" 
           alt="KILOS Loading"
-          src={KILOSWhiteLogo1}
+          src={KILOSLogo}
         />
       </section>
 
