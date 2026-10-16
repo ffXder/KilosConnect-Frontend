@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { login, getRole } from "../../services/authService";
 import KilosGymImg from "../../assets/images/image-5.png";
-import KILOSWhiteLogo1 from "../../assets/images/KILOS-white-logo-1.png";
+import KilosMark from "../../assets/images/kilos-mark.png";
 
 const formFields = [
   { id: "username", label: "Username", type: "text", autoComplete: "username" },
@@ -70,9 +70,9 @@ export const LoginPage: React.FC = () => {
       >
         {/* Logo */}
         <img
-          className="w-[180px] md:w-[238px] mb-8 object-contain"
+          className="w-[260px] md:w-[360px] mb-8 object-contain"
           alt="KILOS"
-          src={KILOSWhiteLogo1}
+          src={KilosMark}
         />
 
         <h1 id={`${formId}-title`} className="font-poppins font-semibold text-[#fdffe0] text-3xl md:text-4xl mb-8">
