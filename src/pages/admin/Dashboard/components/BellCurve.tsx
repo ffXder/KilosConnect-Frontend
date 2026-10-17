@@ -169,8 +169,8 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             const y = toY(val);
             return (
               <g key={`h-${val}`}>
-                <line x1={pad.left} y1={y} x2={svgW - pad.right} y2={y} stroke="#d1d5db" strokeWidth="1" strokeDasharray="4 4" />
-                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[11px]" fill="#9ca3af" fontWeight="600">
+                <line x1={pad.left} y1={y} x2={svgW - pad.right} y2={y} stroke="text-[var(--text)]" strokeWidth="1" strokeDasharray="4 4" />
+                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[11px]" fill="text-[var(--text)]" fontWeight="600">
                   {val}
                 </text>
               </g>
@@ -179,7 +179,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Vertical dashed lines at zones */}
           {zoneXPositions.map((x) => (
-            <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="#d1d5db" strokeWidth="1" strokeDasharray="4 4" />
+            <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="text-[var(--text)]" strokeWidth="1" strokeDasharray="4 4" />
           ))}
 
           {/* Orange curve - Open */}
