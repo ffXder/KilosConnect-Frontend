@@ -14,13 +14,13 @@ export default function BuddySystemPage() {
   const { pendingQueue, loading, submittingId, error, approve, dispute } = useTaskReviews();
   const selectedReview = pendingQueue.find(r => r._id === selectedId) ?? null;
 
-  const { role } = useAuth();
+  const { role, user } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<
     typeof SidebarNavigationSection
   >["userRole"];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans relative dark:bg-slate-950 transition-colors duration-300">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row relative dark:bg-slate-950 transition-colors duration-300">
       <SidebarNavigationSection userRole={userRole} />
 
       <main className="flex-1 w-full min-w-0 p-4 pt-20 md:p-8 md:pt-8 space-y-6 overflow-x-hidden dark:bg-slate-950 transition-colors duration-300">
@@ -77,7 +77,7 @@ export default function BuddySystemPage() {
               <h3 className="font-bold text-gray-900 text-lg dark:text-slate-50">Accountability Assurance</h3>
               <p className="text-sm text-gray-500 mt-1 font-medium leading-relaxed dark:text-slate-300">
                 You are reviewing work submitted by fellow custodians. Your accountability ID 
-                <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded mx-1 dark:bg-slate-800 dark:text-slate-100">CUST-001</span>
+                <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded mx-1 dark:bg-slate-800 dark:text-slate-100">{user.userId}</span>
                 is automatically logged on every action — approvals and disputes alike.
               </p>
             </div>
