@@ -105,28 +105,12 @@ export const IncidentReportPage: React.FC = () => {
   const { assets } = useAssets();
   const incidents = reports ?? [];
   const alertNavigation = location.state as {
+    alertSource?: 'incident' | 'task';
     incidentId?: string;
-    alertTitle?: string;
-    alertSeverity?: 'critical' | 'warning' | 'info' | 'success';
   } | null;
-  const alertIncidentId = alertNavigation?.incidentId;
-  const alertIncident = alertIncidentId
-  ? incidents.find((item) => item._id === alertIncidentId) ?? null
-  : incidents
-      .filter((incident) => {
-        const matchesTitle =
-          incident.title === alertNavigation?.alertTitle ||
-          incident.area === alertNavigation?.alertTitle ||
-          incident.asset?.name === alertNavigation?.alertTitle;
-        const matchesSeverity =
-          alertNavigation?.alertSeverity === 'critical'
-            ? incident.severity === 'Critical' || incident.severity === 'Urgent'
-            : alertNavigation?.alertSeverity === 'warning'
-              ? incident.severity !== 'Critical' && incident.severity !== 'Urgent'
-              : true;
-        return matchesTitle && matchesSeverity && incident.status !== 'Resolved';
-      })
-      .sort((a, b) => Date.parse(b.dateAndTime) - Date.parse(a.dateAndTime))[0] ?? null;
+  const alertIncident = alertNavigation?.alertSource === 'incident' && alertNavigation.incidentId
+    ? incidents.find((item) => item._id === alertNavigation.incidentId) ?? null
+    : null;
 
   const handleAddIncident = async (newIncident: NewIncidentReport) => {
     try {
