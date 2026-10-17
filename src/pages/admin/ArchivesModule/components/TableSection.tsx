@@ -102,9 +102,6 @@ export const TableSection: React.FC<TableSectionProps> = ({
                 Module
               </th>
               <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
-                Original Date
-              </th>
-              <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
                 Archived Date
               </th>
               <th className="py-4 px-4 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-400">
@@ -165,13 +162,6 @@ export const TableSection: React.FC<TableSectionProps> = ({
                       }`}
                     >
                       {item.moduleType}
-                    </span>
-                  </td>
-
-                  {/* Original Date */}
-                  <td className="py-4 px-4 whitespace-nowrap">
-                    <span className="text-xs font-semibold text-[#334155] dark:text-slate-300">
-                      {formatDate(getOriginalDate(item))}
                     </span>
                   </td>
 
