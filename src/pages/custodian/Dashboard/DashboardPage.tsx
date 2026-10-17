@@ -20,7 +20,7 @@ export default function CustodianDashboardPage() {
   const [activeTab, setActiveTab] = useState<"all" | "pending" | "completed">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { role } = useAuth();
+  const { role, user } = useAuth();
   const userRole = (role ?? "admin") as React.ComponentProps<
     typeof SidebarNavigationSection
   >["userRole"];
@@ -83,7 +83,7 @@ export default function CustodianDashboardPage() {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight dark:text-slate-50">
-              Welcome Back, John!
+              Welcome Back, {user.firstName}
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5 dark:text-slate-300">
               Ready to keep Kilos PH in top shape?
