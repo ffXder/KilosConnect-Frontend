@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LostAndFound } from '../../../types/lostAndFound';
-import { MapPin, User, Calendar, Package, CheckCircle2 } from 'lucide-react';
+import { MapPin, User, Calendar, Package, CheckCircle2, IdCard } from 'lucide-react';
 import { formatDateTime } from '../../../utils/formatter';
 
 interface LoFItemCardProps {
@@ -27,6 +27,10 @@ export const LoFItemCard: React.FC<LoFItemCardProps> = ({ item, onClaim, onView 
       <p className="text-[#64748b] text-[13px] leading-relaxed mb-5 line-clamp-2 dark:text-slate-300">{item.description}</p>
 
       <div className="space-y-3 mb-6 text-[13px] text-[#475569] dark:text-slate-300">
+        <div className="flex items-center gap-2.5">
+          <IdCard size={14} className="text-[#94a3b8] dark:text-slate-400" /> 
+          <span className="text-gray-500 dark:text-slate-400">ID:</span> <span className="font-semibold text-[#1a1a1a] dark:text-slate-100">{item.lostId}</span>
+        </div>
         <div className="flex items-center gap-2.5">
           <MapPin size={14} className="text-[#94a3b8] dark:text-slate-400" /> 
           <span className="text-gray-500 dark:text-slate-400">Found in:</span> <span className="font-semibold text-[#1a1a1a] dark:text-slate-100">{item.areaFound}</span>
