@@ -26,6 +26,13 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
   subtitle = 'Completed vs Pending over the last 5 months',
 }) => {
   const chartData = data.length > 0 ? data : [{ month: 'No Data', completed: 0, pending: 0 }];
+  const svgW = 600;
+  const svgH = 268;
+  const pad = { top: 20, right: 20, bottom: 38, left: 40 };
+  const chartW = svgW - pad.left - pad.right;
+  const chartH = svgH - pad.top - pad.bottom;
+  const yForValue = (value: number) => svgH - pad.bottom - (value / 100) * chartH;
+  const gridValues = [100, 80, 60, 40, 20, 0];
 
   return (
     <div className="bg-[var(--bg-card)] border border-border rounded-2xl shadow-sm p-4 sm:p-6">
@@ -39,65 +46,93 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
         </div>
       </div>
 
-      <div className="flex mt-8 h-56">
-        <div className="relative w-8 shrink-0 pb-7">
-          {[100, 80, 60, 40, 20, 0].map((val) => (
-            <span
-              key={val}
-              className="absolute right-2 translate-y-[3px] text-[11px] font-semibold text-gray-400 dark:text-slate-300"
-              style={{ bottom: `${val}%` }}
-            >
-              {val}
-            </span>
-          ))}
-        </div>
+      <div className="mt-6 w-full">
+        <svg className="w-full" viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="xMidYMid meet">
+          {gridValues.map((value) => {
+            const y = yForValue(value);
+            return (
+              <g key={value}>
+                <line
+                  x1={pad.left}
+                  y1={y}
+                  x2={svgW - pad.right}
+                  y2={y}
+                  stroke="#e5e7eb"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                />
+                <text
+                  x={pad.left - 8}
+                  y={y}
+                  textAnchor="end"
+                  dominantBaseline="middle"
+                  className="text-[11px]"
+                  fill="var(--text)"
+                  fontWeight="600"
+                >
+                  {value}
+                </text>
+              </g>
+            );
+          })}
 
-        <div className="flex-1 relative pb-7">
-          {[100, 80, 60, 40, 20, 0].map((val) => (
-            <div
-              key={val}
-              className="absolute left-0 right-0 h-px"
-              style={{
-                bottom: `${val}%`,
-                backgroundImage: 'repeating-linear-gradient(to right, #e5e7eb 0 4px, transparent 4px 8px)',
-              }}
-            />
-          ))}
+          {chartData.map((item, index) => {
+            const groupWidth = chartW / chartData.length;
+            const centerX = pad.left + groupWidth * (index + 0.5);
+            const barWidth = Math.min(30, groupWidth * 0.28);
+            const barGap = 3;
+            const values = [
+              { key: 'completed', value: item.completed, color: '#10b981' },
+              { key: 'pending', value: item.pending, color: '#fb923c' },
+            ];
 
-          <div className="absolute inset-x-0 top-0 flex items-end justify-around" style={{ bottom: '-18px' }}>
-            {chartData.map((item, idx) => (
-              <div key={`${item.month}-${idx}`} className="flex flex-col items-center gap-1 h-full justify-end">
-                <div className="flex items-end gap-[3px] h-full" style={{ height: '100%' }}>
-                  <div className="flex flex-col items-center justify-end h-full">
-                    <div className="mb-[2px] text-[11px] font-semibold text-[--var(--text)]">
-                      {item.completed}%
-                    </div>
-                    <div
-                      className="w-[30px] rounded-none bg-emerald-500 transition-all"
-                      style={{ height: `${Math.max(item.completed, 0)}%` }}
-                    />
-                  </div>
+            return (
+              <g key={`${item.month}-${index}`}>
+                {values.map(({ key, value, color }, seriesIndex) => {
+                  const barHeight = (Math.max(0, Math.min(value, 100)) / 100) * chartH;
+                  const x = centerX + (seriesIndex === 0 ? -barWidth - barGap / 2 : barGap / 2);
+                  const y = svgH - pad.bottom - barHeight;
+                  const labelY = Math.max(pad.top + 11, y - 6);
 
-                  <div className="flex flex-col items-center justify-end h-full">
-                    <div className="mb-[2px] text-[11px] font-semibold  text-[--var(--text)]">
-                      {item.pending}%
-                    </div>
-                    <div
-                      className="w-[30px] rounded-none bg-orange-400 transition-all"
-                      style={{ height: `${Math.max(item.pending, 0)}%` }}
-                    />
-                  </div>
-                </div>
-                <div className={`text-xs font-semibold ${idx === chartData.length - 1 ? ' text-[--var(--text)]' : 'text-[--var(--text)]'}`}>
+                  return (
+                    <g key={key}>
+                      <rect
+                        x={x}
+                        y={y}
+                        width={barWidth}
+                        height={barHeight}
+                        fill={color}
+                      />
+                      <text
+                        x={x + barWidth / 2}
+                        y={labelY}
+                        textAnchor="middle"
+                        className="text-[11px]"
+                        fill="var(--text)"
+                        fontWeight="600"
+                      >
+                        {value}%
+                      </text>
+                    </g>
+                  );
+                })}
+                <text
+                  x={centerX}
+                  y={svgH - pad.bottom + 27}
+                  textAnchor="middle"
+                  className="text-xs"
+                  fill="var(--text)"
+                  fontWeight="600"
+                >
                   {item.month}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
 
-      <div className="flex items-center gap-6 mt-6 pt-4 border-t border-gray-100">
+      <div className="flex flex-wrap items-center gap-6 mt-0 pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-sm bg-emerald-500" />
           <span className="text-xs font-semibold text-[--var(--text)]">Completed</span>

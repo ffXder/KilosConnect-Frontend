@@ -14,6 +14,17 @@ const series = [
   { key: 'resolved', label: 'Resolved', color: '#22c55e' },
 ] as const;
 
+const standardZones = [
+  'Mezzanine',
+  'Powerlifting Area',
+  'Open WOD Area',
+  'Weightlifting Area',
+  'CrossFit Area',
+  'Café',
+  'General Storage',
+  'Maintenance Storage',
+];
+
 function smoothCurvePath(pts: { x: number; y: number }[]): string {
   if (pts.length < 2) return '';
   let d = `M ${pts[0].x},${pts[0].y}`;
@@ -35,6 +46,8 @@ function smoothCurvePath(pts: { x: number; y: number }[]): string {
 }
 
 function wrapZoneLabel(label: string, maxChars: number): string[] {
+  if (label === 'Open WOD Area') return ['Open WOD', 'Area'];
+
   const words = label.split(/\s+/);
   const lines: string[] = [];
   let line = "";
@@ -63,27 +76,6 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   title = "Activity by Zone",
   subtitle = 'Incident activity by zone',
 }) => {
-  const chartData = Array.from(
-    data.reduce((zones, entry) => {
-      const normalizedZone = entry.zone
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .toLowerCase()
-        .replace(/\s+area$/, '');
-      const zone = normalizedZone === 'powerlifting' ? 'Powerlifting Area' : entry.zone.trim();
-      const key = zone.toLowerCase();
-      const existing = zones.get(key);
-      if (existing) {
-        existing.open += entry.open;
-        existing.inProgress += entry.inProgress;
-        existing.resolved += entry.resolved;
-      } else {
-        zones.set(key, { ...entry, zone });
-      }
-      return zones;
-    }, new Map<string, ZoneActivity>()).values(),
-  );
   const normalizeZone = (zone: string) =>
     zone
       .normalize("NFD")
@@ -91,6 +83,36 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       .trim()
       .toLowerCase()
       .replace(/\s+area$/, "");
+  const canonicalizeZone = (zone: string) => {
+    const normalized = normalizeZone(zone).replace(/\s+/g, ' ');
+    if (normalized === 'powerlifting') return 'Powerlifting Area';
+    if (['weight lift', 'weight lifting', 'weightlifting'].includes(normalized)) {
+      return 'Weightlifting Area';
+    }
+    if (normalized === 'open wod') return 'Open WOD Area';
+    if (normalized === 'crossfit') return 'CrossFit Area';
+    if (normalized === 'cafe') return 'Café';
+    return standardZones.find((item) => normalizeZone(item) === normalized) ?? zone.trim();
+  };
+  const zonesByName = new Map<string, ZoneActivity>(
+    standardZones.map((zone) => [
+      normalizeZone(zone),
+      { zone, open: 0, inProgress: 0, resolved: 0 },
+    ]),
+  );
+  for (const entry of data) {
+    const zone = canonicalizeZone(entry.zone);
+    const key = normalizeZone(zone);
+    const existing = zonesByName.get(key);
+    if (existing) {
+      existing.open += entry.open;
+      existing.inProgress += entry.inProgress;
+      existing.resolved += entry.resolved;
+    } else {
+      zonesByName.set(key, { ...entry, zone });
+    }
+  }
+  const chartData = Array.from(zonesByName.values());
   const cafeIndex = chartData.findIndex((item) => normalizeZone(item.zone) === "cafe");
   const maintenanceIndex = chartData.findIndex((item) => {
     const zone = normalizeZone(item.zone);
@@ -113,12 +135,11 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   } | null>(null);
 
   const maxVal = Math.max(...chartData.flatMap((d) => [d.open, d.inProgress, d.resolved]), 1);
-  const yMax = Math.max(10, Math.ceil(maxVal / 2) * 2);
-  const step = 2;
+  const yMax = Math.max(10, Math.ceil(maxVal / 5) * 5);
 
   const svgW = 600;
-  const svgH = 292;
-  const pad = { top: 20, right: 20, bottom: 62, left: 40 };
+  const svgH = 268;
+  const pad = { top: 20, right: 20, bottom: 38, left: 40 };
   const chartW = svgW - pad.left - pad.right;
   const chartH = svgH - pad.top - pad.bottom;
   const maxLabelChars = Math.max(6, Math.floor((chartW / Math.max(chartData.length - 1, 1)) / 5.5));
@@ -139,8 +160,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
     ]),
   ) as Record<(typeof series)[number]['key'], { x: number; y: number }[]>;
 
-  const yLabels: number[] = [];
-  for (let v = 0; v <= yMax; v += step) yLabels.push(v);
+  const yLabels = Array.from({ length: 6 }, (_, index) => (yMax / 5) * index);
 
   const handlePointHover = (
     event: React.MouseEvent<SVGCircleElement>,
@@ -228,7 +248,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 4" />
           ))}
 
-          {chartData.length === 0 && (
+          {data.length === 0 && (
             <text
               x={pad.left + chartW / 2}
               y={pad.top + chartH / 2}
@@ -298,7 +318,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-6 mt-4 pt-4 border-t border-gray-100">
+      <div className="flex flex-wrap items-center gap-6 mt-0 pt-2 border-t border-gray-100">
         {series.map(({ key, label, color }) => (
           <div key={key} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
