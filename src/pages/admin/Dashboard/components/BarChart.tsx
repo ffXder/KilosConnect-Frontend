@@ -56,8 +56,11 @@ const DashboardBarChart: React.FC<DashboardBarChartProps> = ({
           {[100, 80, 60, 40, 20, 0].map((val) => (
             <div
               key={val}
-              className="absolute left-0 right-0 border-t border-dashed border-gray-200"
-              style={{ bottom: `${val}%` }}
+              className="absolute left-0 right-0 h-px"
+              style={{
+                bottom: `${val}%`,
+                backgroundImage: 'repeating-linear-gradient(to right, #e5e7eb 0 4px, transparent 4px 8px)',
+              }}
             />
           ))}
 

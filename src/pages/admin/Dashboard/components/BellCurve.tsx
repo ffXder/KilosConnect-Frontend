@@ -66,24 +66,28 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 }) => {
   const chartData = [...data];
   const normalizeZone = (zone: string) =>
-    zone.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+    zone
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+area$/, "");
   const cafeIndex = chartData.findIndex((item) => normalizeZone(item.zone) === "cafe");
-  const maintenanceStorageIndex = chartData.findIndex(
-    (item) => normalizeZone(item.zone) === "maintenance storage",
-  );
+  const maintenanceIndex = chartData.findIndex((item) => {
+    const zone = normalizeZone(item.zone);
+    return zone === "maintenance" || zone === "maintenance storage";
+  });
 
-  if (cafeIndex >= 0 && maintenanceStorageIndex >= 0) {
-    [chartData[cafeIndex], chartData[maintenanceStorageIndex]] = [
-      chartData[maintenanceStorageIndex],
+  if (cafeIndex >= 0 && maintenanceIndex >= 0) {
+    [chartData[cafeIndex], chartData[maintenanceIndex]] = [
+      chartData[maintenanceIndex],
       chartData[cafeIndex],
     ];
   }
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<{
-    label: string;
-    value: number;
-    color: string;
+    points: { label: 'Open' | 'Resolved'; value: number; color: string }[];
     x: number;
     y: number;
     zone: string;
@@ -114,19 +118,28 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
   const handlePointHover = (
     event: React.MouseEvent<SVGCircleElement>,
+    index: number,
     label: 'Open' | 'Resolved',
-    value: number,
-    color: string,
-    zone: string,
   ) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
 
+    const zone = chartData[index];
+    if (!zone) return;
+    const points = zone.open === zone.resolved
+      ? [
+          { label: 'Open' as const, value: zone.open, color: '#f97316' },
+          { label: 'Resolved' as const, value: zone.resolved, color: '#22c55e' },
+        ]
+      : [{
+          label,
+          value: label === 'Open' ? zone.open : zone.resolved,
+          color: label === 'Open' ? '#f97316' : '#22c55e',
+        }];
+
     setHoveredPoint({
-      label,
-      value,
-      color,
-      zone,
+      points,
+      zone: zone.zone,
       x: event.clientX - rect.left + 18,
       y: event.clientY - rect.top - 12,
     });
@@ -153,12 +166,19 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             transform: 'translateZ(0)',
           }}
         >
-          <div className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: hoveredPoint.color }}>
-            {hoveredPoint.label}
+          <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-300">
+            {hoveredPoint.zone}
           </div>
-          <div className="mt-1 text-xs font-bold uppercase tracking-[0.12em]" style={{ color: hoveredPoint.color }}>
-            Reports: {hoveredPoint.value}
-          </div>
+          {hoveredPoint.points.map((point) => (
+            <div key={point.label}>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: point.color }}>
+                {point.label}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-[0.12em]" style={{ color: point.color }}>
+                Reports: {point.value}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -169,8 +189,8 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             const y = toY(val);
             return (
               <g key={`h-${val}`}>
-                <line x1={pad.left} y1={y} x2={svgW - pad.right} y2={y} stroke="text-[var(--text)]" strokeWidth="1" strokeDasharray="4 4" />
-                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[11px]" fill="text-[var(--text)]" fontWeight="600">
+                <line x1={pad.left} y1={y} x2={svgW - pad.right} y2={y} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 4" />
+                <text x={pad.left - 8} y={y} textAnchor="end" dominantBaseline="middle" className="text-[11px]" fill="var(--text)" fontWeight="600">
                   {val}
                 </text>
               </g>
@@ -179,7 +199,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Vertical dashed lines at zones */}
           {zoneXPositions.map((x) => (
-            <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="text-[var(--text)]" strokeWidth="1" strokeDasharray="4 4" />
+            <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 4" />
           ))}
 
           {/* Orange curve - Open */}
@@ -190,8 +210,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Dots on orange line */}
           {dataOpenPts.map((p, i) => {
-            const zone = chartData[i]?.zone ?? 'Unknown';
-            const value = chartData[i]?.open ?? 0;
+            const isIntersecting = chartData[i]?.open === chartData[i]?.resolved;
 
             return (
               <circle
@@ -199,12 +218,12 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
                 cx={p.x}
                 cy={p.y}
                 r="4.5"
-                fill="#f97316"
+                fill={isIntersecting ? '#facc15' : '#f97316'}
                 stroke="white"
                 strokeWidth="1.5"
                 className="cursor-pointer transition-all duration-200 hover:r-6"
-                onMouseEnter={(event) => handlePointHover(event, 'Open', value, '#f97316', zone)}
-                onMouseMove={(event) => handlePointHover(event, 'Open', value, '#f97316', zone)}
+                onMouseEnter={(event) => handlePointHover(event, i, 'Open')}
+                onMouseMove={(event) => handlePointHover(event, i, 'Open')}
                 onMouseLeave={() => setHoveredPoint(null)}
               />
             );
@@ -212,8 +231,7 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
           {/* Dots on green line */}
           {dataResolvedPts.map((p, i) => {
-            const zone = chartData[i]?.zone ?? 'Unknown';
-            const value = chartData[i]?.resolved ?? 0;
+            const isIntersecting = chartData[i]?.open === chartData[i]?.resolved;
 
             return (
               <circle
@@ -221,12 +239,12 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
                 cx={p.x}
                 cy={p.y}
                 r="4.5"
-                fill="#22c55e"
+                fill={isIntersecting ? '#facc15' : '#22c55e'}
                 stroke="white"
                 strokeWidth="1.5"
                 className="cursor-pointer transition-all duration-200 hover:r-6"
-                onMouseEnter={(event) => handlePointHover(event, 'Resolved', value, '#22c55e', zone)}
-                onMouseMove={(event) => handlePointHover(event, 'Resolved', value, '#22c55e', zone)}
+                onMouseEnter={(event) => handlePointHover(event, i, 'Resolved')}
+                onMouseMove={(event) => handlePointHover(event, i, 'Resolved')}
                 onMouseLeave={() => setHoveredPoint(null)}
               />
             );
