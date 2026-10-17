@@ -4,16 +4,15 @@ import { useRef, useState } from 'react';
 export interface ZoneActivity {
   zone: string;
   open: number;
+  inProgress: number;
   resolved: number;
 }
 
-const defaultZones: ZoneActivity[] = [
-  { zone: 'Mezzanine', open: 2, resolved: 4 },
-  { zone: 'Powerlifting', open: 5, resolved: 7 },
-  { zone: 'WOD Area', open: 4, resolved: 10 },
-  { zone: 'Weight Lift', open: 4, resolved: 6 },
-  { zone: 'CrossFit', open: 1, resolved: 3 },
-];
+const series = [
+  { key: 'open', label: 'Open', color: '#f97316' },
+  { key: 'inProgress', label: 'In Progress', color: '#185FA5' },
+  { key: 'resolved', label: 'Resolved', color: '#22c55e' },
+] as const;
 
 function smoothCurvePath(pts: { x: number; y: number }[]): string {
   if (pts.length < 2) return '';
@@ -60,11 +59,31 @@ interface DashboardBellCurveProps {
 }
 
 const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
-  data = defaultZones,
+  data = [],
   title = "Activity by Zone",
   subtitle = 'Incident activity by zone',
 }) => {
-  const chartData = [...data];
+  const chartData = Array.from(
+    data.reduce((zones, entry) => {
+      const normalizedZone = entry.zone
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase()
+        .replace(/\s+area$/, '');
+      const zone = normalizedZone === 'powerlifting' ? 'Powerlifting Area' : entry.zone.trim();
+      const key = zone.toLowerCase();
+      const existing = zones.get(key);
+      if (existing) {
+        existing.open += entry.open;
+        existing.inProgress += entry.inProgress;
+        existing.resolved += entry.resolved;
+      } else {
+        zones.set(key, { ...entry, zone });
+      }
+      return zones;
+    }, new Map<string, ZoneActivity>()).values(),
+  );
   const normalizeZone = (zone: string) =>
     zone
       .normalize("NFD")
@@ -87,14 +106,14 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredPoint, setHoveredPoint] = useState<{
-    points: { label: 'Open' | 'Resolved'; value: number; color: string }[];
+    points: { label: (typeof series)[number]['label']; value: number; color: string }[];
     x: number;
     y: number;
     zone: string;
   } | null>(null);
 
-  const maxVal = Math.max(...chartData.flatMap((d) => [d.open, d.resolved]), 1);
-  const yMax = Math.ceil(maxVal / 2) * 2;
+  const maxVal = Math.max(...chartData.flatMap((d) => [d.open, d.inProgress, d.resolved]), 1);
+  const yMax = Math.max(10, Math.ceil(maxVal / 2) * 2);
   const step = 2;
 
   const svgW = 600;
@@ -105,13 +124,20 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   const maxLabelChars = Math.max(6, Math.floor((chartW / Math.max(chartData.length - 1, 1)) / 5.5));
   const wrappedZoneLabels = chartData.map((d) => wrapZoneLabel(d.zone, maxLabelChars));
 
-  const toX = (i: number) => pad.left + (i / (chartData.length - 1)) * chartW;
+  const toX = (i: number) =>
+    chartData.length === 1
+      ? pad.left + chartW / 2
+      : pad.left + (i / (chartData.length - 1)) * chartW;
   const toY = (v: number) => svgH - pad.bottom - (v / yMax) * chartH;
 
   const zoneXPositions = chartData.map((_, i) => toX(i));
 
-  const dataOpenPts = chartData.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.open) }));
-  const dataResolvedPts = chartData.map((d, i) => ({ x: zoneXPositions[i], y: toY(d.resolved) }));
+  const dataSeriesPts = Object.fromEntries(
+    series.map(({ key }) => [
+      key,
+      chartData.map((entry, i) => ({ x: zoneXPositions[i], y: toY(entry[key]) })),
+    ]),
+  ) as Record<(typeof series)[number]['key'], { x: number; y: number }[]>;
 
   const yLabels: number[] = [];
   for (let v = 0; v <= yMax; v += step) yLabels.push(v);
@@ -119,23 +145,23 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
   const handlePointHover = (
     event: React.MouseEvent<SVGCircleElement>,
     index: number,
-    label: 'Open' | 'Resolved',
+    key: (typeof series)[number]['key'],
   ) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
 
     const zone = chartData[index];
     if (!zone) return;
-    const points = zone.open === zone.resolved
-      ? [
-          { label: 'Open' as const, value: zone.open, color: '#f97316' },
-          { label: 'Resolved' as const, value: zone.resolved, color: '#22c55e' },
-        ]
-      : [{
-          label,
-          value: label === 'Open' ? zone.open : zone.resolved,
-          color: label === 'Open' ? '#f97316' : '#22c55e',
-        }];
+    const value = zone[key];
+    const intersectingSeries = series.filter((item) => zone[item.key] === value);
+    const displayedSeries = intersectingSeries.length > 1
+      ? intersectingSeries
+      : series.filter((item) => item.key === key);
+    const points = displayedSeries.map((item) => ({
+      label: item.label,
+      value: zone[item.key],
+      color: item.color,
+    }));
 
     setHoveredPoint({
       points,
@@ -202,53 +228,53 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
             <line key={`v-${x}`} x1={x} y1={pad.top} x2={x} y2={svgH - pad.bottom} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 4" />
           ))}
 
-          {/* Orange curve - Open */}
-          <path d={smoothCurvePath([...dataOpenPts])} fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          {chartData.length === 0 && (
+            <text
+              x={pad.left + chartW / 2}
+              y={pad.top + chartH / 2}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="text-xs"
+              fill="var(--text)"
+            >
+              No incident activity yet
+            </text>
+          )}
 
-          {/* Green curve - Resolved */}
-          <path d={smoothCurvePath([...dataResolvedPts])} fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-
-          {/* Dots on orange line */}
-          {dataOpenPts.map((p, i) => {
-            const isIntersecting = chartData[i]?.open === chartData[i]?.resolved;
-
-            return (
-              <circle
-                key={`open-${i}`}
-                cx={p.x}
-                cy={p.y}
-                r="4.5"
-                fill={isIntersecting ? '#facc15' : '#f97316'}
-                stroke="white"
-                strokeWidth="1.5"
-                className="cursor-pointer transition-all duration-200 hover:r-6"
-                onMouseEnter={(event) => handlePointHover(event, i, 'Open')}
-                onMouseMove={(event) => handlePointHover(event, i, 'Open')}
-                onMouseLeave={() => setHoveredPoint(null)}
+          {series.map(({ key, color }) => (
+            <g key={key}>
+              <path
+                d={smoothCurvePath([...dataSeriesPts[key]])}
+                fill="none"
+                stroke={color}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
-            );
-          })}
+              {dataSeriesPts[key].map((point, index) => {
+                const value = chartData[index]?.[key] ?? 0;
+                const isIntersecting = series.filter(
+                  (item) => chartData[index]?.[item.key] === value,
+                ).length > 1;
 
-          {/* Dots on green line */}
-          {dataResolvedPts.map((p, i) => {
-            const isIntersecting = chartData[i]?.open === chartData[i]?.resolved;
-
-            return (
-              <circle
-                key={`resolved-${i}`}
-                cx={p.x}
-                cy={p.y}
-                r="4.5"
-                fill={isIntersecting ? '#facc15' : '#22c55e'}
-                stroke="white"
-                strokeWidth="1.5"
-                className="cursor-pointer transition-all duration-200 hover:r-6"
-                onMouseEnter={(event) => handlePointHover(event, i, 'Resolved')}
-                onMouseMove={(event) => handlePointHover(event, i, 'Resolved')}
-                onMouseLeave={() => setHoveredPoint(null)}
-              />
-            );
-          })}
+                return (
+                  <circle
+                    key={`${key}-${index}`}
+                    cx={point.x}
+                    cy={point.y}
+                    r="4.5"
+                    fill={isIntersecting ? '#facc15' : color}
+                    stroke="white"
+                    strokeWidth="1.5"
+                    className="cursor-pointer transition-all duration-200 hover:r-6"
+                    onMouseEnter={(event) => handlePointHover(event, index, key)}
+                    onMouseMove={(event) => handlePointHover(event, index, key)}
+                    onMouseLeave={() => setHoveredPoint(null)}
+                  />
+                );
+              })}
+            </g>
+          ))}
 
           {/* Zone labels below chart */}
           {chartData.map((d, i) => (
@@ -272,15 +298,13 @@ const DashboardBellCurve: React.FC<DashboardBellCurveProps> = ({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-orange-500" />
-          <span className="text-xs text-[--var(--text)] font-medium">Open</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-green-500" />
-          <span className="text-xs text-[--var(--text)] font-medium">Resolved</span>
-        </div>
+      <div className="flex flex-wrap items-center gap-6 mt-4 pt-4 border-t border-gray-100">
+        {series.map(({ key, label, color }) => (
+          <div key={key} className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
+            <span className="text-xs text-[--var(--text)] font-medium">{label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

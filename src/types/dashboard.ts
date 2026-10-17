@@ -23,6 +23,7 @@ export interface MaintenanceTrendEntry {
 export interface ZoneActivityEntry {
   zone: string;
   open: number;
+  inProgress: number;
   resolved: number;
 }
 
