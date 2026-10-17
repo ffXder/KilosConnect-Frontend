@@ -80,7 +80,7 @@ const DashboardAlertsSection: React.FC<DashboardAlertsSectionProps> = ({
       </div>
 
       <div className="flex-1 mt-4 space-y-2">
-        {alerts.slice(0, 5).map((alert, idx) => {
+        {alerts.slice(0, 4).map((alert, idx) => {
           const cfg = severityConfig[alert.severity] || severityConfig.info;
           const source = alert.source ?? (alert.task ? "task" : "incident");
           const destination = source === "task" ? "/task-monitor/live-monitor" : "/incident-report";

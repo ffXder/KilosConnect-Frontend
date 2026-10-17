@@ -39,11 +39,7 @@ export const DashboardPage: React.FC = () => {
         {!d.loading && <DashboardStatsSection stats={d.stats} />}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <DashboardBarChart
-            data={d.maintenanceTrendData}
-            title="Maintenance Trends"
-            subtitle="Completed vs pending maintenance over the last 5 months"
-          />
+          <DashboardAlertsSection alerts={d.alerts} />
           <DashboardPieChart
             data={d.assetStatusData}
             total={d.totalAssetCount}
@@ -54,7 +50,11 @@ export const DashboardPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           <DashboardBellCurve data={d.zoneActivityData} />
-          <DashboardAlertsSection alerts={d.alerts} />
+          <DashboardBarChart
+            data={d.maintenanceTrendData}
+            title="Maintenance Trends"
+            subtitle="Completed vs pending maintenance over the last 5 months"
+          />
         </div>
 
         <DashboardReplacementRecommendations replacements={d.replacements} />
