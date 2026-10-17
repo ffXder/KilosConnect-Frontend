@@ -50,10 +50,10 @@ const IncidentTable: React.FC<IncidentTableProps> = ({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300">
+              <th scope="col" className="py-4 px-6">ID</th>
               <th scope="col" className="py-4 px-6">Status</th>
               <th scope="col" className="py-4 px-6">Severity</th>
-              <th scope="col" className="py-4 px-6">Incident Details</th>
-              <th scope="col" className="py-4 px-6">Description</th>
+              <th scope="col" className="py-4 px-6">Title & Description</th>
               <th scope="col" className="py-4 px-6">Area</th>
               <th scope="col" className="py-4 px-6">Reported By</th>
               <th scope="col" className="py-4 px-6">Date & Time</th>
